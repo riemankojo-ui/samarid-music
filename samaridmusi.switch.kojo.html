@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samarid Admin Panel</title>
+<style>
+  body {
+    background: #0a0a0a;
+    color: #fff;
+    font-family: 'Inter', -apple-system, Roboto, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+  }
+  .box {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 20px;
+    padding: 40px 30px;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  h1 { font-size: 22px; margin-bottom: 10px; font-weight: 900; }
+  p { color: #ccc; font-size: 13px; margin-bottom: 20px; }
+  
+  /* Password Input Wrapper */
+  .password-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  .password-wrapper input {
+    width: 100%;
+    padding: 14px 45px 14px 14px;
+    background: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  .eye-btn {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #666;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px;
+  }
+  .eye-btn:active { color: #ff0033; }
+
+  /* General Inputs */
+  input[type="text"] {
+    width: 100%;
+    padding: 14px;
+    background: #0a0a0a;
+    border: 1px solid #333;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+  }
+
+  button.main-btn {
+    width: 100%;
+    padding: 14px;
+    background: #ff0033;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  button.main-btn:active { transform: scale(0.97); }
+  
+  .status { font-size: 13px; margin-top: 15px; font-weight: bold; }
+  .success { color: #00cc44; }
+  .error { color: #ff0033; }
+</style>
+</head>
+<body>
+
+  <div class="box">
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen">
+      <div style="font-size: 40px; margin-bottom: 10px;">🔐</div>
+      <h1>Admin Login</h1>
+      <p>Enter your password to access settings.</p>
+      
+      <!-- Password Input with Eye Icon -->
+      <div class="password-wrapper">
+        <input type="password" id="passwordInput" placeholder="Enter Password">
+        <button class="eye-btn" onclick="togglePassword()" id="eyeIcon">👁️</button>
+      </div>
+      
+      <button class="main-btn" onclick="checkPassword()">Unlock</button>
+      <p id="loginStatus" class="status error"></p>
+    </div>
+
+    <!-- ADMIN PANEL SCREEN -->
+    <div id="adminScreen" style="display:none;">
+      <div style="font-size: 40px; margin-bottom: 10px;">⚙️</div>
+      <h1>Channel Switcher</h1>
+      <p>Paste your new YouTube channel link below.</p>
+      <input type="text" id="channelInput" placeholder="https://youtube.com/@newchannel">
+      <button class="main-btn" onclick="saveChannel()">Save & Update Website</button>
+      <p id="adminStatus" class="status"></p>
+      <button class="main-btn" onclick="resetChannel()" style="background:#333; margin-top:20px;">Reset to Default Channel</button>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // 1. SET YOUR PASSWORD HERE
+    // ==========================================
+    const SECRET_PASSWORD = "samarid2026"; 
+    // ==========================================
+
+    const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
+
+    // Toggle Password Visibility
+    function togglePassword() {
+      const input = document.getElementById('passwordInput');
+      const icon = document.getElementById('eyeIcon');
+      
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.innerText = '🙈'; // Hide icon
+      } else {
+        input.type = 'password';
+        icon.innerText = '👁️'; // Show icon
+      }
+    }
+
+    function checkPassword() {
+      const input = document.getElementById('passwordInput').value;
+      const status = document.getElementById('loginStatus');
+
+      if (input === SECRET_PASSWORD) {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminScreen').style.display = 'block';
+      } else {
+        status.innerText = 'Wrong password. Try again.';
+      }
+    }
+
+    async function saveChannel() {
+      const input = document.getElementById('channelInput').value.trim();
+      const status = document.getElementById('adminStatus');
+      
+      if (!input) {
+        status.className = 'status error';
+        status.innerText = 'Please paste a YouTube link first!';
+        return;
+      }
+
+      status.className = 'status';
+      status.style.color = '#ffcc00';
+      status.innerText = 'Finding channel...';
+
+      try {
+        let handle = input;
+        if (input.includes('youtube.com/')) {
+          handle = input.split('youtube.com/')[1].replace('@', '').split('/')[0].split('?')[0];
+        }
+
+        const res = await fetch(
+          'https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=' + 
+          handle + '&key=' + API_KEY
+        );
+        const data = await res.json();
+
+        if (!data.items || data.items.length === 0) {
+          throw new Error('Channel not found');
+        }
+
+        const newId = data.items[0].snippet.channelId;
+        localStorage.setItem('samarid_channel_id', newId);
+        
+        status.className = 'status success';
+        status.innerText = '✅ Success! Your website will now show videos from this channel.';
+        document.getElementById('channelInput').value = '';
+
+      } catch (err) {
+        status.className = 'status error';
+        status.innerText = '❌ Error: Could not find that channel. Try the full link.';
+      }
+    }
+
+    function resetChannel() {
+      localStorage.removeItem('samarid_channel_id');
+      document.getElementById('adminStatus').className = 'status success';
+      document.getElementById('adminStatus').innerText = 'Reset! Your website is back to the default channel.';
+    }
+  </script>
+</body>
+</html>

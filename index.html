@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <style>
   :root {
     --bg: #0a0a0a;
@@ -81,20 +83,33 @@
   }
   .logo span { color: var(--accent); }
 
+  /* ===== SMALLER SUBSCRIBE BUTTON ===== */
   .subscribe-btn {
     background: var(--accent);
     color: #ffffff;
     border: none;
-    padding: 8px 16px;
-    border-radius: 18px;
-    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 14px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
     text-decoration: none;
     cursor: pointer;
-    transition: opacity 0.15s;
+    transition: all 0.15s;
   }
   .subscribe-btn:active { opacity: 0.8; }
+
+  @keyframes bounce {
+    0% { transform: scale(1); }
+    30% { transform: scale(0.9); }
+    50% { transform: scale(1.1); }
+    70% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+  }
+  
+  .subscribe-btn.bounce {
+    animation: bounce 0.4s ease;
+  }
 
   /* ===== DROPDOWN MENU ===== */
   .menu-dropdown {
@@ -105,11 +120,11 @@
     border: 1px solid var(--border);
     border-radius: 14px;
     box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-    min-width: 280px;
-    max-width: 340px;
-    overflow: hidden;
+    width: 260px;
+    max-height: 80vh;
+    overflow-y: auto;
     display: none;
-    z-index: 200;
+    z-index: 9999;
   }
   .menu-dropdown.open { display: block; }
 
@@ -121,10 +136,11 @@
     font-weight: 700;
     text-transform: uppercase;
     border-bottom: 1px solid var(--border);
+    margin-top: 5px;
   }
 
   .menu-item {
-    padding: 13px 18px;
+    padding: 12px 18px;
     font-size: 13px;
     color: var(--text);
     cursor: pointer;
@@ -137,40 +153,17 @@
   }
   .menu-item:last-child { border-bottom: none; }
   .menu-item:active { background: var(--border); }
-  .menu-item .icon { font-size: 16px; width: 20px; text-align: center; }
+  
+  .menu-item .icon { 
+    font-size: 16px; 
+    width: 20px; 
+    text-align: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
   .menu-item .label { flex: 1; color: var(--text); }
   .menu-item .arrow { color: var(--text2); font-size: 11px; }
-
-  /* COLOR PICKER */
-  .color-picker {
-    padding: 14px 18px;
-    border-bottom: 1px solid var(--border);
-  }
-  .color-picker-title {
-    font-size: 10px;
-    color: var(--text2);
-    letter-spacing: 2px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-  }
-  .color-row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-  .color-circle {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: transform 0.15s, border-color 0.15s;
-  }
-  .color-circle.active {
-    border-color: var(--text);
-    transform: scale(1.15);
-  }
 
   /* THEME SWITCH */
   .theme-row {
@@ -257,7 +250,6 @@
     display: block;
   }
 
-  /* YouTube-style play button overlay */
   .video-play-overlay {
     position: absolute;
     inset: 0;
@@ -353,6 +345,63 @@
   }
   .player-close:active { background: var(--accent); }
 
+  /* ===== SUBSCRIBE MODAL ===== */
+  .sub-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(5px);
+  }
+  .sub-modal.open { display: flex; }
+  
+  .sub-modal-inner {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 30px 24px;
+    text-align: center;
+    max-width: 340px;
+    width: 100%;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  
+  @keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  
+  .sub-modal-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    margin-bottom: 10px;
+    transition: all 0.2s;
+  }
+  
+  .sub-modal-btn.confirm {
+    background: #ff0033;
+    color: #ffffff;
+  }
+  .sub-modal-btn.confirm:active { transform: scale(0.97); }
+  
+  .sub-modal-btn.close {
+    background: transparent;
+    color: var(--text2);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
   /* ===== FOOTER ===== */
   .footer {
     padding: 30px 20px;
@@ -370,9 +419,9 @@
 
   <!-- HEADER -->
   <header class="header">
-    <button class="menu-btn" onclick="toggleMenu(event)">⋮</button>
+    <button class="menu-btn" onclick="toggleMenu(event)">☰</button>
     <a href="#" class="logo">SAMARID <span>MUSIC</span></a>
-    <a href="https://youtube.com/@realsamarid?sub_confirmation=1" target="_blank" class="subscribe-btn">SUBSCRIBE</a>
+    <a href="#" id="subBtn" onclick="fakeSubscribe(event)" class="subscribe-btn">SUBSCRIBE</a>
   </header>
 
   <!-- DROPDOWN MENU -->
@@ -388,46 +437,37 @@
       </div>
     </div>
 
-    <div class="color-picker">
-      <div class="color-picker-title">Accent Color</div>
-      <div class="color-row">
-        <div class="color-circle" style="background:#ff0033;" data-color="#ff0033" onclick="setAccent('#ff0033')"></div>
-        <div class="color-circle" style="background:#ff6b00;" data-color="#ff6b00" onclick="setAccent('#ff6b00')"></div>
-        <div class="color-circle" style="background:#ffcc00;" data-color="#ffcc00" onclick="setAccent('#ffcc00')"></div>
-        <div class="color-circle" style="background:#00cc44;" data-color="#00cc44" onclick="setAccent('#00cc44')"></div>
-        <div class="color-circle" style="background:#0084ff;" data-color="#0084ff" onclick="setAccent('#0084ff')"></div>
-        <div class="color-circle" style="background:#8a2be2;" data-color="#8a2be2" onclick="setAccent('#8a2be2')"></div>
-        <div class="color-circle" style="background:#ff00e0;" data-color="#ff00e0" onclick="setAccent('#ff00e0')"></div>
-        <div class="color-circle" style="background:#00c7be;" data-color="#00c7be" onclick="setAccent('#00c7be')"></div>
-      </div>
-    </div>
-
     <div class="menu-title">🔗 Follow</div>
 
     <a href="https://youtube.com/@realsamarid" target="_blank" class="menu-item">
-      <span class="icon">▶️</span>
+      <span class="icon"><i class="fab fa-youtube" style="color: #FF0000;"></i></span>
       <span class="label">YouTube</span>
       <span class="arrow">↗</span>
     </a>
     <a href="https://tiktok.com/@realsamarid" target="_blank" class="menu-item">
-      <span class="icon">🎵</span>
+      <span class="icon"><i class="fab fa-tiktok" style="color: #ffffff;"></i></span>
       <span class="label">TikTok</span>
       <span class="arrow">↗</span>
     </a>
-    <a href="https://instagram.com/realsamarid" target="_blank" class="menu-item">
-      <span class="icon">📸</span>
-      <span class="label">Instagram</span>
+    <a href="https://facebook.com/realsamarid" target="_blank" class="menu-item">
+      <span class="icon"><i class="fab fa-facebook" style="color: #1877F2;"></i></span>
+      <span class="label">Facebook</span>
       <span class="arrow">↗</span>
     </a>
-    <a href="mailto:contact@samarid.com" class="menu-item">
-      <span class="icon">✉️</span>
-      <span class="label">Contact</span>
+    <a href="https://wa.me/233207425831" target="_blank" class="menu-item">
+      <span class="icon"><i class="fab fa-whatsapp" style="color: #25D366;"></i></span>
+      <span class="label">WhatsApp</span>
+      <span class="arrow">↗</span>
+    </a>
+    <a href="mailto:riemankojo@gmail.com" class="menu-item">
+      <span class="icon"><i class="fas fa-envelope" style="color: #EA4335;"></i></span>
+      <span class="label">Email</span>
       <span class="arrow">↗</span>
     </a>
 
     <div class="menu-title">ℹ️ Info</div>
     <div class="menu-item" onclick="showAbout()">
-      <span class="icon">🎤</span>
+      <span class="icon"><i class="fas fa-microphone" style="color: #ff0033;"></i></span>
       <span class="label">About Samarid</span>
       <span class="arrow">›</span>
     </div>
@@ -446,6 +486,19 @@
     <div class="player-inner" onclick="event.stopPropagation()">
       <button class="player-close" onclick="closePlayer()">✕</button>
       <iframe class="player-video" id="playerFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- SUBSCRIBE POPUP MODAL -->
+  <div class="sub-modal" id="subModal" onclick="closeSubModal()">
+    <div class="sub-modal-inner" onclick="event.stopPropagation()">
+      <div style="font-size: 40px; margin-bottom: 10px;">🎵</div>
+      <h2 style="font-size: 20px; font-weight: 900; margin-bottom: 10px;">Support Samarid Music</h2>
+      <p style="font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.5;">
+        Subscribe to the official YouTube channel to get notified when new music drops!
+      </p>
+      <a href="#" id="popupSubBtn" target="_blank" class="sub-modal-btn confirm">Subscribe on YouTube</a>
+      <button onclick="closeSubModal()" class="sub-modal-btn close">I'll do it later</button>
     </div>
   </div>
 
@@ -470,6 +523,31 @@
       closeMenu();
     }
 
+    // === SUBSCRIBE POPUP MAGIC (Dynamic to Current Channel) ===
+    function fakeSubscribe(e) {
+      e.preventDefault();
+      const btn = document.getElementById('subBtn');
+      btn.classList.add('bounce');
+      
+      // Build the subscribe link using the channel we saved!
+      const channelId = localStorage.getItem('samarid_channel_id');
+      const subLink = channelId 
+        ? 'https://www.youtube.com/channel/' + channelId + '?sub_confirmation=1'
+        : 'https://youtube.com/@realsamarid?sub_confirmation=1';
+        
+      // Update the popup button link dynamically
+      document.getElementById('popupSubBtn').href = subLink;
+      
+      setTimeout(() => {
+        btn.classList.remove('bounce');
+        document.getElementById('subModal').classList.add('open');
+      }, 400);
+    }
+    
+    function closeSubModal() {
+      document.getElementById('subModal').classList.remove('open');
+    }
+
     // === THEME ===
     function applySettings() {
       const theme = localStorage.getItem('samarid-theme') || 'dark';
@@ -481,18 +559,10 @@
       document.querySelectorAll('.theme-btn').forEach(b => {
         b.classList.toggle('active', b.dataset.theme === theme);
       });
-      document.querySelectorAll('.color-circle').forEach(c => {
-        c.classList.toggle('active', c.dataset.color === accent);
-      });
     }
 
     function setTheme(theme) {
       localStorage.setItem('samarid-theme', theme);
-      applySettings();
-    }
-
-    function setAccent(color) {
-      localStorage.setItem('samarid-accent', color);
       applySettings();
     }
 
@@ -511,70 +581,72 @@
     }
 
     // === YOUTUBE AUTO-SYNC ===
-    const CHANNEL_ID = 'UC11ElndF459dLRfV-OzwmpA';
+    const CHANNEL_ID = localStorage.getItem('samarid_channel_id') || 'UC11ElndF459dLRfV-OzwmpA';
+    const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
 
-const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
+    async function loadVideos() {
+      const grid = document.getElementById('videoGrid');
+      grid.innerHTML = '<div class="loading">Loading videos...</div>';
 
-async function loadVideos() {
-  const grid = document.getElementById('videoGrid');
-  grid.innerHTML = '<div class="loading">Loading videos...</div>';
+      try {
+        const channelRes = await fetch(
+          'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' +
+          CHANNEL_ID + '&key=' + API_KEY
+        );
+        const channelData = await channelRes.json();
 
-  try {
-    const channelRes = await fetch(
-      'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' +
-      CHANNEL_ID + '&key=' + API_KEY
-    );
-    const channelData = await channelRes.json();
+        if (!channelData.items || channelData.items.length === 0) {
+          throw new Error('Channel not found');
+        }
 
-    if (!channelData.items || channelData.items.length === 0) {
-      throw new Error('Channel not found');
+        const uploadsId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
+
+        const videosRes = await fetch(
+          'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=' +
+          uploadsId + '&key=' + API_KEY
+        );
+        const videosData = await videosRes.json();
+
+        if (!videosData.items || videosData.items.length === 0) {
+          grid.innerHTML = '<div class="empty">No videos yet — check back soon! 🎵</div>';
+          return;
+        }
+
+        const videos = videosData.items.map(item => {
+          const videoId = item.snippet.resourceId.videoId;
+          const title = item.snippet.title;
+          const published = item.snippet.publishedAt;
+          const date = new Date(published).toLocaleDateString('en-US', {
+            month: 'short', day: 'numeric', year: 'numeric'
+          });
+          const timestamp = new Date(published).getTime();
+          return { videoId, title, date, timestamp };
+        });
+
+        videos.sort((a, b) => b.timestamp - a.timestamp);
+
+        grid.innerHTML = videos.map(v => {
+          const thumb = 'https://i.ytimg.com/vi/' + v.videoId + '/hqdefault.jpg';
+          return `
+            <div class="video-card" onclick="openPlayer('${v.videoId}')">
+              <div class="video-thumb">
+                <img src="${thumb}" alt="${v.title}" loading="lazy">
+                <div class="video-play-overlay"></div>
+              </div>
+              <div class="video-title">${v.title}</div>
+              <div class="video-meta">${v.date}</div>
+            </div>
+          `;
+        }).join('');
+
+      } catch (err) {
+        console.error(err);
+        const channelId = localStorage.getItem('samarid_channel_id');
+        const link = channelId ? 'https://www.youtube.com/channel/' + channelId : 'https://youtube.com/@realsamarid';
+        grid.innerHTML = '<div class="empty">Could not load videos. <a href="' + link + '" style="color:var(--accent);">Visit YouTube →</a></div>';
+      }
     }
 
-    const uploadsId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
-
-    const videosRes = await fetch(
-      'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=' +
-      uploadsId + '&key=' + API_KEY
-    );
-    const videosData = await videosRes.json();
-
-    if (!videosData.items || videosData.items.length === 0) {
-      grid.innerHTML = '<div class="empty">No videos yet — check back soon! 🎵</div>';
-      return;
-    }
-
-    const videos = videosData.items.map(item => {
-      const videoId = item.snippet.resourceId.videoId;
-      const title = item.snippet.title;
-      const published = item.snippet.publishedAt;
-      const date = new Date(published).toLocaleDateString('en-US', {
-        month: 'short', day: 'numeric', year: 'numeric'
-      });
-      const timestamp = new Date(published).getTime();
-      return { videoId, title, date, timestamp };
-    });
-
-    videos.sort((a, b) => b.timestamp - a.timestamp);
-
-    grid.innerHTML = videos.map(v => {
-      const thumb = 'https://i.ytimg.com/vi/' + v.videoId + '/hqdefault.jpg';
-      return `
-        <div class="video-card" onclick="openPlayer('${v.videoId}')">
-          <div class="video-thumb">
-            <img src="${thumb}" alt="${v.title}" loading="lazy">
-            <div class="video-play-overlay"></div>
-          </div>
-          <div class="video-title">${v.title}</div>
-          <div class="video-meta">${v.date}</div>
-        </div>
-      `;
-    }).join('');
-
-  } catch (err) {
-    console.error(err);
-    grid.innerHTML = '<div class="empty">Could not load videos. <a href="https://youtube.com/@realsamarid" style="color:var(--accent);">Visit YouTube →</a></div>';
-  }
-}
     applySettings();
     loadVideos();
   </script>
