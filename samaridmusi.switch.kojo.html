@@ -3,208 +3,158 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Samarid Admin Panel</title>
+<title>Samarid Creator Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  body {
-    background: #0a0a0a;
-    color: #fff;
-    font-family: 'Inter', -apple-system, Roboto, sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    margin: 0;
-    padding: 20px;
-  }
-  .box {
-    background: #141414;
-    border: 1px solid #222;
-    border-radius: 20px;
-    padding: 40px 30px;
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-  }
-  h1 { font-size: 22px; margin-bottom: 10px; font-weight: 900; }
-  p { color: #ccc; font-size: 13px; margin-bottom: 20px; }
-  
-  /* Password Input Wrapper */
-  .password-wrapper {
-    position: relative;
-    width: 100%;
-    margin-bottom: 15px;
-  }
-  .password-wrapper input {
-    width: 100%;
-    padding: 14px 45px 14px 14px;
-    background: #0a0a0a;
-    border: 1px solid #333;
-    border-radius: 10px;
-    color: #fff;
-    font-size: 14px;
-    box-sizing: border-box;
-  }
-  .eye-btn {
-    position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    color: #666;
-    font-size: 18px;
-    cursor: pointer;
-    padding: 5px;
-  }
-  .eye-btn:active { color: #ff0033; }
-
-  /* General Inputs */
-  input[type="text"] {
-    width: 100%;
-    padding: 14px;
-    background: #0a0a0a;
-    border: 1px solid #333;
-    border-radius: 10px;
-    color: #fff;
-    font-size: 14px;
-    margin-bottom: 15px;
-    box-sizing: border-box;
-  }
-
-  button.main-btn {
-    width: 100%;
-    padding: 14px;
-    background: #ff0033;
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-  }
+  :root { --accent: #ff0033; --bg: #0a0a0a; --card: #141414; --border: #222; --text2: #888; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; padding-bottom: 80px; }
+  #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+  .login-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 35px 25px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+  .password-wrapper { position: relative; width: 100%; margin-bottom: 15px; }
+  .password-wrapper input { width: 100%; padding: 14px 45px 14px 14px; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; }
+  .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #666; font-size: 18px; cursor: pointer; }
+  #dashboard { display: none; }
+  .top-bar { background: var(--card); border-bottom: 1px solid var(--border); padding: 15px 20px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
+  .top-bar .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; }
+  .top-bar h1 { font-size: 16px; font-weight: 700; flex: 1; }
+  .top-bar .brand { color: var(--accent); font-size: 11px; letter-spacing: 1px; font-weight: 700; }
+  .content { padding: 20px; max-width: 600px; margin: 0 auto; }
+  .page { display: none; }
+  .page.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .page-title { font-size: 22px; font-weight: 900; margin-bottom: 5px; }
+  .page-subtitle { font-size: 13px; color: var(--text2); margin-bottom: 25px; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+  .stat-card .icon { font-size: 20px; margin-bottom: 8px; }
+  .stat-card h3 { font-size: 24px; font-weight: 900; }
+  .stat-card p { font-size: 11px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
+  .quick-actions { display: flex; gap: 12px; margin-bottom: 25px; }
+  .action-btn { flex: 1; padding: 18px 12px; border-radius: 14px; background: var(--card); border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: 0.2s; color: #fff; }
+  .action-btn:active { transform: scale(0.97); background: #222; }
+  .action-btn .icon { font-size: 24px; color: var(--accent); }
+  .action-btn .label { font-size: 12px; font-weight: 700; }
+  .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+  .section-header h2 { font-size: 15px; font-weight: 700; }
+  .section-header .count { font-size: 12px; color: var(--text2); }
+  .song-card { display: flex; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 12px; margin-bottom: 10px; }
+  .song-card img { width: 55px; height: 55px; border-radius: 8px; object-fit: cover; }
+  .song-card .info { flex: 1; min-width: 0; }
+  .song-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .song-card p { font-size: 11px; color: var(--text2); }
+  .delete-btn { background: transparent; border: none; color: #ff0033; font-size: 16px; cursor: pointer; padding: 8px; }
+  .empty-box { background: var(--card); border: 1px dashed var(--border); padding: 40px 20px; border-radius: 14px; text-align: center; color: var(--text2); font-size: 13px; }
+  .empty-box .icon { font-size: 30px; margin-bottom: 10px; }
+  .form-group { margin-bottom: 15px; }
+  .form-group label { display: block; font-size: 11px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+  .form-group input, .form-group textarea { width: 100%; padding: 13px; background: var(--card); border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; resize: vertical; }
+  .form-group textarea { min-height: 100px; }
+  .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); }
+  .form-group .hint { font-size: 10px; color: #555; margin-top: 4px; }
+  button.main-btn { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; }
   button.main-btn:active { transform: scale(0.97); }
-  
-  .status { font-size: 13px; margin-top: 15px; font-weight: bold; }
-  .success { color: #00cc44; }
-  .error { color: #ff0033; }
+  button.secondary-btn { width: 100%; padding: 14px; background: #222; color: #fff; border: 1px solid #333; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+  .status { font-size: 12px; margin-top: 12px; font-weight: bold; text-align: center; }
+  .success { color: #00cc44; } .error { color: #ff0033; } .info { color: #ffcc00; }
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 8px 0; z-index: 1000; }
+  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; color: var(--text2); cursor: pointer; background: transparent; border: none; font-family: inherit; }
+  .nav-item .icon { font-size: 18px; } .nav-item .label { font-size: 10px; font-weight: 700; }
+  .nav-item.active { color: var(--accent); }
 </style>
 </head>
 <body>
 
-  <div class="box">
-    <!-- LOGIN SCREEN -->
-    <div id="loginScreen">
-      <div style="font-size: 40px; margin-bottom: 10px;">🔐</div>
-      <h1>Admin Login</h1>
-      <p>Enter your password to access settings.</p>
-      
-      <!-- Password Input with Eye Icon -->
+  <!-- LOGIN -->
+  <div id="loginScreen">
+    <div class="login-box">
+      <div style="font-size: 40px; margin-bottom: 10px; text-align: center;">🔐</div>
+      <h1 style="font-size: 22px; margin-bottom: 6px; font-weight: 900; text-align: center;">Creator Login</h1>
+      <p style="color: #888; font-size: 13px; text-align: center; margin-bottom: 25px;">Welcome back, Samarid.</p>
       <div class="password-wrapper">
         <input type="password" id="passwordInput" placeholder="Enter Password">
         <button class="eye-btn" onclick="togglePassword()" id="eyeIcon">👁️</button>
       </div>
-      
-      <button class="main-btn" onclick="checkPassword()">Unlock</button>
+      <button class="main-btn" onclick="checkPassword()">Unlock Studio</button>
       <p id="loginStatus" class="status error"></p>
     </div>
+  </div>
 
-    <!-- ADMIN PANEL SCREEN -->
-    <div id="adminScreen" style="display:none;">
-      <div style="font-size: 40px; margin-bottom: 10px;">⚙️</div>
-      <h1>Channel Switcher</h1>
-      <p>Paste your new YouTube channel link below.</p>
-      <input type="text" id="channelInput" placeholder="https://youtube.com/@newchannel">
-      <button class="main-btn" onclick="saveChannel()">Save & Update Website</button>
-      <p id="adminStatus" class="status"></p>
-      <button class="main-btn" onclick="resetChannel()" style="background:#333; margin-top:20px;">Reset to Default Channel</button>
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+    <div class="top-bar">
+      <div class="avatar">S</div>
+      <div style="flex: 1;">
+        <h1>Samarid Music</h1>
+        <div class="brand">CREATOR STUDIO</div>
+      </div>
+      <button class="eye-btn" onclick="logout()" style="position: static; transform: none;"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+
+    <div class="content">
+      <!-- HOME -->
+      <div class="page active" id="pageHome">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Welcome to your Creator Studio</p>
+        <div class="stats-grid">
+          <div class="stat-card"><div class="icon">🎵</div><h3 id="totalSongs">0</h3><p>Total Songs</p></div>
+          <div class="stat-card"><div class="icon">📺</div><h3 id="channelStatus">Active</h3><p>Channel</p></div>
+        </div>
+        <div class="quick-actions">
+          <button class="action-btn" onclick="goToPage('upload')"><div class="icon">➕</div><div class="label">Upload Song</div></button>
+          <button class="action-btn" onclick="goToPage('channel')"><div class="icon">📺</div><div class="label">Channel</div></button>
+        </div>
+        <div class="section-header"><h2>Recent Songs</h2><span class="count" id="songCountHeader">0 songs</span></div>
+        <div id="homeSongList"></div>
+      </div>
+
+      <!-- UPLOAD -->
+      <div class="page" id="pageUpload">
+        <h1 class="page-title">Upload Song</h1>
+        <p class="page-subtitle">Add a new release to your website</p>
+        <div class="form-group"><label>Song Title</label><input type="text" id="songTitle" placeholder="e.g. Back To Sender"></div>
+        <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="https://i.imgur.com/....jpg"><p class="hint">💡 Upload your image to imgur.com and paste the link here</p></div>
+        <div class="form-group"><label>Category</label><input type="text" id="songCategory" placeholder="e.g. Afrobeats, Hip-Hop"></div>
+        <div class="form-group"><label>Release Date</label><input type="text" id="songDate" placeholder="e.g. April 13, 2026"></div>
+        <div class="form-group"><label>About This Song</label><textarea id="songDescription" placeholder="Write a description or story about the song..."></textarea></div>
+        <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="https://archive.org/download/....mp3"><p class="hint">💡 Upload your MP3 to archive.org and paste the direct link here</p></div>
+        <div class="form-group"><label>Play Now Link</label><input type="text" id="songPlay" placeholder="https://youtube.com/..."></div>
+        <button class="main-btn" onclick="saveSong()">Publish Song</button>
+        <p id="songStatus" class="status"></p>
+      </div>
+
+      <!-- CHANNEL -->
+      <div class="page" id="pageChannel">
+        <h1 class="page-title">YouTube Channel</h1>
+        <p class="page-subtitle">Connect your channel to auto-sync videos</p>
+        <div class="form-group"><label>Channel Link</label><input type="text" id="channelInput" placeholder="https://youtube.com/@yourchannel"></div>
+        <button class="main-btn" onclick="saveChannel()">Save & Sync Channel</button>
+        <button class="secondary-btn" onclick="resetChannel()">Reset to Default Channel</button>
+        <p id="adminStatus" class="status"></p>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item active" onclick="goToPage('home')" id="navHome"><div class="icon">🏠</div><div class="label">HOME</div></button>
+      <button class="nav-item" onclick="goToPage('upload')" id="navUpload"><div class="icon">➕</div><div class="label">UPLOAD</div></button>
+      <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon">📺</div><div class="label">CHANNEL</div></button>
     </div>
   </div>
 
   <script>
-    // ==========================================
-    // 1. SET YOUR PASSWORD HERE
-    // ==========================================
     const SECRET_PASSWORD = "samarid2026"; 
-    // ==========================================
-
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
 
-    // Toggle Password Visibility
-    function togglePassword() {
-      const input = document.getElementById('passwordInput');
-      const icon = document.getElementById('eyeIcon');
-      
-      if (input.type === 'password') {
-        input.type = 'text';
-        icon.innerText = '🙈'; // Hide icon
-      } else {
-        input.type = 'password';
-        icon.innerText = '👁️'; // Show icon
-      }
-    }
-
-    function checkPassword() {
-      const input = document.getElementById('passwordInput').value;
-      const status = document.getElementById('loginStatus');
-
-      if (input === SECRET_PASSWORD) {
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('adminScreen').style.display = 'block';
-      } else {
-        status.innerText = 'Wrong password. Try again.';
-      }
-    }
-
-    async function saveChannel() {
-      const input = document.getElementById('channelInput').value.trim();
-      const status = document.getElementById('adminStatus');
-      
-      if (!input) {
-        status.className = 'status error';
-        status.innerText = 'Please paste a YouTube link first!';
-        return;
-      }
-
-      status.className = 'status';
-      status.style.color = '#ffcc00';
-      status.innerText = 'Finding channel...';
-
-      try {
-        let handle = input;
-        if (input.includes('youtube.com/')) {
-          handle = input.split('youtube.com/')[1].replace('@', '').split('/')[0].split('?')[0];
-        }
-
-        const res = await fetch(
-          'https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=' + 
-          handle + '&key=' + API_KEY
-        );
-        const data = await res.json();
-
-        if (!data.items || data.items.length === 0) {
-          throw new Error('Channel not found');
-        }
-
-        const newId = data.items[0].snippet.channelId;
-        localStorage.setItem('samarid_channel_id', newId);
-        
-        status.className = 'status success';
-        status.innerText = '✅ Success! Your website will now show videos from this channel.';
-        document.getElementById('channelInput').value = '';
-
-      } catch (err) {
-        status.className = 'status error';
-        status.innerText = '❌ Error: Could not find that channel. Try the full link.';
-      }
-    }
-
-    function resetChannel() {
-      localStorage.removeItem('samarid_channel_id');
-      document.getElementById('adminStatus').className = 'status success';
-      document.getElementById('adminStatus').innerText = 'Reset! Your website is back to the default channel.';
-    }
+    function togglePassword() { const input = document.getElementById('passwordInput'); const icon = document.getElementById('eyeIcon'); if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; } else { input.type = 'password'; icon.innerText = '👁️'; } }
+    function checkPassword() { const input = document.getElementById('passwordInput').value; const status = document.getElementById('loginStatus'); if (input === SECRET_PASSWORD) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; loadDashboard(); } else { status.innerText = '❌ Wrong password. Try again.'; } }
+    function logout() { if (confirm('Log out?')) location.reload(); }
+    function goToPage(page) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); document.getElementById('nav' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); window.scrollTo(0, 0); }
+    function loadDashboard() { const savedSongs = JSON.parse(localStorage.getItem('samarid_songs') || '[]'); document.getElementById('totalSongs').innerText = savedSongs.length; document.getElementById('songCountHeader').innerText = savedSongs.length + ' songs'; const list = document.getElementById('homeSongList'); if (savedSongs.length === 0) { list.innerHTML = `<div class="empty-box"><div class="icon">🎵</div>No songs uploaded yet.<br>Tap "Upload Song" to start.</div>`; } else { list.innerHTML = savedSongs.map((song, i) => `<div class="song-card"><img src="${song.cover}" alt="${song.title}"><div class="info"><h4>${song.title}</h4><p>${song.category} • ${song.date}</p></div><button class="delete-btn" onclick="deleteSong(${i})"><i class="fas fa-trash"></i></button></div>`).join(''); } }
+    function saveSong() { const status = document.getElementById('songStatus'); const title = document.getElementById('songTitle').value.trim(); const cover = document.getElementById('songCover').value.trim(); const category = document.getElementById('songCategory').value.trim() || 'Music'; const date = document.getElementById('songDate').value.trim() || new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'}); const description = document.getElementById('songDescription').value.trim() || 'No description yet.'; const downloadUrl = document.getElementById('songDownload').value.trim() || '#'; const playUrl = document.getElementById('songPlay').value.trim() || '#'; if (!title || !cover) { status.className = 'status error'; status.innerText = '❌ Title and Cover Art URL are required!'; return; } const songData = { title, cover, category, date, description, downloadUrl, playUrl }; let savedSongs = JSON.parse(localStorage.getItem('samarid_songs') || '[]'); savedSongs.unshift(songData); localStorage.setItem('samarid_songs', JSON.stringify(savedSongs)); status.className = 'status success'; status.innerText = '✅ Song published!'; ['songTitle','songCover','songCategory','songDate','songDescription','songDownload','songPlay'].forEach(id => document.getElementById(id).value = ''); loadDashboard(); setTimeout(() => goToPage('home'), 1200); }
+    function deleteSong(index) { if (!confirm('Delete this song?')) return; let savedSongs = JSON.parse(localStorage.getItem('samarid_songs') || '[]'); savedSongs.splice(index, 1); localStorage.setItem('samarid_songs', JSON.stringify(savedSongs)); loadDashboard(); }
+    async function saveChannel() { const input = document.getElementById('channelInput').value.trim(); const status = document.getElementById('adminStatus'); if (!input) { status.className = 'status error'; status.innerText = 'Please paste a YouTube link first!'; return; } status.className = 'status info'; status.innerText = 'Finding channel...'; try { let handle = input; if (input.includes('youtube.com/')) handle = input.split('youtube.com/')[1].replace('@', '').split('/')[0].split('?')[0]; const res = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=' + handle + '&key=' + API_KEY); const data = await res.json(); if (!data.items || data.items.length === 0) throw new Error('Not found'); localStorage.setItem('samarid_channel_id', data.items[0].snippet.channelId); status.className = 'status success'; status.innerText = '✅ Channel updated successfully!'; document.getElementById('channelInput').value = ''; } catch (err) { status.className = 'status error'; status.innerText = '❌ Could not find that channel.'; } }
+    function resetChannel() { localStorage.removeItem('samarid_channel_id'); document.getElementById('adminStatus').className = 'status success'; document.getElementById('adminStatus').innerText = '✅ Reset to default channel.'; }
   </script>
 </body>
 </html>
