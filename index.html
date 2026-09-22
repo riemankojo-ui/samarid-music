@@ -11,14 +11,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-  :root {
-    --bg: #0a0a0a; --card: #141414; --border: #222; --text: #ffffff; --text2: #cccccc; --accent: #ff0033;
-  }
+  :root { --bg: #0a0a0a; --card: #141414; --border: #222; --text: #ffffff; --text2: #cccccc; --accent: #ff0033; }
   body.light { --bg: #ffffff; --card: #f5f5f5; --border: #e5e5e5; --text: #0a0a0a; --text2: #444444; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; transition: background 0.3s, color 0.3s; padding-bottom: 40px; }
-
-  /* ===== HEADER ===== */
   .header { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; transition: background 0.3s; }
   .menu-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); font-size: 18px; font-weight: 700; transition: all 0.15s; }
   .menu-btn:active { background: var(--accent); color: #fff; }
@@ -28,18 +24,12 @@
   .subscribe-btn:active { opacity: 0.8; }
   @keyframes bounce { 0% { transform: scale(1); } 30% { transform: scale(0.9); } 50% { transform: scale(1.1); } 70% { transform: scale(0.95); } 100% { transform: scale(1); } }
   .subscribe-btn.bounce { animation: bounce 0.4s ease; }
-
-  /* ===== TABS ===== */
   .tabs-container { position: sticky; top: 58px; z-index: 90; display: flex; justify-content: center; gap: 10px; padding: 12px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
   .tab-btn { padding: 8px 24px; border-radius: 20px; background: var(--card); border: 1px solid var(--border); color: var(--text2); font-weight: 700; font-size: 13px; cursor: pointer; transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; }
   .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-  /* ===== SLIDER ===== */
   .slider-wrapper { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .slider-wrapper::-webkit-scrollbar { display: none; }
   .slide { flex: 0 0 100%; scroll-snap-align: start; padding: 20px 16px 30px; box-sizing: border-box; }
-
-  /* ===== DROPDOWN MENU ===== */
   .menu-dropdown { position: fixed; top: 58px; left: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); width: 260px; max-height: 80vh; overflow-y: auto; display: none; z-index: 9999; }
   .menu-dropdown.open { display: block; }
   .menu-title { padding: 12px 18px 8px; font-size: 10px; color: var(--text2); letter-spacing: 2px; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--border); margin-top: 5px; }
@@ -49,31 +39,13 @@
   .menu-item .icon { font-size: 16px; width: 20px; text-align: center; display: flex; justify-content: center; align-items: center; }
   .menu-item .label { flex: 1; color: var(--text); }
   .menu-item .arrow { color: var(--text2); font-size: 11px; }
-
-  /* ===== THEME SWITCH ===== */
   .theme-row { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
   .theme-label { font-size: 13px; color: var(--text); }
   .theme-toggle { display: flex; gap: 6px; }
   .theme-btn { padding: 6px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 11px; cursor: pointer; transition: all 0.15s; }
   .theme-btn.active { border-color: var(--accent); color: var(--accent); font-weight: 700; }
-
-  /* ===== TITLES ===== */
   .section-title { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-  
-  /* NEW: Boxed Page Title for Songs */
-  .page-title {
-    font-size: 18px;
-    font-weight: 900;
-    text-align: center;
-    padding: 20px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 20px;
-    color: var(--text);
-  }
-
-  /* ===== VIDEO GRID ===== */
+  .page-title { font-size: 18px; font-weight: 900; text-align: center; padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px; color: var(--text); }
   .video-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
   @media (min-width: 600px) { .video-grid { grid-template-columns: 1fr 1fr; } }
   @media (min-width: 900px) { .video-grid { grid-template-columns: 1fr 1fr 1fr; } }
@@ -86,8 +58,6 @@
   .video-play-overlay::before { content: ''; position: absolute; width: 0; height: 0; border-left: 14px solid #ffffff; border-top: 9px solid transparent; border-bottom: 9px solid transparent; margin-left: 3px; z-index: 2; }
   .video-title { font-size: 15px; font-weight: 600; line-height: 1.35; margin-bottom: 6px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .video-meta { font-size: 12px; color: var(--text2); }
-
-  /* ===== SONG LIST (Blog Style) ===== */
   .song-list { display: flex; flex-direction: column; gap: 12px; }
   .song-card { display: flex; gap: 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; }
   .song-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
@@ -100,18 +70,13 @@
   .empty-state { text-align: center; padding: 60px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text2); }
   .empty-state .icon { font-size: 50px; margin-bottom: 15px; }
   .empty-state h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
-
   .loading, .empty { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 13px; }
-
-  /* ===== VIDEO PLAYER MODAL ===== */
   .player-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
   .player-modal.open { display: flex; }
   .player-inner { width: 100%; max-width: 900px; background: #000; border-radius: 12px; overflow: hidden; position: relative; }
   .player-video { width: 100%; aspect-ratio: 16 / 9; border: none; display: block; }
   .player-close { position: absolute; top: -50px; right: 0; background: rgba(255,255,255,0.15); color: #fff; border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 22px; cursor: pointer; font-weight: 700; }
   .player-close:active { background: var(--accent); }
-
-  /* ===== SUBSCRIBE MODAL ===== */
   .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
   .sub-modal.open { display: flex; }
   .sub-modal-inner { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 30px 24px; text-align: center; max-width: 340px; width: 100%; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -120,47 +85,38 @@
   .sub-modal-btn.confirm { background: #ff0033; color: #ffffff; }
   .sub-modal-btn.confirm:active { transform: scale(0.97); }
   .sub-modal-btn.close { background: transparent; color: var(--text2); font-size: 12px; font-weight: 500; }
-
-  /* ===== FOOTER ===== */
   .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); letter-spacing: 1px; border-top: 1px solid var(--border); margin-top: 20px; }
   .footer .brand { color: var(--accent); font-weight: 700; }
 </style>
 </head>
 <body>
 
-  <!-- HEADER -->
   <header class="header">
     <button class="menu-btn" onclick="toggleMenu(event)">☰</button>
     <a href="#" class="logo">SAMARID <span>MUSIC</span></a>
     <a href="#" id="subBtn" onclick="fakeSubscribe(event)" class="subscribe-btn">SUBSCRIBE</a>
   </header>
 
-  <!-- TABS -->
   <div class="tabs-container">
     <button class="tab-btn active" id="tabVideos" onclick="switchTab('videos')">Videos</button>
     <button class="tab-btn" id="tabSongs" onclick="switchTab('songs')">Songs</button>
   </div>
 
-  <!-- SLIDER -->
   <div class="slider-wrapper" id="sliderWrapper">
-    
-    <!-- SLIDE 1: VIDEOS -->
     <div class="slide" id="slideVideos">
       <div class="section-title">Latest Releases</div>
       <div class="video-grid" id="videoGrid">
         <div class="loading">Loading videos...</div>
       </div>
     </div>
-
-    <!-- SLIDE 2: SONGS -->
     <div class="slide" id="slideSongs">
       <div class="page-title">Browse - Samarid Music</div>
-      <div class="song-list" id="songList"></div>
+      <div class="song-list" id="songList">
+        <div class="loading">Loading songs...</div>
+      </div>
     </div>
-
   </div>
 
-  <!-- DROPDOWN MENU -->
   <div class="menu-dropdown" id="menuDropdown" onclick="event.stopPropagation()">
     <div class="menu-title">⚙️ Settings</div>
     <div class="theme-row">
@@ -171,40 +127,15 @@
       </div>
     </div>
     <div class="menu-title">🔗 Follow</div>
-    <a href="https://youtube.com/@realsamarid" target="_blank" class="menu-item">
-      <span class="icon"><i class="fab fa-youtube" style="color: #FF0000;"></i></span>
-      <span class="label">YouTube</span>
-      <span class="arrow">↗</span>
-    </a>
-    <a href="https://tiktok.com/@realsamarid" target="_blank" class="menu-item">
-      <span class="icon"><i class="fab fa-tiktok" style="color: #ffffff;"></i></span>
-      <span class="label">TikTok</span>
-      <span class="arrow">↗</span>
-    </a>
-    <a href="https://facebook.com/realsamarid" target="_blank" class="menu-item">
-      <span class="icon"><i class="fab fa-facebook" style="color: #1877F2;"></i></span>
-      <span class="label">Facebook</span>
-      <span class="arrow">↗</span>
-    </a>
-    <a href="https://wa.me/233207425831" target="_blank" class="menu-item">
-      <span class="icon"><i class="fab fa-whatsapp" style="color: #25D366;"></i></span>
-      <span class="label">WhatsApp</span>
-      <span class="arrow">↗</span>
-    </a>
-    <a href="mailto:riemankojo@gmail.com" class="menu-item">
-      <span class="icon"><i class="fas fa-envelope" style="color: #EA4335;"></i></span>
-      <span class="label">Email</span>
-      <span class="arrow">↗</span>
-    </a>
+    <a href="https://youtube.com/@realsamarid" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-youtube" style="color: #FF0000;"></i></span><span class="label">YouTube</span><span class="arrow">↗</span></a>
+    <a href="https://tiktok.com/@realsamarid" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-tiktok" style="color: #ffffff;"></i></span><span class="label">TikTok</span><span class="arrow">↗</span></a>
+    <a href="https://facebook.com/realsamarid" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-facebook" style="color: #1877F2;"></i></span><span class="label">Facebook</span><span class="arrow">↗</span></a>
+    <a href="https://wa.me/233207425831" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-whatsapp" style="color: #25D366;"></i></span><span class="label">WhatsApp</span><span class="arrow">↗</span></a>
+    <a href="mailto:riemankojo@gmail.com" class="menu-item"><span class="icon"><i class="fas fa-envelope" style="color: #EA4335;"></i></span><span class="label">Email</span><span class="arrow">↗</span></a>
     <div class="menu-title">ℹ️ Info</div>
-    <div class="menu-item" onclick="showAbout()">
-      <span class="icon"><i class="fas fa-microphone" style="color: #ff0033;"></i></span>
-      <span class="label">About Samarid</span>
-      <span class="arrow">›</span>
-    </div>
+    <div class="menu-item" onclick="showAbout()"><span class="icon"><i class="fas fa-microphone" style="color: #ff0033;"></i></span><span class="label">About Samarid</span><span class="arrow">›</span></div>
   </div>
 
-  <!-- VIDEO PLAYER MODAL -->
   <div class="player-modal" id="playerModal" onclick="closePlayer()">
     <div class="player-inner" onclick="event.stopPropagation()">
       <button class="player-close" onclick="closePlayer()">✕</button>
@@ -212,7 +143,6 @@
     </div>
   </div>
 
-  <!-- SUBSCRIBE POPUP MODAL -->
   <div class="sub-modal" id="subModal" onclick="closeSubModal()">
     <div class="sub-modal-inner" onclick="event.stopPropagation()">
       <div style="font-size: 40px; margin-bottom: 10px;">🎵</div>
@@ -225,100 +155,90 @@
 
   <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
 
-  <script>
-    // === TABS & SLIDER (Intersection Observer - Super Smooth) ===
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAmeKKhMA1YHs0VNkliwNUl4BvrQLS-RMY",
+      authDomain: "samarid-music-e1a61.firebaseapp.com",
+      projectId: "samarid-music-e1a61",
+      storageBucket: "samarid-music-e1a61.firebasestorage.app",
+      messagingSenderId: "435825568762",
+      appId: "1:435825568762:web:2aa73d62cdb5197514d243",
+      measurementId: "G-EHRCK42546"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     const slider = document.getElementById('sliderWrapper');
     const tabVideos = document.getElementById('tabVideos');
     const tabSongs = document.getElementById('tabSongs');
     const slideVideos = document.getElementById('slideVideos');
     const slideSongs = document.getElementById('slideSongs');
 
-    function switchTab(tab) {
-      if (tab === 'videos') {
-        slider.scrollTo({ left: 0, behavior: 'smooth' });
-      } else {
-        slider.scrollTo({ left: slider.offsetWidth, behavior: 'smooth' });
-      }
+    window.switchTab = function(tab) {
+      if (tab === 'videos') { slider.scrollTo({ left: 0, behavior: 'smooth' }); }
+      else { slider.scrollTo({ left: slider.offsetWidth, behavior: 'smooth' }); }
     }
 
     const observerOptions = { root: slider, threshold: 0.5 };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          if (entry.target.id === 'slideVideos') {
-            tabVideos.classList.add('active');
-            tabSongs.classList.remove('active');
-          } else {
-            tabSongs.classList.add('active');
-            tabVideos.classList.remove('active');
-          }
+          if (entry.target.id === 'slideVideos') { tabVideos.classList.add('active'); tabSongs.classList.remove('active'); }
+          else { tabSongs.classList.add('active'); tabVideos.classList.remove('active'); }
         }
       });
     }, observerOptions);
+    observer.observe(slideVideos); observer.observe(slideSongs);
 
-    observer.observe(slideVideos);
-    observer.observe(slideSongs);
-
-    // === MENU ===
-    function toggleMenu(e) { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('open'); }
+    window.toggleMenu = function(e) { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('open'); }
     function closeMenu() { document.getElementById('menuDropdown').classList.remove('open'); }
     document.addEventListener('click', closeMenu);
-    function showAbout() { alert('Samarid Music\n\nArtist · Creating music that moves you.\n\nSubscribe on YouTube: @realsamarid'); closeMenu(); }
+    window.showAbout = function() { alert('Samarid Music\n\nArtist · Creating music that moves you.\n\nSubscribe on YouTube: @realsamarid'); closeMenu(); }
 
-    // === SUBSCRIBE POPUP ===
-    function fakeSubscribe(e) {
+    window.fakeSubscribe = function(e) {
       e.preventDefault();
-      const btn = document.getElementById('subBtn');
-      btn.classList.add('bounce');
+      const btn = document.getElementById('subBtn'); btn.classList.add('bounce');
       const channelId = localStorage.getItem('samarid_channel_id');
       const subLink = channelId ? 'https://www.youtube.com/channel/' + channelId + '?sub_confirmation=1' : 'https://youtube.com/@realsamarid?sub_confirmation=1';
       document.getElementById('popupSubBtn').href = subLink;
       setTimeout(() => { btn.classList.remove('bounce'); document.getElementById('subModal').classList.add('open'); }, 400);
     }
-    function closeSubModal() { document.getElementById('subModal').classList.remove('open'); }
+    window.closeSubModal = function() { document.getElementById('subModal').classList.remove('open'); }
 
-    // === THEME ===
-    function applySettings() {
-      const theme = localStorage.getItem('samarid-theme') || 'dark';
-      const accent = localStorage.getItem('samarid-accent') || '#ff0033';
-      document.body.classList.toggle('light', theme === 'light');
-      document.documentElement.style.setProperty('--accent', accent);
+    window.applySettings = function() {
+      const theme = localStorage.getItem('samarid-theme') || 'dark'; const accent = localStorage.getItem('samarid-accent') || '#ff0033';
+      document.body.classList.toggle('light', theme === 'light'); document.documentElement.style.setProperty('--accent', accent);
       document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
     }
-    function setTheme(theme) { localStorage.setItem('samarid-theme', theme); applySettings(); }
+    window.setTheme = function(theme) { localStorage.setItem('samarid-theme', theme); applySettings(); }
 
-    // === VIDEO PLAYER ===
-    function openPlayer(videoId) {
-      const modal = document.getElementById('playerModal');
-      const frame = document.getElementById('playerFrame');
-      frame.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0';
-      modal.classList.add('open');
+    window.openPlayer = function(videoId) {
+      const modal = document.getElementById('playerModal'); const frame = document.getElementById('playerFrame');
+      frame.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0'; modal.classList.add('open');
     }
-    function closePlayer() {
-      const modal = document.getElementById('playerModal');
-      const frame = document.getElementById('playerFrame');
+    window.closePlayer = function() {
+      const modal = document.getElementById('playerModal'); const frame = document.getElementById('playerFrame');
       frame.src = ''; modal.classList.remove('open');
     }
 
-    // === YOUTUBE AUTO-SYNC ===
     const CHANNEL_ID = localStorage.getItem('samarid_channel_id') || 'UC11ElndF459dLRfV-OzwmpA';
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
 
     async function loadVideos() {
-      const grid = document.getElementById('videoGrid');
-      grid.innerHTML = '<div class="loading">Loading videos...</div>';
+      const grid = document.getElementById('videoGrid'); grid.innerHTML = '<div class="loading">Loading videos...</div>';
       try {
         const channelRes = await fetch('https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' + CHANNEL_ID + '&key=' + API_KEY);
-        const channelData = await channelRes.json();
-        if (!channelData.items || channelData.items.length === 0) throw new Error('Channel not found');
+        const channelData = await channelRes.json(); if (!channelData.items || channelData.items.length === 0) throw new Error('Channel not found');
         const uploadsId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
         const videosRes = await fetch('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=' + uploadsId + '&key=' + API_KEY);
         const videosData = await videosRes.json();
         if (!videosData.items || videosData.items.length === 0) { grid.innerHTML = '<div class="empty">No videos yet — check back soon! 🎵</div>'; return; }
         const videos = videosData.items.map(item => {
-          const videoId = item.snippet.resourceId.videoId;
-          const title = item.snippet.title;
-          const published = item.snippet.publishedAt;
+          const videoId = item.snippet.resourceId.videoId; const title = item.snippet.title; const published = item.snippet.publishedAt;
           const date = new Date(published).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
           return { videoId, title, date, timestamp: new Date(published).getTime() };
         });
@@ -336,31 +256,29 @@
       }
     }
 
-    // === RENDER SONGS FROM LOCALSTORAGE ===
-    function renderSongs() {
+    async function renderSongs() {
       const list = document.getElementById('songList');
-      const songs = JSON.parse(localStorage.getItem('samarid_songs') || '[]');
-      
-      if (songs.length === 0) {
-        list.innerHTML = `<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>Check back soon for new music!</p></div>`;
-        return;
-      }
-      
-      list.innerHTML = songs.map((s, i) => `
-        <div class="song-card">
-          <div class="song-card-img"><img src="${s.cover}"></div>
-          <div class="song-card-info">
-            <div class="song-card-cat">${s.category} • Listen</div>
-            <h3>${s.title}</h3>
-            <div class="date">${s.date}</div>
+      try {
+        const querySnapshot = await getDocs(query(collection(db, "songs"), orderBy("timestamp", "desc")));
+        const songs = []; querySnapshot.forEach((doc) => { songs.push({ id: doc.id, ...doc.data() }); });
+        if (songs.length === 0) {
+          list.innerHTML = `<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>Check back soon for new music!</p></div>`;
+          return;
+        }
+        list.innerHTML = songs.map((s) => `
+          <div class="song-card" onclick="window.location.href='song.html?id=${s.id}'">
+            <div class="song-card-img"><img src="${s.cover}"></div>
+            <div class="song-card-info">
+              <div class="song-card-cat">${s.category} • Listen</div>
+              <h3>${s.title}</h3>
+              <div class="date">${s.date}</div>
+            </div>
           </div>
-        </div>
-      `).join('');
+        `).join('');
+      } catch (e) { console.error("Error loading songs: ", e); list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Could not load songs</h3><p>Try again later.</p></div>'; }
     }
 
-    applySettings();
-    loadVideos();
-    renderSongs();
+    applySettings(); loadVideos(); renderSongs();
   </script>
 </body>
 </html>
