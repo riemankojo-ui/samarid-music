@@ -512,65 +512,67 @@
     // === YOUTUBE AUTO-SYNC ===
     const CHANNEL_ID = 'UC11ElndF459dLRfV-OzwmpA';
 
+const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
+
 async function loadVideos() {
   const grid = document.getElementById('videoGrid');
-  const rssUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + CHANNEL_ID;
-
-  const proxies = [
-    'https://api.allorigins.win/raw?url=' + encodeURIComponent(rssUrl),
-    'https://corsproxy.io/?' + encodeURIComponent(rssUrl),
-    'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(rssUrl)
-  ];
-
   grid.innerHTML = '<div class="loading">Loading videos...</div>';
 
-  for (const proxy of proxies) {
-    try {
-      const res = await fetch(proxy, { cache: 'no-store' });
-      if (!res.ok) continue;
+  try {
+    const channelRes = await fetch(
+      'https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' +
+      CHANNEL_ID + '&key=' + API_KEY
+    );
+    const channelData = await channelRes.json();
 
-      const text = await res.text();
-      const parser = new DOMParser();
-      const xml = parser.parseFromString(text, 'text/xml');
-      const entries = xml.querySelectorAll('entry');
-
-      if (entries.length === 0) continue;
-
-      const videos = Array.from(entries).map(entry => {
-        const videoIdEl = entry.getElementsByTagName('yt:videoId')[0];
-        const videoId = videoIdEl ? videoIdEl.textContent : null;
-        const title = entry.getElementsByTagName('title')[0]?.textContent || 'Untitled';
-        const published = entry.getElementsByTagName('published')[0]?.textContent || '';
-        const date = new Date(published).toLocaleDateString('en-US', {
-          month: 'short', day: 'numeric', year: 'numeric'
-        });
-        const timestamp = new Date(published).getTime();
-        return { videoId, title, date, timestamp };
-      }).filter(v => v.videoId);
-
-      videos.sort((a, b) => b.timestamp - a.timestamp);
-
-      grid.innerHTML = videos.map(v => {
-        const thumb = 'https://i.ytimg.com/vi/' + v.videoId + '/hqdefault.jpg';
-        return `
-          <div class="video-card" onclick="openPlayer('${v.videoId}')">
-            <div class="video-thumb">
-              <img src="${thumb}" alt="${v.title}" loading="lazy">
-              <div class="video-play-overlay"></div>
-            </div>
-            <div class="video-title">${v.title}</div>
-            <div class="video-meta">${v.date}</div>
-          </div>
-        `;
-      }).join('');
-      return;
-    } catch (err) {
-      console.log('Proxy failed:', proxy);
-      continue;
+    if (!channelData.items || channelData.items.length === 0) {
+      throw new Error('Channel not found');
     }
-  }
 
-  grid.innerHTML = '<div class="empty">Could not load videos. <a href="https://youtube.com/@realsamarid" style="color:var(--accent);">Visit YouTube →</a></div>';
+    const uploadsId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
+
+    const videosRes = await fetch(
+      'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=' +
+      uploadsId + '&key=' + API_KEY
+    );
+    const videosData = await videosRes.json();
+
+    if (!videosData.items || videosData.items.length === 0) {
+      grid.innerHTML = '<div class="empty">No videos yet — check back soon! 🎵</div>';
+      return;
+    }
+
+    const videos = videosData.items.map(item => {
+      const videoId = item.snippet.resourceId.videoId;
+      const title = item.snippet.title;
+      const published = item.snippet.publishedAt;
+      const date = new Date(published).toLocaleDateString('en-US', {
+        month: 'short', day: 'numeric', year: 'numeric'
+      });
+      const timestamp = new Date(published).getTime();
+      return { videoId, title, date, timestamp };
+    });
+
+    videos.sort((a, b) => b.timestamp - a.timestamp);
+
+    grid.innerHTML = videos.map(v => {
+      const thumb = 'https://i.ytimg.com/vi/' + v.videoId + '/hqdefault.jpg';
+      return `
+        <div class="video-card" onclick="openPlayer('${v.videoId}')">
+          <div class="video-thumb">
+            <img src="${thumb}" alt="${v.title}" loading="lazy">
+            <div class="video-play-overlay"></div>
+          </div>
+          <div class="video-title">${v.title}</div>
+          <div class="video-meta">${v.date}</div>
+        </div>
+      `;
+    }).join('');
+
+  } catch (err) {
+    console.error(err);
+    grid.innerHTML = '<div class="empty">Could not load videos. <a href="https://youtube.com/@realsamarid" style="color:var(--accent);">Visit YouTube →</a></div>';
+  }
 }
     applySettings();
     loadVideos();
