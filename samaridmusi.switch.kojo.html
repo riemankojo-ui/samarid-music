@@ -55,6 +55,7 @@
   .form-group .hint { font-size: 10px; color: #555; margin-top: 4px; }
   button.main-btn { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; }
   button.main-btn:active { transform: scale(0.97); }
+  button.main-btn:disabled { background: #555; cursor: not-allowed; }
   button.secondary-btn { width: 100%; padding: 14px; background: #222; color: #fff; border: 1px solid #333; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; }
   .status { font-size: 12px; margin-top: 12px; font-weight: bold; text-align: center; }
   .success { color: #00cc44; } .error { color: #ff0033; } .info { color: #ffcc00; }
@@ -120,7 +121,7 @@
         <div class="form-group"><label>About This Song</label><textarea id="songDescription" placeholder="Write a description or story about the song..."></textarea></div>
         <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="https://archive.org/download/....mp3"><p class="hint">💡 Upload your MP3 to archive.org or Google Drive and paste the link here</p></div>
         <div class="form-group"><label>Play Now Link</label><input type="text" id="songPlay" placeholder="https://youtube.com/..."></div>
-        <button class="main-btn" onclick="saveSong()">Publish Song</button>
+        <button class="main-btn" id="publishBtn" onclick="saveSong()">Publish Song</button>
         <p id="songStatus" class="status"></p>
       </div>
 
@@ -192,7 +193,15 @@
     }
 
     window.saveSong = async function() {
+      const btn = document.getElementById('publishBtn');
       const status = document.getElementById('songStatus');
+      
+      // Visual feedback immediately
+      btn.innerText = "Publishing...";
+      btn.disabled = true;
+      status.className = 'status info';
+      status.innerText = '⏳ Saving to Firebase...';
+
       const title = document.getElementById('songTitle').value.trim();
       const cover = document.getElementById('songCover').value.trim();
       const category = document.getElementById('songCategory').value.trim() || 'Music';
@@ -201,14 +210,35 @@
       const downloadUrl = document.getElementById('songDownload').value.trim() || '#';
       const playUrl = document.getElementById('songPlay').value.trim() || '#';
 
-      if (!title || !cover) { status.className = 'status error'; status.innerText = '❌ Title and Cover Art URL are required!'; return; }
+      if (!title || !cover) { 
+        status.className = 'status error'; 
+        status.innerText = '❌ Title and Cover Art URL are required!'; 
+        btn.innerText = "Publish Song"; btn.disabled = false;
+        return; 
+      }
 
       try {
         await addDoc(collection(db, "songs"), { title, cover, category, date, description, downloadUrl, playUrl, timestamp: new Date().getTime() });
-        status.className = 'status success'; status.innerText = '✅ Song published to the cloud!';
+        
+        status.className = 'status success'; 
+        status.innerText = '✅ Song published to the cloud!';
+        
         ['songTitle','songCover','songCategory','songDate','songDescription','songDownload','songPlay'].forEach(id => document.getElementById(id).value = '');
-        loadDashboard(); setTimeout(() => goToPage('home'), 1200);
-      } catch (e) { console.error("Error adding document: ", e); status.className = 'status error'; status.innerText = '❌ Error saving song. Check console.'; }
+        
+        loadDashboard(); 
+        setTimeout(() => {
+          goToPage('home');
+          btn.innerText = "Publish Song"; 
+          btn.disabled = false;
+        }, 1500);
+
+      } catch (e) { 
+        console.error("Error adding document: ", e); 
+        status.className = 'status error'; 
+        status.innerText = '❌ Error: ' + e.message; 
+        btn.innerText = "Publish Song"; 
+        btn.disabled = false;
+      }
     }
 
     window.deleteSong = async function(id) {
