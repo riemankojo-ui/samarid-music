@@ -512,43 +512,55 @@
     // === YOUTUBE AUTO-SYNC ===
     const CHANNEL_ID = 'UC11ElndF459dLRfV-OzwmpA';
 
-    async function loadVideos() {
-      const grid = document.getElementById('videoGrid');
-      const rssUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + CHANNEL_ID;
-      const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl);
+async function loadVideos() {
+  const grid = document.getElementById('videoGrid');
+  const rssUrl = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + CHANNEL_ID;
+  const proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(rssUrl);
 
-      try {
-        const res = await fetch(apiUrl);
-        const data = await res.json();
+  try {
+    const res = await fetch(proxy, { cache: 'no-store' });
+    const data = await res.json();
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(data.contents, 'text/xml');
+    const entries = xml.querySelectorAll('entry');
 
-        if (!data.items || data.items.length === 0) {
-          grid.innerHTML = '<div class="empty">No videos yet — check back soon! 🎵</div>';
-          return;
-        }
-
-        grid.innerHTML = data.items.map(item => {
-          const videoId = item.link.split('v=')[1] || item.guid.split(':')[2];
-          const thumb = 'https://i.ytimg.com/vi/' + videoId + '/hqdefault.jpg';
-          const title = item.title;
-          const date = new Date(item.pubDate).toLocaleDateString('en-US', {
-            month: 'short', day: 'numeric', year: 'numeric'
-          });
-          return `
-            <div class="video-card" onclick="openPlayer('${videoId}')">
-              <div class="video-thumb">
-                <img src="${thumb}" alt="${title}" loading="lazy">
-                <div class="video-play-overlay"></div>
-              </div>
-              <div class="video-title">${title}</div>
-              <div class="video-meta">${date}</div>
-            </div>
-          `;
-        }).join('');
-      } catch (err) {
-        console.error(err);
-        grid.innerHTML = '<div class="empty">Could not load videos. Visit YouTube →</div>';
-      }
+    if (entries.length === 0) {
+      grid.innerHTML = '<div class="empty">No videos yet — check back soon! 🎵</div>';
+      return;
     }
+
+    const videos = Array.from(entries).map(entry => {
+      const videoIdEl = entry.getElementsByTagName('yt:videoId')[0];
+      const videoId = videoIdEl ? videoIdEl.textContent : null;
+      const title = entry.getElementsByTagName('title')[0]?.textContent || 'Untitled';
+      const published = entry.getElementsByTagName('published')[0]?.textContent || '';
+      const date = new Date(published).toLocaleDateString('en-US', {
+        month: 'short', day: 'numeric', year: 'numeric'
+      });
+      const timestamp = new Date(published).getTime();
+      return { videoId, title, date, timestamp };
+    }).filter(v => v.videoId);
+
+    videos.sort((a, b) => b.timestamp - a.timestamp);
+
+    grid.innerHTML = videos.map(v => {
+      const thumb = 'https://i.ytimg.com/vi/' + v.videoId + '/hqdefault.jpg';
+      return `
+        <div class="video-card" onclick="openPlayer('${v.videoId}')">
+          <div class="video-thumb">
+            <img src="${thumb}" alt="${v.title}" loading="lazy">
+            <div class="video-play-overlay"></div>
+          </div>
+          <div class="video-title">${v.title}</div>
+          <div class="video-meta">${v.date}</div>
+        </div>
+      `;
+    }).join('');
+  } catch (err) {
+    console.error(err);
+    grid.innerHTML = '<div class="empty">Could not load videos. Visit YouTube →</div>';
+  }
+}
 
     applySettings();
     loadVideos();
