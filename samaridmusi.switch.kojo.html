@@ -128,15 +128,15 @@
     const SECRET_PASSWORD = "samarid2026"; 
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
     
-    // === SUPABASE CONFIGURATION ===
+    // === SUPABASE CONFIGURATION (lowercase table names) ===
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
-    const SONGS_TABLE = "Songs";
-    const ABOUT_TABLE = "About";
-    // ==============================
+    const SONGS_TABLE = "songs";
+    const ABOUT_TABLE = "about";
+    // ======================================================
 
     window.togglePassword = function() { const input = document.getElementById('passwordInput'); const icon = document.getElementById('eyeIcon'); if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; } else { input.type = 'password'; icon.innerText = '👁️'; } }
-    window.checkPassword = function() { const input = document.getElementById('passwordInput').value; const status = document.getElementById('loginStatus'); if (input === SECRET_PASSWORD) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; loadProfile(); } else { status.innerText = '❌ Wrong password. Try again.'; } }
+    window.checkPassword = function() { const input = document.getElementById('passwordInput').value; const status = document.getElementById('loginStatus'); if (input === SECRET_PASSWORD) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; } else { status.innerText = '❌ Wrong password. Try again.'; } }
     window.logout = function() { if (confirm('Log out?')) location.reload(); }
     window.goToPage = function(page) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); document.getElementById('nav' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); window.scrollTo(0, 0); }
 
