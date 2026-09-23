@@ -1,0 +1,49 @@
+        // === SAVE SONG TO SUPABASE ===
+        window.saveSong = async function() {
+          const status = document.getElementById('songStatus');
+          const title = document.getElementById('songTitle').value.trim();
+          const cover = document.getElementById('songCover').value.trim();
+          const category = document.getElementById('songCategory').value.trim() || 'Music';
+          const date = document.getElementById('songDate').value.trim() || new Date().toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'});
+          const description = document.getElementById('songDescription').value.trim() || 'No description yet.';
+          const downloadUrl = document.getElementById('songDownload').value.trim() || '#';
+          const playUrl = document.getElementById('songPlay').value.trim() || '#';
+
+          if (!title || !cover) {
+            status.innerText = '❌ Please fill in the Title and Cover URL.';
+            return;
+          }
+
+          status.innerText = '⏳ Publishing song...';
+
+          try {
+            const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, {
+              method: 'POST',
+              headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': 'Bearer ' + SUPABASE_KEY,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+              },
+              body: JSON.stringify({ title, cover, category, date, description, downloadUrl, playUrl })
+            });
+
+            if (res.ok) {
+              status.innerText = '✅ Song published successfully!';
+              document.getElementById('songTitle').value = '';
+              document.getElementById('songCover').value = '';
+              document.getElementById('songCategory').value = '';
+              document.getElementById('songDate').value = '';
+              document.getElementById('songDescription').value = '';
+              document.getElementById('songDownload').value = '';
+              document.getElementById('songPlay').value = '';
+            } else {
+              const errText = await res.text();
+              status.innerText = '❌ Error: Supabase error: ' + res.status;
+              console.error(errText);
+            }
+          } catch (err) {
+            status.innerText = '❌ Network error. Check connection.';
+            console.error(err);
+          }
+        };
