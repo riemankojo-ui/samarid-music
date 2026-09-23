@@ -69,11 +69,10 @@
     </div>
 
     <div class="content">
-      <!-- HOME -->
       <div class="page active" id="pageHome">
         <h1 class="page-title">Dashboard</h1>
         <p class="page-subtitle">Manage your website and songs</p>
-        <div class="quick-actions" style="display:flex; gap:12px; margin-bottom:25px;">
+        <div style="display:flex; gap:12px; margin-bottom:25px;">
           <button onclick="goToPage('upload')" style="flex:1; padding:18px 12px; border-radius:14px; background:var(--card); border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; color:#fff;">
             <div style="font-size:24px; color:var(--accent);">➕</div><div style="font-size:12px; font-weight:700;">Add Song</div>
           </button>
@@ -81,12 +80,8 @@
             <div style="font-size:24px; color:var(--accent);">👤</div><div style="font-size:12px; font-weight:700;">Edit About</div>
           </button>
         </div>
-        <div style="background:var(--card); padding:15px; border-radius:12px; border:1px solid var(--border); font-size:13px; line-height:1.6;">
-          Everything you save here now goes directly to the cloud database. Your fans will see all changes instantly!
-        </div>
       </div>
 
-      <!-- UPLOAD -->
       <div class="page" id="pageUpload">
         <h1 class="page-title">Add New Song</h1>
         <p class="page-subtitle">Fill the form and publish instantly</p>
@@ -101,7 +96,6 @@
         <p id="songStatus" class="status"></p>
       </div>
 
-      <!-- PROFILE & ABOUT -->
       <div class="page" id="pageProfile">
         <h1 class="page-title">Edit About Page</h1>
         <p class="page-subtitle">Update your photo and story</p>
@@ -112,13 +106,12 @@
         <p id="profileStatus" class="status"></p>
       </div>
 
-      <!-- CHANNEL -->
       <div class="page" id="pageChannel">
         <h1 class="page-title">YouTube Channel</h1>
         <p class="page-subtitle">Connect your channel to auto-sync videos</p>
         <div class="form-group"><label>Channel Link</label><input type="text" id="channelInput" placeholder="https://youtube.com/@yourchannel"></div>
         <button class="main-btn" onclick="saveChannel()">Save & Sync Channel</button>
-        <button class="secondary-btn" style="width:100%; padding:14px; background:#222; color:#fff; border:1px solid #333; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; margin-top:10px;" onclick="resetChannel()">Reset to Default Channel</button>
+        <button style="width:100%; padding:14px; background:#222; color:#fff; border:1px solid #333; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; margin-top:10px;" onclick="resetChannel()">Reset to Default Channel</button>
         <p id="adminStatus" class="status"></p>
       </div>
     </div>
@@ -138,6 +131,8 @@
     // === SUPABASE CONFIGURATION ===
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+    const SONGS_TABLE = "Songs";
+    const ABOUT_TABLE = "About";
     // ==============================
 
     window.togglePassword = function() { const input = document.getElementById('passwordInput'); const icon = document.getElementById('eyeIcon'); if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; } else { input.type = 'password'; icon.innerText = '👁️'; } }
@@ -161,7 +156,7 @@
       status.className = 'status info'; status.innerText = '⏳ Saving to cloud...';
 
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs', {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, {
           method: 'POST',
           headers: {
             'apikey': SUPABASE_KEY,
@@ -190,16 +185,14 @@
       status.className = 'status info'; status.innerText = '⏳ Saving...';
 
       try {
-        // Check if a row exists first
-        const check = await fetch(SUPABASE_URL + '/rest/v1/about?select=*', {
+        const check = await fetch(SUPABASE_URL + '/rest/v1/' + ABOUT_TABLE + '?select=*', {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
         });
         const existing = await check.json();
 
         let res;
         if (existing && existing.length > 0) {
-          // Update existing row
-          res = await fetch(SUPABASE_URL + '/rest/v1/about?id=eq.' + existing[0].id, {
+          res = await fetch(SUPABASE_URL + '/rest/v1/' + ABOUT_TABLE + '?id=eq.' + existing[0].id, {
             method: 'PATCH',
             headers: {
               'apikey': SUPABASE_KEY,
@@ -209,8 +202,7 @@
             body: JSON.stringify({ profile_pic, big_photo, story })
           });
         } else {
-          // Insert new row
-          res = await fetch(SUPABASE_URL + '/rest/v1/about', {
+          res = await fetch(SUPABASE_URL + '/rest/v1/' + ABOUT_TABLE, {
             method: 'POST',
             headers: {
               'apikey': SUPABASE_KEY,
