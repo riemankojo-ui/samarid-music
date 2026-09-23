@@ -64,7 +64,10 @@
             <h1 class="detail-title">${s.title}</h1>
             <p class="detail-meta">${s.date} • ${s.category}</p>
             <div class="detail-section"><h4>📖 About this Song</h4><p>${s.description}</p></div>
-            <div class="detail-section"><h4>⬇️ Get the Song</h4><div class="download-buttons"><a href="${s.downloadUrl}" id="detailDownload" class="btn-download" target="_blank"><i class="fas fa-download"></i> Download MP3</a><a href="${s.playUrl}" id="detailPlay" class="btn-play" target="_blank"><i class="fas fa-play"></i> Play Now</a></div></div>
+            <div class="detail-section"><h4>⬇️ Get the Song</h4><div class="download-buttons">
+              <a href="${s.downloadUrl}" download="${s.title}_Samaridmusic.com.mp3" id="detailDownload" class="btn-download" target="_blank"><i class="fas fa-download"></i> Download MP3</a>
+              <a href="${s.playUrl}" id="detailPlay" class="btn-play" target="_blank"><i class="fas fa-play"></i> Play Now</a>
+            </div></div>
           `;
         } else { container.innerHTML = '<div class="loading">Song not found.</div>'; }
       } catch (e) { console.error("Error getting song: ", e); container.innerHTML = '<div class="loading">Error loading song.</div>'; }
