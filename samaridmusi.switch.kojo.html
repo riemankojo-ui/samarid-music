@@ -26,27 +26,6 @@
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   .page-title { font-size: 22px; font-weight: 900; margin-bottom: 5px; }
   .page-subtitle { font-size: 13px; color: var(--text2); margin-bottom: 25px; }
-  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
-  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
-  .stat-card .icon { font-size: 20px; margin-bottom: 8px; }
-  .stat-card h3 { font-size: 24px; font-weight: 900; }
-  .stat-card p { font-size: 11px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; margin-top: 4px; }
-  .quick-actions { display: flex; gap: 12px; margin-bottom: 25px; }
-  .action-btn { flex: 1; padding: 18px 12px; border-radius: 14px; background: var(--card); border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; transition: 0.2s; color: #fff; }
-  .action-btn:active { transform: scale(0.97); background: #222; }
-  .action-btn .icon { font-size: 24px; color: var(--accent); }
-  .action-btn .label { font-size: 12px; font-weight: 700; }
-  .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-  .section-header h2 { font-size: 15px; font-weight: 700; }
-  .section-header .count { font-size: 12px; color: var(--text2); }
-  .song-card { display: flex; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 12px; margin-bottom: 10px; }
-  .song-card img { width: 55px; height: 55px; border-radius: 8px; object-fit: cover; }
-  .song-card .info { flex: 1; min-width: 0; }
-  .song-card h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .song-card p { font-size: 11px; color: var(--text2); }
-  .delete-btn { background: transparent; border: none; color: #ff0033; font-size: 16px; cursor: pointer; padding: 8px; }
-  .empty-box { background: var(--card); border: 1px dashed var(--border); padding: 40px 20px; border-radius: 14px; text-align: center; color: var(--text2); font-size: 13px; }
-  .empty-box .icon { font-size: 30px; margin-bottom: 10px; }
   .form-group { margin-bottom: 15px; }
   .form-group label { display: block; font-size: 11px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
   .form-group input, .form-group textarea { width: 100%; padding: 13px; background: var(--card); border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; resize: vertical; }
@@ -55,7 +34,6 @@
   .form-group .hint { font-size: 10px; color: #555; margin-top: 4px; }
   button.main-btn { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; }
   button.main-btn:active { transform: scale(0.97); }
-  button.main-btn:disabled { background: #555; cursor: not-allowed; }
   button.secondary-btn { width: 100%; padding: 14px; background: #222; color: #fff; border: 1px solid #333; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; }
   .status { font-size: 12px; margin-top: 12px; font-weight: bold; text-align: center; }
   .success { color: #00cc44; } .error { color: #ff0033; } .info { color: #ffcc00; }
@@ -63,11 +41,17 @@
   .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; color: var(--text2); cursor: pointer; background: transparent; border: none; font-family: inherit; }
   .nav-item .icon { font-size: 18px; } .nav-item .label { font-size: 10px; font-weight: 700; }
   .nav-item.active { color: var(--accent); }
+  .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; padding: 20px; align-items: center; justify-content: center; }
+  .modal.open { display: flex; }
+  .modal-content { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; width: 100%; max-width: 500px; }
+  .modal-content h3 { margin-bottom: 10px; font-size: 16px; }
+  .modal-content p { font-size: 12px; color: var(--text2); margin-bottom: 15px; }
+  .modal-content textarea { width: 100%; height: 200px; background: #0a0a0a; color: #00cc44; border: 1px solid #333; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 12px; }
+  .modal-content button { margin-top: 15px; width: 100%; padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 </style>
 </head>
 <body>
 
-  <!-- LOGIN -->
   <div id="loginScreen">
     <div class="login-box">
       <div style="font-size: 40px; margin-bottom: 10px; text-align: center;">🔐</div>
@@ -82,7 +66,6 @@
     </div>
   </div>
 
-  <!-- DASHBOARD -->
   <div id="dashboard">
     <div class="top-bar">
       <div class="avatar">S</div>
@@ -97,35 +80,35 @@
       <!-- HOME -->
       <div class="page active" id="pageHome">
         <h1 class="page-title">Dashboard</h1>
-        <p class="page-subtitle">Welcome to your Creator Studio</p>
-        <div class="stats-grid">
-          <div class="stat-card"><div class="icon">🎵</div><h3 id="totalSongs">0</h3><p>Total Songs</p></div>
-          <div class="stat-card"><div class="icon">📺</div><h3 id="channelStatus">Active</h3><p>Channel</p></div>
-        </div>
+        <p class="page-subtitle">Generate code for your songs.json file</p>
         <div class="quick-actions">
-          <button class="action-btn" onclick="goToPage('upload')"><div class="icon">➕</div><div class="label">Upload Song</div></button>
-          <button class="action-btn" onclick="goToPage('channel')"><div class="icon">📺</div><div class="label">Channel</div></button>
+          <button class="action-btn" onclick="goToPage('upload')"><div class="icon">➕</div><div class="label">Add New Song</div></button>
         </div>
-        <div class="section-header"><h2>Recent Songs</h2><span class="count" id="songCountHeader">0 songs</span></div>
-        <div id="homeSongList"></div>
+        <div class="section-header"><h2>How it works</h2></div>
+        <div style="background:var(--card); padding:15px; border-radius:12px; border:1px solid var(--border); font-size:13px; line-height:1.6;">
+          1. Fill out the form.<br>
+          2. Tap "Generate JSON".<br>
+          3. Copy the text.<br>
+          4. Paste it into <b>songs.json</b> on GitHub.
+        </div>
       </div>
 
       <!-- UPLOAD -->
       <div class="page" id="pageUpload">
-        <h1 class="page-title">Upload Song</h1>
-        <p class="page-subtitle">Add a new release to your website</p>
+        <h1 class="page-title">Generate Song Code</h1>
+        <p class="page-subtitle">Fill the form, then copy the output</p>
         <div class="form-group"><label>Song Title</label><input type="text" id="songTitle" placeholder="e.g. Back To Sender"></div>
-        <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="https://i.imgur.com/....jpg"><p class="hint">💡 Upload your image to imgur.com and paste the link here</p></div>
+        <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="https://files.catbox.moe/....png"></div>
         <div class="form-group"><label>Category</label><input type="text" id="songCategory" placeholder="e.g. Afrobeats, Hip-Hop"></div>
         <div class="form-group"><label>Release Date</label><input type="text" id="songDate" placeholder="e.g. April 13, 2026"></div>
-        <div class="form-group"><label>About This Song</label><textarea id="songDescription" placeholder="Write a description or story about the song..."></textarea></div>
-        <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="https://archive.org/download/....mp3"><p class="hint">💡 Upload your MP3 to archive.org or Google Drive and paste the link here</p></div>
+        <div class="form-group"><label>About This Song</label><textarea id="songDescription" placeholder="Write a description..."></textarea></div>
+        <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="https://files.catbox.moe/....mp3"></div>
         <div class="form-group"><label>Play Now Link</label><input type="text" id="songPlay" placeholder="https://youtube.com/..."></div>
-        <button class="main-btn" id="publishBtn" onclick="saveSong()">Publish Song</button>
+        <button class="main-btn" onclick="generateJson()">Generate JSON Code</button>
         <p id="songStatus" class="status"></p>
       </div>
 
-      <!-- CHANNEL -->
+      <!-- CHANNEL (RESTORED) -->
       <div class="page" id="pageChannel">
         <h1 class="page-title">YouTube Channel</h1>
         <p class="page-subtitle">Connect your channel to auto-sync videos</p>
@@ -136,72 +119,35 @@
       </div>
     </div>
 
+    <!-- BOTTOM NAV (RESTORED CHANNEL TAB) -->
     <div class="bottom-nav">
       <button class="nav-item active" onclick="goToPage('home')" id="navHome"><div class="icon">🏠</div><div class="label">HOME</div></button>
-      <button class="nav-item" onclick="goToPage('upload')" id="navUpload"><div class="icon">➕</div><div class="label">UPLOAD</div></button>
+      <button class="nav-item" onclick="goToPage('upload')" id="navUpload"><div class="icon">➕</div><div class="label">ADD SONG</div></button>
       <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon">📺</div><div class="label">CHANNEL</div></button>
     </div>
   </div>
 
-  <!-- FIREBASE SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  <!-- JSON OUTPUT MODAL -->
+  <div class="modal" id="jsonModal">
+    <div class="modal-content">
+      <h3>✅ Song Generated!</h3>
+      <p>Copy the code below and paste it inside the square brackets `[ ]` in your <b>songs.json</b> file on GitHub.</p>
+      <textarea id="jsonOutput" readonly></textarea>
+      <button onclick="closeModal()">Done</button>
+    </div>
+  </div>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAmeKKhMA1YHs0VNkliwNUl4BvrQLS-RMY",
-      authDomain: "samarid-music-e1a61.firebaseapp.com",
-      projectId: "samarid-music-e1a61",
-      storageBucket: "samarid-music-e1a61.firebasestorage.app",
-      messagingSenderId: "435825568762",
-      appId: "1:435825568762:web:2aa73d62cdb5197514d243",
-      measurementId: "G-EHRCK42546"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
+  <script>
     const SECRET_PASSWORD = "samarid2026"; 
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
 
     window.togglePassword = function() { const input = document.getElementById('passwordInput'); const icon = document.getElementById('eyeIcon'); if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; } else { input.type = 'password'; icon.innerText = '👁️'; } }
-    window.checkPassword = function() { const input = document.getElementById('passwordInput').value; const status = document.getElementById('loginStatus'); if (input === SECRET_PASSWORD) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; loadDashboard(); } else { status.innerText = '❌ Wrong password. Try again.'; } }
+    window.checkPassword = function() { const input = document.getElementById('passwordInput').value; const status = document.getElementById('loginStatus'); if (input === SECRET_PASSWORD) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; } else { status.innerText = '❌ Wrong password. Try again.'; } }
     window.logout = function() { if (confirm('Log out?')) location.reload(); }
     window.goToPage = function(page) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); document.getElementById('nav' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); window.scrollTo(0, 0); }
 
-    async function loadDashboard() {
-      try {
-        const querySnapshot = await getDocs(query(collection(db, "songs"), orderBy("timestamp", "desc")));
-        const savedSongs = [];
-        querySnapshot.forEach((doc) => { savedSongs.push({ id: doc.id, ...doc.data() }); });
-        
-        document.getElementById('totalSongs').innerText = savedSongs.length;
-        document.getElementById('songCountHeader').innerText = savedSongs.length + ' songs';
-        const list = document.getElementById('homeSongList');
-        if (savedSongs.length === 0) {
-          list.innerHTML = `<div class="empty-box"><div class="icon">🎵</div>No songs uploaded yet.<br>Tap "Upload Song" to start.</div>`;
-        } else {
-          list.innerHTML = savedSongs.map((song) => `
-            <div class="song-card">
-              <img src="${song.cover}" alt="${song.title}">
-              <div class="info"><h4>${song.title}</h4><p>${song.category} • ${song.date}</p></div>
-              <button class="delete-btn" onclick="deleteSong('${song.id}')"><i class="fas fa-trash"></i></button>
-            </div>
-          `).join('');
-        }
-      } catch (e) { console.error(e); }
-    }
-
-    window.saveSong = async function() {
-      const btn = document.getElementById('publishBtn');
+    window.generateJson = function() {
       const status = document.getElementById('songStatus');
-      
-      // Visual feedback immediately
-      btn.innerText = "Publishing...";
-      btn.disabled = true;
-      status.className = 'status info';
-      status.innerText = '⏳ Saving to Firebase...';
-
       const title = document.getElementById('songTitle').value.trim();
       const cover = document.getElementById('songCover').value.trim();
       const category = document.getElementById('songCategory').value.trim() || 'Music';
@@ -210,42 +156,24 @@
       const downloadUrl = document.getElementById('songDownload').value.trim() || '#';
       const playUrl = document.getElementById('songPlay').value.trim() || '#';
 
-      if (!title || !cover) { 
-        status.className = 'status error'; 
-        status.innerText = '❌ Title and Cover Art URL are required!'; 
-        btn.innerText = "Publish Song"; btn.disabled = false;
-        return; 
-      }
+      if (!title || !cover) { status.className = 'status error'; status.innerText = '❌ Title and Cover Art URL are required!'; return; }
 
-      try {
-        await addDoc(collection(db, "songs"), { title, cover, category, date, description, downloadUrl, playUrl, timestamp: new Date().getTime() });
-        
-        status.className = 'status success'; 
-        status.innerText = '✅ Song published to the cloud!';
-        
-        ['songTitle','songCover','songCategory','songDate','songDescription','songDownload','songPlay'].forEach(id => document.getElementById(id).value = '');
-        
-        loadDashboard(); 
-        setTimeout(() => {
-          goToPage('home');
-          btn.innerText = "Publish Song"; 
-          btn.disabled = false;
-        }, 1500);
+      const songData = { title, cover, category, date, description, downloadUrl, playUrl };
+      const jsonString = JSON.stringify(songData, null, 2);
 
-      } catch (e) { 
-        console.error("Error adding document: ", e); 
-        status.className = 'status error'; 
-        status.innerText = '❌ Error: ' + e.message; 
-        btn.innerText = "Publish Song"; 
-        btn.disabled = false;
-      }
+      document.getElementById('jsonOutput').value = jsonString;
+      document.getElementById('jsonModal').classList.add('open');
+      status.className = 'status success'; status.innerText = '✅ Code generated!';
     }
 
-    window.deleteSong = async function(id) {
-      if (!confirm('Delete this song?')) return;
-      try { await deleteDoc(doc(db, "songs", id)); loadDashboard(); } catch (e) { console.error("Error deleting: ", e); }
+    window.closeModal = function() {
+      document.getElementById('jsonModal').classList.remove('open');
+      ['songTitle','songCover','songCategory','songDate','songDescription','songDownload','songPlay'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('songStatus').innerText = '';
+      goToPage('home');
     }
 
+    // === YOUTUBE CHANNEL SWITCHER (RESTORED) ===
     window.saveChannel = async function() {
       const input = document.getElementById('channelInput').value.trim(); const status = document.getElementById('adminStatus');
       if (!input) { status.className = 'status error'; status.innerText = 'Please paste a YouTube link first!'; return; }

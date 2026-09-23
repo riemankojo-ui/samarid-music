@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <style>
   :root { --bg: #0a0a0a; --card: #141414; --border: #222; --text: #ffffff; --text2: #cccccc; --accent: #ff0033; }
   body.light { --bg: #ffffff; --card: #f5f5f5; --border: #e5e5e5; --text: #0a0a0a; --text2: #444444; }
@@ -155,43 +154,17 @@
 
   <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAmeKKhMA1YHs0VNkliwNUl4BvrQLS-RMY",
-      authDomain: "samarid-music-e1a61.firebaseapp.com",
-      projectId: "samarid-music-e1a61",
-      storageBucket: "samarid-music-e1a61.firebasestorage.app",
-      messagingSenderId: "435825568762",
-      appId: "1:435825568762:web:2aa73d62cdb5197514d243",
-      measurementId: "G-EHRCK42546"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
+  <script>
     const slider = document.getElementById('sliderWrapper');
     const tabVideos = document.getElementById('tabVideos');
     const tabSongs = document.getElementById('tabSongs');
     const slideVideos = document.getElementById('slideVideos');
     const slideSongs = document.getElementById('slideSongs');
 
-    window.switchTab = function(tab) {
-      if (tab === 'videos') { slider.scrollTo({ left: 0, behavior: 'smooth' }); }
-      else { slider.scrollTo({ left: slider.offsetWidth, behavior: 'smooth' }); }
-    }
+    window.switchTab = function(tab) { if (tab === 'videos') { slider.scrollTo({ left: 0, behavior: 'smooth' }); } else { slider.scrollTo({ left: slider.offsetWidth, behavior: 'smooth' }); } }
 
     const observerOptions = { root: slider, threshold: 0.5 };
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          if (entry.target.id === 'slideVideos') { tabVideos.classList.add('active'); tabSongs.classList.remove('active'); }
-          else { tabSongs.classList.add('active'); tabVideos.classList.remove('active'); }
-        }
-      });
-    }, observerOptions);
+    const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { if (entry.target.id === 'slideVideos') { tabVideos.classList.add('active'); tabSongs.classList.remove('active'); } else { tabSongs.classList.add('active'); tabVideos.classList.remove('active'); } } }); }, observerOptions);
     observer.observe(slideVideos); observer.observe(slideSongs);
 
     window.toggleMenu = function(e) { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('open'); }
@@ -200,30 +173,18 @@
     window.showAbout = function() { alert('Samarid Music\n\nArtist · Creating music that moves you.\n\nSubscribe on YouTube: @realsamarid'); closeMenu(); }
 
     window.fakeSubscribe = function(e) {
-      e.preventDefault();
-      const btn = document.getElementById('subBtn'); btn.classList.add('bounce');
+      e.preventDefault(); const btn = document.getElementById('subBtn'); btn.classList.add('bounce');
       const channelId = localStorage.getItem('samarid_channel_id');
       const subLink = channelId ? 'https://www.youtube.com/channel/' + channelId + '?sub_confirmation=1' : 'https://youtube.com/@realsamarid?sub_confirmation=1';
-      document.getElementById('popupSubBtn').href = subLink;
-      setTimeout(() => { btn.classList.remove('bounce'); document.getElementById('subModal').classList.add('open'); }, 400);
+      document.getElementById('popupSubBtn').href = subLink; setTimeout(() => { btn.classList.remove('bounce'); document.getElementById('subModal').classList.add('open'); }, 400);
     }
     window.closeSubModal = function() { document.getElementById('subModal').classList.remove('open'); }
 
-    window.applySettings = function() {
-      const theme = localStorage.getItem('samarid-theme') || 'dark'; const accent = localStorage.getItem('samarid-accent') || '#ff0033';
-      document.body.classList.toggle('light', theme === 'light'); document.documentElement.style.setProperty('--accent', accent);
-      document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
-    }
+    window.applySettings = function() { const theme = localStorage.getItem('samarid-theme') || 'dark'; const accent = localStorage.getItem('samarid-accent') || '#ff0033'; document.body.classList.toggle('light', theme === 'light'); document.documentElement.style.setProperty('--accent', accent); document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === theme)); }
     window.setTheme = function(theme) { localStorage.setItem('samarid-theme', theme); applySettings(); }
 
-    window.openPlayer = function(videoId) {
-      const modal = document.getElementById('playerModal'); const frame = document.getElementById('playerFrame');
-      frame.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0'; modal.classList.add('open');
-    }
-    window.closePlayer = function() {
-      const modal = document.getElementById('playerModal'); const frame = document.getElementById('playerFrame');
-      frame.src = ''; modal.classList.remove('open');
-    }
+    window.openPlayer = function(videoId) { const modal = document.getElementById('playerModal'); const frame = document.getElementById('playerFrame'); frame.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0'; modal.classList.add('open'); }
+    window.closePlayer = function() { const modal = document.getElementById('playerModal'); const frame = document.getElementById('playerFrame'); frame.src = ''; modal.classList.remove('open'); }
 
     const CHANNEL_ID = localStorage.getItem('samarid_channel_id') || 'UC11ElndF459dLRfV-OzwmpA';
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
@@ -237,45 +198,20 @@
         const videosRes = await fetch('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=' + uploadsId + '&key=' + API_KEY);
         const videosData = await videosRes.json();
         if (!videosData.items || videosData.items.length === 0) { grid.innerHTML = '<div class="empty">No videos yet — check back soon! 🎵</div>'; return; }
-        const videos = videosData.items.map(item => {
-          const videoId = item.snippet.resourceId.videoId; const title = item.snippet.title; const published = item.snippet.publishedAt;
-          const date = new Date(published).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-          return { videoId, title, date, timestamp: new Date(published).getTime() };
-        });
+        const videos = videosData.items.map(item => { const videoId = item.snippet.resourceId.videoId; const title = item.snippet.title; const published = item.snippet.publishedAt; const date = new Date(published).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); return { videoId, title, date, timestamp: new Date(published).getTime() }; });
         videos.sort((a, b) => b.timestamp - a.timestamp);
-        grid.innerHTML = videos.map(v => `
-          <div class="video-card" onclick="openPlayer('${v.videoId}')">
-            <div class="video-thumb"><img src="https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg" alt="${v.title}" loading="lazy"><div class="video-play-overlay"></div></div>
-            <div class="video-title">${v.title}</div><div class="video-meta">${v.date}</div>
-          </div>
-        `).join('');
-      } catch (err) {
-        console.error(err);
-        const link = localStorage.getItem('samarid_channel_id') ? 'https://www.youtube.com/channel/' + localStorage.getItem('samarid_channel_id') : 'https://youtube.com/@realsamarid';
-        grid.innerHTML = '<div class="empty">Could not load videos. <a href="' + link + '" style="color:var(--accent);">Visit YouTube →</a></div>';
-      }
+        grid.innerHTML = videos.map(v => `<div class="video-card" onclick="openPlayer('${v.videoId}')"><div class="video-thumb"><img src="https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg" alt="${v.title}" loading="lazy"><div class="video-play-overlay"></div></div><div class="video-title">${v.title}</div><div class="video-meta">${v.date}</div></div>`).join('');
+      } catch (err) { console.error(err); const link = localStorage.getItem('samarid_channel_id') ? 'https://www.youtube.com/channel/' + localStorage.getItem('samarid_channel_id') : 'https://youtube.com/@realsamarid'; grid.innerHTML = '<div class="empty">Could not load videos. <a href="' + link + '" style="color:var(--accent);">Visit YouTube →</a></div>'; }
     }
 
     async function renderSongs() {
       const list = document.getElementById('songList');
       try {
-        const querySnapshot = await getDocs(query(collection(db, "songs"), orderBy("timestamp", "desc")));
-        const songs = []; querySnapshot.forEach((doc) => { songs.push({ id: doc.id, ...doc.data() }); });
-        if (songs.length === 0) {
-          list.innerHTML = `<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>Check back soon for new music!</p></div>`;
-          return;
-        }
-        list.innerHTML = songs.map((s) => `
-          <div class="song-card" onclick="window.location.href='song.html?id=${s.id}'">
-            <div class="song-card-img"><img src="${s.cover}"></div>
-            <div class="song-card-info">
-              <div class="song-card-cat">${s.category} • Listen</div>
-              <h3>${s.title}</h3>
-              <div class="date">${s.date}</div>
-            </div>
-          </div>
-        `).join('');
-      } catch (e) { console.error("Error loading songs: ", e); list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Could not load songs</h3><p>Try again later.</p></div>'; }
+        const res = await fetch('songs.json?v=' + new Date().getTime());
+        const songs = await res.json();
+        if (songs.length === 0) { list.innerHTML = `<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>Check back soon for new music!</p></div>`; return; }
+        list.innerHTML = songs.map((s, i) => `<div class="song-card" onclick="window.location.href='song.html?id=${i}'"><div class="song-card-img"><img src="${s.cover}"></div><div class="song-card-info"><div class="song-card-cat">${s.category} • Listen</div><h3>${s.title}</h3><div class="date">${s.date}</div></div></div>`).join('');
+      } catch (e) { console.error("Error loading songs: ", e); list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Could not load songs</h3><p>Check back later.</p></div>'; }
     }
 
     applySettings(); loadVideos(); renderSongs();
