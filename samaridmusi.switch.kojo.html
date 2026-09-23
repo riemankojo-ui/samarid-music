@@ -128,7 +128,7 @@
     const SECRET_PASSWORD = "samarid2026"; 
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
     
-    // === SUPABASE CONFIGURATION (lowercase table names) ===
+    // === SUPABASE CONFIGURATION ===
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
     const SONGS_TABLE = "songs";
@@ -148,8 +148,8 @@
       const category = document.getElementById('songCategory').value.trim() || 'Music';
       const date = document.getElementById('songDate').value.trim() || new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
       const description = document.getElementById('songDescription').value.trim() || 'No description yet.';
-      const downloadUrl = document.getElementById('songDownload').value.trim() || '#';
-      const playUrl = document.getElementById('songPlay').value.trim() || '#';
+      const downloadurl = document.getElementById('songDownload').value.trim() || '#';
+      const playurl = document.getElementById('songPlay').value.trim() || '#';
 
       if (!title || !cover) { status.className = 'status error'; status.innerText = '❌ Title and Cover Art URL are required!'; return; }
 
@@ -161,18 +161,20 @@
           headers: {
             'apikey': SUPABASE_KEY,
             'Authorization': 'Bearer ' + SUPABASE_KEY,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=minimal'
+            'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ title, cover, category, date, description, downloadUrl, playUrl })
+          body: JSON.stringify({ title, cover, category, date, description, downloadurl, playurl })
         });
 
-        if (!res.ok) throw new Error('Supabase error: ' + res.status);
+        if (!res.ok) {
+          const errText = await res.text();
+          throw new Error(res.status + ': ' + errText);
+        }
 
         status.className = 'status success'; status.innerText = '✅ Song published to the cloud!';
         ['songTitle','songCover','songCategory','songDate','songDescription','songDownload','songPlay'].forEach(id => document.getElementById(id).value = '');
         setTimeout(() => { goToPage('home'); }, 1500);
-      } catch (e) { status.className = 'status error'; status.innerText = '❌ Error: ' + e.message; }
+      } catch (e) { status.className = 'status error'; status.innerText = '❌ ' + e.message; }
     }
 
     // === SAVE ABOUT PAGE TO SUPABASE ===
@@ -207,17 +209,19 @@
             headers: {
               'apikey': SUPABASE_KEY,
               'Authorization': 'Bearer ' + SUPABASE_KEY,
-              'Content-Type': 'application/json',
-              'Prefer': 'return=minimal'
+              'Content-Type': 'application/json'
             },
             body: JSON.stringify({ profile_pic, big_photo, story })
           });
         }
 
-        if (!res.ok) throw new Error('Supabase error: ' + res.status);
+        if (!res.ok) {
+          const errText = await res.text();
+          throw new Error(res.status + ': ' + errText);
+        }
 
         status.className = 'status success'; status.innerText = '✅ About page updated!';
-      } catch (e) { status.className = 'status error'; status.innerText = '❌ Error: ' + e.message; }
+      } catch (e) { status.className = 'status error'; status.innerText = '❌ ' + e.message; }
     }
 
     // === YOUTUBE CHANNEL SWITCHER ===
