@@ -29,12 +29,11 @@
   .form-group { margin-bottom: 15px; }
   .form-group label { display: block; font-size: 11px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
   .form-group input, .form-group textarea { width: 100%; padding: 13px; background: var(--card); border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; resize: vertical; }
-  .form-group textarea { min-height: 100px; }
+  .form-group textarea { min-height: 120px; }
   .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); }
   .form-group .hint { font-size: 10px; color: #555; margin-top: 4px; }
   button.main-btn { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; }
   button.main-btn:active { transform: scale(0.97); }
-  button.secondary-btn { width: 100%; padding: 14px; background: #222; color: #fff; border: 1px solid #333; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; }
   .status { font-size: 12px; margin-top: 12px; font-weight: bold; text-align: center; }
   .success { color: #00cc44; } .error { color: #ff0033; } .info { color: #ffcc00; }
   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 8px 0; z-index: 1000; }
@@ -80,16 +79,14 @@
       <!-- HOME -->
       <div class="page active" id="pageHome">
         <h1 class="page-title">Dashboard</h1>
-        <p class="page-subtitle">Generate code for your songs.json file</p>
-        <div class="quick-actions">
-          <button class="action-btn" onclick="goToPage('upload')"><div class="icon">➕</div><div class="label">Add New Song</div></button>
-        </div>
-        <div class="section-header"><h2>How it works</h2></div>
-        <div style="background:var(--card); padding:15px; border-radius:12px; border:1px solid var(--border); font-size:13px; line-height:1.6;">
-          1. Fill out the form.<br>
-          2. Tap "Generate JSON".<br>
-          3. Copy the text.<br>
-          4. Paste it into <b>songs.json</b> on GitHub.
+        <p class="page-subtitle">Manage your website and songs</p>
+        <div class="quick-actions" style="display:flex; gap:12px; margin-bottom:25px;">
+          <button class="action-btn" onclick="goToPage('upload')" style="flex:1; padding:18px 12px; border-radius:14px; background:var(--card); border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; color:#fff;">
+            <div class="icon" style="font-size:24px; color:var(--accent);">➕</div><div class="label" style="font-size:12px; font-weight:700;">Add Song</div>
+          </button>
+          <button class="action-btn" onclick="goToPage('profile')" style="flex:1; padding:18px 12px; border-radius:14px; background:var(--card); border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; color:#fff;">
+            <div class="icon" style="font-size:24px; color:var(--accent);">👤</div><div class="label" style="font-size:12px; font-weight:700;">Edit About</div>
+          </button>
         </div>
       </div>
 
@@ -108,26 +105,55 @@
         <p id="songStatus" class="status"></p>
       </div>
 
-      <!-- CHANNEL (RESTORED) -->
+      <!-- PROFILE & ABOUT -->
+      <div class="page" id="pageProfile">
+        <h1 class="page-title">Edit About Page</h1>
+        <p class="page-subtitle">Update your photo and story</p>
+        
+        <div class="form-group">
+          <label>Profile Photo URL (Small circle)</label>
+          <input type="text" id="profilePicInput" placeholder="https://files.catbox.moe/....png">
+        </div>
+        
+        <div class="form-group">
+          <label>Big Banner Photo URL (Horizontal)</label>
+          <input type="text" id="bigPhotoInput" placeholder="https://files.catbox.moe/....png">
+          <p class="hint">💡 Upload a wide, horizontal photo of yourself for the big banner</p>
+        </div>
+
+        <div class="form-group">
+          <label>My Story (Long Text)</label>
+          <textarea id="storyInput" placeholder="Write your full story here. You can use line breaks."></textarea>
+        </div>
+
+        <button class="main-btn" onclick="saveAboutPage()">Save About Page</button>
+        <p id="profileStatus" class="status"></p>
+        
+        <div style="margin-top:20px; text-align:center;">
+          <p style="font-size:12px; color:#666; margin-bottom:10px;">Current Profile Preview:</p>
+          <img id="profilePreview" src="" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); display:none;">
+        </div>
+      </div>
+
+      <!-- CHANNEL -->
       <div class="page" id="pageChannel">
         <h1 class="page-title">YouTube Channel</h1>
         <p class="page-subtitle">Connect your channel to auto-sync videos</p>
         <div class="form-group"><label>Channel Link</label><input type="text" id="channelInput" placeholder="https://youtube.com/@yourchannel"></div>
         <button class="main-btn" onclick="saveChannel()">Save & Sync Channel</button>
-        <button class="secondary-btn" onclick="resetChannel()">Reset to Default Channel</button>
+        <button class="secondary-btn" style="width:100%; padding:14px; background:#222; color:#fff; border:1px solid #333; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; margin-top:10px;" onclick="resetChannel()">Reset to Default Channel</button>
         <p id="adminStatus" class="status"></p>
       </div>
     </div>
 
-    <!-- BOTTOM NAV (RESTORED CHANNEL TAB) -->
     <div class="bottom-nav">
       <button class="nav-item active" onclick="goToPage('home')" id="navHome"><div class="icon">🏠</div><div class="label">HOME</div></button>
-      <button class="nav-item" onclick="goToPage('upload')" id="navUpload"><div class="icon">➕</div><div class="label">ADD SONG</div></button>
+      <button class="nav-item" onclick="goToPage('upload')" id="navUpload"><div class="icon">➕</div><div class="label">SONGS</div></button>
+      <button class="nav-item" onclick="goToPage('profile')" id="navProfile"><div class="icon">👤</div><div class="label">ABOUT</div></button>
       <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon">📺</div><div class="label">CHANNEL</div></button>
     </div>
   </div>
 
-  <!-- JSON OUTPUT MODAL -->
   <div class="modal" id="jsonModal">
     <div class="modal-content">
       <h3>✅ Song Generated!</h3>
@@ -142,7 +168,7 @@
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
 
     window.togglePassword = function() { const input = document.getElementById('passwordInput'); const icon = document.getElementById('eyeIcon'); if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; } else { input.type = 'password'; icon.innerText = '👁️'; } }
-    window.checkPassword = function() { const input = document.getElementById('passwordInput').value; const status = document.getElementById('loginStatus'); if (input === SECRET_PASSWORD) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; } else { status.innerText = '❌ Wrong password. Try again.'; } }
+    window.checkPassword = function() { const input = document.getElementById('passwordInput').value; const status = document.getElementById('loginStatus'); if (input === SECRET_PASSWORD) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; loadProfile(); } else { status.innerText = '❌ Wrong password. Try again.'; } }
     window.logout = function() { if (confirm('Log out?')) location.reload(); }
     window.goToPage = function(page) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); document.getElementById('nav' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); window.scrollTo(0, 0); }
 
@@ -173,7 +199,39 @@
       goToPage('home');
     }
 
-    // === YOUTUBE CHANNEL SWITCHER (RESTORED) ===
+    // === ABOUT PAGE LOGIC ===
+    function loadProfile() {
+      const savedPic = localStorage.getItem('samarid_profile_pic');
+      const savedBigPic = localStorage.getItem('samarid_about_big_photo');
+      const savedStory = localStorage.getItem('samarid_about_story');
+
+      if (savedPic) {
+        document.getElementById('profilePicInput').value = savedPic;
+        document.getElementById('profilePreview').src = savedPic;
+        document.getElementById('profilePreview').style.display = 'inline-block';
+      }
+      if (savedBigPic) document.getElementById('bigPhotoInput').value = savedBigPic;
+      if (savedStory) document.getElementById('storyInput').value = savedStory;
+    }
+
+    window.saveAboutPage = function() {
+      const pic = document.getElementById('profilePicInput').value.trim();
+      const bigPic = document.getElementById('bigPhotoInput').value.trim();
+      const story = document.getElementById('storyInput').value.trim();
+      const status = document.getElementById('profileStatus');
+
+      if (pic) localStorage.setItem('samarid_profile_pic', pic);
+      if (bigPic) localStorage.setItem('samarid_about_big_photo', bigPic);
+      if (story) localStorage.setItem('samarid_about_story', story);
+
+      if (pic) {
+        document.getElementById('profilePreview').src = pic;
+        document.getElementById('profilePreview').style.display = 'inline-block';
+      }
+      status.className = 'status success'; status.innerText = '✅ About page updated!';
+    }
+
+    // === CHANNEL LOGIC ===
     window.saveChannel = async function() {
       const input = document.getElementById('channelInput').value.trim(); const status = document.getElementById('adminStatus');
       if (!input) { status.className = 'status error'; status.innerText = 'Please paste a YouTube link first!'; return; }

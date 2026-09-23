@@ -14,6 +14,7 @@
   body.light { --bg: #ffffff; --card: #f5f5f5; --border: #e5e5e5; --text: #0a0a0a; --text2: #444444; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; transition: background 0.3s, color 0.3s; padding-bottom: 40px; }
+  
   .header { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; transition: background 0.3s; }
   .menu-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); font-size: 18px; font-weight: 700; transition: all 0.15s; }
   .menu-btn:active { background: var(--accent); color: #fff; }
@@ -23,12 +24,15 @@
   .subscribe-btn:active { opacity: 0.8; }
   @keyframes bounce { 0% { transform: scale(1); } 30% { transform: scale(0.9); } 50% { transform: scale(1.1); } 70% { transform: scale(0.95); } 100% { transform: scale(1); } }
   .subscribe-btn.bounce { animation: bounce 0.4s ease; }
+  
   .tabs-container { position: sticky; top: 58px; z-index: 90; display: flex; justify-content: center; gap: 10px; padding: 12px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
   .tab-btn { padding: 8px 24px; border-radius: 20px; background: var(--card); border: 1px solid var(--border); color: var(--text2); font-weight: 700; font-size: 13px; cursor: pointer; transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; }
   .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  
   .slider-wrapper { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .slider-wrapper::-webkit-scrollbar { display: none; }
   .slide { flex: 0 0 100%; scroll-snap-align: start; padding: 20px 16px 30px; box-sizing: border-box; }
+  
   .menu-dropdown { position: fixed; top: 58px; left: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); width: 260px; max-height: 80vh; overflow-y: auto; display: none; z-index: 9999; }
   .menu-dropdown.open { display: block; }
   .menu-title { padding: 12px 18px 8px; font-size: 10px; color: var(--text2); letter-spacing: 2px; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--border); margin-top: 5px; }
@@ -43,8 +47,8 @@
   .theme-toggle { display: flex; gap: 6px; }
   .theme-btn { padding: 6px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 11px; cursor: pointer; transition: all 0.15s; }
   .theme-btn.active { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+  
   .section-title { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-  .page-title { font-size: 18px; font-weight: 900; text-align: center; padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px; color: var(--text); }
   .video-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
   @media (min-width: 600px) { .video-grid { grid-template-columns: 1fr 1fr; } }
   @media (min-width: 900px) { .video-grid { grid-template-columns: 1fr 1fr 1fr; } }
@@ -57,6 +61,7 @@
   .video-play-overlay::before { content: ''; position: absolute; width: 0; height: 0; border-left: 14px solid #ffffff; border-top: 9px solid transparent; border-bottom: 9px solid transparent; margin-left: 3px; z-index: 2; }
   .video-title { font-size: 15px; font-weight: 600; line-height: 1.35; margin-bottom: 6px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .video-meta { font-size: 12px; color: var(--text2); }
+  
   .song-list { display: flex; flex-direction: column; gap: 12px; }
   .song-card { display: flex; gap: 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; }
   .song-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
@@ -70,6 +75,29 @@
   .empty-state .icon { font-size: 50px; margin-bottom: 15px; }
   .empty-state h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
   .loading, .empty { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 13px; }
+
+  /* ABOUT PAGE STYLES (Simple & Clean) */
+  .about-profile { text-align: center; margin-bottom: 30px; }
+  .about-img { width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); margin-bottom: 15px; box-shadow: 0 10px 30px rgba(255, 0, 51, 0.3); }
+  .about-name { font-size: 24px; font-weight: 900; margin-bottom: 5px; }
+  .about-role { font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+  
+  .about-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
+  .about-section h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .about-section p { font-size: 14px; line-height: 1.7; color: var(--text2); margin-bottom: 12px; white-space: pre-wrap; }
+  .about-section p:last-child { margin-bottom: 0; }
+  
+  .about-social { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  .about-social a { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--text); font-weight: 700; font-size: 12px; transition: 0.2s; }
+  .about-social a:active { transform: scale(0.97); background: var(--border); }
+  
+  .about-contact { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; text-align: center; }
+  .about-contact h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+  .about-contact p { font-size: 12px; color: var(--text2); margin-bottom: 15px; }
+  .about-contact a { display: inline-block; padding: 12px 24px; background: var(--accent); color: #fff; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 13px; transition: 0.2s; }
+  .about-contact a:active { transform: scale(0.97); }
+
+  /* MODALS */
   .player-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
   .player-modal.open { display: flex; }
   .player-inner { width: 100%; max-width: 900px; background: #000; border-radius: 12px; overflow: hidden; position: relative; }
@@ -99,19 +127,52 @@
   <div class="tabs-container">
     <button class="tab-btn active" id="tabVideos" onclick="switchTab('videos')">Videos</button>
     <button class="tab-btn" id="tabSongs" onclick="switchTab('songs')">Songs</button>
+    <button class="tab-btn" id="tabAbout" onclick="switchTab('about')">About</button>
   </div>
 
   <div class="slider-wrapper" id="sliderWrapper">
+    <!-- SLIDE 1: VIDEOS -->
     <div class="slide" id="slideVideos">
       <div class="section-title">Latest Releases</div>
       <div class="video-grid" id="videoGrid">
         <div class="loading">Loading videos...</div>
       </div>
     </div>
+
+    <!-- SLIDE 2: SONGS -->
     <div class="slide" id="slideSongs">
-      <div class="page-title">Browse - Samarid Music</div>
+      <div class="page-title" style="font-size: 18px; font-weight: 900; text-align: center; padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px; color: var(--text);">Browse - Samarid Music</div>
       <div class="song-list" id="songList">
         <div class="loading">Loading songs...</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: ABOUT (Simple & Clean) -->
+    <div class="slide" id="slideAbout">
+      <div class="about-profile">
+        <img id="aboutProfilePic" src="https://files.catbox.moe/64x8wm.jpg" alt="Samarid Music" class="about-img">
+        <h1 class="about-name">Samarid Music</h1>
+        <p class="about-role">ARTIST • SONGWRITER • PRODUCER</p>
+      </div>
+
+      <!-- STORY SECTION -->
+      <div class="about-section">
+        <h3><i class="fas fa-user" style="color: var(--accent);"></i> My Story</h3>
+        <p id="aboutStoryText">Loading story... Please update your story in the Creator Studio.</p>
+      </div>
+
+      <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 12px;"><i class="fas fa-link" style="color: var(--accent);"></i> Connect With Me</h3>
+      <div class="about-social">
+        <a href="https://youtube.com/@realsamarid" target="_blank"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
+        <a href="https://tiktok.com/@realsamarid" target="_blank"><i class="fab fa-tiktok" style="color: #ffffff;"></i> TikTok</a>
+        <a href="https://facebook.com/realsamarid" target="_blank"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
+        <a href="https://wa.me/233207425831" target="_blank"><i class="fab fa-whatsapp" style="color: #25D366;"></i> WhatsApp</a>
+      </div>
+
+      <div class="about-contact">
+        <h3><i class="fas fa-envelope" style="color: var(--accent);"></i> Get In Touch</h3>
+        <p>For bookings, features, or business inquiries.</p>
+        <a href="mailto:riemankojo@gmail.com">Send Email</a>
       </div>
     </div>
   </div>
@@ -131,8 +192,6 @@
     <a href="https://facebook.com/realsamarid" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-facebook" style="color: #1877F2;"></i></span><span class="label">Facebook</span><span class="arrow">↗</span></a>
     <a href="https://wa.me/233207425831" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-whatsapp" style="color: #25D366;"></i></span><span class="label">WhatsApp</span><span class="arrow">↗</span></a>
     <a href="mailto:riemankojo@gmail.com" class="menu-item"><span class="icon"><i class="fas fa-envelope" style="color: #EA4335;"></i></span><span class="label">Email</span><span class="arrow">↗</span></a>
-    <div class="menu-title">ℹ️ Info</div>
-    <div class="menu-item" onclick="showAbout()"><span class="icon"><i class="fas fa-microphone" style="color: #ff0033;"></i></span><span class="label">About Samarid</span><span class="arrow">›</span></div>
   </div>
 
   <div class="player-modal" id="playerModal" onclick="closePlayer()">
@@ -158,19 +217,36 @@
     const slider = document.getElementById('sliderWrapper');
     const tabVideos = document.getElementById('tabVideos');
     const tabSongs = document.getElementById('tabSongs');
+    const tabAbout = document.getElementById('tabAbout');
     const slideVideos = document.getElementById('slideVideos');
     const slideSongs = document.getElementById('slideSongs');
+    const slideAbout = document.getElementById('slideAbout');
 
-    window.switchTab = function(tab) { if (tab === 'videos') { slider.scrollTo({ left: 0, behavior: 'smooth' }); } else { slider.scrollTo({ left: slider.offsetWidth, behavior: 'smooth' }); } }
+    window.switchTab = function(tab) {
+      if (tab === 'videos') { slider.scrollTo({ left: 0, behavior: 'smooth' }); }
+      else if (tab === 'songs') { slider.scrollTo({ left: slider.offsetWidth, behavior: 'smooth' }); }
+      else if (tab === 'about') { slider.scrollTo({ left: slider.offsetWidth * 2, behavior: 'smooth' }); }
+    }
 
     const observerOptions = { root: slider, threshold: 0.5 };
-    const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { if (entry.target.id === 'slideVideos') { tabVideos.classList.add('active'); tabSongs.classList.remove('active'); } else { tabSongs.classList.add('active'); tabVideos.classList.remove('active'); } } }); }, observerOptions);
-    observer.observe(slideVideos); observer.observe(slideSongs);
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          if (entry.target.id === 'slideVideos') {
+            tabVideos.classList.add('active'); tabSongs.classList.remove('active'); tabAbout.classList.remove('active');
+          } else if (entry.target.id === 'slideSongs') {
+            tabSongs.classList.add('active'); tabVideos.classList.remove('active'); tabAbout.classList.remove('active');
+          } else if (entry.target.id === 'slideAbout') {
+            tabAbout.classList.add('active'); tabVideos.classList.remove('active'); tabSongs.classList.remove('active');
+          }
+        }
+      });
+    }, observerOptions);
+    observer.observe(slideVideos); observer.observe(slideSongs); observer.observe(slideAbout);
 
     window.toggleMenu = function(e) { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('open'); }
     function closeMenu() { document.getElementById('menuDropdown').classList.remove('open'); }
     document.addEventListener('click', closeMenu);
-    window.showAbout = function() { alert('Samarid Music\n\nArtist · Creating music that moves you.\n\nSubscribe on YouTube: @realsamarid'); closeMenu(); }
 
     window.fakeSubscribe = function(e) {
       e.preventDefault(); const btn = document.getElementById('subBtn'); btn.classList.add('bounce');
@@ -214,7 +290,16 @@
       } catch (e) { console.error("Error loading songs: ", e); list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Could not load songs</h3><p>Check back later.</p></div>'; }
     }
 
-    applySettings(); loadVideos(); renderSongs();
+    function loadAboutPage() {
+      const savedPic = localStorage.getItem('samarid_profile_pic');
+      const savedStory = localStorage.getItem('samarid_about_story');
+
+      if (savedPic) document.getElementById('aboutProfilePic').src = savedPic;
+      if (savedStory) document.getElementById('aboutStoryText').innerText = savedStory;
+      else document.getElementById('aboutStoryText').innerText = "Welcome to my official website. I am Samarid, an artist from Ghana dedicated to creating music that moves the soul and tells real stories. My journey started with a passion for sound and a dream to reach the world.\n\nEvery song I create is a piece of my journey. From the beats to the lyrics, I put my heart into every track. This website is my home, and I'm glad you're here.";
+    }
+
+    applySettings(); loadVideos(); renderSongs(); loadAboutPage();
   </script>
 </body>
 </html>
