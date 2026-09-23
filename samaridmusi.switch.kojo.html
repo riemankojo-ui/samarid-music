@@ -29,7 +29,7 @@
   .form-group { margin-bottom: 15px; }
   .form-group label { display: block; font-size: 11px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
   .form-group input, .form-group textarea { width: 100%; padding: 13px; background: var(--card); border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; resize: vertical; }
-  .form-group textarea { min-height: 120px; }
+  .form-group textarea { min-height: 100px; }
   .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); }
   .form-group .hint { font-size: 10px; color: #555; margin-top: 4px; }
   button.main-btn { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; }
@@ -40,13 +40,6 @@
   .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; color: var(--text2); cursor: pointer; background: transparent; border: none; font-family: inherit; }
   .nav-item .icon { font-size: 18px; } .nav-item .label { font-size: 10px; font-weight: 700; }
   .nav-item.active { color: var(--accent); }
-  .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 2000; padding: 20px; align-items: center; justify-content: center; }
-  .modal.open { display: flex; }
-  .modal-content { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; width: 100%; max-width: 500px; }
-  .modal-content h3 { margin-bottom: 10px; font-size: 16px; }
-  .modal-content p { font-size: 12px; color: var(--text2); margin-bottom: 15px; }
-  .modal-content textarea { width: 100%; height: 200px; background: #0a0a0a; color: #00cc44; border: 1px solid #333; border-radius: 8px; padding: 10px; font-family: monospace; font-size: 12px; }
-  .modal-content button { margin-top: 15px; width: 100%; padding: 12px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -81,19 +74,22 @@
         <h1 class="page-title">Dashboard</h1>
         <p class="page-subtitle">Manage your website and songs</p>
         <div class="quick-actions" style="display:flex; gap:12px; margin-bottom:25px;">
-          <button class="action-btn" onclick="goToPage('upload')" style="flex:1; padding:18px 12px; border-radius:14px; background:var(--card); border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; color:#fff;">
-            <div class="icon" style="font-size:24px; color:var(--accent);">➕</div><div class="label" style="font-size:12px; font-weight:700;">Add Song</div>
+          <button onclick="goToPage('upload')" style="flex:1; padding:18px 12px; border-radius:14px; background:var(--card); border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; color:#fff;">
+            <div style="font-size:24px; color:var(--accent);">➕</div><div style="font-size:12px; font-weight:700;">Add Song</div>
           </button>
-          <button class="action-btn" onclick="goToPage('profile')" style="flex:1; padding:18px 12px; border-radius:14px; background:var(--card); border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; color:#fff;">
-            <div class="icon" style="font-size:24px; color:var(--accent);">👤</div><div class="label" style="font-size:12px; font-weight:700;">Edit About</div>
+          <button onclick="goToPage('profile')" style="flex:1; padding:18px 12px; border-radius:14px; background:var(--card); border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; color:#fff;">
+            <div style="font-size:24px; color:var(--accent);">👤</div><div style="font-size:12px; font-weight:700;">Edit About</div>
           </button>
+        </div>
+        <div style="background:var(--card); padding:15px; border-radius:12px; border:1px solid var(--border); font-size:13px; line-height:1.6;">
+          Everything you save here now goes directly to the cloud database. Your fans will see all changes instantly!
         </div>
       </div>
 
       <!-- UPLOAD -->
       <div class="page" id="pageUpload">
-        <h1 class="page-title">Generate Song Code</h1>
-        <p class="page-subtitle">Fill the form, then copy the output</p>
+        <h1 class="page-title">Add New Song</h1>
+        <p class="page-subtitle">Fill the form and publish instantly</p>
         <div class="form-group"><label>Song Title</label><input type="text" id="songTitle" placeholder="e.g. Back To Sender"></div>
         <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="https://files.catbox.moe/....png"></div>
         <div class="form-group"><label>Category</label><input type="text" id="songCategory" placeholder="e.g. Afrobeats, Hip-Hop"></div>
@@ -101,7 +97,7 @@
         <div class="form-group"><label>About This Song</label><textarea id="songDescription" placeholder="Write a description..."></textarea></div>
         <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="https://files.catbox.moe/....mp3"></div>
         <div class="form-group"><label>Play Now Link</label><input type="text" id="songPlay" placeholder="https://youtube.com/..."></div>
-        <button class="main-btn" onclick="generateJson()">Generate JSON Code</button>
+        <button class="main-btn" onclick="saveSong()">Publish Song</button>
         <p id="songStatus" class="status"></p>
       </div>
 
@@ -109,30 +105,11 @@
       <div class="page" id="pageProfile">
         <h1 class="page-title">Edit About Page</h1>
         <p class="page-subtitle">Update your photo and story</p>
-        
-        <div class="form-group">
-          <label>Profile Photo URL (Small circle)</label>
-          <input type="text" id="profilePicInput" placeholder="https://files.catbox.moe/....png">
-        </div>
-        
-        <div class="form-group">
-          <label>Big Banner Photo URL (Horizontal)</label>
-          <input type="text" id="bigPhotoInput" placeholder="https://files.catbox.moe/....png">
-          <p class="hint">💡 Upload a wide, horizontal photo of yourself for the big banner</p>
-        </div>
-
-        <div class="form-group">
-          <label>My Story (Long Text)</label>
-          <textarea id="storyInput" placeholder="Write your full story here. You can use line breaks."></textarea>
-        </div>
-
+        <div class="form-group"><label>Profile Photo URL</label><input type="text" id="profilePicInput" placeholder="https://files.catbox.moe/....png"></div>
+        <div class="form-group"><label>Big Banner Photo URL</label><input type="text" id="bigPhotoInput" placeholder="https://files.catbox.moe/....png"></div>
+        <div class="form-group"><label>My Story</label><textarea id="storyInput" placeholder="Write your full story here..."></textarea></div>
         <button class="main-btn" onclick="saveAboutPage()">Save About Page</button>
         <p id="profileStatus" class="status"></p>
-        
-        <div style="margin-top:20px; text-align:center;">
-          <p style="font-size:12px; color:#666; margin-bottom:10px;">Current Profile Preview:</p>
-          <img id="profilePreview" src="" style="width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); display:none;">
-        </div>
       </div>
 
       <!-- CHANNEL -->
@@ -154,25 +131,22 @@
     </div>
   </div>
 
-  <div class="modal" id="jsonModal">
-    <div class="modal-content">
-      <h3>✅ Song Generated!</h3>
-      <p>Copy the code below and paste it inside the square brackets `[ ]` in your <b>songs.json</b> file on GitHub.</p>
-      <textarea id="jsonOutput" readonly></textarea>
-      <button onclick="closeModal()">Done</button>
-    </div>
-  </div>
-
   <script>
     const SECRET_PASSWORD = "samarid2026"; 
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
+    
+    // === SUPABASE CONFIGURATION ===
+    const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+    // ==============================
 
     window.togglePassword = function() { const input = document.getElementById('passwordInput'); const icon = document.getElementById('eyeIcon'); if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; } else { input.type = 'password'; icon.innerText = '👁️'; } }
     window.checkPassword = function() { const input = document.getElementById('passwordInput').value; const status = document.getElementById('loginStatus'); if (input === SECRET_PASSWORD) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; loadProfile(); } else { status.innerText = '❌ Wrong password. Try again.'; } }
     window.logout = function() { if (confirm('Log out?')) location.reload(); }
     window.goToPage = function(page) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); document.getElementById('nav' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); window.scrollTo(0, 0); }
 
-    window.generateJson = function() {
+    // === SAVE SONG TO SUPABASE ===
+    window.saveSong = async function() {
       const status = document.getElementById('songStatus');
       const title = document.getElementById('songTitle').value.trim();
       const cover = document.getElementById('songCover').value.trim();
@@ -184,54 +158,77 @@
 
       if (!title || !cover) { status.className = 'status error'; status.innerText = '❌ Title and Cover Art URL are required!'; return; }
 
-      const songData = { title, cover, category, date, description, downloadUrl, playUrl };
-      const jsonString = JSON.stringify(songData, null, 2);
+      status.className = 'status info'; status.innerText = '⏳ Saving to cloud...';
 
-      document.getElementById('jsonOutput').value = jsonString;
-      document.getElementById('jsonModal').classList.add('open');
-      status.className = 'status success'; status.innerText = '✅ Code generated!';
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs', {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ title, cover, category, date, description, downloadUrl, playUrl })
+        });
+
+        if (!res.ok) throw new Error('Supabase error: ' + res.status);
+
+        status.className = 'status success'; status.innerText = '✅ Song published to the cloud!';
+        ['songTitle','songCover','songCategory','songDate','songDescription','songDownload','songPlay'].forEach(id => document.getElementById(id).value = '');
+        setTimeout(() => { goToPage('home'); }, 1500);
+      } catch (e) { status.className = 'status error'; status.innerText = '❌ Error: ' + e.message; }
     }
 
-    window.closeModal = function() {
-      document.getElementById('jsonModal').classList.remove('open');
-      ['songTitle','songCover','songCategory','songDate','songDescription','songDownload','songPlay'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('songStatus').innerText = '';
-      goToPage('home');
-    }
-
-    // === ABOUT PAGE LOGIC ===
-    function loadProfile() {
-      const savedPic = localStorage.getItem('samarid_profile_pic');
-      const savedBigPic = localStorage.getItem('samarid_about_big_photo');
-      const savedStory = localStorage.getItem('samarid_about_story');
-
-      if (savedPic) {
-        document.getElementById('profilePicInput').value = savedPic;
-        document.getElementById('profilePreview').src = savedPic;
-        document.getElementById('profilePreview').style.display = 'inline-block';
-      }
-      if (savedBigPic) document.getElementById('bigPhotoInput').value = savedBigPic;
-      if (savedStory) document.getElementById('storyInput').value = savedStory;
-    }
-
-    window.saveAboutPage = function() {
-      const pic = document.getElementById('profilePicInput').value.trim();
-      const bigPic = document.getElementById('bigPhotoInput').value.trim();
-      const story = document.getElementById('storyInput').value.trim();
+    // === SAVE ABOUT PAGE TO SUPABASE ===
+    window.saveAboutPage = async function() {
       const status = document.getElementById('profileStatus');
+      const profile_pic = document.getElementById('profilePicInput').value.trim();
+      const big_photo = document.getElementById('bigPhotoInput').value.trim();
+      const story = document.getElementById('storyInput').value.trim();
 
-      if (pic) localStorage.setItem('samarid_profile_pic', pic);
-      if (bigPic) localStorage.setItem('samarid_about_big_photo', bigPic);
-      if (story) localStorage.setItem('samarid_about_story', story);
+      status.className = 'status info'; status.innerText = '⏳ Saving...';
 
-      if (pic) {
-        document.getElementById('profilePreview').src = pic;
-        document.getElementById('profilePreview').style.display = 'inline-block';
-      }
-      status.className = 'status success'; status.innerText = '✅ About page updated!';
+      try {
+        // Check if a row exists first
+        const check = await fetch(SUPABASE_URL + '/rest/v1/about?select=*', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const existing = await check.json();
+
+        let res;
+        if (existing && existing.length > 0) {
+          // Update existing row
+          res = await fetch(SUPABASE_URL + '/rest/v1/about?id=eq.' + existing[0].id, {
+            method: 'PATCH',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': 'Bearer ' + SUPABASE_KEY,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ profile_pic, big_photo, story })
+          });
+        } else {
+          // Insert new row
+          res = await fetch(SUPABASE_URL + '/rest/v1/about', {
+            method: 'POST',
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': 'Bearer ' + SUPABASE_KEY,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({ profile_pic, big_photo, story })
+          });
+        }
+
+        if (!res.ok) throw new Error('Supabase error: ' + res.status);
+
+        status.className = 'status success'; status.innerText = '✅ About page updated!';
+      } catch (e) { status.className = 'status error'; status.innerText = '❌ Error: ' + e.message; }
     }
 
-    // === CHANNEL LOGIC ===
+    // === YOUTUBE CHANNEL SWITCHER ===
     window.saveChannel = async function() {
       const input = document.getElementById('channelInput').value.trim(); const status = document.getElementById('adminStatus');
       if (!input) { status.className = 'status error'; status.innerText = 'Please paste a YouTube link first!'; return; }
