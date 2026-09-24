@@ -22,7 +22,7 @@
   /* CONTAINER */
   .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
 
-  /* BIG TITLE (Download MP3 Back To Sender) */
+  /* BIG TITLE (Download MP3 ...) */
   .big-title {
     font-size: 20px;
     font-weight: 900;
@@ -37,7 +37,7 @@
   }
   .big-title .accent { color: var(--accent); }
 
-  /* BOXED COVER ART (Halmblog style) */
+  /* BOXED COVER ART */
   .detail-cover-box {
     width: 100%;
     max-width: 300px;
@@ -49,12 +49,11 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.12);
     background: #000;
   }
-  .detail-cover-box img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-  }
+  .detail-cover-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .detail-title { font-size: 22px; font-weight: 900; line-height: 1.25; margin-bottom: 6px; text-align: center; }
   .detail-meta { font-size: 13px; color: #999; margin-bottom: 25px; text-align: center; }
+  .detail-meta .artist { color: var(--accent); font-weight: 700; }
 
   .detail-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
   .detail-section h4 { font-size: 12px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
@@ -76,7 +75,7 @@
 <body>
 
   <header class="header">
-    <button class="back-btn" onclick="window.location.href='index.html'"><i class="fas fa-arrow-left"></i> Back</button>
+    <button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i> Back</button>
     <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
     <div style="width: 70px;"></div>
   </header>
@@ -108,14 +107,23 @@
         const s = data[0];
 
         if (s) {
+          // Get the artist name (default to Samarid if not set)
+          const artist = s.artist_name || 'Samarid';
+          
+          // Build the "Download MP3 Artist - Title" text
+          const downloadTitle = artist + ' - ' + s.title;
+          
+          // Update browser tab title too
+          document.title = downloadTitle + ' - Samarid Music';
+          
           container.innerHTML = `
-            <div class="big-title">Download MP3 <span class="accent">${s.title}</span></div>
+            <div class="big-title">Download MP3 <span class="accent">${downloadTitle}</span></div>
             <div class="detail-cover-box"><img src="${s.cover}" alt="${s.title}"></div>
             <h1 class="detail-title">${s.title}</h1>
-            <p class="detail-meta">${s.date} • ${s.category}</p>
+            <p class="detail-meta"><span class="artist">${artist}</span> • ${s.date} • ${s.category}</p>
             <div class="detail-section"><h4>📖 About this Song</h4><p>${s.description}</p></div>
             <div class="detail-section"><h4>⬇️ Get the Song</h4><div class="download-buttons">
-              <a href="${s.downloadurl}" download="${s.title}_Samaridmusic.com.mp3" id="detailDownload" class="btn-download" target="_blank"><i class="fas fa-download"></i> Download MP3</a>
+              <a href="${s.downloadurl}" download="${artist} - ${s.title}.mp3" id="detailDownload" class="btn-download" target="_blank"><i class="fas fa-download"></i> Download MP3</a>
               <a href="${s.playurl}" id="detailPlay" class="btn-play" target="_blank"><i class="fas fa-play"></i> Play Now</a>
             </div></div>
           `;
