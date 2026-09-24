@@ -161,6 +161,19 @@
         <div class="fanbase-arrow"><i class="fas fa-arrow-right"></i></div>
       </a>
 
+      <a href="artists.html" class="fanbase-btn" style="background: linear-gradient(135deg, #141414 0%, #2a2a2a 100%); box-shadow: 0 10px 30px rgba(255,255,255,0.1); animation: none;">
+        <div class="fanbase-icon" style="background: rgba(255,255,255,0.1);">
+          <i class="fas fa-microphone" style="animation: none;"></i>
+        </div>
+        <div class="fanbase-text">
+          <span class="fanbase-title">All Artists</span>
+          <span class="fanbase-sub">Discover everyone on Samarid Music</span>
+        </div>
+        <div class="fanbase-arrow" style="background: rgba(255,255,255,0.1);">
+          <i class="fas fa-arrow-right" style="animation: none;"></i>
+        </div>
+      </a>
+
       <div class="about-section">
         <h3><i class="fas fa-user" style="color: var(--accent);"></i> My Story</h3>
         <p id="aboutStoryText">Loading story...</p>
@@ -181,7 +194,7 @@
   </div>
 
   <div class="menu-dropdown" id="menuDropdown" onclick="event.stopPropagation()">
-    <div class="menu-title">⚙️ Settings</div>
+    <div class="menu-title">Settings</div>
     <div class="theme-row">
       <span class="theme-label">Theme</span>
       <div class="theme-toggle">
@@ -189,13 +202,16 @@
         <button class="theme-btn" data-theme="light" onclick="setTheme('light')">Light</button>
       </div>
     </div>
-    <div class="menu-title">🎉 Fanbase</div>
-    <a href="fanbase.html" class="menu-item">
-      <span class="icon"><i class="fas fa-heart" style="color: #ff0033;"></i></span>
-      <span class="label">Connect To Fanbase</span>
-      <span class="arrow">➡️</span>
+    <a href="artists.html" class="menu-item">
+      <span class="label" style="font-weight: 900; font-size: 15px;">All Artists</span>
+      <span class="arrow">➡</span>
     </a>
-    <div class="menu-title">🔗 Follow</div>
+    <div class="menu-title">Fanbase</div>
+    <a href="fanbase.html" class="menu-item">
+      <span class="label">Connect To Fanbase</span>
+      <span class="arrow">➡</span>
+    </a>
+    <div class="menu-title">Follow</div>
     <a href="https://youtube.com/@realsamarid" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-youtube" style="color: #FF0000;"></i></span><span class="label">YouTube</span><span class="arrow">↗</span></a>
     <a href="https://tiktok.com/@realsamarid" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-tiktok" style="color: #ffffff;"></i></span><span class="label">TikTok</span><span class="arrow">↗</span></a>
     <a href="https://facebook.com/realsamarid" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-facebook" style="color: #1877F2;"></i></span><span class="label">Facebook</span><span class="arrow">↗</span></a>
@@ -285,14 +301,13 @@
         const uploadsId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
         const videosRes = await fetch('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=' + uploadsId + '&key=' + API_KEY);
         const videosData = await videosRes.json();
-        if (!videosData.items || videosData.items.length === 0) { grid.innerHTML = '<div class="empty">No videos yet — check back soon! 🎵</div>'; return; }
+        if (!videosData.items || videosData.items.length === 0) { grid.innerHTML = '<div class="empty">No videos yet — check back soon!</div>'; return; }
         const videos = videosData.items.map(item => { const videoId = item.snippet.resourceId.videoId; const title = item.snippet.title; const published = item.snippet.publishedAt; const date = new Date(published).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); return { videoId, title, date, timestamp: new Date(published).getTime() }; });
         videos.sort((a, b) => b.timestamp - a.timestamp);
         grid.innerHTML = videos.map(v => `<div class="video-card" onclick="openPlayer('${v.videoId}')"><div class="video-thumb"><img src="https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg" alt="${v.title}" loading="lazy"><div class="video-play-overlay"></div></div><div class="video-title">${v.title}</div><div class="video-meta">${v.date}</div></div>`).join('');
       } catch (err) { console.error(err); const link = localStorage.getItem('samarid_channel_id') ? 'https://www.youtube.com/channel/' + localStorage.getItem('samarid_channel_id') : 'https://youtube.com/@realsamarid'; grid.innerHTML = '<div class="empty">Could not load videos. <a href="' + link + '" style="color:var(--accent);">Visit YouTube →</a></div>'; }
     }
 
-    // === SONGS: ONLY YOUR OWN SONGS (filtered by artist_name = Samarid) ===
     async function renderSongs() {
       const list = document.getElementById('songList');
       try {

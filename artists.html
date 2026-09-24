@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>All Artists - Samarid Music</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root { --bg: #ffffff; --text: #0a0a0a; --text2: #888888; --accent: #ff0033; --orange: #ff8800; --border: #eeeeee; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 40px; }
+
+  /* HEADER */
+  .header { position: sticky; top: 0; background: #111111; padding: 12px 16px; display: flex; align-items: center; gap: 10px; z-index: 100; }
+  .back-btn { background: #222; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+  .back-btn:active { background: var(--accent); }
+  .logo { font-size: 18px; font-weight: 900; color: #fff; text-decoration: none; flex: 1; text-align: center; }
+  .logo span { color: var(--accent); }
+
+  /* PAGE TITLE */
+  .page-title { font-size: 20px; font-weight: 900; text-align: center; padding: 30px 20px 20px; color: var(--text); letter-spacing: -0.5px; }
+
+  /* SEARCH */
+  .search-wrap { position: relative; max-width: 700px; margin: 0 auto 24px; padding: 0 16px; }
+  .search-wrap i { position: absolute; left: 30px; top: 50%; transform: translateY(-50%); color: var(--text2); font-size: 13px; }
+  .search-input { width: 100%; padding: 12px 14px 12px 42px; background: #f5f5f5; border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 14px; font-family: inherit; }
+  .search-input:focus { outline: none; border-color: var(--orange); }
+  .search-input::placeholder { color: var(--text2); }
+
+  /* ARTIST GRID (2 columns) */
+  .artist-grid {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 12px;
+  }
+
+  .artist-name {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--orange);
+    text-decoration: none;
+    padding: 6px 0;
+    transition: 0.15s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .artist-name:active { opacity: 0.5; }
+
+  .loading, .empty { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 14px; grid-column: 1 / -1; }
+
+  .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 40px; background: #fafafa; }
+  .footer .brand { color: var(--accent); font-weight: 700; }
+</style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+    <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
+    <div style="width: 70px;"></div>
+  </header>
+
+  <h1 class="page-title">All Artists</h1>
+
+  <div class="search-wrap">
+    <i class="fas fa-search"></i>
+    <input type="text" class="search-input" id="searchInput" placeholder="Search artist..." oninput="filterArtists()">
+  </div>
+
+  <div class="artist-grid" id="artistGrid">
+    <div class="loading">Loading...</div>
+  </div>
+
+  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
+
+  <script>
+    const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+
+    let allArtists = [];
+
+    async function loadArtists() {
+      const container = document.getElementById('artistGrid');
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const songs = await res.json();
+
+        if (!Array.isArray(songs) || songs.length === 0) {
+          container.innerHTML = '<div class="empty">No artists yet.</div>';
+          return;
+        }
+
+        // Get unique artist names
+        const names = [...new Set(songs.map(s => (s.artist_name || 'Samarid').trim()))];
+
+        // Sort A to Z
+        allArtists = names.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+
+        renderArtists(allArtists);
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = '<div class="empty">Could not load artists.</div>';
+      }
+    }
+
+    function renderArtists(list) {
+      const container = document.getElementById('artistGrid');
+
+      if (list.length === 0) {
+        container.innerHTML = '<div class="empty">No artists found.</div>';
+        return;
+      }
+
+      container.innerHTML = list.map(name => {
+        // Build URL: kuamifamous.html for "Kuami Famous", samarid.html for "Samarid", etc.
+        const fileSlug = name.toLowerCase().replace(/\s+/g, '');
+        const url = fileSlug + '.html';
+        return `<a href="${url}" class="artist-name">${name}</a>`;
+      }).join('');
+    }
+
+    window.filterArtists = function() {
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      if (!query) { renderArtists(allArtists); return; }
+      const filtered = allArtists.filter(name => name.toLowerCase().includes(query));
+      renderArtists(filtered);
+    }
+
+    loadArtists();
+  </script>
+</body>
+</html>
