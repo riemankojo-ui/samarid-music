@@ -233,6 +233,10 @@
     let editingCommentId = null;
     let countRefreshTimer = null;
 
+    // Local memory of what THIS device liked
+    let myLikes = JSON.parse(localStorage.getItem('samarid_my_likes') || '[]');
+    function saveMyLikes() { localStorage.setItem('samarid_my_likes', JSON.stringify(myLikes)); }
+
     // === NAME GATE ===
     const firstInput = document.getElementById('firstNameInput');
     const secondInput = document.getElementById('secondNameInput');
@@ -310,7 +314,7 @@
           fetch(SUPABASE_URL + '/rest/v1/songs?select=*&order=id.desc', {
             headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
           }),
-          fetch(SUPABASE_URL + '/rest/v1/likes?select=song_id', {
+          fetch(SUPABASE_URL + '/rest/v1/likes?select=song_id,visitor_id', {
             headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
           })
         ]);
@@ -323,14 +327,20 @@
         }
 
         const likeCounts = {};
-        likesData.forEach(l => { likeCounts[l.song_id] = (likeCounts[l.song_id] || 0) + 1; });
+        likesData.forEach(l => { 
+          likeCounts[l.song_id] = (likeCounts[l.song_id] || 0) + 1; 
+        });
+
+        // Sync local memory with server
+        myLikes = likesData.filter(l => l.visitor_id === visitorId).map(l => l.song_id);
+        saveMyLikes();
 
         boxes.innerHTML = songs.map(s => `
-          <div class="song-box" onclick='openSongModal(${JSON.stringify(s).replace(/'/g, "&#39;")})'>
+          <div class="song-box" data-song-id="${s.id}" onclick='openSongModal(${JSON.stringify(s).replace(/'/g, "&#39;")})'>
             <img src="${s.cover}" alt="${s.title}">
             <div class="song-box-info">
               <h4>${s.title}</h4>
-              <div class="song-box-likes"><i class="fas fa-heart"></i> ${likeCounts[s.id] || 0}</div>
+              <div class="song-box-likes"><i class="fas fa-heart"></i> <span class="like-count-${s.id}">${likeCounts[s.id] || 0}</span></div>
             </div>
           </div>
         `).join('');
@@ -352,7 +362,7 @@
           </div>
         </div>
         <div class="like-row">
-          <button class="like-btn-small" id="likeBtn" onclick="toggleLike(${song.id}, this)">
+          <button class="like-btn-small" id="likeBtn" data-song-id="${song.id}" onclick="toggleLike(${song.id}, this)">
             <i class="fas fa-heart"></i> <span id="likeCount">0</span>
           </button>
           <button class="comment-count-btn" onclick="scrollToComments()">
@@ -369,18 +379,37 @@
       `;
       modal.classList.add('open');
 
-      const myLike = await fetch(SUPABASE_URL + '/rest/v1/likes?song_id=eq.' + song.id + '&visitor_id=eq.' + visitorId, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-      });
-      const myLikeData = await myLike.json();
       const btn = document.getElementById('likeBtn');
-      if (myLikeData && myLikeData.length > 0) btn.classList.add('liked');
+      
+      if (myLikes.includes(song.id)) {
+        btn.classList.add('liked');
+      }
+
+      const localGridSpan = document.querySelector(`.song-box[data-song-id="${song.id}"] .like-count-${song.id}`);
+      if (localGridSpan) {
+         document.getElementById('likeCount').innerText = localGridSpan.innerText;
+      }
+
+      try {
+        const myLike = await fetch(SUPABASE_URL + '/rest/v1/likes?song_id=eq.' + song.id + '&visitor_id=eq.' + visitorId, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const myLikeData = await myLike.json();
+        
+        if (myLikeData && myLikeData.length > 0) {
+          if (!myLikes.includes(song.id)) { myLikes.push(song.id); saveMyLikes(); }
+          btn.classList.add('liked');
+        } else {
+          myLikes = myLikes.filter(id => id !== song.id);
+          saveMyLikes();
+          btn.classList.remove('liked');
+        }
+      } catch(e) { console.error("Sync check failed", e); }
 
       await refreshLikeCount(song.id);
       await refreshCommentCount(song.id);
       loadComments(song.id);
 
-      // Auto-refresh counts every 8 seconds
       if (countRefreshTimer) clearInterval(countRefreshTimer);
       countRefreshTimer = setInterval(async () => {
         if (currentSong && currentSong.id === song.id) {
@@ -398,6 +427,23 @@
         const data = await res.json();
         const el = document.getElementById('likeCount');
         if (el) el.innerText = data.length;
+        
+        const gridSpan = document.querySelector(`.song-box[data-song-id="${songId}"] .like-count-${songId}`);
+        if (gridSpan) gridSpan.innerText = data.length;
+
+        // CRITICAL FIX: Ensure heart stays red if YOUR visitor_id is in server data
+        const serverHasMyLike = data.some(l => l.visitor_id === visitorId);
+        const btn = document.getElementById('likeBtn');
+        if (btn) {
+          if (serverHasMyLike) {
+            btn.classList.add('liked');
+            if (!myLikes.includes(songId)) { myLikes.push(songId); saveMyLikes(); }
+          } else if (myLikes.includes(songId)) {
+            myLikes = myLikes.filter(id => id !== songId);
+            saveMyLikes();
+            btn.classList.remove('liked');
+          }
+        }
       } catch (e) { console.error(e); }
     }
 
@@ -423,32 +469,56 @@
       loadSongs();
     }
 
-    // === LIKE — PERFECT SYNC ===
+    // === LIKE — INSTANT UI + LOCAL MEMORY ===
     window.toggleLike = async function(songId, btn) {
       const isLiked = btn.classList.contains('liked');
+      const countSpan = document.getElementById('likeCount');
+      const currentCount = parseInt(countSpan.innerText) || 0;
+
+      // 1. INSTANTLY UPDATE UI
+      if (isLiked) {
+        btn.classList.remove('liked');
+        countSpan.innerText = Math.max(0, currentCount - 1);
+        myLikes = myLikes.filter(id => id !== songId);
+      } else {
+        btn.classList.add('liked');
+        countSpan.innerText = currentCount + 1;
+        if (!myLikes.includes(songId)) myLikes.push(songId);
+      }
+      saveMyLikes();
       btn.disabled = true;
-      
+
       try {
         if (isLiked) {
           await fetch(SUPABASE_URL + '/rest/v1/likes?song_id=eq.' + songId + '&visitor_id=eq.' + visitorId, {
             method: 'DELETE',
             headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
           });
-          btn.classList.remove('liked');
         } else {
           await fetch(SUPABASE_URL + '/rest/v1/likes', {
             method: 'POST',
             headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
             body: JSON.stringify({ song_id: songId, visitor_id: visitorId, name: fanName })
           });
-          btn.classList.add('liked');
         }
-        
-        // Force refresh count from server
-        await refreshLikeCount(songId);
-      } catch (e) { console.error(e); }
-      
-      btn.disabled = false;
+      } catch (e) {
+        console.error(e);
+        // REVERT ON FAILURE
+        if (isLiked) {
+          btn.classList.add('liked');
+          countSpan.innerText = currentCount + 1;
+          if (!myLikes.includes(songId)) myLikes.push(songId);
+        } else {
+          btn.classList.remove('liked');
+          countSpan.innerText = Math.max(0, currentCount - 1);
+          myLikes = myLikes.filter(id => id !== songId);
+        }
+        saveMyLikes();
+      } finally {
+        btn.disabled = false;
+        const gridSpan = document.querySelector(`.song-box[data-song-id="${songId}"] .like-count-${songId}`);
+        if (gridSpan) gridSpan.innerText = countSpan.innerText;
+      }
     }
 
     // === LOAD COMMENTS ===
