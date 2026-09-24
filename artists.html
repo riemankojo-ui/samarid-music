@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artists - Samarid Music</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root { --bg: #0a0a0a; --card: #141414; --border: #222; --text: #ffffff; --text2: #cccccc; --accent: #ff0033; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; padding-bottom: 40px; }
+
+  .header { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 10px; z-index: 100; }
+  .back-btn { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+  .back-btn:active { background: var(--accent); color: #fff; }
+  .logo { font-size: 18px; font-weight: 900; color: var(--text); text-decoration: none; flex: 1; text-align: center; }
+  .logo span { color: var(--accent); }
+
+  .container { max-width: 700px; margin: 0 auto; padding: 16px; }
+
+  .search-wrap { position: relative; margin-bottom: 16px; }
+  .search-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text2); font-size: 13px; }
+  .search-input { width: 100%; padding: 12px 14px 12px 38px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: inherit; }
+  .search-input:focus { outline: none; border-color: var(--accent); }
+  .search-input::placeholder { color: var(--text2); }
+
+  .artists-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  @media (min-width: 600px) { .artists-grid { grid-template-columns: 1fr 1fr 1fr; } }
+
+  .artist-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px 12px; text-align: center; cursor: pointer; text-decoration: none; color: inherit; transition: 0.15s; display: block; }
+  .artist-card:active { transform: scale(0.96); border-color: var(--accent); }
+  .artist-name { font-size: 14px; font-weight: 800; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .artist-meta { font-size: 10px; color: var(--text2); margin-top: 4px; }
+
+  .loading, .empty { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 13px; grid-column: 1 / -1; }
+  .empty .icon { font-size: 50px; margin-bottom: 15px; display: block; }
+
+  .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 40px; }
+  .footer .brand { color: var(--accent); font-weight: 700; }
+</style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+    <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
+    <div style="width: 60px;"></div>
+  </header>
+
+  <div class="container">
+    <div class="search-wrap">
+      <i class="fas fa-search"></i>
+      <input type="text" class="search-input" id="searchInput" placeholder="Search artists..." oninput="filterArtists()">
+    </div>
+
+    <div class="artists-grid" id="artistsGrid">
+      <div class="loading">Loading artists...</div>
+    </div>
+  </div>
+
+  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
+
+  <script>
+    const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+
+    let allArtists = [];
+
+    async function loadArtists() {
+      const grid = document.getElementById('artistsGrid');
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id,artist_name', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const songs = await res.json();
+
+        if (!Array.isArray(songs) || songs.length === 0) {
+          grid.innerHTML = '<div class="empty"><span class="icon">🎤</span>No artists yet.<br>Check back soon!</div>';
+          return;
+        }
+
+        // Build artists with song count
+        const artists = {};
+        songs.forEach(s => {
+          const name = (s.artist_name || 'Samarid').trim();
+          if (!artists[name]) artists[name] = { name: name, songCount: 0 };
+          artists[name].songCount++;
+        });
+
+        // Sort A to Z (secretly in background)
+        allArtists = Object.values(artists).sort((a, b) =>
+          a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+        );
+
+        renderArtists(allArtists);
+      } catch (e) {
+        console.error(e);
+        grid.innerHTML = '<div class="empty"><span class="icon">😕</span>Could not load artists.</div>';
+      }
+    }
+
+    function renderArtists(list) {
+      const grid = document.getElementById('artistsGrid');
+
+      if (list.length === 0) {
+        grid.innerHTML = '<div class="empty"><span class="icon">🔍</span>No artists match your search.</div>';
+        return;
+      }
+
+      grid.innerHTML = list.map(a => {
+        const url = 'artist.html?name=' + encodeURIComponent(a.name);
+        return `
+          <a href="${url}" class="artist-card">
+            <div class="artist-name">${a.name}</div>
+            <div class="artist-meta">🎵 ${a.songCount} ${a.songCount === 1 ? 'song' : 'songs'}</div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    window.filterArtists = function() {
+      const query = document.getElementById('searchInput').value.trim().toLowerCase();
+      if (!query) { renderArtists(allArtists); return; }
+      const filtered = allArtists.filter(a => a.name.toLowerCase().includes(query));
+      renderArtists(filtered);
+    }
+
+    loadArtists();
+  </script>
+</body>
+</html>
