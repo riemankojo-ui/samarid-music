@@ -121,9 +121,7 @@
       }
 
       container.innerHTML = list.map(name => {
-        // Build URL: kuamifamous.html for "Kuami Famous", samarid.html for "Samarid", etc.
-        const fileSlug = name.toLowerCase().replace(/\s+/g, '');
-        const url = fileSlug + '.html';
+        const url = 'artist-template.html?name=' + encodeURIComponent(name);
         return `<a href="${url}" class="artist-name">${name}</a>`;
       }).join('');
     }
