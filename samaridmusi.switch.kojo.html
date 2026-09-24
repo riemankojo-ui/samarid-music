@@ -34,8 +34,21 @@
   .form-group .hint { font-size: 10px; color: #555; margin-top: 4px; }
   button.main-btn { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; }
   button.main-btn:active { transform: scale(0.97); }
+  button.secondary-btn { width: 100%; padding: 14px; background: #222; color: #fff; border: 1px solid #333; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; }
   .status { font-size: 12px; margin-top: 12px; font-weight: bold; text-align: center; }
   .success { color: #00cc44; } .error { color: #ff0033; } .info { color: #ffcc00; }
+  
+  /* SONG LIST IN ADMIN */
+  .admin-song { display: flex; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 12px; margin-bottom: 10px; }
+  .admin-song img { width: 55px; height: 55px; border-radius: 8px; object-fit: cover; }
+  .admin-song .info { flex: 1; min-width: 0; }
+  .admin-song h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .admin-song p { font-size: 11px; color: var(--text2); }
+  .admin-song .actions { display: flex; gap: 6px; }
+  .admin-song .action-btn { background: transparent; border: none; font-size: 16px; cursor: pointer; padding: 8px; border-radius: 8px; }
+  .admin-song .edit-btn { color: #00cc44; }
+  .admin-song .delete-btn { color: #ff0033; }
+  
   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 8px 0; z-index: 1000; }
   .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; color: var(--text2); cursor: pointer; background: transparent; border: none; font-family: inherit; }
   .nav-item .icon { font-size: 18px; } .nav-item .label { font-size: 10px; font-weight: 700; }
@@ -80,11 +93,13 @@
             <div style="font-size:24px; color:var(--accent);">👤</div><div style="font-size:12px; font-weight:700;">Edit About</div>
           </button>
         </div>
+        <div id="homeSongList"></div>
       </div>
 
       <div class="page" id="pageUpload">
-        <h1 class="page-title">Add New Song</h1>
+        <h1 class="page-title" id="uploadTitle">Add New Song</h1>
         <p class="page-subtitle">Fill the form and publish instantly</p>
+        <input type="hidden" id="editingId" value="">
         <div class="form-group"><label>Song Title</label><input type="text" id="songTitle" placeholder="e.g. Back To Sender"></div>
         <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="https://files.catbox.moe/....png"></div>
         <div class="form-group"><label>Category</label><input type="text" id="songCategory" placeholder="e.g. Afrobeats, Hip-Hop"></div>
@@ -92,7 +107,8 @@
         <div class="form-group"><label>About This Song</label><textarea id="songDescription" placeholder="Write a description..."></textarea></div>
         <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="https://files.catbox.moe/....mp3"></div>
         <div class="form-group"><label>Play Now Link</label><input type="text" id="songPlay" placeholder="https://youtube.com/..."></div>
-        <button class="main-btn" onclick="saveSong()">Publish Song</button>
+        <button class="main-btn" id="submitBtn" onclick="saveSong()">Publish Song</button>
+        <button class="secondary-btn" id="cancelBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
         <p id="songStatus" class="status"></p>
       </div>
 
@@ -111,7 +127,7 @@
         <p class="page-subtitle">Connect your channel to auto-sync videos</p>
         <div class="form-group"><label>Channel Link</label><input type="text" id="channelInput" placeholder="https://youtube.com/@yourchannel"></div>
         <button class="main-btn" onclick="saveChannel()">Save & Sync Channel</button>
-        <button style="width:100%; padding:14px; background:#222; color:#fff; border:1px solid #333; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; margin-top:10px;" onclick="resetChannel()">Reset to Default Channel</button>
+        <button class="secondary-btn" onclick="resetChannel()">Reset to Default Channel</button>
         <p id="adminStatus" class="status"></p>
       </div>
     </div>
@@ -136,13 +152,74 @@
     // ======================================================
 
     window.togglePassword = function() { const input = document.getElementById('passwordInput'); const icon = document.getElementById('eyeIcon'); if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; } else { input.type = 'password'; icon.innerText = '👁️'; } }
-    window.checkPassword = function() { const input = document.getElementById('passwordInput').value; const status = document.getElementById('loginStatus'); if (input === SECRET_PASSWORD) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; } else { status.innerText = '❌ Wrong password. Try again.'; } }
+    window.checkPassword = function() { const input = document.getElementById('passwordInput').value; const status = document.getElementById('loginStatus'); if (input === SECRET_PASSWORD) { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('dashboard').style.display = 'block'; loadAdminSongs(); } else { status.innerText = '❌ Wrong password. Try again.'; } }
     window.logout = function() { if (confirm('Log out?')) location.reload(); }
     window.goToPage = function(page) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); document.getElementById('nav' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); window.scrollTo(0, 0); }
 
-    // === SAVE SONG TO SUPABASE ===
+    // === LOAD SONGS LIST IN ADMIN ===
+    async function loadAdminSongs() {
+      const list = document.getElementById('homeSongList');
+      list.innerHTML = '<p style="text-align:center; color:#666; padding:20px;">Loading songs...</p>';
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=*&order=id.desc', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const songs = await res.json();
+        if (!Array.isArray(songs) || songs.length === 0) {
+          list.innerHTML = '<p style="text-align:center; color:#666; padding:20px;">No songs yet. Tap "Add Song" to start.</p>';
+          return;
+        }
+        list.innerHTML = songs.map(s => `
+          <div class="admin-song">
+            <img src="${s.cover}" alt="${s.title}">
+            <div class="info">
+              <h4>${s.title}</h4>
+              <p>${s.category} • ${s.date}</p>
+            </div>
+            <div class="actions">
+              <button class="action-btn edit-btn" onclick='editSong(${JSON.stringify(s)})' title="Edit"><i class="fas fa-edit"></i></button>
+              <button class="action-btn delete-btn" onclick="deleteSong(${s.id})" title="Delete"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+        `).join('');
+      } catch (e) { list.innerHTML = '<p style="text-align:center; color:#ff0033; padding:20px;">Could not load songs.</p>'; }
+    }
+
+    // === EDIT SONG ===
+    window.editSong = function(song) {
+      document.getElementById('editingId').value = song.id;
+      document.getElementById('songTitle').value = song.title;
+      document.getElementById('songCover').value = song.cover;
+      document.getElementById('songCategory').value = song.category;
+      document.getElementById('songDate').value = song.date;
+      document.getElementById('songDescription').value = song.description;
+      document.getElementById('songDownload').value = song.downloadurl || song.downloadUrl;
+      document.getElementById('songPlay').value = song.playurl || song.playUrl;
+      document.getElementById('uploadTitle').innerText = 'Edit Song';
+      document.getElementById('submitBtn').innerText = 'Update Song';
+      document.getElementById('cancelBtn').style.display = 'block';
+      goToPage('upload');
+    }
+
+    window.cancelEdit = function() {
+      document.getElementById('editingId').value = '';
+      document.getElementById('songTitle').value = '';
+      document.getElementById('songCover').value = '';
+      document.getElementById('songCategory').value = '';
+      document.getElementById('songDate').value = '';
+      document.getElementById('songDescription').value = '';
+      document.getElementById('songDownload').value = '';
+      document.getElementById('songPlay').value = '';
+      document.getElementById('uploadTitle').innerText = 'Add New Song';
+      document.getElementById('submitBtn').innerText = 'Publish Song';
+      document.getElementById('cancelBtn').style.display = 'none';
+      goToPage('home');
+    }
+
+    // === SAVE OR UPDATE SONG ===
     window.saveSong = async function() {
       const status = document.getElementById('songStatus');
+      const editingId = document.getElementById('editingId').value;
       const title = document.getElementById('songTitle').value.trim();
       const cover = document.getElementById('songCover').value.trim();
       const category = document.getElementById('songCategory').value.trim() || 'Music';
@@ -153,65 +230,31 @@
 
       if (!title || !cover) { status.className = 'status error'; status.innerText = '❌ Title and Cover Art URL are required!'; return; }
 
-      status.className = 'status info'; status.innerText = '⏳ Saving to cloud...';
-
-      try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, {
-          method: 'POST',
-          headers: {
-            'apikey': SUPABASE_KEY,
-            'Authorization': 'Bearer ' + SUPABASE_KEY,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ title, cover, category, date, description, downloadurl, playurl })
-        });
-
-        if (!res.ok) {
-          const errText = await res.text();
-          throw new Error(res.status + ': ' + errText);
-        }
-
-        status.className = 'status success'; status.innerText = '✅ Song published to the cloud!';
-        ['songTitle','songCover','songCategory','songDate','songDescription','songDownload','songPlay'].forEach(id => document.getElementById(id).value = '');
-        setTimeout(() => { goToPage('home'); }, 1500);
-      } catch (e) { status.className = 'status error'; status.innerText = '❌ ' + e.message; }
-    }
-
-    // === SAVE ABOUT PAGE TO SUPABASE ===
-    window.saveAboutPage = async function() {
-      const status = document.getElementById('profileStatus');
-      const profile_pic = document.getElementById('profilePicInput').value.trim();
-      const big_photo = document.getElementById('bigPhotoInput').value.trim();
-      const story = document.getElementById('storyInput').value.trim();
-
       status.className = 'status info'; status.innerText = '⏳ Saving...';
 
       try {
-        const check = await fetch(SUPABASE_URL + '/rest/v1/' + ABOUT_TABLE + '?select=*', {
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-        });
-        const existing = await check.json();
-
         let res;
-        if (existing && existing.length > 0) {
-          res = await fetch(SUPABASE_URL + '/rest/v1/' + ABOUT_TABLE + '?id=eq.' + existing[0].id, {
+        if (editingId) {
+          // Update existing song
+          res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + editingId, {
             method: 'PATCH',
             headers: {
               'apikey': SUPABASE_KEY,
               'Authorization': 'Bearer ' + SUPABASE_KEY,
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ profile_pic, big_photo, story })
+            body: JSON.stringify({ title, cover, category, date, description, downloadurl, playurl })
           });
         } else {
-          res = await fetch(SUPABASE_URL + '/rest/v1/' + ABOUT_TABLE, {
+          // Create new song
+          res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, {
             method: 'POST',
             headers: {
               'apikey': SUPABASE_KEY,
               'Authorization': 'Bearer ' + SUPABASE_KEY,
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ profile_pic, big_photo, story })
+            body: JSON.stringify({ title, cover, category, date, description, downloadurl, playurl })
           });
         }
 
@@ -220,6 +263,50 @@
           throw new Error(res.status + ': ' + errText);
         }
 
+        status.className = 'status success'; status.innerText = editingId ? '✅ Song updated!' : '✅ Song published!';
+        setTimeout(() => { cancelEdit(); loadAdminSongs(); }, 1500);
+      } catch (e) { status.className = 'status error'; status.innerText = '❌ ' + e.message; }
+    }
+
+    // === DELETE SONG ===
+    window.deleteSong = async function(id) {
+      if (!confirm('Delete this song permanently?')) return;
+      try {
+        await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + id, {
+          method: 'DELETE',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        loadAdminSongs();
+      } catch (e) { alert('Could not delete song.'); }
+    }
+
+    // === SAVE ABOUT PAGE ===
+    window.saveAboutPage = async function() {
+      const status = document.getElementById('profileStatus');
+      const profile_pic = document.getElementById('profilePicInput').value.trim();
+      const big_photo = document.getElementById('bigPhotoInput').value.trim();
+      const story = document.getElementById('storyInput').value.trim();
+      status.className = 'status info'; status.innerText = '⏳ Saving...';
+      try {
+        const check = await fetch(SUPABASE_URL + '/rest/v1/' + ABOUT_TABLE + '?select=*', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const existing = await check.json();
+        let res;
+        if (existing && existing.length > 0) {
+          res = await fetch(SUPABASE_URL + '/rest/v1/' + ABOUT_TABLE + '?id=eq.' + existing[0].id, {
+            method: 'PATCH',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ profile_pic, big_photo, story })
+          });
+        } else {
+          res = await fetch(SUPABASE_URL + '/rest/v1/' + ABOUT_TABLE, {
+            method: 'POST',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ profile_pic, big_photo, story })
+          });
+        }
+        if (!res.ok) throw new Error('Supabase error: ' + res.status);
         status.className = 'status success'; status.innerText = '✅ About page updated!';
       } catch (e) { status.className = 'status error'; status.innerText = '❌ ' + e.message; }
     }
