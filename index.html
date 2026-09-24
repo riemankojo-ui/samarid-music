@@ -298,10 +298,11 @@
       } catch (err) { console.error(err); const link = localStorage.getItem('samarid_channel_id') ? 'https://www.youtube.com/channel/' + localStorage.getItem('samarid_channel_id') : 'https://youtube.com/@realsamarid'; grid.innerHTML = '<div class="empty">Could not load videos. <a href="' + link + '" style="color:var(--accent);">Visit YouTube →</a></div>'; }
     }
 
+    // === SONGS: ONLY SHOW SAMARID'S SONGS ON HOMEPAGE ===
     async function renderSongs() {
       const list = document.getElementById('songList');
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=*&order=id.desc', {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=eq.Samarid&select=*&order=id.desc', {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
         });
         const songs = await res.json();
