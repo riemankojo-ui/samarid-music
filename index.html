@@ -14,15 +14,20 @@
   body.light { --bg: #ffffff; --card: #f5f5f5; --border: #e5e5e5; --text: #0a0a0a; --text2: #444444; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; transition: background 0.3s, color 0.3s; padding-bottom: 40px; }
-  .header { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; transition: background 0.3s; }
-  .menu-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); font-size: 18px; font-weight: 700; transition: all 0.15s; }
-  .menu-btn:active { background: var(--accent); color: #fff; }
-  .logo { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; color: var(--text); text-decoration: none; flex: 1; text-align: center; }
+
+  .header { position: sticky; top: 0; background: #0a0a0a; border-bottom: 1px solid #222; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+  .menu-btn { width: 38px; height: 38px; border-radius: 50%; background: #222; border: 1px solid #333; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #ffffff; font-size: 18px; font-weight: 700; transition: all 0.15s; }
+  .menu-btn:active { background: var(--accent); }
+  .logo { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; color: #ffffff; text-decoration: none; flex: 1; text-align: center; }
   .logo span { color: var(--accent); }
   .subscribe-btn { background: var(--accent); color: #ffffff; border: none; padding: 6px 12px; border-radius: 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; text-decoration: none; cursor: pointer; transition: all 0.15s; }
   .subscribe-btn:active { opacity: 0.8; }
   @keyframes bounce { 0% { transform: scale(1); } 30% { transform: scale(0.9); } 50% { transform: scale(1.1); } 70% { transform: scale(0.95); } 100% { transform: scale(1); } }
   .subscribe-btn.bounce { animation: bounce 0.4s ease; }
+
+  .label-banner { background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); color: #fff; padding: 12px 20px; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 900; letter-spacing: 2px; font-size: 13px; box-shadow: 0 4px 15px rgba(255, 0, 51, 0.2); }
+  .label-banner .label-text { text-transform: uppercase; }
+
   .tabs-container { position: sticky; top: 58px; z-index: 90; display: flex; justify-content: center; gap: 10px; padding: 12px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
   .tab-btn { padding: 8px 24px; border-radius: 20px; background: var(--card); border: 1px solid var(--border); color: var(--text2); font-weight: 700; font-size: 13px; cursor: pointer; transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease; }
   .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
@@ -35,7 +40,6 @@
   .menu-item { padding: 12px 18px; font-size: 13px; color: var(--text); cursor: pointer; display: flex; align-items: center; gap: 12px; text-decoration: none; border-bottom: 1px solid var(--border); transition: background 0.15s; }
   .menu-item:last-child { border-bottom: none; }
   .menu-item:active { background: var(--border); }
-  .menu-item .icon { font-size: 16px; width: 20px; text-align: center; display: flex; justify-content: center; align-items: center; }
   .menu-item .label { flex: 1; color: var(--text); }
   .menu-item .arrow { color: var(--text2); font-size: 11px; }
   .theme-row { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
@@ -44,95 +48,60 @@
   .theme-btn { padding: 6px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 11px; cursor: pointer; transition: all 0.15s; }
   .theme-btn.active { border-color: var(--accent); color: var(--accent); font-weight: 700; }
   .section-title { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-  .page-title { font-size: 18px; font-weight: 900; text-align: center; padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px; color: var(--text); }
 
-  /* === BIG WELCOME TEXT === */
-  .welcome-section {
-    margin-top: 25px;
-    padding: 35px 22px;
-    background: linear-gradient(135deg, #1a0005 0%, #0a0a0a 60%);
-    border-radius: 20px;
-    text-align: center;
-    border: none;
-    box-shadow: 0 10px 40px rgba(255, 0, 51, 0.15);
-    position: relative;
-    overflow: hidden;
-  }
-  body.light .welcome-section {
-    background: linear-gradient(135deg, #fff0f3 0%, #fafafa 60%);
-    box-shadow: 0 10px 40px rgba(255, 0, 51, 0.08);
-  }
-  .welcome-section::before {
-    content: '';
-    display: block;
-    width: 60px;
-    height: 4px;
-    background: var(--accent);
-    border-radius: 3px;
-    margin: 0 auto 22px;
-  }
-  .welcome-section h2 {
-    font-size: 26px;
-    font-weight: 900;
-    margin-bottom: 18px;
-    color: var(--text);
-    letter-spacing: -0.8px;
-    line-height: 1.2;
-  }
+  .section-head { display: flex; align-items: center; gap: 10px; margin: 30px 0 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .section-head:first-of-type { margin-top: 0; }
+  .section-head h3 { font-size: 16px; font-weight: 900; letter-spacing: -0.3px; flex: 1; }
+  .section-head .icon-fire { color: var(--accent); font-size: 18px; }
+  .section-head .icon-new { color: #00cc44; font-size: 18px; }
+  .section-head .icon-cat { color: #8b5cf6; font-size: 18px; }
+  .section-head .icon-artist { color: #ff8800; font-size: 18px; }
+  .section-head .icon-tag { color: #ff8800; font-size: 18px; }
+  .section-head .icon-social { color: #0084ff; font-size: 18px; }
+
+  .top-song { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px; margin-bottom: 10px; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; }
+  .top-song:active { transform: scale(0.99); }
+  .top-rank { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #ff0033, #b3002d); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; flex-shrink: 0; }
+  .top-rank.rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
+  .top-rank.rank-2 { background: linear-gradient(135deg, #C0C0C0, #808080); color: #000; }
+  .top-rank.rank-3 { background: linear-gradient(135deg, #CD7F32, #8B4513); }
+  .top-cover { width: 55px; height: 55px; border-radius: 6px; overflow: hidden; background: #000; flex-shrink: 0; }
+  .top-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .top-info { flex: 1; min-width: 0; }
+  .top-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .top-info p { font-size: 11px; color: var(--text2); }
+  .top-plays { font-size: 11px; color: var(--accent); font-weight: 700; }
+
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill { display: inline-block; padding: 8px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; color: var(--text); font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.2s; cursor: pointer; }
+  .pill:active { transform: scale(0.96); }
+  .pill.cat-pill { color: #8b5cf6; border-color: #8b5cf644; }
+  .pill.cat-pill.active { background: #8b5cf6; color: #fff; border-color: #8b5cf6; }
+  .pill.artist-pill { color: #ff8800; border-color: #ff880044; }
+  .pill.artist-pill:active { background: #ff8800; color: #fff; border-color: #ff8800; }
+
+  .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .social-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; color: var(--text); font-size: 13px; font-weight: 700; transition: 0.2s; }
+  .social-btn:active { transform: scale(0.96); }
+  .social-btn i { font-size: 16px; }
+
+  .welcome-section { margin-top: 25px; padding: 35px 22px; background: linear-gradient(135deg, #1a0005 0%, #0a0a0a 60%); border-radius: 20px; text-align: center; border: none; box-shadow: 0 10px 40px rgba(255, 0, 51, 0.15); }
+  body.light .welcome-section { background: linear-gradient(135deg, #fff0f3 0%, #fafafa 60%); box-shadow: 0 10px 40px rgba(255, 0, 51, 0.08); }
+  .welcome-section::before { content: ''; display: block; width: 60px; height: 4px; background: var(--accent); border-radius: 3px; margin: 0 auto 22px; }
+  .welcome-section h2 { font-size: 26px; font-weight: 900; margin-bottom: 18px; color: var(--text); letter-spacing: -0.8px; line-height: 1.2; }
   .welcome-section h2 span { color: var(--accent); }
-  .welcome-section p {
-    font-size: 16px;
-    line-height: 1.8;
-    color: var(--text2);
-    max-width: 500px;
-    margin: 0 auto;
-    font-weight: 500;
-  }
+  .welcome-section p { font-size: 16px; line-height: 1.8; color: var(--text2); max-width: 500px; margin: 0 auto; font-weight: 500; }
 
-  /* === SMALL TRENDING (below welcome) === */
-  .trending-section {
-    margin-top: 20px;
-    background: #0a0a0a;
-    border-radius: 16px;
-    padding: 16px 12px;
-    border: none;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-  }
+  .trending-section { margin-top: 20px; background: #0a0a0a; border-radius: 16px; padding: 16px 12px; border: none; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
   body.light .trending-section { background: #0a0a0a; }
-  .trending-title {
-    text-align: center;
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    color: #888;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-  .trending-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    justify-content: center;
-  }
-  .trending-tag {
-    display: inline-block;
-    padding: 5px 10px;
-    background: #141414;
-    border: 1px solid #2a2a2a;
-    border-radius: 6px;
-    color: #cccccc;
-    font-size: 10px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
+  .trending-title { text-align: center; font-size: 11px; font-weight: 900; letter-spacing: 2px; color: #888; text-transform: uppercase; margin-bottom: 12px; }
+  .trending-tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+  .trending-tag { display: inline-block; padding: 5px 10px; background: #141414; border: 1px solid #2a2a2a; border-radius: 6px; color: #cccccc; font-size: 10px; font-weight: 600; text-decoration: none; transition: all 0.2s; white-space: nowrap; cursor: pointer; }
   .trending-tag:active { transform: scale(0.96); }
   .trending-tag.artist-tag { color: #ff8800; }
   .trending-tag.category-tag { color: #8b5cf6; }
   .trending-tag.brand-tag { color: #ff0033; }
 
-  /* === VIDEOS === */
   .video-grid { display: flex; flex-direction: column; gap: 12px; }
   .video-card { display: flex; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; padding: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
   .video-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
@@ -145,7 +114,6 @@
   .video-title { font-size: 13px; font-weight: 700; line-height: 1.35; margin-bottom: 5px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .video-meta { font-size: 11px; color: var(--text2); }
 
-  /* === SONGS === */
   .song-list { display: flex; flex-direction: column; gap: 12px; }
   .song-card { display: flex; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; padding: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
   .song-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
@@ -156,10 +124,10 @@
   .song-card-info h3 { font-size: 15px; font-weight: 700; line-height: 1.35; margin-bottom: 6px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .song-card-info .date { font-size: 12px; color: #999; }
 
-  .empty-state { text-align: center; padding: 60px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text2); }
-  .empty-state .icon { font-size: 50px; margin-bottom: 15px; }
-  .empty-state h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
-  .loading, .empty { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 13px; }
+  .empty-state { text-align: center; padding: 40px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text2); }
+  .empty-state .icon { font-size: 40px; margin-bottom: 15px; }
+  .empty-state h3 { font-size: 16px; margin-bottom: 8px; color: var(--text); }
+  .loading, .empty { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 13px; }
   .player-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
   .player-modal.open { display: flex; }
   .player-inner { width: 100%; max-width: 900px; background: #000; border-radius: 12px; overflow: hidden; position: relative; }
@@ -177,80 +145,33 @@
   .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); letter-spacing: 1px; border-top: 1px solid var(--border); margin-top: 20px; }
   .footer .brand { color: var(--accent); font-weight: 700; }
 
-  /* === ABOUT (Water Tank Style - soft, rounded, no borders) === */
-  .about-profile { text-align: center; margin-bottom: 30px; }
-  .about-img { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent); margin-bottom: 18px; box-shadow: 0 15px 40px rgba(255, 0, 51, 0.35); }
-  .about-name { font-size: 28px; font-weight: 900; margin-bottom: 6px; letter-spacing: -0.5px; }
-  .about-role { font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+  /* === ABOUT — SMALLER + BOUNCY (OLD STYLE) === */
+  .about-profile { text-align: center; margin-bottom: 20px; }
+  .about-img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); margin-bottom: 12px; box-shadow: 0 10px 30px rgba(255, 0, 51, 0.3); }
+  .about-name { font-size: 22px; font-weight: 900; margin-bottom: 4px; }
+  .about-role { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 15px; }
 
-  .about-section {
-    background: var(--card);
-    border: none;
-    border-radius: 24px;
-    padding: 25px 22px;
-    margin-bottom: 18px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-    position: relative;
-    overflow: hidden;
-  }
-  body.light .about-section {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-  }
-  .about-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 4px;
-    background: linear-gradient(90deg, var(--accent) 0%, transparent 100%);
-    border-radius: 24px 24px 0 0;
-  }
-  .about-section h3 { font-size: 16px; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; letter-spacing: -0.3px; }
-  .about-section p { font-size: 14px; line-height: 1.8; color: var(--text2); margin-bottom: 12px; white-space: pre-wrap; }
+  .about-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 15px; }
+  .about-section h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .about-section p { font-size: 13px; line-height: 1.7; color: var(--text2); margin-bottom: 10px; white-space: pre-wrap; }
   .about-section p:last-child { margin-bottom: 0; }
 
-  .about-social { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
-  .about-social a {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 16px; background: var(--card); border: none;
-    border-radius: 16px; text-decoration: none; color: var(--text);
-    font-weight: 700; font-size: 12px; transition: 0.2s;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  }
-  body.light .about-social a { background: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
-  .about-social a:active { transform: scale(0.96); }
-
-  .about-contact {
-    background: var(--card);
-    border: none;
-    border-radius: 24px;
-    padding: 28px 22px;
-    text-align: center;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-  }
-  body.light .about-contact { background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%); box-shadow: 0 8px 25px rgba(0,0,0,0.06); }
-  .about-contact h3 { font-size: 16px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.3px; }
-  .about-contact p { font-size: 13px; color: var(--text2); margin-bottom: 18px; line-height: 1.6; }
-  .about-contact a {
-    display: inline-block; padding: 14px 30px; background: var(--accent);
-    color: #fff; border-radius: 14px; text-decoration: none;
-    font-weight: 700; font-size: 14px; transition: 0.2s;
-    box-shadow: 0 8px 20px rgba(255, 0, 51, 0.3);
-  }
+  .about-contact { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; text-align: center; }
+  .about-contact h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+  .about-contact p { font-size: 12px; color: var(--text2); margin-bottom: 12px; }
+  .about-contact a { display: inline-block; padding: 10px 20px; background: var(--accent); color: #fff; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 13px; transition: 0.2s; }
   .about-contact a:active { transform: scale(0.97); }
 
+  /* BOUNCY FANBASE BUTTON (OLD STYLE) */
   .fanbase-btn {
     display: flex; align-items: center; gap: 14px;
-    padding: 20px 22px;
+    padding: 16px 18px;
     background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%);
-    border-radius: 24px; text-decoration: none; color: #ffffff;
-    margin-bottom: 20px; position: relative; overflow: hidden;
-    box-shadow: 0 15px 40px rgba(255, 0, 51, 0.35);
+    border-radius: 16px; text-decoration: none; color: #ffffff;
+    margin-bottom: 15px; position: relative; overflow: hidden;
+    box-shadow: 0 10px 30px rgba(255, 0, 51, 0.4);
     animation: glowPulse 2.5s ease-in-out infinite;
     transition: transform 0.2s ease;
-    border: none;
   }
   .fanbase-btn:active { transform: scale(0.97); }
   .fanbase-btn::before {
@@ -260,19 +181,24 @@
     animation: shine 4s linear infinite; pointer-events: none;
   }
   @keyframes shine { 0% { transform: translateX(-100%) translateY(-100%); } 100% { transform: translateX(100%) translateY(100%); } }
-  @keyframes glowPulse { 0%, 100% { box-shadow: 0 15px 40px rgba(255, 0, 51, 0.35); } 50% { box-shadow: 0 15px 55px rgba(255, 0, 51, 0.7); } }
-  .fanbase-icon { width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.3); }
-  .fanbase-icon i { font-size: 22px; color: #ffffff; animation: heartBeat 1.2s ease-in-out infinite; }
+  @keyframes glowPulse { 0%, 100% { box-shadow: 0 10px 30px rgba(255, 0, 51, 0.4); } 50% { box-shadow: 0 10px 45px rgba(255, 0, 51, 0.8); } }
+  .fanbase-icon { width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.3); }
+  .fanbase-icon i { font-size: 20px; color: #ffffff; animation: heartBeat 1.2s ease-in-out infinite; }
   @keyframes heartBeat { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.2); } 50% { transform: scale(1); } 75% { transform: scale(1.15); } }
   .fanbase-text { flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-  .fanbase-title { font-size: 17px; font-weight: 900; letter-spacing: 0.3px; }
+  .fanbase-title { font-size: 15px; font-weight: 900; letter-spacing: 0.3px; }
   .fanbase-sub { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.85); }
-  .fanbase-arrow { width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .fanbase-arrow i { font-size: 16px; color: #ffffff; animation: slideRight 1.5s ease-in-out infinite; }
+  .fanbase-arrow { width: 34px; height: 34px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .fanbase-arrow i { font-size: 14px; color: #ffffff; animation: slideRight 1.5s ease-in-out infinite; }
   @keyframes slideRight { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+
+  /* ABOUT SOCIAL BUTTONS — SMALLER */
+  .about-social { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+  .about-social a { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--text); font-weight: 700; font-size: 12px; transition: 0.2s; }
+  .about-social a:active { transform: scale(0.97); background: var(--border); }
 </style>
 </head>
-<body>
+<body class="light">
 
   <header class="header">
     <button class="menu-btn" onclick="toggleMenu(event)">☰</button>
@@ -280,41 +206,53 @@
     <a href="#" id="subBtn" onclick="fakeSubscribe(event)" class="subscribe-btn">SUBSCRIBE</a>
   </header>
 
+  <div class="label-banner">
+    <i class="fas fa-compact-disc"></i>
+    <span class="label-text">Samarid Music Release</span>
+    <i class="fas fa-compact-disc"></i>
+  </div>
+
   <div class="tabs-container">
-    <button class="tab-btn active" id="tabVideos" onclick="switchTab('videos')">Videos</button>
-    <button class="tab-btn" id="tabSongs" onclick="switchTab('songs')">Songs</button>
+    <button class="tab-btn active" id="tabSongs" onclick="switchTab('songs')">Songs</button>
     <button class="tab-btn" id="tabAbout" onclick="switchTab('about')">About</button>
+    <button class="tab-btn" id="tabVideos" onclick="switchTab('videos')">Videos</button>
   </div>
 
   <div class="slider-wrapper" id="sliderWrapper">
-    <div class="slide" id="slideVideos">
-      <div class="section-title">Latest Releases</div>
-      <div class="video-grid" id="videoGrid">
-        <div class="loading">Loading videos...</div>
-      </div>
 
-      <!-- === BIG WELCOME === -->
-      <div class="welcome-section">
-        <h2>Welcome to <span>Samarid Music</span></h2>
-        <p>🎵 Ghana's newest music label. Discover fresh sounds, support underground artists, and stream exclusive releases. Follow us for weekly drops.</p>
-      </div>
-
-      <!-- === SMALL TRENDING === -->
-      <div class="trending-section">
-        <div class="trending-title">What's Trending</div>
-        <div class="trending-tags" id="trendingTags">
-          <span class="trending-tag">Loading...</span>
-        </div>
-      </div>
-    </div>
-
+    <!-- SONGS -->
     <div class="slide" id="slideSongs">
-      <div class="page-title">Browse - Samarid Music</div>
-      <div class="song-list" id="songList">
-        <div class="loading">Loading songs...</div>
+      <div class="section-head"><i class="fas fa-fire icon-fire"></i><h3>Top Songs</h3></div>
+      <div id="topSongsList"><div class="loading">Loading top songs...</div></div>
+
+      <div class="section-head">
+        <i class="fas fa-bolt icon-new"></i>
+        <h3 id="latestTitle">Latest Releases</h3>
+        <button id="clearFilterBtn" onclick="clearFilter()" style="display:none; background: var(--accent); color: #fff; border: none; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; cursor: pointer;">✕ Clear</button>
+      </div>
+      <div class="song-list" id="songList"><div class="loading">Loading songs...</div></div>
+
+      <div class="section-head"><i class="fas fa-music icon-cat"></i><h3>Browse by Category</h3></div>
+      <div class="pill-row" id="categoryPills"><span class="pill">Loading...</span></div>
+
+      <div class="section-head"><i class="fas fa-microphone icon-artist"></i><h3>Our Artists</h3></div>
+      <div class="pill-row" id="artistPills"><span class="pill">Loading...</span></div>
+
+      <div class="section-head"><i class="fas fa-hashtag icon-tag"></i><h3>Trending Tags</h3></div>
+      <div class="trending-section" style="margin-top:0;">
+        <div class="trending-tags" id="trendingTags"><span class="trending-tag">Loading...</span></div>
+      </div>
+
+      <div class="section-head"><i class="fas fa-share-nodes icon-social"></i><h3>Follow Us</h3></div>
+      <div class="social-grid">
+        <a href="https://youtube.com/@realsamarid" target="_blank" class="social-btn"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
+        <a href="https://tiktok.com/@realsamarid" target="_blank" class="social-btn"><i class="fab fa-tiktok" style="color: #ffffff;"></i> TikTok</a>
+        <a href="https://instagram.com/realsamarid" target="_blank" class="social-btn"><i class="fab fa-instagram" style="color: #E1306C;"></i> Instagram</a>
+        <a href="mailto:wunatehk@gmail.com" class="social-btn"><i class="fas fa-envelope" style="color: #EA4335;"></i> Email</a>
       </div>
     </div>
 
+    <!-- ABOUT -->
     <div class="slide" id="slideAbout">
       <div class="about-profile">
         <img id="aboutProfilePic" src="https://files.catbox.moe/64x8wm.jpg" alt="Samarid Music" class="about-img">
@@ -331,7 +269,7 @@
         <div class="fanbase-arrow"><i class="fas fa-arrow-right"></i></div>
       </a>
 
-      <a href="artists.html" class="fanbase-btn" style="background: linear-gradient(135deg, #141414 0%, #2a2a2a 100%); box-shadow: 0 15px 40px rgba(255,255,255,0.08); animation: none;">
+      <a href="artists.html" class="fanbase-btn" style="background: linear-gradient(135deg, #141414 0%, #2a2a2a 100%); box-shadow: 0 10px 30px rgba(255,255,255,0.1);">
         <div class="fanbase-icon" style="background: rgba(255,255,255,0.1);">
           <i class="fas fa-microphone" style="animation: none;"></i>
         </div>
@@ -349,7 +287,7 @@
         <p id="aboutStoryText">Loading story...</p>
       </div>
 
-      <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 14px; padding-left: 4px;"><i class="fas fa-link" style="color: var(--accent);"></i> Connect With Me</h3>
+      <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 10px;"><i class="fas fa-link" style="color: var(--accent);"></i> Connect With Me</h3>
       <div class="about-social">
         <a href="https://youtube.com/@realsamarid" target="_blank"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
         <a href="https://tiktok.com/@realsamarid" target="_blank"><i class="fab fa-tiktok" style="color: #ffffff;"></i> TikTok</a>
@@ -363,6 +301,21 @@
         <a href="mailto:wunatehk@gmail.com">Send Email</a>
       </div>
     </div>
+
+    <!-- VIDEOS -->
+    <div class="slide" id="slideVideos">
+      <div class="section-title">Latest Videos</div>
+      <div class="video-grid" id="videoGrid"><div class="loading">Loading videos...</div></div>
+      <div class="welcome-section">
+        <h2>Welcome to <span>Samarid Music</span></h2>
+        <p>🎵 Ghana's newest music label. Discover fresh sounds, support underground artists, and stream exclusive releases. Follow us for weekly drops.</p>
+      </div>
+      <div class="trending-section">
+        <div class="trending-title">What's Trending</div>
+        <div class="trending-tags" id="trendingTagsVideos"><span class="trending-tag">Loading...</span></div>
+      </div>
+    </div>
+
   </div>
 
   <div class="menu-dropdown" id="menuDropdown" onclick="event.stopPropagation()">
@@ -374,21 +327,9 @@
         <button class="theme-btn" data-theme="light" onclick="setTheme('light')">Light</button>
       </div>
     </div>
-    <a href="artists.html" class="menu-item">
-      <span class="label" style="font-weight: 900; font-size: 15px;">All Artists</span>
-      <span class="arrow">➡</span>
-    </a>
+    <a href="artists.html" class="menu-item"><span class="label" style="font-weight: 900; font-size: 15px;">All Artists</span><span class="arrow">➡</span></a>
     <div class="menu-title">Fanbase</div>
-    <a href="fanbase.html" class="menu-item">
-      <span class="label">Connect To Fanbase</span>
-      <span class="arrow">➡</span>
-    </a>
-    <div class="menu-title">Follow</div>
-    <a href="https://youtube.com/@realsamarid" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-youtube" style="color: #FF0000;"></i></span><span class="label">YouTube</span><span class="arrow">↗</span></a>
-    <a href="https://tiktok.com/@realsamarid" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-tiktok" style="color: #ffffff;"></i></span><span class="label">TikTok</span><span class="arrow">↗</span></a>
-    <a href="https://facebook.com/realsamarid" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-facebook" style="color: #1877F2;"></i></span><span class="label">Facebook</span><span class="arrow">↗</span></a>
-    <a href="https://wa.me/233207425831" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-whatsapp" style="color: #25D366;"></i></span><span class="label">WhatsApp</span><span class="arrow">↗</span></a>
-    <a href="mailto:wunatehk@gmail.com" class="menu-item"><span class="icon"><i class="fas fa-envelope" style="color: #EA4335;"></i></span><span class="label">Email</span><span class="arrow">↗</span></a>
+    <a href="fanbase.html" class="menu-item"><span class="label">Connect To Fanbase</span><span class="arrow">➡</span></a>
   </div>
 
   <div class="player-modal" id="playerModal" onclick="closePlayer()">
@@ -402,7 +343,7 @@
     <div class="sub-modal-inner" onclick="event.stopPropagation()">
       <div style="font-size: 40px; margin-bottom: 10px;">🎵</div>
       <h2 style="font-size: 20px; font-weight: 900; margin-bottom: 10px;">Support Samarid Music</h2>
-      <p style="font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.5;">Subscribe to the official YouTube channel to get notified when new music drops!</p>
+      <p style="font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.5;">Subscribe to the official YouTube channel!</p>
       <a href="#" id="popupSubBtn" target="_blank" class="sub-modal-btn confirm">Subscribe on YouTube</a>
       <button onclick="closeSubModal()" class="sub-modal-btn close">I'll do it later</button>
     </div>
@@ -423,26 +364,22 @@
     const slideAbout = document.getElementById('slideAbout');
 
     window.switchTab = function(tab) {
-      if (tab === 'videos') { slider.scrollTo({ left: 0, behavior: 'smooth' }); }
-      else if (tab === 'songs') { slider.scrollTo({ left: slider.offsetWidth, behavior: 'smooth' }); }
-      else if (tab === 'about') { slider.scrollTo({ left: slider.offsetWidth * 2, behavior: 'smooth' }); }
+      if (tab === 'songs') { slider.scrollTo({ left: 0, behavior: 'smooth' }); }
+      else if (tab === 'about') { slider.scrollTo({ left: slider.offsetWidth, behavior: 'smooth' }); }
+      else if (tab === 'videos') { slider.scrollTo({ left: slider.offsetWidth * 2, behavior: 'smooth' }); }
     }
 
     const observerOptions = { root: slider, threshold: 0.5 };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          if (entry.target.id === 'slideVideos') {
-            tabVideos.classList.add('active'); tabSongs.classList.remove('active'); tabAbout.classList.remove('active');
-          } else if (entry.target.id === 'slideSongs') {
-            tabSongs.classList.add('active'); tabVideos.classList.remove('active'); tabAbout.classList.remove('active');
-          } else if (entry.target.id === 'slideAbout') {
-            tabAbout.classList.add('active'); tabVideos.classList.remove('active'); tabSongs.classList.remove('active');
-          }
+          if (entry.target.id === 'slideSongs') { tabSongs.classList.add('active'); tabAbout.classList.remove('active'); tabVideos.classList.remove('active'); }
+          else if (entry.target.id === 'slideAbout') { tabAbout.classList.add('active'); tabSongs.classList.remove('active'); tabVideos.classList.remove('active'); }
+          else if (entry.target.id === 'slideVideos') { tabVideos.classList.add('active'); tabSongs.classList.remove('active'); tabAbout.classList.remove('active'); }
         }
       });
     }, observerOptions);
-    observer.observe(slideVideos); observer.observe(slideSongs); observer.observe(slideAbout);
+    observer.observe(slideSongs); observer.observe(slideAbout); observer.observe(slideVideos);
 
     window.toggleMenu = function(e) { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('open'); }
     function closeMenu() { document.getElementById('menuDropdown').classList.remove('open'); }
@@ -456,7 +393,7 @@
     }
     window.closeSubModal = function() { document.getElementById('subModal').classList.remove('open'); }
 
-    window.applySettings = function() { const theme = localStorage.getItem('samarid-theme') || 'dark'; const accent = localStorage.getItem('samarid-accent') || '#ff0033'; document.body.classList.toggle('light', theme === 'light'); document.documentElement.style.setProperty('--accent', accent); document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === theme)); }
+    window.applySettings = function() { const theme = localStorage.getItem('samarid-theme') || 'light'; const accent = localStorage.getItem('samarid-accent') || '#ff0033'; document.body.classList.toggle('light', theme === 'light'); document.documentElement.style.setProperty('--accent', accent); document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === theme)); }
     window.setTheme = function(theme) { localStorage.setItem('samarid-theme', theme); applySettings(); }
 
     window.openPlayer = function(videoId) { const modal = document.getElementById('playerModal'); const frame = document.getElementById('playerFrame'); frame.src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0'; modal.classList.add('open'); }
@@ -473,30 +410,108 @@
         const uploadsId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
         const videosRes = await fetch('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=' + uploadsId + '&key=' + API_KEY);
         const videosData = await videosRes.json();
-        if (!videosData.items || videosData.items.length === 0) { grid.innerHTML = '<div class="empty">No videos yet — check back soon!</div>'; return; }
+        if (!videosData.items || videosData.items.length === 0) { grid.innerHTML = '<div class="empty">No videos yet!</div>'; return; }
         const videos = videosData.items.map(item => { const videoId = item.snippet.resourceId.videoId; const title = item.snippet.title; const published = item.snippet.publishedAt; const date = new Date(published).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); return { videoId, title, date, timestamp: new Date(published).getTime() }; });
         videos.sort((a, b) => b.timestamp - a.timestamp);
         grid.innerHTML = videos.map(v => `<div class="video-card" onclick="openPlayer('${v.videoId}')"><div class="video-thumb"><img src="https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg" alt="${v.title}" loading="lazy"><div class="video-play-overlay"></div></div><div class="video-card-info"><div class="video-title">${v.title}</div><div class="video-meta">${v.date}</div></div></div>`).join('');
       } catch (err) { console.error(err); const link = localStorage.getItem('samarid_channel_id') ? 'https://www.youtube.com/channel/' + localStorage.getItem('samarid_channel_id') : 'https://youtube.com/@realsamarid'; grid.innerHTML = '<div class="empty">Could not load videos. <a href="' + link + '" style="color:var(--accent);">Visit YouTube →</a></div>'; }
     }
 
+    async function loadTopSongs() {
+      const container = document.getElementById('topSongsList');
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=*&order=plays.desc.nullslast,id.desc&limit=5', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const songs = await res.json();
+        if (!Array.isArray(songs) || songs.length === 0) { container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>No Top Songs Yet</h3></div>'; return; }
+        container.innerHTML = songs.map((s, index) => {
+          const rank = index + 1; const artist = s.artist_name || 'Samarid'; const rankClass = rank <= 3 ? 'rank-' + rank : '';
+          return '<div class="top-song" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="top-rank ' + rankClass + '">#' + rank + '</div><div class="top-cover"><img src="' + s.cover + '"></div><div class="top-info"><h4>' + s.title + '</h4><p>' + artist + '</p></div><div class="top-plays">🔥 ' + (s.plays || 0) + '</div></div>';
+        }).join('');
+      } catch (e) { console.error(e); container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>Error</h3></div>'; }
+    }
+
     async function renderSongs() {
       const list = document.getElementById('songList');
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=eq.Samarid&select=*&order=id.desc', {
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-        });
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=*&order=id.desc&limit=10', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
-        if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = `<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>Check back soon for new music!</p></div>`; return; }
-        list.innerHTML = songs.map((s) => `<div class="song-card" onclick="window.location.href='song.html?id=${s.id}'"><div class="song-card-img"><img src="${s.cover}"></div><div class="song-card-info"><div class="song-card-cat">${s.category} • Listen</div><h3>${s.title}</h3><div class="date">${s.date}</div></div></div>`).join('');
-      } catch (e) { console.error("Error loading songs: ", e); list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Could not load songs</h3><p>Check back later.</p></div>'; }
+        if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3></div>'; return; }
+        list.innerHTML = songs.map((s) => {
+          const artist = s.artist_name || 'Samarid';
+          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '"></div><div class="song-card-info"><div class="song-card-cat">' + artist + ' • ' + s.category + ' • 🔥 ' + (s.plays || 0) + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+        }).join('');
+      } catch (e) { console.error(e); list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Error</h3></div>'; }
+    }
+
+    async function loadCategories() {
+      const container = document.getElementById('categoryPills');
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=category', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const songs = await res.json();
+        const cats = [...new Set(songs.map(s => (s.category || 'Music').trim()))].sort();
+        if (cats.length === 0) { container.innerHTML = '<span class="pill">No categories yet</span>'; return; }
+        container.innerHTML = cats.map(c => '<span class="pill cat-pill" onclick="filterByCategory(\'' + c.replace(/'/g, "\\'") + '\')">' + c + '</span>').join('');
+      } catch (e) { container.innerHTML = '<span class="pill">Error</span>'; }
+    }
+
+    window.filterByCategory = async function(category) {
+      const list = document.getElementById('songList');
+      const title = document.getElementById('latestTitle');
+      const clearBtn = document.getElementById('clearFilterBtn');
+      document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+      event.target.classList.add('active');
+      title.innerText = '📂 ' + category;
+      clearBtn.style.display = 'inline-block';
+      list.innerHTML = '<div class="loading">Loading...</div>';
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?category=eq.' + encodeURIComponent(category) + '&select=*&order=plays.desc.nullslast,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const songs = await res.json();
+        if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No ' + category + ' songs yet</h3></div>'; return; }
+        list.innerHTML = songs.map((s) => {
+          const artist = s.artist_name || 'Samarid';
+          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '"></div><div class="song-card-info"><div class="song-card-cat">' + artist + ' • ' + s.category + ' • 🔥 ' + (s.plays || 0) + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+        }).join('');
+      } catch (e) { console.error(e); }
+    }
+
+    window.clearFilter = function() {
+      document.getElementById('latestTitle').innerText = 'Latest Releases';
+      document.getElementById('clearFilterBtn').style.display = 'none';
+      document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+      renderSongs();
+    }
+
+    async function loadArtists() {
+      const container = document.getElementById('artistPills');
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const songs = await res.json();
+        const artists = [...new Set(songs.map(s => (s.artist_name || 'Samarid').trim()))].sort();
+        container.innerHTML = artists.map(a => '<a href="artist-template.html?name=' + encodeURIComponent(a) + '" class="pill artist-pill">' + a + '</a>').join('');
+      } catch (e) { container.innerHTML = '<span class="pill">Error</span>'; }
+    }
+
+    async function loadTrendingTags() {
+      const container = document.getElementById('trendingTags');
+      const containerVideos = document.getElementById('trendingTagsVideos');
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,category', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const songs = await res.json();
+        const artists = [...new Set(songs.map(s => (s.artist_name || 'Samarid').trim()))].sort();
+        const categories = [...new Set(songs.map(s => (s.category || 'Music').trim()))].sort();
+        const brandTags = ['SamaridMusic', 'GhanaMusic', 'NewMusic'];
+        let html = '';
+        artists.forEach(name => { html += '<a href="artist-template.html?name=' + encodeURIComponent(name) + '" class="trending-tag artist-tag">#' + name.replace(/\s+/g, '') + '</a>'; });
+        categories.forEach(cat => { html += '<span class="trending-tag category-tag" onclick="filterByCategory(\'' + cat.replace(/'/g, "\\'") + '\')">#' + cat.replace(/\s+/g, '') + '</span>'; });
+        brandTags.forEach(tag => { html += '<a href="index.html" class="trending-tag brand-tag">#' + tag + '</a>'; });
+        if (container) container.innerHTML = html;
+        if (containerVideos) containerVideos.innerHTML = html;
+      } catch (e) { console.error(e); }
     }
 
     async function loadAboutPage() {
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/about?select=*', {
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-        });
+        const res = await fetch(SUPABASE_URL + '/rest/v1/about?select=*', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const data = await res.json();
         if (Array.isArray(data) && data.length > 0) {
           const about = data[0];
@@ -508,29 +523,14 @@
       } catch (e) { console.error(e); }
     }
 
-    async function loadTrendingTags() {
-      const container = document.getElementById('trendingTags');
-      try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,category', {
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-        });
-        const songs = await res.json();
-        if (!Array.isArray(songs) || songs.length === 0) {
-          container.innerHTML = '<a href="artists.html" class="trending-tag brand-tag">#SamaridMusic</a>';
-          return;
-        }
-        const artists = [...new Set(songs.map(s => (s.artist_name || 'Samarid').trim()))].sort();
-        const categories = [...new Set(songs.map(s => (s.category || 'Music').trim()))].sort();
-        const brandTags = ['SamaridMusic', 'GhanaMusic', 'NewMusic'];
-        let html = '';
-        artists.forEach(name => { html += `<a href="artist-template.html?name=${encodeURIComponent(name)}" class="trending-tag artist-tag">#${name.replace(/\s+/g, '')}</a>`; });
-        categories.forEach(cat => { html += `<a href="artists.html" class="trending-tag category-tag">#${cat.replace(/\s+/g, '')}</a>`; });
-        brandTags.forEach(tag => { html += `<a href="index.html" class="trending-tag brand-tag">#${tag}</a>`; });
-        container.innerHTML = html;
-      } catch (e) { console.error(e); container.innerHTML = '<a href="artists.html" class="trending-tag brand-tag">#SamaridMusic</a>'; }
-    }
-
-    applySettings(); loadVideos(); renderSongs(); loadAboutPage(); loadTrendingTags();
+    applySettings();
+    loadVideos();
+    loadTopSongs();
+    renderSongs();
+    loadCategories();
+    loadArtists();
+    loadTrendingTags();
+    loadAboutPage();
   </script>
 </body>
 </html>
