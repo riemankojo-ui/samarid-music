@@ -8,26 +8,118 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  :root { --bg: #ffffff; --card: #f5f5f5; --border: #e5e5e5; --text: #0a0a0a; --text2: #444444; --accent: #ff0033; }
+  :root { --bg: #ffffff; --card: #f5f5f5; --border: #e5e5e5; --text: #0a0a0a; --text2: #666666; --accent: #ff0033; --purple: #8b5cf6; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 40px; }
-  .header { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 10px; z-index: 100; }
-  .back-btn { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+  body { background: #fafafa; color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 40px; }
+
+  .header { position: sticky; top: 0; background: #fff; border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 10px; z-index: 100; }
+  .back-btn { background: #f5f5f5; color: var(--text); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
   .back-btn:active { background: var(--accent); color: #fff; }
   .logo { font-size: 18px; font-weight: 900; color: var(--text); text-decoration: none; flex: 1; text-align: center; }
   .logo span { color: var(--accent); }
-  .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
-  .page-title { font-size: 18px; font-weight: 900; text-align: center; padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px; color: var(--text); }
-  .song-list { display: flex; flex-direction: column; gap: 12px; }
-  .song-card { display: flex; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; }
-  .song-card:active { transform: scale(0.99); background: rgba(0,0,0,0.03); }
-  .song-card-img { width: 110px; height: 110px; flex-shrink: 0; overflow: hidden; background: #000; border-right: 1px solid var(--border); padding: 8px; }
-  .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 6px; }
-  .song-card-info { flex: 1; padding: 12px 14px; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
-  .song-card-cat { font-size: 11px; color: #d4a017; font-weight: 600; margin-bottom: 4px; }
-  .song-card-info h3 { font-size: 15px; font-weight: 700; line-height: 1.35; margin-bottom: 6px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .song-card-info .date { font-size: 12px; color: #999; }
-  .empty-state { text-align: center; padding: 60px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text2); }
+  .menu-btn { background: #f5f5f5; color: var(--text); border: 1px solid var(--border); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; flex-shrink: 0; }
+  .menu-btn:active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .side-menu { position: fixed; top: 0; right: -320px; width: 300px; max-width: 85%; height: 100vh; background: #0a0a0a; color: #fff; z-index: 9999; transition: right 0.3s ease; overflow-y: auto; box-shadow: -10px 0 40px rgba(0,0,0,0.3); }
+  .side-menu.open { right: 0; }
+  .side-menu-header { padding: 20px; border-bottom: 1px solid #222; display: flex; align-items: center; justify-content: space-between; }
+  .side-menu-title { font-size: 16px; font-weight: 900; color: #fff; }
+  .side-menu-close { background: transparent; border: none; color: #666; font-size: 22px; cursor: pointer; }
+  .side-menu-artist { padding: 25px 20px; border-bottom: 1px solid #222; text-align: center; }
+  .side-menu-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; border: 3px solid var(--accent); font-size: 28px; font-weight: 900; color: #fff; }
+  .side-menu-artist-name { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+  .side-menu-artist-role { font-size: 11px; color: #666; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; }
+  .side-menu-section-title { padding: 18px 20px 8px; font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
+  .side-menu-item { display: flex; align-items: center; gap: 14px; padding: 14px 20px; color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; border-bottom: 1px solid #151515; transition: background 0.15s; }
+  .side-menu-item:active { background: #1a1a1a; }
+  .side-menu-item i { font-size: 18px; width: 24px; text-align: center; }
+  .side-menu-item .item-label { flex: 1; }
+  .side-menu-item .tiktok-icon { color: #ffffff; }
+  .side-menu-item .insta-icon { color: #E1306C; }
+  .side-menu-item .youtube-icon { color: #FF0000; }
+  .side-menu-footer { padding: 25px 20px; text-align: center; font-size: 10px; color: #444; letter-spacing: 1px; }
+  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9998; display: none; }
+  .menu-overlay.open { display: block; }
+
+  .container { max-width: 700px; margin: 0 auto; padding: 16px; }
+
+  .page-title {
+    font-size: 15px;
+    font-weight: 900;
+    text-align: center;
+    padding: 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .song-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+
+  .song-card {
+    display: flex;
+    background: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 14px;
+    align-items: center;
+    transition: background 0.15s;
+  }
+  .song-card:last-child { border-bottom: none; }
+  .song-card:active { background: #f9f9f9; }
+
+  .song-card-img {
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #f0f0f0;
+    border-radius: 4px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .song-card-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+
+  /* SMALLER CATEGORY */
+  .song-card-cat {
+    font-size: 11px;
+    color: var(--purple);
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-family: Georgia, serif;
+  }
+
+  /* SMALLER SONG TITLE — THIS WAS THE FIX! */
+  .song-card-info h3 {
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 5px;
+    color: #1a1a1a;
+    font-family: Georgia, 'Times New Roman', serif;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* SMALLER DATE */
+  .song-card-info .date { font-size: 11px; color: #999; }
+
+  .empty-state { text-align: center; padding: 60px 20px; background: #fff; border-radius: 8px; color: var(--text2); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
   .empty-state .icon { font-size: 50px; margin-bottom: 15px; }
   .empty-state h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
   .loading { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 13px; }
@@ -36,25 +128,62 @@
 </style>
 </head>
 <body>
+
   <header class="header">
     <a href="artists.html" class="back-btn"><i class="fas fa-arrow-left"></i> Artists</a>
     <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
-    <div style="width: 60px;"></div>
+    <button class="menu-btn" onclick="toggleSideMenu(event)" id="menuBtn">☰</button>
   </header>
+
+  <div class="menu-overlay" id="menuOverlay" onclick="closeSideMenu()"></div>
+  <div class="side-menu" id="sideMenu">
+    <div class="side-menu-header">
+      <span class="side-menu-title">Artist Info</span>
+      <button class="side-menu-close" onclick="closeSideMenu()">✕</button>
+    </div>
+    <div class="side-menu-artist">
+      <div class="side-menu-avatar" id="menuAvatar">K</div>
+      <div class="side-menu-artist-name" id="menuArtistName">Loading...</div>
+      <div class="side-menu-artist-role">Samarid Music Artist</div>
+    </div>
+    <div class="side-menu-section-title">Follow on Social</div>
+    <div id="menuSocialLinks">
+      <p style="padding: 20px; text-align: center; color: #666; font-size: 13px;">Loading...</p>
+    </div>
+    <div class="side-menu-footer">© 2026 SAMARID MUSIC</div>
+  </div>
+
   <div class="container">
     <div class="page-title" id="pageTitle">Loading...</div>
     <div class="song-list" id="songList">
       <div class="loading">Loading songs...</div>
     </div>
   </div>
+
   <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
+
   <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+
     const params = new URLSearchParams(window.location.search);
     const artistName = params.get('name') || 'Samarid';
+
     document.title = artistName + ' - Samarid Music';
     document.getElementById('pageTitle').innerText = 'Browse - ' + artistName;
+    document.getElementById('menuArtistName').innerText = artistName;
+    document.getElementById('menuAvatar').innerText = artistName.charAt(0).toUpperCase();
+
+    window.toggleSideMenu = function(e) {
+      e.stopPropagation();
+      document.getElementById('sideMenu').classList.add('open');
+      document.getElementById('menuOverlay').classList.add('open');
+    }
+    window.closeSideMenu = function() {
+      document.getElementById('sideMenu').classList.remove('open');
+      document.getElementById('menuOverlay').classList.remove('open');
+    }
+
     async function loadArtistSongs() {
       const list = document.getElementById('songList');
       try {
@@ -62,10 +191,24 @@
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
         });
         const songs = await res.json();
+
         if (!Array.isArray(songs) || songs.length === 0) {
           list.innerHTML = `<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>Check back soon for new music!</p></div>`;
           return;
         }
+
+        const firstSong = songs[0];
+        const socialHTML = [];
+        if (firstSong.tiktok) socialHTML.push(`<a href="${firstSong.tiktok}" target="_blank" class="side-menu-item"><i class="fab fa-tiktok tiktok-icon"></i><span class="item-label">TikTok</span><span style="color:#444;">↗</span></a>`);
+        if (firstSong.instagram) socialHTML.push(`<a href="${firstSong.instagram}" target="_blank" class="side-menu-item"><i class="fab fa-instagram insta-icon"></i><span class="item-label">Instagram</span><span style="color:#444;">↗</span></a>`);
+        if (firstSong.youtube) socialHTML.push(`<a href="${firstSong.youtube}" target="_blank" class="side-menu-item"><i class="fab fa-youtube youtube-icon"></i><span class="item-label">YouTube</span><span style="color:#444;">↗</span></a>`);
+
+        if (socialHTML.length > 0) {
+          document.getElementById('menuSocialLinks').innerHTML = socialHTML.join('');
+        } else {
+          document.getElementById('menuSocialLinks').innerHTML = '<p style="padding: 20px; text-align: center; color: #666; font-size: 13px;">No social links added yet.</p>';
+        }
+
         list.innerHTML = songs.map((s) => `
           <div class="song-card" onclick="window.location.href='song.html?id=${s.id}'">
             <div class="song-card-img"><img src="${s.cover}"></div>
@@ -81,6 +224,7 @@
         list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Could not load songs</h3><p>Check back later.</p></div>';
       }
     }
+
     loadArtistSongs();
   </script>
 </body>
