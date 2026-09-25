@@ -109,7 +109,7 @@
       <p style="padding: 20px; text-align: center; color: #666; font-size: 13px;">Loading...</p>
     </div>
 
-    <!-- SHARE SECTION (NEW) -->
+    <!-- SHARE SECTION -->
     <div class="side-menu-section-title">📤 Share this Artist</div>
     <button class="side-menu-item" onclick="shareWhatsApp()">
       <i class="fab fa-whatsapp share-whatsapp-icon"></i>
@@ -248,7 +248,7 @@
         }
 
         list.innerHTML = songs.map((s) => `
-          <div class="song-card" onclick="window.location.href='song-detail.html?id=${s.id}'">
+          <div class="song-card" onclick="window.location.href='song.html?id=${s.id}'">
             <div class="song-card-img"><img src="${s.cover}"></div>
             <div class="song-card-info">
               <div class="song-card-cat">${artistName} • ${s.category}</div>
