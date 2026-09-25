@@ -116,7 +116,7 @@
     transition: all 0.2s; 
     padding: 8px; 
     box-shadow: 0 2px 8px rgba(0,0,0,0.04); 
-    align-items: center;   /* 👈 CENTERED */
+    align-items: center;
   }
   .song-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
   
@@ -135,9 +135,8 @@
     flex: 1; 
     display: flex; 
     flex-direction: column; 
-    justify-content: center;   /* 👈 CENTERED */
+    justify-content: center;
     min-width: 0; 
-    padding-top: 0;
   }
   .song-card-cat { 
     font-size: 10px; 
@@ -187,13 +186,11 @@
   .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); letter-spacing: 1px; border-top: 1px solid var(--border); margin-top: 20px; }
   .footer .brand { color: var(--accent); font-weight: 700; }
 
-  /* === ABOUT PAGE — SMALL & TIGHT === */
   .about-profile { text-align: center; margin-bottom: 20px; }
   .about-img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); margin-bottom: 12px; box-shadow: 0 10px 25px rgba(255, 0, 51, 0.25); }
   .about-name { font-size: 22px; font-weight: 900; margin-bottom: 2px; letter-spacing: -0.5px; }
   .about-role { font-size: 10px; color: var(--accent); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 15px; }
 
-  /* === FANBASE SECTION — SHINE & CLICKABLE === */
   @keyframes pulseGlow {
     0% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0.7); }
     70% { box-shadow: 0 0 0 15px rgba(255, 0, 51, 0); }
@@ -227,7 +224,6 @@
   .fanbase-btn:active .fanbase-arrow { transform: translateX(4px); }
   .fanbase-arrow i { font-size: 14px; color: #ffffff; }
 
-  /* === SECONDARY BUTTON === */
   .secondary-btn { 
     display: flex; 
     align-items: center; 
@@ -256,7 +252,6 @@
   .secondary-btn:active .secondary-arrow { transform: translateX(4px); }
   .secondary-arrow i { font-size: 14px; color: #ffffff; }
 
-  /* === ABOUT SECTIONS — COMPACT === */
   .about-section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; margin-bottom: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
   .about-section::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, var(--accent) 0%, transparent 100%); border-radius: 16px 16px 0 0; }
   .about-section h3 { font-size: 14px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; letter-spacing: -0.3px; }
@@ -321,7 +316,6 @@
       </div>
     </div>
 
-    <!-- === ABOUT PAGE === -->
     <div class="slide" id="slideAbout">
       <div class="about-profile">
         <img id="aboutProfilePic" src="https://files.catbox.moe/64x8wm.jpg" alt="Samarid Music" class="about-img">
@@ -480,7 +474,7 @@
         if (!Array.isArray(songs) || songs.length === 0) { container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>No Top Songs Yet</h3></div>'; return; }
         container.innerHTML = songs.map((s) => {
           const artist = s.artist_name || 'Samarid';
-          return '<div class="song-card" onclick="window.location.href=\'song-detail.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
         }).join('');
       } catch (e) { console.error(e); container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>Error</h3></div>'; }
     }
@@ -493,7 +487,7 @@
         if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3></div>'; return; }
         list.innerHTML = songs.map((s) => {
           const artist = s.artist_name || 'Samarid';
-          return '<div class="song-card" onclick="window.location.href=\'song-detail.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
         }).join('');
       } catch (e) { console.error(e); list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Error</h3></div>'; }
     }
@@ -524,7 +518,7 @@
         if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No ' + category + ' songs yet</h3></div>'; return; }
         list.innerHTML = songs.map((s) => {
           const artist = s.artist_name || 'Samarid';
-          return '<div class="song-card" onclick="window.location.href=\'song-detail.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
         }).join('');
       } catch (e) { console.error(e); }
     }
