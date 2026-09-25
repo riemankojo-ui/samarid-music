@@ -62,113 +62,22 @@
   .presented-by { text-align: center; padding: 15px; margin-bottom: 15px; background: var(--card); border: 1px dashed var(--border); border-radius: 10px; font-size: 12px; color: #666; font-weight: 600; }
   .presented-by strong { color: var(--accent); }
 
-  /* === NEW: DARK SECTION (Contact + More Artists) === */
-  .dark-section {
-    background: var(--dark);
-    color: #fff;
-    border-radius: 16px;
-    padding: 30px 20px;
-    margin-top: 30px;
-    border: 1px solid #222;
-  }
+  /* DARK SECTION */
+  .dark-section { background: var(--dark); color: #fff; border-radius: 16px; padding: 30px 20px; margin-top: 30px; border: 1px solid #222; }
+  .dark-section-title { font-size: 14px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); text-align: center; margin-bottom: 6px; }
+  .dark-section-subtitle { font-size: 12px; color: #888; text-align: center; margin-bottom: 20px; }
 
-  .dark-section-title {
-    font-size: 14px;
-    font-weight: 900;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--accent);
-    text-align: center;
-    margin-bottom: 6px;
-  }
+  .contact-box { text-align: center; padding: 20px 15px; background: #111; border: 1px solid #222; border-radius: 12px; margin-bottom: 25px; }
+  .contact-label { font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
+  .contact-email { font-size: 16px; font-weight: 700; color: #fff; text-decoration: line-through; text-decoration-color: var(--accent); text-decoration-thickness: 2px; letter-spacing: 0.5px; word-break: break-all; }
+  .contact-hint { font-size: 11px; color: #666; margin-top: 10px; font-style: italic; }
 
-  .dark-section-subtitle {
-    font-size: 12px;
-    color: #888;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  /* Contact section */
-  .contact-box {
-    text-align: center;
-    padding: 20px 15px;
-    background: #111;
-    border: 1px solid #222;
-    border-radius: 12px;
-    margin-bottom: 25px;
-  }
-
-  .contact-label {
-    font-size: 10px;
-    color: #666;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-
-  .contact-email {
-    font-size: 16px;
-    font-weight: 700;
-    color: #fff;
-    text-decoration: line-through;
-    text-decoration-color: var(--accent);
-    text-decoration-thickness: 2px;
-    letter-spacing: 0.5px;
-    word-break: break-all;
-  }
-
-  .contact-hint {
-    font-size: 11px;
-    color: #666;
-    margin-top: 10px;
-    font-style: italic;
-  }
-
-  /* Artists list */
-  .artists-label {
-    font-size: 10px;
-    color: #666;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 700;
-    margin-bottom: 12px;
-    padding-left: 4px;
-  }
-
-  .artists-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  .artist-link {
-    display: block;
-    padding: 14px 12px;
-    background: #111;
-    border: 1px solid #222;
-    border-radius: 10px;
-    text-decoration: none;
-    color: var(--accent);
-    font-size: 14px;
-    font-weight: 700;
-    text-align: center;
-    transition: 0.15s;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
+  .artists-label { font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; padding-left: 4px; }
+  .artists-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .artist-link { display: block; padding: 14px 12px; background: #111; border: 1px solid #222; border-radius: 10px; text-decoration: none; color: var(--accent); font-size: 14px; font-weight: 700; text-align: center; transition: 0.15s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .artist-link:active { background: #1a1a1a; transform: scale(0.97); }
 
-  .dark-footer-note {
-    text-align: center;
-    font-size: 11px;
-    color: #444;
-    margin-top: 25px;
-    letter-spacing: 1px;
-  }
+  .dark-footer-note { text-align: center; font-size: 11px; color: #444; margin-top: 25px; letter-spacing: 1px; }
 
   .footer { padding: 30px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 40px; background: var(--card); }
   .footer .brand { color: var(--accent); font-weight: 700; }
@@ -199,8 +108,8 @@
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
 
-    // === CHANGE YOUR EMAIL HERE ===
-    const CONTACT_EMAIL = "riemankojo@gmail.com";
+    // === YOUR EMAIL ===
+    const CONTACT_EMAIL = "wunatehk@gmail.com";
 
     async function loadSong() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -229,7 +138,6 @@
             });
             const artistsData = await artistsRes.json();
             const uniqueNames = [...new Set(artistsData.map(a => (a.artist_name || 'Samarid').trim()))];
-            // Sort A to Z, and remove the current artist
             artistsList = uniqueNames
               .filter(n => n.toLowerCase() !== artist.toLowerCase())
               .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
@@ -275,14 +183,12 @@
               <h3 class="dark-section-title">Samarid Music</h3>
               <p class="dark-section-subtitle">Record Label • Ghana</p>
 
-              <!-- Contact email (crossed out) -->
               <div class="contact-box">
                 <p class="contact-label">📧 Contact / Bookings</p>
                 <p class="contact-email">${CONTACT_EMAIL}</p>
                 <p class="contact-hint">(Tap and hold to copy the email)</p>
               </div>
 
-              <!-- More Artists -->
               <p class="artists-label">🎤 More Artists on Samarid Music</p>
               <div class="artists-list">
                 ${artistsHTML}
