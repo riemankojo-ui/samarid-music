@@ -45,20 +45,107 @@
   .theme-btn.active { border-color: var(--accent); color: var(--accent); font-weight: 700; }
   .section-title { font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
   .page-title { font-size: 18px; font-weight: 900; text-align: center; padding: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px; color: var(--text); }
-  .video-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
-  @media (min-width: 600px) { .video-grid { grid-template-columns: 1fr 1fr; } }
-  @media (min-width: 900px) { .video-grid { grid-template-columns: 1fr 1fr 1fr; } }
-  .video-card { cursor: pointer; text-decoration: none; color: inherit; display: block; transition: transform 0.15s; }
-  .video-card:active { transform: scale(0.98); }
-  .video-thumb { position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000; border-radius: 12px; overflow: hidden; margin-bottom: 12px; border: 1px solid var(--border); }
-  .video-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .video-play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; background: rgba(0,0,0,0.12); }
-  .video-play-overlay::after { content: ''; width: 56px; height: 40px; background: rgba(0,0,0,0.75); border-radius: 6px; position: relative; }
-  .video-play-overlay::before { content: ''; position: absolute; width: 0; height: 0; border-left: 14px solid #ffffff; border-top: 9px solid transparent; border-bottom: 9px solid transparent; margin-left: 3px; z-index: 2; }
-  .video-title { font-size: 15px; font-weight: 600; line-height: 1.35; margin-bottom: 6px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .video-meta { font-size: 12px; color: var(--text2); }
 
-  /* === SONGS: Matching artist template style === */
+  /* === BIG WELCOME TEXT === */
+  .welcome-section {
+    margin-top: 25px;
+    padding: 35px 22px;
+    background: linear-gradient(135deg, #1a0005 0%, #0a0a0a 60%);
+    border-radius: 20px;
+    text-align: center;
+    border: none;
+    box-shadow: 0 10px 40px rgba(255, 0, 51, 0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  body.light .welcome-section {
+    background: linear-gradient(135deg, #fff0f3 0%, #fafafa 60%);
+    box-shadow: 0 10px 40px rgba(255, 0, 51, 0.08);
+  }
+  .welcome-section::before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 3px;
+    margin: 0 auto 22px;
+  }
+  .welcome-section h2 {
+    font-size: 26px;
+    font-weight: 900;
+    margin-bottom: 18px;
+    color: var(--text);
+    letter-spacing: -0.8px;
+    line-height: 1.2;
+  }
+  .welcome-section h2 span { color: var(--accent); }
+  .welcome-section p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--text2);
+    max-width: 500px;
+    margin: 0 auto;
+    font-weight: 500;
+  }
+
+  /* === SMALL TRENDING (below welcome) === */
+  .trending-section {
+    margin-top: 20px;
+    background: #0a0a0a;
+    border-radius: 16px;
+    padding: 16px 12px;
+    border: none;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  }
+  body.light .trending-section { background: #0a0a0a; }
+  .trending-title {
+    text-align: center;
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .trending-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+  }
+  .trending-tag {
+    display: inline-block;
+    padding: 5px 10px;
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    color: #cccccc;
+    font-size: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .trending-tag:active { transform: scale(0.96); }
+  .trending-tag.artist-tag { color: #ff8800; }
+  .trending-tag.category-tag { color: #8b5cf6; }
+  .trending-tag.brand-tag { color: #ff0033; }
+
+  /* === VIDEOS === */
+  .video-grid { display: flex; flex-direction: column; gap: 12px; }
+  .video-card { display: flex; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; padding: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  .video-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
+  .video-thumb { position: relative; width: 120px; height: 68px; flex-shrink: 0; background: #000; border-radius: 6px; overflow: hidden; }
+  .video-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .video-play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; background: rgba(0,0,0,0.2); }
+  .video-play-overlay::after { content: ''; width: 28px; height: 20px; background: rgba(0,0,0,0.75); border-radius: 4px; position: relative; }
+  .video-play-overlay::before { content: ''; position: absolute; width: 0; height: 0; border-left: 8px solid #ffffff; border-top: 5px solid transparent; border-bottom: 5px solid transparent; margin-left: 2px; z-index: 2; }
+  .video-card-info { flex: 1; padding: 2px 0; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+  .video-title { font-size: 13px; font-weight: 700; line-height: 1.35; margin-bottom: 5px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .video-meta { font-size: 11px; color: var(--text2); }
+
+  /* === SONGS === */
   .song-list { display: flex; flex-direction: column; gap: 12px; }
   .song-card { display: flex; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; padding: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
   .song-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
@@ -89,34 +176,98 @@
   .sub-modal-btn.close { background: transparent; color: var(--text2); font-size: 12px; font-weight: 500; }
   .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); letter-spacing: 1px; border-top: 1px solid var(--border); margin-top: 20px; }
   .footer .brand { color: var(--accent); font-weight: 700; }
+
+  /* === ABOUT (Water Tank Style - soft, rounded, no borders) === */
   .about-profile { text-align: center; margin-bottom: 30px; }
-  .about-img { width: 130px; height: 130px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent); margin-bottom: 15px; box-shadow: 0 10px 30px rgba(255, 0, 51, 0.3); }
-  .about-name { font-size: 24px; font-weight: 900; margin-bottom: 5px; }
+  .about-img { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent); margin-bottom: 18px; box-shadow: 0 15px 40px rgba(255, 0, 51, 0.35); }
+  .about-name { font-size: 28px; font-weight: 900; margin-bottom: 6px; letter-spacing: -0.5px; }
   .about-role { font-size: 12px; color: var(--accent); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
-  .about-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 20px; }
-  .about-section h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
-  .about-section p { font-size: 14px; line-height: 1.7; color: var(--text2); margin-bottom: 12px; white-space: pre-wrap; }
+
+  .about-section {
+    background: var(--card);
+    border: none;
+    border-radius: 24px;
+    padding: 25px 22px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  body.light .about-section {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+  }
+  .about-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent) 0%, transparent 100%);
+    border-radius: 24px 24px 0 0;
+  }
+  .about-section h3 { font-size: 16px; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; letter-spacing: -0.3px; }
+  .about-section p { font-size: 14px; line-height: 1.8; color: var(--text2); margin-bottom: 12px; white-space: pre-wrap; }
   .about-section p:last-child { margin-bottom: 0; }
-  .about-social { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-  .about-social a { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; text-decoration: none; color: var(--text); font-weight: 700; font-size: 12px; transition: 0.2s; }
-  .about-social a:active { transform: scale(0.97); background: var(--border); }
-  .about-contact { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 20px; text-align: center; }
-  .about-contact h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-  .about-contact p { font-size: 12px; color: var(--text2); margin-bottom: 15px; }
-  .about-contact a { display: inline-block; padding: 12px 24px; background: var(--accent); color: #fff; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 13px; transition: 0.2s; }
+
+  .about-social { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+  .about-social a {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 16px; background: var(--card); border: none;
+    border-radius: 16px; text-decoration: none; color: var(--text);
+    font-weight: 700; font-size: 12px; transition: 0.2s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  body.light .about-social a { background: #ffffff; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
+  .about-social a:active { transform: scale(0.96); }
+
+  .about-contact {
+    background: var(--card);
+    border: none;
+    border-radius: 24px;
+    padding: 28px 22px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+  body.light .about-contact { background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%); box-shadow: 0 8px 25px rgba(0,0,0,0.06); }
+  .about-contact h3 { font-size: 16px; font-weight: 800; margin-bottom: 10px; letter-spacing: -0.3px; }
+  .about-contact p { font-size: 13px; color: var(--text2); margin-bottom: 18px; line-height: 1.6; }
+  .about-contact a {
+    display: inline-block; padding: 14px 30px; background: var(--accent);
+    color: #fff; border-radius: 14px; text-decoration: none;
+    font-weight: 700; font-size: 14px; transition: 0.2s;
+    box-shadow: 0 8px 20px rgba(255, 0, 51, 0.3);
+  }
   .about-contact a:active { transform: scale(0.97); }
-  .fanbase-btn { display: flex; align-items: center; gap: 14px; padding: 18px 20px; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); border-radius: 16px; text-decoration: none; color: #ffffff; margin-bottom: 20px; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(255, 0, 51, 0.4); animation: glowPulse 2.5s ease-in-out infinite; transition: transform 0.2s ease; }
+
+  .fanbase-btn {
+    display: flex; align-items: center; gap: 14px;
+    padding: 20px 22px;
+    background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%);
+    border-radius: 24px; text-decoration: none; color: #ffffff;
+    margin-bottom: 20px; position: relative; overflow: hidden;
+    box-shadow: 0 15px 40px rgba(255, 0, 51, 0.35);
+    animation: glowPulse 2.5s ease-in-out infinite;
+    transition: transform 0.2s ease;
+    border: none;
+  }
   .fanbase-btn:active { transform: scale(0.97); }
-  .fanbase-btn::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 60%); animation: shine 4s linear infinite; pointer-events: none; }
+  .fanbase-btn::before {
+    content: ''; position: absolute; top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 60%);
+    animation: shine 4s linear infinite; pointer-events: none;
+  }
   @keyframes shine { 0% { transform: translateX(-100%) translateY(-100%); } 100% { transform: translateX(100%) translateY(100%); } }
-  @keyframes glowPulse { 0%, 100% { box-shadow: 0 10px 30px rgba(255, 0, 51, 0.4); } 50% { box-shadow: 0 10px 45px rgba(255, 0, 51, 0.8); } }
-  .fanbase-icon { width: 48px; height: 48px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.3); }
+  @keyframes glowPulse { 0%, 100% { box-shadow: 0 15px 40px rgba(255, 0, 51, 0.35); } 50% { box-shadow: 0 15px 55px rgba(255, 0, 51, 0.7); } }
+  .fanbase-icon { width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.3); }
   .fanbase-icon i { font-size: 22px; color: #ffffff; animation: heartBeat 1.2s ease-in-out infinite; }
   @keyframes heartBeat { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.2); } 50% { transform: scale(1); } 75% { transform: scale(1.15); } }
   .fanbase-text { flex: 1; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-  .fanbase-title { font-size: 16px; font-weight: 900; letter-spacing: 0.3px; }
+  .fanbase-title { font-size: 17px; font-weight: 900; letter-spacing: 0.3px; }
   .fanbase-sub { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.85); }
-  .fanbase-arrow { width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .fanbase-arrow { width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .fanbase-arrow i { font-size: 16px; color: #ffffff; animation: slideRight 1.5s ease-in-out infinite; }
   @keyframes slideRight { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
 </style>
@@ -141,13 +292,29 @@
       <div class="video-grid" id="videoGrid">
         <div class="loading">Loading videos...</div>
       </div>
+
+      <!-- === BIG WELCOME === -->
+      <div class="welcome-section">
+        <h2>Welcome to <span>Samarid Music</span></h2>
+        <p>🎵 Ghana's newest music label. Discover fresh sounds, support underground artists, and stream exclusive releases. Follow us for weekly drops.</p>
+      </div>
+
+      <!-- === SMALL TRENDING === -->
+      <div class="trending-section">
+        <div class="trending-title">What's Trending</div>
+        <div class="trending-tags" id="trendingTags">
+          <span class="trending-tag">Loading...</span>
+        </div>
+      </div>
     </div>
+
     <div class="slide" id="slideSongs">
       <div class="page-title">Browse - Samarid Music</div>
       <div class="song-list" id="songList">
         <div class="loading">Loading songs...</div>
       </div>
     </div>
+
     <div class="slide" id="slideAbout">
       <div class="about-profile">
         <img id="aboutProfilePic" src="https://files.catbox.moe/64x8wm.jpg" alt="Samarid Music" class="about-img">
@@ -164,7 +331,7 @@
         <div class="fanbase-arrow"><i class="fas fa-arrow-right"></i></div>
       </a>
 
-      <a href="artists.html" class="fanbase-btn" style="background: linear-gradient(135deg, #141414 0%, #2a2a2a 100%); box-shadow: 0 10px 30px rgba(255,255,255,0.1); animation: none;">
+      <a href="artists.html" class="fanbase-btn" style="background: linear-gradient(135deg, #141414 0%, #2a2a2a 100%); box-shadow: 0 15px 40px rgba(255,255,255,0.08); animation: none;">
         <div class="fanbase-icon" style="background: rgba(255,255,255,0.1);">
           <i class="fas fa-microphone" style="animation: none;"></i>
         </div>
@@ -181,17 +348,19 @@
         <h3><i class="fas fa-user" style="color: var(--accent);"></i> My Story</h3>
         <p id="aboutStoryText">Loading story...</p>
       </div>
-      <h3 style="font-size: 15px; font-weight: 700; margin-bottom: 12px;"><i class="fas fa-link" style="color: var(--accent);"></i> Connect With Me</h3>
+
+      <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 14px; padding-left: 4px;"><i class="fas fa-link" style="color: var(--accent);"></i> Connect With Me</h3>
       <div class="about-social">
         <a href="https://youtube.com/@realsamarid" target="_blank"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
         <a href="https://tiktok.com/@realsamarid" target="_blank"><i class="fab fa-tiktok" style="color: #ffffff;"></i> TikTok</a>
         <a href="https://facebook.com/realsamarid" target="_blank"><i class="fab fa-facebook" style="color: #1877F2;"></i> Facebook</a>
         <a href="https://wa.me/233207425831" target="_blank"><i class="fab fa-whatsapp" style="color: #25D366;"></i> WhatsApp</a>
       </div>
+
       <div class="about-contact">
         <h3><i class="fas fa-envelope" style="color: var(--accent);"></i> Get In Touch</h3>
         <p>For bookings, features, or business inquiries.</p>
-        <a href="mailto:riemankojo@gmail.com">Send Email</a>
+        <a href="mailto:wunatehk@gmail.com">Send Email</a>
       </div>
     </div>
   </div>
@@ -219,7 +388,7 @@
     <a href="https://tiktok.com/@realsamarid" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-tiktok" style="color: #ffffff;"></i></span><span class="label">TikTok</span><span class="arrow">↗</span></a>
     <a href="https://facebook.com/realsamarid" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-facebook" style="color: #1877F2;"></i></span><span class="label">Facebook</span><span class="arrow">↗</span></a>
     <a href="https://wa.me/233207425831" target="_blank" class="menu-item"><span class="icon"><i class="fab fa-whatsapp" style="color: #25D366;"></i></span><span class="label">WhatsApp</span><span class="arrow">↗</span></a>
-    <a href="mailto:riemankojo@gmail.com" class="menu-item"><span class="icon"><i class="fas fa-envelope" style="color: #EA4335;"></i></span><span class="label">Email</span><span class="arrow">↗</span></a>
+    <a href="mailto:wunatehk@gmail.com" class="menu-item"><span class="icon"><i class="fas fa-envelope" style="color: #EA4335;"></i></span><span class="label">Email</span><span class="arrow">↗</span></a>
   </div>
 
   <div class="player-modal" id="playerModal" onclick="closePlayer()">
@@ -307,7 +476,7 @@
         if (!videosData.items || videosData.items.length === 0) { grid.innerHTML = '<div class="empty">No videos yet — check back soon!</div>'; return; }
         const videos = videosData.items.map(item => { const videoId = item.snippet.resourceId.videoId; const title = item.snippet.title; const published = item.snippet.publishedAt; const date = new Date(published).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); return { videoId, title, date, timestamp: new Date(published).getTime() }; });
         videos.sort((a, b) => b.timestamp - a.timestamp);
-        grid.innerHTML = videos.map(v => `<div class="video-card" onclick="openPlayer('${v.videoId}')"><div class="video-thumb"><img src="https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg" alt="${v.title}" loading="lazy"><div class="video-play-overlay"></div></div><div class="video-title">${v.title}</div><div class="video-meta">${v.date}</div></div>`).join('');
+        grid.innerHTML = videos.map(v => `<div class="video-card" onclick="openPlayer('${v.videoId}')"><div class="video-thumb"><img src="https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg" alt="${v.title}" loading="lazy"><div class="video-play-overlay"></div></div><div class="video-card-info"><div class="video-title">${v.title}</div><div class="video-meta">${v.date}</div></div></div>`).join('');
       } catch (err) { console.error(err); const link = localStorage.getItem('samarid_channel_id') ? 'https://www.youtube.com/channel/' + localStorage.getItem('samarid_channel_id') : 'https://youtube.com/@realsamarid'; grid.innerHTML = '<div class="empty">Could not load videos. <a href="' + link + '" style="color:var(--accent);">Visit YouTube →</a></div>'; }
     }
 
@@ -339,7 +508,29 @@
       } catch (e) { console.error(e); }
     }
 
-    applySettings(); loadVideos(); renderSongs(); loadAboutPage();
+    async function loadTrendingTags() {
+      const container = document.getElementById('trendingTags');
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,category', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const songs = await res.json();
+        if (!Array.isArray(songs) || songs.length === 0) {
+          container.innerHTML = '<a href="artists.html" class="trending-tag brand-tag">#SamaridMusic</a>';
+          return;
+        }
+        const artists = [...new Set(songs.map(s => (s.artist_name || 'Samarid').trim()))].sort();
+        const categories = [...new Set(songs.map(s => (s.category || 'Music').trim()))].sort();
+        const brandTags = ['SamaridMusic', 'GhanaMusic', 'NewMusic'];
+        let html = '';
+        artists.forEach(name => { html += `<a href="artist-template.html?name=${encodeURIComponent(name)}" class="trending-tag artist-tag">#${name.replace(/\s+/g, '')}</a>`; });
+        categories.forEach(cat => { html += `<a href="artists.html" class="trending-tag category-tag">#${cat.replace(/\s+/g, '')}</a>`; });
+        brandTags.forEach(tag => { html += `<a href="index.html" class="trending-tag brand-tag">#${tag}</a>`; });
+        container.innerHTML = html;
+      } catch (e) { console.error(e); container.innerHTML = '<a href="artists.html" class="trending-tag brand-tag">#SamaridMusic</a>'; }
+    }
+
+    applySettings(); loadVideos(); renderSongs(); loadAboutPage(); loadTrendingTags();
   </script>
 </body>
 </html>
