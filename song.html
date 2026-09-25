@@ -19,12 +19,29 @@
   .logo { font-size: 18px; font-weight: 900; color: #fff; text-decoration: none; flex: 1; text-align: center; }
   .logo span { color: var(--accent); }
 
+  /* LABEL BANNER (NEW) */
+  .label-banner {
+    background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%);
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    font-size: 13px;
+    box-shadow: 0 4px 15px rgba(255, 0, 51, 0.3);
+  }
+  .label-banner i { font-size: 16px; }
+  .label-banner .label-text { text-transform: uppercase; }
+
   /* CONTAINER */
   .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
 
-  /* BIG TITLE (Download MP3 ...) */
+  /* BIG TITLE */
   .big-title {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 900;
     line-height: 1.3;
     text-align: center;
@@ -37,7 +54,7 @@
   }
   .big-title .accent { color: var(--accent); }
 
-  /* BOXED COVER ART */
+  /* COVER ART */
   .detail-cover-box {
     width: 100%;
     max-width: 300px;
@@ -52,8 +69,20 @@
   .detail-cover-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .detail-title { font-size: 22px; font-weight: 900; line-height: 1.25; margin-bottom: 6px; text-align: center; }
-  .detail-meta { font-size: 13px; color: #999; margin-bottom: 25px; text-align: center; }
+  .detail-meta { font-size: 13px; color: #999; margin-bottom: 8px; text-align: center; }
   .detail-meta .artist { color: var(--accent); font-weight: 700; }
+
+  /* LABEL LINE (NEW) */
+  .detail-label {
+    text-align: center;
+    font-size: 11px;
+    color: #999;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .detail-label i { color: var(--accent); margin-right: 4px; }
 
   .detail-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
   .detail-section h4 { font-size: 12px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
@@ -66,6 +95,20 @@
     text-decoration: none; color: #fff; background: #e74c3c;
   }
   .btn-download:active, .btn-play:active { background: #c0392b; }
+
+  /* PRESENTED BY (NEW) */
+  .presented-by {
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: var(--card);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    font-size: 12px;
+    color: #666;
+    font-weight: 600;
+  }
+  .presented-by strong { color: var(--accent); }
 
   .footer { padding: 30px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 40px; background: var(--card); }
   .footer .brand { color: var(--accent); font-weight: 700; }
@@ -80,6 +123,13 @@
     <div style="width: 70px;"></div>
   </header>
 
+  <!-- LABEL BANNER -->
+  <div class="label-banner">
+    <i class="fas fa-compact-disc"></i>
+    <span class="label-text">Samarid Music Release</span>
+    <i class="fas fa-compact-disc"></i>
+  </div>
+
   <div class="container" id="songDetail">
     <div class="loading">Loading song...</div>
   </div>
@@ -87,10 +137,8 @@
   <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
 
   <script>
-    // === SUPABASE CONFIGURATION ===
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
-    // ==============================
 
     async function loadSong() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -107,25 +155,40 @@
         const s = data[0];
 
         if (s) {
-          // Get the artist name (default to Samarid if not set)
           const artist = s.artist_name || 'Samarid';
-          
-          // Build the "Download MP3 Artist - Title" text
           const downloadTitle = artist + ' - ' + s.title;
-          
-          // Update browser tab title too
           document.title = downloadTitle + ' - Samarid Music';
-          
+
           container.innerHTML = `
             <div class="big-title">Download MP3 <span class="accent">${downloadTitle}</span></div>
+
             <div class="detail-cover-box"><img src="${s.cover}" alt="${s.title}"></div>
+
             <h1 class="detail-title">${s.title}</h1>
             <p class="detail-meta"><span class="artist">${artist}</span> • ${s.date} • ${s.category}</p>
-            <div class="detail-section"><h4>📖 About this Song</h4><p>${s.description}</p></div>
-            <div class="detail-section"><h4>⬇️ Get the Song</h4><div class="download-buttons">
-              <a href="${s.downloadurl}" download="${artist} - ${s.title}.mp3" id="detailDownload" class="btn-download" target="_blank"><i class="fas fa-download"></i> Download MP3</a>
-              <a href="${s.playurl}" id="detailPlay" class="btn-play" target="_blank"><i class="fas fa-play"></i> Play Now</a>
-            </div></div>
+
+            <p class="detail-label"><i class="fas fa-compact-disc"></i> A Samarid Music Release</p>
+
+            <div class="detail-section">
+              <h4>📖 About this Song</h4>
+              <p>${s.description}</p>
+            </div>
+
+            <div class="presented-by">
+              🎵 <strong>SAMARID MUSIC</strong> presents this track • © 2026 Samarid Music
+            </div>
+
+            <div class="detail-section">
+              <h4>⬇️ Get the Song</h4>
+              <div class="download-buttons">
+                <a href="${s.downloadurl}" download="${artist} - ${s.title} [Samarid Music].mp3" id="detailDownload" class="btn-download" target="_blank">
+                  <i class="fas fa-download"></i> Download MP3
+                </a>
+                <a href="${s.playurl}" id="detailPlay" class="btn-play" target="_blank">
+                  <i class="fas fa-play"></i> Play Now
+                </a>
+              </div>
+            </div>
           `;
         } else { container.innerHTML = '<div class="loading">Song not found.</div>'; }
       } catch (e) { console.error("Error getting song: ", e); container.innerHTML = '<div class="loading">Error loading song.</div>'; }
