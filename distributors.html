@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distributors - Samarid Music</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root { --bg: #0a0a0a; --card: #141414; --border: #222; --text: #ffffff; --text2: #888; --accent: #ff0033; --header-bg: #0a0a0a; --ghana: #00cc44; --free: #10b981; --cheap: #f59e0b; --global: #1d9bf0; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 60px; }
+
+  .header { position: sticky; top: 0; background: var(--header-bg); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; border-bottom: 1px solid var(--border); }
+  .back-btn { background: #222; color: #fff; border: 1px solid #333; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; text-decoration: none; }
+  .back-btn:active { background: var(--accent); border-color: var(--accent); }
+  .logo { font-size: 17px; font-weight: 900; color: #fff; text-decoration: none; flex: 1; text-align: center; }
+  .logo span { color: var(--accent); }
+  .spacer { width: 65px; }
+
+  .hero { text-align: center; padding: 36px 20px 28px; background: var(--bg); border-bottom: 1px solid var(--border); }
+  .hero-icon { font-size: 46px; margin-bottom: 14px; line-height: 1; }
+  .hero h1 { font-size: 26px; font-weight: 900; letter-spacing: -0.6px; margin-bottom: 10px; color: #fff; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { font-size: 14px; color: var(--text2); line-height: 1.6; max-width: 420px; margin: 0 auto; }
+  .hero p strong { color: #ddd; }
+
+  .filters { display: flex; gap: 8px; padding: 18px 16px 0; max-width: 700px; margin: 0 auto; overflow-x: auto; scrollbar-width: none; }
+  .filters::-webkit-scrollbar { display: none; }
+  .filter-btn { flex-shrink: 0; padding: 10px 18px; background: var(--card); border: 1px solid var(--border); color: var(--text2); font-size: 14px; font-weight: 700; cursor: pointer; border-radius: 24px; font-family: inherit; transition: all 0.15s; }
+  .filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .filter-btn:active { transform: scale(0.96); }
+
+  .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
+
+  .section-head { display: flex; align-items: center; gap: 10px; margin: 26px 0 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .section-head:first-child { margin-top: 4px; }
+  .section-head .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .section-head .dot.ghana { background: var(--ghana); }
+  .section-head .dot.global { background: var(--global); }
+  .section-head h2 { font-size: 16px; font-weight: 900; letter-spacing: -0.2px; flex: 1; color: #fff; }
+
+  .distro-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: all 0.15s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .distro-card:active { transform: scale(0.99); background: #1a1a1a; }
+
+  .distro-logo {
+    width: 68px;
+    height: 68px;
+    border-radius: 16px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #fff;
+    border: 1px solid #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .distro-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px;
+  }
+
+  .distro-info { flex: 1; min-width: 0; }
+  .distro-name-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .distro-info h3 { font-size: 17px; font-weight: 900; letter-spacing: -0.3px; color: #fff; }
+  .distro-info .tag {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    letter-spacing: 0.2px;
+  }
+  .tag.ghana { background: rgba(0, 204, 68, 0.15); color: #00cc44; }
+  .tag.free { background: rgba(29, 155, 240, 0.15); color: #4fb2f5; }
+  .tag.cheap { background: rgba(245, 158, 11, 0.15); color: #f5a623; }
+  .tag.global { background: rgba(29, 155, 240, 0.15); color: #4fb2f5; }
+  .distro-info p { font-size: 13px; color: var(--text2); line-height: 1.5; }
+  .distro-arrow { color: #444; font-size: 16px; flex-shrink: 0; }
+
+  .guide { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px 20px; margin-top: 30px; }
+  .guide h3 { font-size: 18px; font-weight: 900; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; color: #fff; }
+  .guide .sub { font-size: 13px; color: var(--text2); margin-bottom: 18px; }
+  .step { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid #1a1a1a; }
+  .step:last-child { border-bottom: none; padding-bottom: 0; }
+  .step-num { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; flex-shrink: 0; }
+  .step-text { flex: 1; font-size: 14px; line-height: 1.55; color: #ccc; }
+  .step-text strong { color: #fff; font-weight: 800; }
+
+  .tip { background: linear-gradient(135deg, #1a0005 0%, #141414 100%); border: 1px solid rgba(255, 0, 51, 0.25); border-radius: 16px; padding: 20px; margin-top: 20px; display: flex; gap: 14px; align-items: flex-start; }
+  .tip .emoji { font-size: 26px; line-height: 1; }
+  .tip .text { flex: 1; font-size: 14px; line-height: 1.6; color: #ccc; }
+  .tip .text strong { color: var(--accent); }
+
+  .footer { padding: 40px 20px 20px; text-align: center; font-size: 11px; color: #555; letter-spacing: 1px; }
+  .footer .brand { color: var(--accent); font-weight: 700; }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+    <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
+    <div class="spacer"></div>
+  </header>
+
+  <div class="hero">
+    <div class="hero-icon">🎧</div>
+    <h1>Get Your Music <span>Everywhere</span></h1>
+    <p>Want your song on Spotify, Apple Music, Boomplay? Here are the best distributors — starting with <strong>Ghana-based</strong> options 🇬🇭</p>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterDistros('all', this)">All</button>
+    <button class="filter-btn" onclick="filterDistros('ghana', this)">🇬🇭 Ghana</button>
+    <button class="filter-btn" onclick="filterDistros('global', this)">🌍 Global</button>
+  </div>
+
+  <div class="container">
+
+    <!-- GHANA -->
+    <div class="distro-section" data-cat="ghana">
+      <div class="section-head">
+        <div class="dot ghana"></div>
+        <h2>Ghana-Based 🇬🇭</h2>
+      </div>
+
+      <a href="https://pitchdistro.com" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=pitchdistro.com&sz=256" alt="Pitch Distro"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>Pitch Distro</h3><span class="tag ghana">Ghana</span><span class="tag free">Free</span></div>
+          <p>Free music distribution + playlist pitching</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://mazufa.com" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=mazufa.com&sz=256" alt="Mazufa"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>Mazufa</h3><span class="tag ghana">Ghana</span></div>
+          <p>Boomplay, Audiomack, Spotify — keep your rights</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://www.afroblendrecord.top" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=afroblendrecord.top&sz=256" alt="Afroblend"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>Afroblend Record</h3><span class="tag ghana">Ghana</span></div>
+          <p>Label + distributor. Afrobeat, Amapiano, African music</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://www.cruxmusic.global" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=cruxmusic.global&sz=256" alt="Crux Global"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>Crux Global</h3><span class="tag ghana">Ghana</span></div>
+          <p>African-owned. Distribution + artist development</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://bangsmusicdistro.com" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=bangsmusicdistro.com&sz=256" alt="Bangs Music"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>Bangs Music Distro</h3><span class="tag ghana">Ghana</span></div>
+          <p>Distribute music + manage your catalogue</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://apprisemusic.com" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=apprisemusic.com&sz=256" alt="Apprise Music"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>Apprise Music</h3><span class="tag ghana">Ghana</span></div>
+          <p>For artists, labels, churches, creative entrepreneurs</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://www.tiememusic.com" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=tiememusic.com&sz=256" alt="Tieme"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>Tieme Distribution</h3><span class="tag ghana">Ghana</span></div>
+          <p>Spotify, Apple Music, Amazon, TikTok, YouTube Music</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://ghanandwom.net" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=ghanandwom.net&sz=256" alt="iNMusic Distro"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>iNMusic Distro</h3><span class="tag ghana">Ghana</span><span class="tag free">Free</span></div>
+          <p>100% FREE distribution to all major digital platforms</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://dapstrem.com" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=dapstrem.com&sz=256" alt="Dapstrem"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>Dapstrem</h3><span class="tag ghana">Ghana</span></div>
+          <p>Distribute to Apple Music, Spotify, YouTube Music</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://afrobeatdistro.com" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=afrobeatdistro.com&sz=256" alt="Afrobeats Distro"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>Afrobeats Distro</h3><span class="tag ghana">Ghana</span></div>
+          <p>Compare distributors. Production, mastering, royalties</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://mipromo.me" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=mipromo.me&sz=256" alt="MiPROMO Media"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>MiPROMO Media</h3><span class="tag ghana">Ghana</span></div>
+          <p>Global audience, access to all major online stores</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://www.freecords.com" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=freecords.com&sz=256" alt="Freecords"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>Freecords</h3><span class="tag free">Free</span></div>
+          <p>Music discovery platform. Free sign-up to get discovered</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+    </div>
+
+    <!-- GLOBAL -->
+    <div class="distro-section" data-cat="global">
+      <div class="section-head">
+        <div class="dot global"></div>
+        <h2>Global (Works in Ghana)</h2>
+      </div>
+
+      <a href="https://www.amuse.io" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=amuse.io&sz=256" alt="Amuse"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>Amuse</h3><span class="tag free">Free</span></div>
+          <p>Free forever. Keep 100% of your royalties</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://distrokid.com" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=distrokid.com&sz=256" alt="DistroKid"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>DistroKid</h3><span class="tag cheap">$22/year</span></div>
+          <p>Unlimited songs for one yearly price</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://www.tunecore.com" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=tunecore.com&sz=256" alt="TuneCore"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>TuneCore</h3><span class="tag cheap">$15/song</span></div>
+          <p>Pay per release. Keep 100% royalties forever</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://www.cdbaby.com" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=cdbaby.com&sz=256" alt="CD Baby"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>CD Baby</h3><span class="tag cheap">$9.95/song</span></div>
+          <p>One-time payment. Keep 91% royalties forever</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://www.unitedmasters.com" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=unitedmasters.com&sz=256" alt="United Masters"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>United Masters</h3><span class="tag free">Free + %</span></div>
+          <p>Free tier. They take a small % of royalties</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+
+      <a href="https://www.dittomusic.com" target="_blank" class="distro-card">
+        <div class="distro-logo"><img src="https://www.google.com/s2/favicons?domain=dittomusic.com&sz=256" alt="Ditto"></div>
+        <div class="distro-info">
+          <div class="distro-name-row"><h3>Ditto Music</h3><span class="tag cheap">$19/year</span></div>
+          <p>Budget-friendly for independent artists</p>
+        </div>
+        <i class="fas fa-chevron-right distro-arrow"></i>
+      </a>
+    </div>
+
+    <!-- GUIDE -->
+    <div class="guide">
+      <h3>📖 How to Distribute</h3>
+      <p class="sub">5 steps to get your song live worldwide</p>
+
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Pick a distributor.</strong> Start with a Ghana-based one for local support.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Create account.</strong> Sign up with email. Verify your artist name.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Upload.</strong> Cover art, title, artist, audio file.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-text"><strong>Choose stores.</strong> Spotify, Apple Music, Boomplay, YouTube Music.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-text"><strong>Wait 2-7 days.</strong> Song appears on all platforms. Share it!</div>
+      </div>
+    </div>
+
+    <!-- TIP -->
+    <div class="tip">
+      <div class="emoji">💎</div>
+      <div class="text"><strong>Pro tip:</strong> Upload to <strong>Samarid Music first</strong> — then distribute. Your site gives direct downloads + fan engagement. The big platforms give reach.</div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div><span class="brand">SAMARID MUSIC</span> • © 2026</div>
+  </footer>
+
+  <script>
+    window.filterDistros = function(cat, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.distro-section').forEach(sec => {
+        if (cat === 'all') sec.classList.remove('hidden');
+        else if (sec.dataset.cat === cat) sec.classList.remove('hidden');
+        else sec.classList.add('hidden');
+      });
+    };
+  </script>
+
+</body>
+</html>
