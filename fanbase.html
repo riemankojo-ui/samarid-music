@@ -39,7 +39,6 @@
   .container { max-width: 700px; margin: 0 auto; padding: 20px 16px 0; }
   .page-title { font-size: 15px; font-weight: 900; text-align: center; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; }
 
-  /* SECTION HEADS */
   .section-head { display: flex; align-items: center; gap: 8px; margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
   .section-head:first-of-type { margin-top: 0; }
   .section-head h3 { font-size: 13px; font-weight: 900; flex: 1; }
@@ -100,6 +99,9 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 3px;
   }
   .top-plays {
     font-size: 9px;
@@ -108,7 +110,7 @@
     flex-shrink: 0;
   }
 
-  /* === LATEST RELEASES (SMALLER ROWS, BUT SLIGHTLY BIGGER THAN TOP) === */
+  /* === LATEST RELEASES === */
   .latest-list { display: flex; flex-direction: column; gap: 8px; }
   .latest-row {
     display: flex;
@@ -148,6 +150,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
     margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
   }
   .latest-info .stats {
     font-size: 9px;
@@ -161,6 +166,22 @@
   .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 40px; }
   .footer .brand { color: var(--accent); font-weight: 700; }
   .loading { text-align: center; padding: 30px; color: var(--text2); font-size: 13px; }
+
+  /* Twitter/X-style verified badge */
+  .verify-badge {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+  .verify-badge-lg {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
 </style>
 </head>
 <body>
@@ -209,6 +230,11 @@
   <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+
+    // Twitter/X-style verified badge SVG
+    const VERIFY_BADGE_SM = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
+
+    const VERIFY_BADGE_LG = '<svg class="verify-badge-lg" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
     let visitorId = localStorage.getItem('samarid_visitor_id');
     if (!visitorId) {
@@ -288,13 +314,15 @@
         container.innerHTML = songs.map((s, index) => {
           const rank = index + 1;
           const rankClass = rank <= 3 ? 'rank-' + rank : '';
+          const badge = s.verified ? VERIFY_BADGE_SM : '';
+          const artist = s.artist_name || 'Samarid';
           return `
             <div class="top-row" onclick="window.location.href='song-detail.html?id=${s.id}'">
               <div class="top-rank ${rankClass}">${rank}</div>
               <div class="top-thumb"><img src="${s.cover}" alt="${s.title}"></div>
               <div class="top-info">
                 <h4>${s.title}</h4>
-                <p>${s.artist_name || 'Samarid'}</p>
+                <p>${artist}${badge}</p>
               </div>
               <div class="top-plays">🔥 ${s.plays || 0}</div>
             </div>
@@ -303,7 +331,7 @@
       } catch (e) { console.error(e); container.innerHTML = '<div class="loading">Error.</div>'; }
     }
 
-    // === LATEST RELEASES (slightly bigger rows) ===
+    // === LATEST RELEASES ===
     async function loadLatest() {
       const container = document.getElementById('latestList');
       container.innerHTML = '<div class="loading">Loading...</div>';
@@ -323,19 +351,23 @@
         const likeCounts = {};
         likesData.forEach(l => { likeCounts[l.song_id] = (likeCounts[l.song_id] || 0) + 1; });
 
-        container.innerHTML = songs.map(s => `
-          <div class="latest-row" onclick="window.location.href='song-detail.html?id=${s.id}'">
-            <div class="latest-thumb"><img src="${s.cover}" alt="${s.title}"></div>
-            <div class="latest-info">
-              <h4>${s.title}</h4>
-              <div class="artist">${s.artist_name || 'Samarid'}</div>
-              <div class="stats">
-                <span class="stat-plays">🔥 ${s.plays || 0}</span>
-                <span class="stat-likes">❤️ ${likeCounts[s.id] || 0}</span>
+        container.innerHTML = songs.map(s => {
+          const badge = s.verified ? VERIFY_BADGE_LG : '';
+          const artist = s.artist_name || 'Samarid';
+          return `
+            <div class="latest-row" onclick="window.location.href='song-detail.html?id=${s.id}'">
+              <div class="latest-thumb"><img src="${s.cover}" alt="${s.title}"></div>
+              <div class="latest-info">
+                <h4>${s.title}</h4>
+                <div class="artist">${artist}${badge}</div>
+                <div class="stats">
+                  <span class="stat-plays">🔥 ${s.plays || 0}</span>
+                  <span class="stat-likes">❤️ ${likeCounts[s.id] || 0}</span>
+                </div>
               </div>
             </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       } catch (e) { container.innerHTML = '<div class="loading" style="color:#ff0033;">Error.</div>'; }
     }
 

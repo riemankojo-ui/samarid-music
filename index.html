@@ -147,6 +147,9 @@
     overflow: hidden; 
     text-overflow: ellipsis; 
     font-family: 'Inter', sans-serif; 
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
   .song-card-info h3 { 
     font-size: 13px; 
@@ -163,6 +166,16 @@
   .song-card-info .date { 
     font-size: 10px; 
     color: var(--text2); 
+  }
+
+  /* Twitter/X-style verified badge */
+  .verify-badge {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    vertical-align: middle;
+    margin-left: 3px;
+    flex-shrink: 0;
   }
 
   .empty-state { text-align: center; padding: 40px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text2); }
@@ -197,21 +210,11 @@
     100% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0); }
   }
   .fanbase-btn { 
-    display: flex; 
-    align-items: center; 
-    gap: 14px; 
-    padding: 18px 20px; 
+    display: flex; align-items: center; gap: 14px; padding: 18px 20px; 
     background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); 
-    border-radius: 18px; 
-    text-decoration: none; 
-    color: #ffffff; 
-    margin-bottom: 12px; 
-    position: relative; 
-    overflow: hidden; 
-    transition: transform 0.2s ease; 
-    border: none; 
-    animation: pulseGlow 2s infinite;
-    cursor: pointer;
+    border-radius: 18px; text-decoration: none; color: #ffffff; margin-bottom: 12px; 
+    position: relative; overflow: hidden; transition: transform 0.2s ease; border: none; 
+    animation: pulseGlow 2s infinite; cursor: pointer;
   }
   .fanbase-btn:active { transform: scale(0.96); }
   .fanbase-icon, .fanbase-text, .fanbase-arrow { pointer-events: none; }
@@ -220,26 +223,15 @@
   .fanbase-text { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .fanbase-title { font-size: 16px; font-weight: 900; letter-spacing: 0.3px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
   .fanbase-sub { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.95); }
-  .fanbase-arrow { width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.2s ease; }
-  .fanbase-btn:active .fanbase-arrow { transform: translateX(4px); }
+  .fanbase-arrow { width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .fanbase-arrow i { font-size: 14px; color: #ffffff; }
 
   .secondary-btn { 
-    display: flex; 
-    align-items: center; 
-    gap: 14px; 
-    padding: 16px 20px; 
+    display: flex; align-items: center; gap: 14px; padding: 16px 20px; 
     background: linear-gradient(135deg, #141414 0%, #2a2a2a 100%); 
-    border-radius: 18px; 
-    text-decoration: none; 
-    color: #ffffff; 
-    margin-bottom: 18px; 
-    position: relative; 
-    overflow: hidden; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
-    transition: transform 0.2s ease; 
-    border: 1px solid #333; 
-    cursor: pointer;
+    border-radius: 18px; text-decoration: none; color: #ffffff; margin-bottom: 18px; 
+    position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+    transition: transform 0.2s ease; border: 1px solid #333; cursor: pointer;
   }
   .secondary-btn:active { transform: scale(0.96); }
   .secondary-icon, .secondary-text, .secondary-arrow { pointer-events: none; }
@@ -248,8 +240,7 @@
   .secondary-text { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .secondary-title { font-size: 16px; font-weight: 900; letter-spacing: 0.3px; }
   .secondary-sub { font-size: 11px; font-weight: 500; color: #aaa; }
-  .secondary-arrow { width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.2s ease; }
-  .secondary-btn:active .secondary-arrow { transform: translateX(4px); }
+  .secondary-arrow { width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .secondary-arrow i { font-size: 14px; color: #ffffff; }
 
   .about-section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; margin-bottom: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
@@ -404,6 +395,9 @@
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
 
+    // Twitter/X-style verified badge SVG
+    const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
+
     const slider = document.getElementById('sliderWrapper');
     const tabVideos = document.getElementById('tabVideos');
     const tabSongs = document.getElementById('tabSongs');
@@ -451,14 +445,10 @@
     const CHANNEL_ID = localStorage.getItem('samarid_channel_id') || 'UC11ElndF459dLRfV-OzwmpA';
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
 
-    // === UPDATED: Load videos from BOTH YouTube channel AND manual videos table ===
     async function loadVideos() {
       const grid = document.getElementById('videoGrid');
       grid.innerHTML = '<div class="loading">Loading videos...</div>';
-
       let allVideos = [];
-
-      // 1. Load from YouTube channel (auto-sync)
       try {
         const channelRes = await fetch('https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' + CHANNEL_ID + '&key=' + API_KEY);
         const channelData = await channelRes.json();
@@ -467,21 +457,16 @@
           const videosRes = await fetch('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=' + uploadsId + '&key=' + API_KEY);
           const videosData = await videosRes.json();
           if (videosData.items && videosData.items.length > 0) {
-            const ytVideos = videosData.items.map(item => {
-              const videoId = item.snippet.resourceId.videoId;
-              return {
-                videoId: videoId,
-                title: item.snippet.title,
-                date: new Date(item.snippet.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-                timestamp: new Date(item.snippet.publishedAt).getTime()
-              };
-            });
+            const ytVideos = videosData.items.map(item => ({
+              videoId: item.snippet.resourceId.videoId,
+              title: item.snippet.title,
+              date: new Date(item.snippet.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+              timestamp: new Date(item.snippet.publishedAt).getTime()
+            }));
             allVideos = allVideos.concat(ytVideos);
           }
         }
       } catch (err) { console.warn('YouTube fetch failed:', err); }
-
-      // 2. Load manual videos from Supabase videos table
       try {
         const manualRes = await fetch(SUPABASE_URL + '/rest/v1/videos?select=*&order=id.desc', {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
@@ -492,27 +477,15 @@
             let videoId = '';
             const url = v.video_url || '';
             if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
-            else if (url.includes('youtube.com/watch')) {
-              try { videoId = new URL(url).searchParams.get('v') || ''; } catch(e) {}
-            } else if (url.includes('youtube.com/embed/')) videoId = url.split('embed/')[1].split('?')[0];
-            return {
-              videoId: videoId,
-              title: v.title,
-              date: v.video_date || '',
-              timestamp: Date.now() + 1000
-            };
+            else if (url.includes('youtube.com/watch')) { try { videoId = new URL(url).searchParams.get('v') || ''; } catch(e) {} }
+            else if (url.includes('youtube.com/embed/')) videoId = url.split('embed/')[1].split('?')[0];
+            return { videoId: videoId, title: v.title, date: v.video_date || '', timestamp: Date.now() + 1000 };
           }).filter(v => v.videoId);
           allVideos = allVideos.concat(manualVideos);
         }
       } catch (err) { console.warn('Manual videos fetch failed:', err); }
-
-      if (allVideos.length === 0) {
-        grid.innerHTML = '<div class="empty">No videos yet!</div>';
-        return;
-      }
-
+      if (allVideos.length === 0) { grid.innerHTML = '<div class="empty">No videos yet!</div>'; return; }
       allVideos.sort((a, b) => b.timestamp - a.timestamp);
-
       grid.innerHTML = allVideos.map(v => `
         <div class="video-card" onclick="openPlayer('${v.videoId}')">
           <div class="video-thumb">
@@ -535,7 +508,8 @@
         if (!Array.isArray(songs) || songs.length === 0) { container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>No Top Songs Yet</h3></div>'; return; }
         container.innerHTML = songs.map((s) => {
           const artist = s.artist_name || 'Samarid';
-          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+          const badge = s.verified ? VERIFY_BADGE : '';
+          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
         }).join('');
       } catch (e) { console.error(e); container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>Error</h3></div>'; }
     }
@@ -548,7 +522,8 @@
         if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3></div>'; return; }
         list.innerHTML = songs.map((s) => {
           const artist = s.artist_name || 'Samarid';
-          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+          const badge = s.verified ? VERIFY_BADGE : '';
+          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
         }).join('');
       } catch (e) { console.error(e); list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Error</h3></div>'; }
     }
@@ -579,7 +554,8 @@
         if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No ' + category + ' songs yet</h3></div>'; return; }
         list.innerHTML = songs.map((s) => {
           const artist = s.artist_name || 'Samarid';
-          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+          const badge = s.verified ? VERIFY_BADGE : '';
+          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
         }).join('');
       } catch (e) { console.error(e); }
     }
@@ -594,10 +570,16 @@
     async function loadArtists() {
       const container = document.getElementById('artistPills');
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
-        const artists = [...new Set(songs.map(s => (s.artist_name || 'Samarid').trim()))].sort();
-        container.innerHTML = artists.map(a => '<a href="artist-template.html?name=' + encodeURIComponent(a) + '" class="pill artist-pill">' + a + '</a>').join('');
+        const artistMap = {};
+        songs.forEach(s => {
+          const name = (s.artist_name || 'Samarid').trim();
+          if (!artistMap[name]) artistMap[name] = false;
+          if (s.verified) artistMap[name] = true;
+        });
+        const artists = Object.keys(artistMap).sort();
+        container.innerHTML = artists.map(a => '<a href="artist-template.html?name=' + encodeURIComponent(a) + '" class="pill artist-pill">' + a + (artistMap[a] ? VERIFY_BADGE : '') + '</a>').join('');
       } catch (e) { container.innerHTML = '<span class="pill">Error</span>'; }
     }
 
