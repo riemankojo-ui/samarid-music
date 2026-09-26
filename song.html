@@ -364,14 +364,14 @@
             </div>
           </div>
 
-          <!-- ===== COMPACT FOLLOW ROW (between Download & Share) ===== -->
+          <!-- COMPACT FOLLOW ROW -->
           <div class="follow-row-compact">
             <div class="follow-avatar-sm">${avatarHTML}</div>
             <div class="follow-info-sm">
               <div class="follow-name-sm">${artist}${badge}</div>
               <div class="follow-stats-sm">
                 <span class="stat-num" id="followerCountNum">${followerCount.toLocaleString()}</span>
-                <span id="followerCountLabel"> ${followerCount === 1 ? 'follower' : 'followers'}</span>
+                <span id="followerCountLabel"> followers</span>
               </div>
             </div>
             <button class="follow-btn-sm ${myFollow ? 'following' : ''}" id="songFollowBtn" onclick="toggleFollowSong()">
@@ -425,7 +425,7 @@
       isFollowingArtist = !isFollowingArtist;
       const newCount = isFollowingArtist ? currentCount + 1 : Math.max(0, currentCount - 1);
       countNum.innerText = newCount.toLocaleString();
-      countLabel.innerText = ' ' + (newCount === 1 ? 'follower' : 'followers');
+      countLabel.innerText = ' followers';
 
       if (isFollowingArtist) {
         btn.classList.add('following');
@@ -453,7 +453,7 @@
       } catch (e) {
         isFollowingArtist = !isFollowingArtist;
         countNum.innerText = currentCount.toLocaleString();
-        countLabel.innerText = ' ' + (currentCount === 1 ? 'follower' : 'followers');
+        countLabel.innerText = ' followers';
       } finally {
         btn.disabled = false;
       }
