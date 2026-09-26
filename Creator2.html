@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manager - Samarid Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root { --accent: #ff0033; --bg: #0a0a0a; --card: #141414; --border: #222; --text2: #888; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; padding-bottom: 40px; }
+
+  #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+  .login-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 35px 25px; width: 100%; max-width: 400px; }
+  .password-wrapper { position: relative; width: 100%; margin-bottom: 15px; }
+  .password-wrapper input { width: 100%; padding: 14px 45px 14px 14px; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; }
+  .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #666; font-size: 18px; cursor: pointer; }
+
+  #dashboard { display: none; }
+  .top-bar { background: var(--card); border-bottom: 1px solid var(--border); padding: 15px 20px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
+  .top-bar h1 { font-size: 16px; font-weight: 700; flex: 1; }
+  .top-bar .brand { color: var(--accent); font-size: 11px; letter-spacing: 1px; font-weight: 700; }
+  .back-btn { background: #222; color: #fff; border: 1px solid #333; padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+  .back-btn:active { background: var(--accent); }
+
+  .content { padding: 20px; max-width: 700px; margin: 0 auto; }
+  .page-title { font-size: 22px; font-weight: 900; margin-bottom: 5px; }
+  .page-subtitle { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+
+  .tabs-scroll { display: flex; gap: 8px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+  .tabs-scroll::-webkit-scrollbar { display: none; }
+  .tab-btn { flex-shrink: 0; padding: 10px 16px; background: var(--card); border: 1px solid var(--border); color: var(--text2); font-size: 13px; font-weight: 700; cursor: pointer; border-radius: 20px; font-family: inherit; white-space: nowrap; }
+  .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .search-wrap { position: relative; margin-bottom: 15px; }
+  .search-wrap input { width: 100%; padding: 12px 40px 12px 40px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: #fff; font-size: 13px; font-family: inherit; }
+  .search-wrap input:focus { outline: none; border-color: var(--accent); }
+  .search-wrap .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #666; font-size: 14px; pointer-events: none; }
+  .search-wrap .clear-search { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #666; font-size: 16px; cursor: pointer; padding: 6px; display: none; }
+  .search-wrap .clear-search.show { display: block; }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
+  .item .info { flex: 1; min-width: 0; }
+  .item .info h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; word-break: break-word; }
+  .item .info p { font-size: 12px; color: var(--text2); word-break: break-word; line-height: 1.4; }
+  .item .info .meta { font-size: 11px; color: var(--accent); font-weight: 700; margin-bottom: 6px; }
+  .item .delete-btn { background: transparent; border: none; color: #ff0033; font-size: 18px; cursor: pointer; padding: 10px; border-radius: 8px; }
+  .item .delete-btn:active { background: rgba(255,0,51,0.15); }
+
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+  .stat-card img { width: 55px; height: 55px; border-radius: 8px; object-fit: cover; }
+  .stat-card .stat-info { flex: 1; min-width: 0; }
+  .stat-card .stat-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .stat-card .stat-info p { font-size: 11px; color: var(--text2); }
+  .stat-card .stat-num { font-size: 18px; font-weight: 900; color: var(--accent); }
+
+  .poll-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .poll-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .poll-row:last-child { border-bottom: none; }
+  .poll-row .label { font-size: 14px; font-weight: 600; }
+  .poll-row .count { font-size: 18px; font-weight: 900; color: var(--accent); }
+
+  .video-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
+  .video-item img { width: 80px; height: 50px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: #000; }
+  .video-item .info { flex: 1; min-width: 0; }
+  .video-item .info h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .video-item .info p { font-size: 11px; color: var(--text2); }
+  .video-item .actions { display: flex; gap: 4px; }
+  .video-item .action-btn { background: transparent; border: none; font-size: 16px; cursor: pointer; padding: 8px; border-radius: 8px; text-decoration: none; }
+  .video-item .edit-btn { color: #00cc44; }
+  .video-item .delete-btn { color: #ff0033; }
+  .video-item .open-btn { color: #ffcc00; }
+
+  .empty { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 13px; }
+  .section-note { font-size: 11px; color: #666; margin-bottom: 12px; line-height: 1.5; }
+  .yt-note { background: #111; border: 1px dashed #333; border-radius: 10px; padding: 12px; font-size: 11px; color: #888; margin-bottom: 12px; line-height: 1.6; }
+  .yt-note strong { color: #ffcc00; }
+  .yt-note a { color: var(--accent); }
+
+  .status { font-size: 12px; margin-top: 12px; font-weight: bold; text-align: center; }
+  .success { color: #00cc44; } .error { color: #ff0033; } .info { color: #ffcc00; }
+  button.main-btn { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  button.main-btn:active { transform: scale(0.97); }
+  button.reset-btn { width: 100%; padding: 14px; background: #222; color: #fff; border: 1px solid #333; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 12px; font-family: inherit; }
+
+  .scroll-top-btn {
+    position: fixed; right: 16px; bottom: 24px; width: 50px; height: 50px;
+    border-radius: 50%; background: var(--accent); color: #fff; border: none;
+    font-size: 20px; cursor: pointer; box-shadow: 0 8px 25px rgba(255, 0, 51, 0.5);
+    z-index: 9999; display: none; align-items: center; justify-content: center;
+    transition: opacity 0.3s, transform 0.2s;
+  }
+  .scroll-top-btn.show { display: flex; animation: popIn 0.3s ease; }
+  .scroll-top-btn:active { transform: scale(0.9); }
+  @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal.open { display: flex; }
+  .modal-inner { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 25px; width: 100%; max-width: 450px; }
+  .modal-inner h3 { font-size: 16px; font-weight: 800; margin-bottom: 15px; }
+  .form-group { margin-bottom: 12px; }
+  .form-group label { display: block; font-size: 11px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+  .form-group input { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; }
+  .form-group input:focus { outline: none; border-color: var(--accent); }
+  .modal-btns { display: flex; gap: 10px; margin-top: 15px; }
+  .modal-btns button { flex: 1; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; font-family: inherit; }
+  .modal-btns .save { background: var(--accent); color: #fff; }
+  .modal-btns .cancel { background: #222; color: #fff; border: 1px solid #333; }
+</style>
+</head>
+<body>
+
+  <div id="loginScreen">
+    <div class="login-box">
+      <div style="font-size: 40px; margin-bottom: 10px; text-align: center;">⚙️</div>
+      <h1 style="font-size: 22px; margin-bottom: 6px; font-weight: 900; text-align: center;">Manager</h1>
+      <p style="color: #888; font-size: 13px; text-align: center; margin-bottom: 25px;">Fanbase • Videos • Everything</p>
+      <div class="password-wrapper">
+        <input type="password" id="passwordInput" placeholder="Enter Password" onkeypress="if(event.key==='Enter')checkPassword()">
+        <button class="eye-btn" onclick="togglePassword()" id="eyeIcon">👁️</button>
+      </div>
+      <button class="main-btn" onclick="checkPassword()">Unlock</button>
+      <p id="loginStatus" class="status error"></p>
+      <a href="creator.html" style="display: block; text-align: center; margin-top: 15px; color: #666; font-size: 12px; text-decoration: none;">← Back to Creator Studio</a>
+    </div>
+  </div>
+
+  <div id="dashboard">
+    <div class="top-bar">
+      <a href="creator.html" class="back-btn"><i class="fas fa-arrow-left"></i> Studio</a>
+      <div style="flex: 1;">
+        <h1>Manager</h1>
+        <div class="brand">SAMARID STUDIO</div>
+      </div>
+      <button class="eye-btn" onclick="logout()" style="position: static; transform: none;"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+
+    <div class="content">
+      <h1 class="page-title">Manage Everything</h1>
+      <p class="page-subtitle">Fanbase + Videos + All in one place</p>
+
+      <div class="tabs-scroll">
+        <button class="tab-btn active" onclick="switchTab('comments', this)">💬 Comments</button>
+        <button class="tab-btn" onclick="switchTab('likes', this)">❤️ Likes</button>
+        <button class="tab-btn" onclick="switchTab('votes', this)">📊 Votes</button>
+        <button class="tab-btn" onclick="switchTab('myvideos', this)">🎬 My Videos</button>
+        <button class="tab-btn" onclick="switchTab('ytvideos', this)">📺 YouTube</button>
+      </div>
+
+      <div class="search-wrap">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="searchInput" placeholder="Search..." oninput="handleSearch()" autocomplete="off">
+        <button class="clear-search" id="clearSearchBtn" onclick="clearSearch()">✕</button>
+      </div>
+
+      <div class="tab-content active" id="tab-comments">
+        <div id="commentsList"><div class="empty">Loading...</div></div>
+      </div>
+
+      <div class="tab-content" id="tab-likes">
+        <div id="likesList"><div class="empty">Loading...</div></div>
+      </div>
+
+      <div class="tab-content" id="tab-votes">
+        <div id="votesList"><div class="empty">Loading...</div></div>
+      </div>
+
+      <div class="tab-content" id="tab-myvideos">
+        <div class="section-note">Videos you added from the Creator Studio. You can edit or delete these anytime.</div>
+        <div id="manualVideosList"><div class="empty">Loading...</div></div>
+      </div>
+
+      <div class="tab-content" id="tab-ytvideos">
+        <div class="yt-note">
+          <strong>⚠️ Manage on YouTube:</strong> These videos are auto-synced from your YouTube channel. To edit or delete them, tap the yellow arrow to open them in YouTube Studio. They'll disappear from your site automatically once deleted there.
+        </div>
+        <div id="youtubeVideosList"><div class="empty">Loading...</div></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="scroll-top-btn" id="scrollTopBtn" onclick="scrollToTop()" title="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <div class="modal" id="editModal" onclick="closeEditModal()">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+      <h3>✏️ Edit Video</h3>
+      <input type="hidden" id="editVideoId">
+      <div class="form-group"><label>Video Title</label><input type="text" id="editVideoTitle"></div>
+      <div class="form-group"><label>YouTube Link</label><input type="text" id="editVideoUrl"></div>
+      <div class="form-group"><label>Release Date</label><input type="text" id="editVideoDate"></div>
+      <div class="modal-btns">
+        <button class="cancel" onclick="closeEditModal()">Cancel</button>
+        <button class="save" onclick="saveVideoEdit()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ⚠️ PASSWORD — case-sensitive, "Samarid2026" with capital S
+    const SECRET_PASSWORD = "Samarid2026";
+    const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+    const CHANNEL_ID = localStorage.getItem('samarid_channel_id') || 'UC11ElndF459dLRfV-OzwmpA';
+    const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
+
+    let allComments = [];
+    let allLikes = [];
+    let allManualVideos = [];
+    let allYouTubeVideos = [];
+    let currentTab = 'comments';
+
+    window.togglePassword = function() {
+      const input = document.getElementById('passwordInput');
+      const icon = document.getElementById('eyeIcon');
+      if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; }
+      else { input.type = 'password'; icon.innerText = '👁️'; }
+    }
+
+    // ✅ NO auto-login. Always requires password on every page load.
+    window.checkPassword = function() {
+      const input = document.getElementById('passwordInput').value;
+      const status = document.getElementById('loginStatus');
+      if (input === SECRET_PASSWORD) {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        loadAll();
+      } else {
+        status.innerText = '❌ Wrong password. Try again.';
+        document.getElementById('passwordInput').value = '';
+      }
+    }
+
+    window.logout = function() {
+      if (confirm('Log out?')) { location.reload(); }
+    }
+
+    window.switchTab = function(tab, btn) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + tab).classList.add('active');
+      currentTab = tab;
+      updateSearchPlaceholder();
+      clearSearch();
+      if (tab === 'comments') loadComments();
+      if (tab === 'likes') loadLikes();
+      if (tab === 'votes') loadVotes();
+      if (tab === 'myvideos') loadManualVideos();
+      if (tab === 'ytvideos') loadYouTubeVideos();
+    }
+
+    function updateSearchPlaceholder() {
+      const input = document.getElementById('searchInput');
+      if (currentTab === 'comments') input.placeholder = 'Search comments by name or text...';
+      else if (currentTab === 'likes') input.placeholder = 'Search songs by title...';
+      else if (currentTab === 'votes') input.placeholder = 'Search not available for votes';
+      else if (currentTab === 'myvideos') input.placeholder = 'Search my videos...';
+      else if (currentTab === 'ytvideos') input.placeholder = 'Search YouTube videos...';
+    }
+
+    function loadAll() {
+      loadComments();
+      loadLikes();
+      loadVotes();
+      loadManualVideos();
+      loadYouTubeVideos();
+    }
+
+    window.handleSearch = function() {
+      const query = document.getElementById('searchInput').value.toLowerCase().trim();
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (query) clearBtn.classList.add('show');
+      else clearBtn.classList.remove('show');
+      if (currentTab === 'comments') renderComments(query);
+      else if (currentTab === 'likes') renderLikes(query);
+      else if (currentTab === 'myvideos') renderManualVideos(query);
+      else if (currentTab === 'ytvideos') renderYouTubeVideos(query);
+    }
+
+    window.clearSearch = function() {
+      document.getElementById('searchInput').value = '';
+      document.getElementById('clearSearchBtn').classList.remove('show');
+      if (currentTab === 'comments') renderComments('');
+      else if (currentTab === 'likes') renderLikes('');
+      else if (currentTab === 'myvideos') renderManualVideos('');
+      else if (currentTab === 'ytvideos') renderYouTubeVideos('');
+    }
+
+    window.addEventListener('scroll', function() {
+      const btn = document.getElementById('scrollTopBtn');
+      if (window.scrollY > 200) btn.classList.add('show');
+      else btn.classList.remove('show');
+    });
+
+    window.scrollToTop = function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    async function loadComments() {
+      const container = document.getElementById('commentsList');
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/comments?select=*&order=id.desc&limit=100', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        allComments = await res.json();
+        if (!Array.isArray(allComments)) allComments = [];
+        const songsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id,title', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const songs = await songsRes.json();
+        window._songMap = {};
+        songs.forEach(s => window._songMap[s.id] = s.title);
+        renderComments('');
+      } catch (e) {
+        container.innerHTML = '<div class="empty" style="color:#ff0033;">Error.</div>';
+      }
+    }
+
+    function renderComments(query) {
+      const container = document.getElementById('commentsList');
+      let filtered = allComments;
+      if (query) {
+        filtered = allComments.filter(c =>
+          (c.name || '').toLowerCase().includes(query) ||
+          (c.message || '').toLowerCase().includes(query) ||
+          (window._songMap[c.song_id] || '').toLowerCase().includes(query)
+        );
+      }
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty">' + (query ? 'No comments match your search.' : 'No comments yet.') + '</div>';
+        return;
+      }
+      container.innerHTML = filtered.map(c => `
+        <div class="item">
+          <div class="info">
+            <div class="meta">💬 ${c.name || 'Anonymous'} on "${window._songMap[c.song_id] || 'Unknown'}"</div>
+            <p>${c.message}</p>
+          </div>
+          <button class="delete-btn" onclick="deleteComment(${c.id})"><i class="fas fa-trash"></i></button>
+        </div>
+      `).join('');
+    }
+
+    window.deleteComment = async function(id) {
+      if (!confirm('Delete this comment?')) return;
+      try {
+        await fetch(SUPABASE_URL + '/rest/v1/comments?id=eq.' + id, {
+          method: 'DELETE',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        loadComments();
+      } catch (e) { alert('Could not delete.'); }
+    }
+
+    async function loadLikes() {
+      try {
+        const songsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id,title,cover,artist_name&order=id.desc', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const songs = await songsRes.json();
+        const likesRes = await fetch(SUPABASE_URL + '/rest/v1/likes?select=song_id', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const likes = await likesRes.json();
+        const likeMap = {};
+        likes.forEach(l => likeMap[l.song_id] = (likeMap[l.song_id] || 0) + 1);
+        allLikes = songs.map(s => ({
+          id: s.id, title: s.title, cover: s.cover,
+          artist: s.artist_name || 'Samarid', count: likeMap[s.id] || 0
+        }));
+        renderLikes('');
+      } catch (e) {
+        document.getElementById('likesList').innerHTML = '<div class="empty" style="color:#ff0033;">Error.</div>';
+      }
+    }
+
+    function renderLikes(query) {
+      const container = document.getElementById('likesList');
+      let filtered = allLikes;
+      if (query) {
+        filtered = allLikes.filter(s =>
+          s.title.toLowerCase().includes(query) ||
+          s.artist.toLowerCase().includes(query)
+        );
+      }
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty">' + (query ? 'No songs match your search.' : 'No songs yet.') + '</div>';
+        return;
+      }
+      container.innerHTML = filtered.map(s => `
+        <div class="stat-card">
+          <img src="${s.cover}" alt="${s.title}">
+          <div class="stat-info">
+            <h4>${s.title}</h4>
+            <p>${s.artist}</p>
+          </div>
+          <div class="stat-num">❤️ ${s.count}</div>
+        </div>
+      `).join('');
+    }
+
+    async function loadVotes() {
+      const container = document.getElementById('votesList');
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/votes?select=choice', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const votes = await res.json();
+        const counts = { love: 0, sometimes: 0, one: 0 };
+        votes.forEach(v => { if (counts[v.choice] !== undefined) counts[v.choice]++; });
+        const total = counts.love + counts.sometimes + counts.one;
+        container.innerHTML = `
+          <div class="poll-card">
+            <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 15px; text-align: center;">💬 How Do You Like Samarid?</h3>
+            <div class="poll-row"><span class="label">❤️ Love this artist</span><span class="count">${counts.love}</span></div>
+            <div class="poll-row"><span class="label">⏰ Sometimes</span><span class="count">${counts.sometimes}</span></div>
+            <div class="poll-row"><span class="label">🎵 One song only</span><span class="count">${counts.one}</span></div>
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text2); text-align: center;">
+              <strong>Total votes:</strong> ${total}
+            </div>
+          </div>
+          <button class="reset-btn" onclick="resetVotes()">🗑️ Reset All Votes</button>
+        `;
+      } catch (e) {
+        container.innerHTML = '<div class="empty" style="color:#ff0033;">Error.</div>';
+      }
+    }
+
+    window.resetVotes = async function() {
+      if (!confirm('Delete ALL votes? This cannot be undone.')) return;
+      try {
+        await fetch(SUPABASE_URL + '/rest/v1/votes?id=gt.0', {
+          method: 'DELETE',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        loadVotes();
+      } catch (e) { alert('Could not reset.'); }
+    }
+
+    async function loadManualVideos() {
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/videos?select=*&order=id.desc', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const videos = await res.json();
+        allManualVideos = Array.isArray(videos) ? videos : [];
+        renderManualVideos('');
+      } catch (e) {
+        document.getElementById('manualVideosList').innerHTML = '<div class="empty" style="color:#ff0033;">Error.</div>';
+      }
+    }
+
+    function getYouTubeId(url) {
+      if (!url) return '';
+      if (url.includes('youtu.be/')) return url.split('youtu.be/')[1].split('?')[0];
+      if (url.includes('youtube.com/watch')) {
+        try { return new URL(url).searchParams.get('v') || ''; } catch(e) {}
+      }
+      if (url.includes('youtube.com/embed/')) return url.split('embed/')[1].split('?')[0];
+      return '';
+    }
+
+    function renderManualVideos(query) {
+      const container = document.getElementById('manualVideosList');
+      let filtered = allManualVideos;
+      if (query) filtered = allManualVideos.filter(v => (v.title || '').toLowerCase().includes(query));
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty">' + (query ? 'No videos match your search.' : 'No manual videos yet.') + '</div>';
+        return;
+      }
+      container.innerHTML = filtered.map(v => {
+        const videoId = getYouTubeId(v.video_url);
+        const thumb = videoId ? `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg` : '';
+        return `
+          <div class="video-item">
+            ${thumb ? `<img src="${thumb}">` : ''}
+            <div class="info">
+              <h4>${v.title}</h4>
+              <p>${v.video_date || 'No date'}</p>
+            </div>
+            <div class="actions">
+              <button class="action-btn edit-btn" onclick='openEditModal(${JSON.stringify(v).replace(/'/g, "&#39;")})'><i class="fas fa-edit"></i></button>
+              <button class="action-btn delete-btn" onclick="deleteManualVideo(${v.id})"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.deleteManualVideo = async function(id) {
+      if (!confirm('Delete this video permanently?')) return;
+      try {
+        await fetch(SUPABASE_URL + '/rest/v1/videos?id=eq.' + id, {
+          method: 'DELETE',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        loadManualVideos();
+      } catch (e) { alert('Could not delete.'); }
+    }
+
+    window.openEditModal = function(video) {
+      document.getElementById('editVideoId').value = video.id;
+      document.getElementById('editVideoTitle').value = video.title;
+      document.getElementById('editVideoUrl').value = video.video_url;
+      document.getElementById('editVideoDate').value = video.video_date || '';
+      document.getElementById('editModal').classList.add('open');
+    }
+
+    window.closeEditModal = function() {
+      document.getElementById('editModal').classList.remove('open');
+    }
+
+    window.saveVideoEdit = async function() {
+      const id = document.getElementById('editVideoId').value;
+      const title = document.getElementById('editVideoTitle').value.trim();
+      const video_url = document.getElementById('editVideoUrl').value.trim();
+      const video_date = document.getElementById('editVideoDate').value.trim();
+      if (!title || !video_url) { alert('Title and link are required'); return; }
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/videos?id=eq.' + id, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ title, video_url, video_date })
+        });
+        if (res.ok) { closeEditModal(); loadManualVideos(); }
+        else { alert('Could not save.'); }
+      } catch (e) { alert('Network error.'); }
+    }
+
+    async function loadYouTubeVideos() {
+      const container = document.getElementById('youtubeVideosList');
+      try {
+        const channelRes = await fetch('https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' + CHANNEL_ID + '&key=' + API_KEY);
+        const channelData = await channelRes.json();
+        if (!channelData.items || channelData.items.length === 0) throw new Error('Channel not found');
+        const uploadsId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
+        const videosRes = await fetch('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=25&playlistId=' + uploadsId + '&key=' + API_KEY);
+        const videosData = await videosRes.json();
+        if (!videosData.items) videosData.items = [];
+        allYouTubeVideos = videosData.items.map(item => ({
+          videoId: item.snippet.resourceId.videoId,
+          title: item.snippet.title,
+          date: new Date(item.snippet.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        }));
+        renderYouTubeVideos('');
+      } catch (e) {
+        container.innerHTML = '<div class="empty" style="color:#ff0033;">Could not load YouTube videos.</div>';
+      }
+    }
+
+    function renderYouTubeVideos(query) {
+      const container = document.getElementById('youtubeVideosList');
+      let filtered = allYouTubeVideos;
+      if (query) filtered = allYouTubeVideos.filter(v => v.title.toLowerCase().includes(query));
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty">' + (query ? 'No videos match your search.' : 'No YouTube videos.') + '</div>';
+        return;
+      }
+      container.innerHTML = filtered.map(v => `
+        <div class="video-item">
+          <img src="https://i.ytimg.com/vi/${v.videoId}/mqdefault.jpg">
+          <div class="info">
+            <h4>${v.title}</h4>
+            <p>${v.date}</p>
+          </div>
+          <a href="https://studio.youtube.com/video/${v.videoId}/edit" target="_blank" class="action-btn open-btn"><i class="fas fa-external-link-alt"></i></a>
+        </div>
+      `).join('');
+    }
+
+    updateSearchPlaceholder();
+  </script>
+</body>
+</html>
