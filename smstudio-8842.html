@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root { --accent: #ff0033; --bg: #0a0a0a; --card: #141414; --border: #222; --text2: #888; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; padding-bottom: 80px; }
+  #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+  .login-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 35px 25px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+  .password-wrapper { position: relative; width: 100%; margin-bottom: 15px; }
+  .password-wrapper input { width: 100%; padding: 14px 45px 14px 14px; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; }
+  .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #666; font-size: 18px; cursor: pointer; }
+  #dashboard { display: none; }
+  .top-bar { background: var(--card); border-bottom: 1px solid var(--border); padding: 15px 20px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
+  .top-bar .avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; }
+  .top-bar h1 { font-size: 16px; font-weight: 700; flex: 1; }
+  .top-bar .brand { color: var(--accent); font-size: 11px; letter-spacing: 1px; font-weight: 700; }
+  .manager-quick-btn { background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; border: none; padding: 9px 14px; border-radius: 20px; font-size: 12px; font-weight: 900; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(255,0,51,0.35); transition: transform 0.2s; }
+  .manager-quick-btn:active { transform: scale(0.94); }
+  .manager-quick-btn i { font-size: 13px; }
+  .content { padding: 20px; max-width: 600px; margin: 0 auto; }
+  .page { display: none; }
+  .page.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .page-title { font-size: 22px; font-weight: 900; margin-bottom: 5px; }
+  .page-subtitle { font-size: 13px; color: var(--text2); margin-bottom: 25px; }
+  .form-group { margin-bottom: 15px; }
+  .form-group label { display: block; font-size: 11px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+  .form-group input, .form-group textarea { width: 100%; padding: 13px; background: var(--card); border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; resize: vertical; }
+  .form-group textarea { min-height: 100px; }
+  .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); }
+  button.main-btn { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: 0.2s; font-family: inherit; }
+  button.main-btn:active { transform: scale(0.97); }
+  button.secondary-btn { width: 100%; padding: 14px; background: #222; color: #fff; border: 1px solid #333; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; font-family: inherit; }
+  .status { font-size: 12px; margin-top: 12px; font-weight: bold; text-align: center; }
+  .success { color: #00cc44; } .error { color: #ff0033; } .info { color: #ffcc00; }
+  .search-wrap { position: relative; margin-bottom: 18px; }
+  .search-wrap input { width: 100%; padding: 12px 40px 12px 40px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: #fff; font-size: 13px; font-family: inherit; }
+  .search-wrap input:focus { outline: none; border-color: var(--accent); }
+  .search-wrap .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #666; font-size: 14px; pointer-events: none; }
+  .search-wrap .clear-search { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #666; font-size: 16px; cursor: pointer; padding: 6px; display: none; }
+  .search-wrap .clear-search.show { display: block; }
+  .admin-song { display: flex; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 12px; margin-bottom: 10px; }
+  .admin-song img { width: 55px; height: 55px; border-radius: 8px; object-fit: cover; }
+  .admin-song .info { flex: 1; min-width: 0; }
+  .admin-song h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .admin-song p { font-size: 11px; color: var(--text2); }
+  .admin-song .actions { display: flex; gap: 6px; }
+  .admin-song .action-btn { background: transparent; border: none; font-size: 16px; cursor: pointer; padding: 8px; border-radius: 8px; }
+  .admin-song .edit-btn { color: #00cc44; }
+  .admin-song .delete-btn { color: #ff0033; }
+  .empty-songs { text-align: center; padding: 30px 20px; color: #666; font-size: 13px; }
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 8px 0; z-index: 1000; }
+  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; color: var(--text2); cursor: pointer; background: transparent; border: none; font-family: inherit; }
+  .nav-item .icon { font-size: 18px; } .nav-item .label { font-size: 10px; font-weight: 700; }
+  .nav-item.active { color: var(--accent); }
+  .release-toggle { display: flex; gap: 8px; margin-bottom: 20px; }
+  .release-btn { flex: 1; padding: 14px 10px; background: var(--card); border: 2px solid #333; border-radius: 12px; color: var(--text2); font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .release-btn .emoji { font-size: 22px; }
+  .release-btn.active { border-color: var(--accent); color: #fff; background: rgba(255,0,51,0.1); }
+  .release-btn:active { transform: scale(0.97); }
+  .artist-input-wrap { position: relative; }
+  .artist-input-wrap input { width: 100%; padding: 13px; background: var(--card); border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; }
+  .artist-input-wrap input:focus { outline: none; border-color: var(--accent); }
+  .artist-hint { font-size: 11px; margin-top: 6px; padding: 6px 10px; border-radius: 8px; font-weight: 600; display: none; }
+  .artist-hint.show { display: block; }
+  .artist-hint.exists { background: rgba(0,204,68,0.15); color: #00cc44; }
+  .artist-hint.new { background: rgba(255,204,0,0.15); color: #ffcc00; }
+  .artist-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: #1a1a1a; border: 1px solid #333; border-radius: 10px; margin-top: 4px; max-height: 200px; overflow-y: auto; z-index: 200; display: none; }
+  .artist-dropdown.open { display: block; }
+  .artist-option { padding: 12px 14px; font-size: 13px; cursor: pointer; border-bottom: 1px solid #222; }
+  .artist-option:last-child { border-bottom: none; }
+  .artist-option:hover, .artist-option:active { background: var(--accent); color: #fff; }
+  .other-artist-section { display: none; }
+  .other-artist-section.show { display: block; }
+  .social-section, .video-section-box { background: #111; border: 1px solid #222; border-radius: 12px; padding: 16px; margin-top: 15px; margin-bottom: 15px; }
+  .social-section-title, .video-section-title { font-size: 12px; font-weight: 800; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .social-section-note, .video-section-note { font-size: 11px; color: #666; margin-bottom: 14px; line-height: 1.5; }
+  .spotify-song-section { background: linear-gradient(135deg, #0a1a0f 0%, #111 100%); border: 1px solid #1DB95433; border-radius: 12px; padding: 16px; margin-top: 10px; margin-bottom: 15px; }
+  .spotify-song-title { font-size: 12px; font-weight: 800; color: #1DB954; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .spotify-song-note { font-size: 11px; color: #666; margin-bottom: 12px; line-height: 1.5; }
+</style>
+</head>
+<body>
+
+  <div id="loginScreen">
+    <div class="login-box">
+      <div style="font-size: 40px; margin-bottom: 10px; text-align: center;">🔐</div>
+      <h1 style="font-size: 22px; margin-bottom: 6px; font-weight: 900; text-align: center;">Studio Login</h1>
+      <p style="color: #888; font-size: 13px; text-align: center; margin-bottom: 25px;">Enter password to continue</p>
+      <div class="password-wrapper">
+        <input type="password" id="passwordInput" placeholder="Enter Password" onkeypress="if(event.key==='Enter')checkPassword()">
+        <button class="eye-btn" onclick="togglePassword()" id="eyeIcon">👁️</button>
+      </div>
+      <button class="main-btn" onclick="checkPassword()">Unlock</button>
+      <p id="loginStatus" class="status error"></p>
+    </div>
+  </div>
+
+  <div id="dashboard">
+    <div class="top-bar">
+      <div class="avatar">S</div>
+      <div style="flex: 1;">
+        <h1>Samarid Music</h1>
+        <div class="brand">CREATOR STUDIO</div>
+      </div>
+      <a href="smpanel-2261.html" class="manager-quick-btn">
+        <i class="fas fa-cog"></i> Manager
+      </a>
+      <button class="eye-btn" onclick="logout()" style="position: static; transform: none;"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+
+    <div class="content">
+      <div class="page active" id="pageHome">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Manage your website and songs</p>
+        
+        <div style="display:flex; gap:12px; margin-bottom:25px;">
+          <button onclick="goToPage('upload')" style="flex:1; padding:18px 12px; border-radius:14px; background:var(--card); border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; color:#fff; font-family:inherit;">
+            <div style="font-size:24px; color:var(--accent);">➕</div><div style="font-size:12px; font-weight:700;">Add Song</div>
+          </button>
+          <button onclick="goToPage('profile')" style="flex:1; padding:18px 12px; border-radius:14px; background:var(--card); border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer; color:#fff; font-family:inherit;">
+            <div style="font-size:24px; color:var(--accent);">👤</div><div style="font-size:12px; font-weight:700;">Edit About</div>
+          </button>
+        </div>
+
+        <div class="search-wrap">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="songSearchInput" placeholder="Search songs by title, artist, category..." oninput="handleSongSearch()" autocomplete="off">
+          <button class="clear-search" id="clearSongSearchBtn" onclick="clearSongSearch()">✕</button>
+        </div>
+        
+        <div id="homeSongList"></div>
+      </div>
+
+      <div class="page" id="pageUpload">
+        <h1 class="page-title" id="uploadTitle">Add New Song</h1>
+        <p class="page-subtitle">Fill the form and publish instantly</p>
+        <input type="hidden" id="editingId" value="">
+
+        <div class="release-toggle" id="releaseToggle">
+          <button class="release-btn active" id="btnMySong" onclick="setReleaseType('me')">
+            <span class="emoji">🎵</span><span>My Song</span>
+          </button>
+          <button class="release-btn" id="btnOtherArtist" onclick="setReleaseType('other')">
+            <span class="emoji">🎤</span><span>Other Artist</span>
+          </button>
+        </div>
+
+        <div class="other-artist-section" id="otherArtistSection">
+          <div class="form-group">
+            <label>Artist Name *</label>
+            <div class="artist-input-wrap">
+              <input type="text" id="artistNameInput" placeholder="Type artist name..." oninput="checkArtistName()" onfocus="showArtistDropdown()" autocomplete="off">
+              <div class="artist-dropdown" id="artistDropdown"></div>
+            </div>
+            <div class="artist-hint" id="artistHint"></div>
+          </div>
+        </div>
+
+        <div class="form-group"><label>Song Title</label><input type="text" id="songTitle" placeholder="e.g. Back To Sender"></div>
+        <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="https://files.catbox.moe/....png"></div>
+        <div class="form-group"><label>Category</label><input type="text" id="songCategory" placeholder="e.g. Afrobeats, Hip-Hop"></div>
+        <div class="form-group"><label>Release Date</label><input type="text" id="songDate" placeholder="e.g. April 13, 2026"></div>
+        <div class="form-group"><label>About This Song</label><textarea id="songDescription" placeholder="Write a description..."></textarea></div>
+        <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="https://files.catbox.moe/....mp3"></div>
+        <div class="form-group"><label>Play Now Link</label><input type="text" id="songPlay" placeholder="https://youtube.com/..."></div>
+
+        <div class="spotify-song-section">
+          <div class="spotify-song-title"><i class="fab fa-spotify"></i> Spotify Link (for this song)</div>
+          <div class="spotify-song-note">Paste the Spotify link for THIS song. This will show a green Spotify button on the song's detail page. (Optional — leave blank if not on Spotify.)</div>
+          <div class="form-group" style="margin-bottom:0;">
+            <input type="text" id="songSpotify" placeholder="https://open.spotify.com/track/xxxxx">
+          </div>
+        </div>
+
+        <div class="social-section">
+          <div class="social-section-title">🎤 Artist Social Links</div>
+          <div class="social-section-note">Add the artist's social media. These will show in the ☰ menu on their artist page. (Leave blank if not available.)</div>
+          <div class="form-group"><label>TikTok Link</label><input type="text" id="artistTiktok" placeholder="https://tiktok.com/@username"></div>
+          <div class="form-group"><label>Instagram Link</label><input type="text" id="artistInstagram" placeholder="https://instagram.com/username"></div>
+          <div class="form-group"><label>YouTube Link</label><input type="text" id="artistYoutube" placeholder="https://youtube.com/@channel"></div>
+        </div>
+
+        <button class="main-btn" id="submitBtn" onclick="saveSong()">Publish Song</button>
+        <button class="secondary-btn" id="cancelBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
+        <p id="songStatus" class="status"></p>
+      </div>
+
+      <div class="page" id="pageProfile">
+        <h1 class="page-title">Edit About Page</h1>
+        <p class="page-subtitle">Update your photo and story</p>
+        <div class="form-group"><label>Profile Photo URL</label><input type="text" id="profilePicInput" placeholder="https://files.catbox.moe/....png"></div>
+        <div class="form-group"><label>Big Banner Photo URL</label><input type="text" id="bigPhotoInput" placeholder="https://files.catbox.moe/....png"></div>
+        <div class="form-group"><label>My Story</label><textarea id="storyInput" placeholder="Write your full story here..."></textarea></div>
+        <button class="main-btn" onclick="saveAboutPage()">Save About Page</button>
+        <p id="profileStatus" class="status"></p>
+      </div>
+
+      <div class="page" id="pageChannel">
+        <h1 class="page-title">YouTube Channel</h1>
+        <p class="page-subtitle">Connect your channel to auto-sync videos</p>
+        
+        <div class="form-group">
+          <label>Channel Link</label>
+          <input type="text" id="channelLinkInput" placeholder="https://youtube.com/@yourchannel">
+        </div>
+        <button class="main-btn" onclick="saveChannelLink()">Save & Sync Channel</button>
+        <button class="secondary-btn" onclick="resetChannelLink()">Reset to Default Channel</button>
+        <p id="channelStatus" class="status"></p>
+
+        <div class="video-section-box">
+          <div class="video-section-title"><i class="fas fa-video"></i> Add Video Link</div>
+          <div class="video-section-note">Add individual YouTube video links to display in your new video links section.</div>
+          <div class="form-group"><label>Video Title</label><input type="text" id="videoTitle" placeholder="e.g. Samarid Back To Sender Visualizer"></div>
+          <div class="form-group"><label>YouTube Link</label><input type="text" id="videoUrl" placeholder="https://youtube.com/watch?v=..."></div>
+          <div class="form-group"><label>Release Date</label><input type="text" id="videoDate" placeholder="e.g. April 13, 2026"></div>
+          <button class="main-btn" onclick="saveVideo()">Publish Video Link</button>
+          <p id="videoStatus" class="status"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-item active" onclick="goToPage('home')" id="navHome"><div class="icon">🏠</div><div class="label">HOME</div></button>
+      <button class="nav-item" onclick="goToPage('upload')" id="navUpload"><div class="icon">➕</div><div class="label">SONGS</div></button>
+      <button class="nav-item" onclick="goToPage('profile')" id="navProfile"><div class="icon">👤</div><div class="label">ABOUT</div></button>
+      <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon">📺</div><div class="label">CHANNEL</div></button>
+    </div>
+  </div>
+
+  <script>
+    const SECRET_PASSWORD = "Samarid2026";
+    const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+    const SONGS_TABLE = "songs";
+    const ABOUT_TABLE = "about";
+    const VIDEOS_TABLE = "videos";
+
+    let currentReleaseType = 'me';
+    let existingArtists = [];
+    let allAdminSongs = [];
+
+    window.togglePassword = function() { 
+      const input = document.getElementById('passwordInput'); 
+      const icon = document.getElementById('eyeIcon'); 
+      if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; } 
+      else { input.type = 'password'; icon.innerText = '👁️'; } 
+    }
+    
+    window.checkPassword = async function() { 
+      const input = document.getElementById('passwordInput').value; 
+      const status = document.getElementById('loginStatus'); 
+      if (input === SECRET_PASSWORD) { 
+        document.getElementById('loginScreen').style.display = 'none'; 
+        document.getElementById('dashboard').style.display = 'block'; 
+        await loadExistingArtists();
+        loadAdminSongs(); 
+      } else { 
+        status.innerText = '❌ Wrong password. Try again.'; 
+        document.getElementById('passwordInput').value = '';
+      } 
+    }
+
+    window.logout = function() { 
+      if (confirm('Log out?')) { location.reload(); } 
+    }
+
+    window.goToPage = function(page) { 
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); 
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); 
+      document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); 
+      document.getElementById('nav' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); 
+      window.scrollTo(0, 0); 
+    }
+
+    async function loadExistingArtists() {
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=artist_name', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          const names = [...new Set(data.map(s => (s.artist_name || 'Samarid').trim()))];
+          existingArtists = names.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+        }
+      } catch (e) { console.error('Could not load artists:', e); }
+    }
+
+    window.setReleaseType = function(type) {
+      currentReleaseType = type;
+      const btnMe = document.getElementById('btnMySong');
+      const btnOther = document.getElementById('btnOtherArtist');
+      const otherSection = document.getElementById('otherArtistSection');
+      if (type === 'me') {
+        btnMe.classList.add('active'); btnOther.classList.remove('active');
+        otherSection.classList.remove('show');
+      } else {
+        btnOther.classList.add('active'); btnMe.classList.remove('active');
+        otherSection.classList.add('show');
+        document.getElementById('artistNameInput').focus();
+      }
+    }
+
+    window.checkArtistName = function() {
+      const input = document.getElementById('artistNameInput').value.trim();
+      const hint = document.getElementById('artistHint');
+      if (!input) { hint.classList.remove('show'); return; }
+      const exists = existingArtists.find(a => a.toLowerCase() === input.toLowerCase());
+      if (exists) {
+        hint.className = 'artist-hint show exists';
+        hint.innerText = '✅ "' + exists + '" already exists';
+      } else {
+        hint.className = 'artist-hint show new';
+        hint.innerText = '✨ New artist! Page will be created automatically';
+      }
+    }
+
+    window.showArtistDropdown = function() {
+      const dd = document.getElementById('artistDropdown');
+      if (existingArtists.length === 0) return;
+      renderDropdown(existingArtists);
+      dd.classList.add('open');
+    }
+
+    function renderDropdown(list) {
+      const dd = document.getElementById('artistDropdown');
+      const input = document.getElementById('artistNameInput').value.toLowerCase();
+      const filtered = input ? list.filter(a => a.toLowerCase().includes(input)) : list;
+      if (filtered.length === 0) {
+        dd.innerHTML = '<div class="artist-option" style="color:#666;cursor:default;">No matches — type to create new</div>';
+        return;
+      }
+      dd.innerHTML = filtered.map(name => `<div class="artist-option" onclick="selectArtist('${name.replace(/'/g, "\\'")}')">${name}</div>`).join('');
+    }
+
+    window.selectArtist = function(name) {
+      document.getElementById('artistNameInput').value = name;
+      document.getElementById('artistDropdown').classList.remove('open');
+      checkArtistName();
+    }
+
+    document.addEventListener('input', function(e) {
+      if (e.target.id === 'artistNameInput') { renderDropdown(existingArtists); }
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.artist-input-wrap')) { document.getElementById('artistDropdown').classList.remove('open'); }
+    });
+
+    async function loadAdminSongs() {
+      const list = document.getElementById('homeSongList');
+      list.innerHTML = '<p class="empty-songs">Loading songs...</p>';
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=*&order=id.desc', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const songs = await res.json();
+        allAdminSongs = Array.isArray(songs) ? songs : [];
+        renderAdminSongs('');
+      } catch (e) { 
+        list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; 
+      }
+    }
+
+    function renderAdminSongs(query) {
+      const list = document.getElementById('homeSongList');
+      let filtered = allAdminSongs;
+      if (query) {
+        filtered = allAdminSongs.filter(s =>
+          (s.title || '').toLowerCase().includes(query) ||
+          (s.artist_name || 'Samarid').toLowerCase().includes(query) ||
+          (s.category || '').toLowerCase().includes(query)
+        );
+      }
+      if (filtered.length === 0) {
+        list.innerHTML = '<p class="empty-songs">' + (query ? '🔍 No songs match your search.' : 'No songs yet. Tap "Add Song" to start.') + '</p>';
+        return;
+      }
+      list.innerHTML = filtered.map(s => `
+        <div class="admin-song">
+          <img src="${s.cover}" alt="${s.title}">
+          <div class="info">
+            <h4>${s.title}</h4>
+            <p>${s.artist_name || 'Samarid'} • ${s.category} • ${s.date}</p>
+          </div>
+          <div class="actions">
+            <button class="action-btn edit-btn" onclick='editSong(${JSON.stringify(s).replace(/'/g, "&#39;")})' title="Edit"><i class="fas fa-edit"></i></button>
+            <button class="action-btn delete-btn" onclick="deleteSong(${s.id})" title="Delete"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.handleSongSearch = function() {
+      const query = document.getElementById('songSearchInput').value.toLowerCase().trim();
+      const clearBtn = document.getElementById('clearSongSearchBtn');
+      if (query) clearBtn.classList.add('show');
+      else clearBtn.classList.remove('show');
+      renderAdminSongs(query);
+    }
+
+    window.clearSongSearch = function() {
+      document.getElementById('songSearchInput').value = '';
+      document.getElementById('clearSongSearchBtn').classList.remove('show');
+      renderAdminSongs('');
+    }
+
+    window.editSong = function(song) {
+      document.getElementById('editingId').value = song.id;
+      document.getElementById('songTitle').value = song.title;
+      document.getElementById('songCover').value = song.cover;
+      document.getElementById('songCategory').value = song.category;
+      document.getElementById('songDate').value = song.date;
+      document.getElementById('songDescription').value = song.description;
+      document.getElementById('songDownload').value = song.downloadurl || song.downloadUrl;
+      document.getElementById('songPlay').value = song.playurl || song.playUrl;
+      document.getElementById('songSpotify').value = song.spotify_url || '';
+      document.getElementById('artistTiktok').value = song.tiktok || '';
+      document.getElementById('artistInstagram').value = song.instagram || '';
+      document.getElementById('artistYoutube').value = song.youtube || '';
+      const artistName = song.artist_name || 'Samarid';
+      if (artistName.toLowerCase() === 'samarid') {
+        setReleaseType('me');
+      } else {
+        setReleaseType('other');
+        document.getElementById('artistNameInput').value = artistName;
+        checkArtistName();
+      }
+      document.getElementById('uploadTitle').innerText = 'Edit Song';
+      document.getElementById('submitBtn').innerText = 'Update Song';
+      document.getElementById('cancelBtn').style.display = 'block';
+      goToPage('upload');
+    }
+
+    window.cancelEdit = function() {
+      document.getElementById('editingId').value = '';
+      ['songTitle','songCover','songCategory','songDate','songDescription','songDownload','songPlay','songSpotify','artistNameInput','artistTiktok','artistInstagram','artistYoutube'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('artistHint').classList.remove('show');
+      setReleaseType('me');
+      document.getElementById('uploadTitle').innerText = 'Add New Song';
+      document.getElementById('submitBtn').innerText = 'Publish Song';
+      document.getElementById('cancelBtn').style.display = 'none';
+      goToPage('home');
+    }
+
+    window.saveSong = async function() {
+      const status = document.getElementById('songStatus');
+      const editingId = document.getElementById('editingId').value;
+      const title = document.getElementById('songTitle').value.trim();
+      const cover = document.getElementById('songCover').value.trim();
+      const category = document.getElementById('songCategory').value.trim() || 'Music';
+      const date = document.getElementById('songDate').value.trim() || new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+      const description = document.getElementById('songDescription').value.trim() || 'No description yet.';
+      const downloadurl = document.getElementById('songDownload').value.trim() || '#';
+      const playurl = document.getElementById('songPlay').value.trim() || '#';
+      const spotify_url = document.getElementById('songSpotify').value.trim();
+      const tiktok = document.getElementById('artistTiktok').value.trim();
+      const instagram = document.getElementById('artistInstagram').value.trim();
+      const youtube = document.getElementById('artistYoutube').value.trim();
+      
+      let artist_name = 'Samarid';
+      if (currentReleaseType === 'other') {
+        artist_name = document.getElementById('artistNameInput').value.trim();
+        if (!artist_name) {
+          status.className = 'status error';
+          status.innerText = '❌ Please enter the artist name';
+          return;
+        }
+      }
+      if (!title || !cover) { 
+        status.className = 'status error'; 
+        status.innerText = '❌ Title and Cover Art URL are required!'; 
+        return; 
+      }
+      status.className = 'status info'; status.innerText = '⏳ Saving...';
+      try {
+        let res;
+        const payload = { title, cover, category, date, description, downloadurl, playurl, artist_name, spotify_url, tiktok, instagram, youtube };
+        if (editingId) {
+          res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + editingId, {
+            method: 'PATCH',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+            body: JSON.stringify(payload)
+          });
+        } else {
+          res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, {
+            method: 'POST',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+            body: JSON.stringify(payload)
+          });
+        }
+        if (!res.ok) { const errText = await res.text(); throw new Error(res.status + ': ' + errText); }
+        await loadExistingArtists();
+        status.className = 'status success'; 
+        status.innerText = editingId ? '✅ Song updated!' : '✅ Song published for ' + artist_name + '!';
+        setTimeout(() => { cancelEdit(); loadAdminSongs(); }, 1500);
+      } catch (e) { status.className = 'status error'; status.innerText = '❌ ' + e.message; }
+    }
+
+    window.deleteSong = async function(id) {
+      if (!confirm('Delete this song permanently?')) return;
+      try {
+        await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + id, {
+          method: 'DELETE',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Prefer': 'return=minimal' }
+        });
+        loadAdminSongs();
+      } catch (e) { alert('Could not delete song.'); }
+    }
+
+    window.saveAboutPage = async function() {
+      const status = document.getElementById('profileStatus');
+      const profile_pic = document.getElementById('profilePicInput').value.trim();
+      const big_photo = document.getElementById('bigPhotoInput').value.trim();
+      const story = document.getElementById('storyInput').value.trim();
+      status.className = 'status info'; status.innerText = '⏳ Saving...';
+      try {
+        const check = await fetch(SUPABASE_URL + '/rest/v1/' + ABOUT_TABLE + '?select=*', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const existing = await check.json();
+        let res;
+        if (existing && existing.length > 0) {
+          res = await fetch(SUPABASE_URL + '/rest/v1/' + ABOUT_TABLE + '?id=eq.' + existing[0].id, {
+            method: 'PATCH',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+            body: JSON.stringify({ profile_pic, big_photo, story })
+          });
+        } else {
+          res = await fetch(SUPABASE_URL + '/rest/v1/' + ABOUT_TABLE, {
+            method: 'POST',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+            body: JSON.stringify({ profile_pic, big_photo, story })
+          });
+        }
+        if (!res.ok) throw new Error('Supabase error: ' + res.status);
+        status.className = 'status success'; status.innerText = '✅ About page updated!';
+      } catch (e) { status.className = 'status error'; status.innerText = '❌ ' + e.message; }
+    }
+
+    window.saveChannelLink = function() {
+      const status = document.getElementById('channelStatus');
+      const link = document.getElementById('channelLinkInput').value.trim();
+      if (!link) { status.className = 'status error'; status.innerText = '❌ Please enter a channel link.'; return; }
+      status.className = 'status success';
+      status.innerText = '✅ Channel link saved!';
+    }
+
+    window.resetChannelLink = function() {
+      document.getElementById('channelLinkInput').value = '';
+      const status = document.getElementById('channelStatus');
+      status.className = 'status info';
+      status.innerText = 'ℹ️ Reset to default.';
+    }
+
+    window.saveVideo = async function() {
+      const status = document.getElementById('videoStatus');
+      const title = document.getElementById('videoTitle').value.trim();
+      const videoUrl = document.getElementById('videoUrl').value.trim();
+      const date = document.getElementById('videoDate').value.trim() || new Date().toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'});
+      if (!title || !videoUrl) {
+        status.className = 'status error';
+        status.innerText = '❌ Please fill in the Video Title and YouTube Link.';
+        return;
+      }
+      status.className = 'status info';
+      status.innerText = '⏳ Publishing...';
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + VIDEOS_TABLE, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ title: title, video_url: videoUrl, video_date: date })
+        });
+        if (res.ok) {
+          status.className = 'status success';
+          status.innerText = '✅ Video link published!';
+          document.getElementById('videoTitle').value = '';
+          document.getElementById('videoUrl').value = '';
+          document.getElementById('videoDate').value = '';
+        } else {
+          const errText = await res.text();
+          status.className = 'status error';
+          status.innerText = '❌ Error: ' + errText;
+        }
+      } catch (err) {
+        status.className = 'status error';
+        status.innerText = '❌ Network error: ' + err.message;
+      }
+    };
+  </script>
+</body>
+</html>
