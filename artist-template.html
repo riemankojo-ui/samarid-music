@@ -29,7 +29,8 @@
   .side-menu-artist { padding: 25px 20px; border-bottom: 1px solid #222; text-align: center; }
   .side-menu-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; border: 3px solid var(--accent); font-size: 28px; font-weight: 900; color: #fff; overflow: hidden; }
   .side-menu-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .side-menu-artist-name { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .side-menu-artist-name { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .side-menu-artist-bio { font-size: 12px; color: #999; line-height: 1.5; margin-bottom: 12px; text-align: center; padding: 0 4px; }
   .side-menu-artist-role { font-size: 11px; color: #666; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 14px; }
 
   /* FOLLOW ROW INSIDE MENU */
@@ -208,9 +209,9 @@
     <div class="side-menu-artist">
       <div class="side-menu-avatar" id="menuAvatar">K</div>
       <div class="side-menu-artist-name" id="menuArtistName">Loading...</div>
+      <div class="side-menu-artist-bio" id="menuArtistBio" style="display:none;"></div>
       <div class="side-menu-artist-role" id="menuArtistRole">Samarid Music Artist</div>
 
-      <!-- FOLLOW BUTTON + COUNT INSIDE MENU -->
       <div class="menu-follow-row">
         <button class="menu-follow-btn" id="followBtn" onclick="toggleFollow()">
           <i class="fas fa-plus" id="followIcon"></i>
@@ -366,7 +367,7 @@
       const text = document.getElementById('followText');
 
       countNum.innerText = count.toLocaleString();
-      countLabel.innerText = count === 1 ? 'follower' : 'followers';
+      countLabel.innerText = 'followers';
 
       if (isFollowing) {
         btn.classList.add('following');
@@ -379,16 +380,27 @@
       }
     }
 
-    // INSTANT toggle — no popup, optimistic update
     window.toggleFollow = async function() {
       const btn = document.getElementById('followBtn');
+      const icon = document.getElementById('followIcon');
+      const text = document.getElementById('followText');
+      const countNum = document.getElementById('countNum');
       btn.disabled = true;
 
-      // Flip UI instantly
+      const currentCount = parseInt(countNum.innerText.replace(/,/g, '')) || 0;
       isFollowing = !isFollowing;
-      const currentCount = parseInt(document.getElementById('countNum').innerText.replace(/,/g, '')) || 0;
       const newCount = isFollowing ? currentCount + 1 : Math.max(0, currentCount - 1);
-      updateFollowUI(newCount);
+      countNum.innerText = newCount.toLocaleString();
+
+      if (isFollowing) {
+        btn.classList.add('following');
+        icon.className = 'fas fa-check';
+        text.innerText = 'Following';
+      } else {
+        btn.classList.remove('following');
+        icon.className = 'fas fa-plus';
+        text.innerText = 'Follow';
+      }
 
       try {
         if (isFollowing) {
@@ -404,9 +416,8 @@
           });
         }
       } catch (e) {
-        // Rollback on error
         isFollowing = !isFollowing;
-        updateFollowUI(currentCount);
+        countNum.innerText = currentCount.toLocaleString();
       } finally {
         btn.disabled = false;
       }
@@ -416,6 +427,7 @@
     async function loadArtistPage() {
       const list = document.getElementById('songList');
 
+      // Load artist profile
       let artistProfile = null;
       try {
         const profileRes = await fetch(SUPABASE_URL + '/rest/v1/artists?name=eq.' + encodeURIComponent(artistName) + '&limit=1', {
@@ -425,6 +437,7 @@
         if (Array.isArray(profileData) && profileData.length > 0) artistProfile = profileData[0];
       } catch (e) { console.error(e); }
 
+      // Load songs
       let songs = [];
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=eq.' + encodeURIComponent(artistName) + '&select=*&order=id.desc', {
@@ -438,6 +451,7 @@
       const songsVerified = songs.some(s => s.verified === true);
       const isVerified = (artistProfile && artistProfile.verified) || songsVerified;
       const profilePic = artistProfile && artistProfile.profile_pic ? artistProfile.profile_pic : null;
+      const bio = artistProfile && artistProfile.bio ? artistProfile.bio : null;
       const tiktok = (artistProfile && artistProfile.tiktok) || firstSong.tiktok || null;
       const instagram = (artistProfile && artistProfile.instagram) || firstSong.instagram || null;
       const youtube = (artistProfile && artistProfile.youtube) || firstSong.youtube || null;
@@ -447,6 +461,15 @@
       if (profilePic) menuAvatar.innerHTML = '<img src="' + profilePic + '" alt="' + artistName + '">';
       else menuAvatar.innerText = artistName.charAt(0).toUpperCase();
       document.getElementById('menuArtistName').innerHTML = artistName + (isVerified ? VERIFY_BADGE : '');
+
+      // Menu bio (only in ☰ menu)
+      const bioEl = document.getElementById('menuArtistBio');
+      if (bio) {
+        bioEl.innerText = bio;
+        bioEl.style.display = 'block';
+      } else {
+        bioEl.style.display = 'none';
+      }
 
       // Socials
       const socialHTML = [];
