@@ -22,7 +22,6 @@
   .top-bar .brand { color: var(--accent); font-size: 11px; letter-spacing: 1px; font-weight: 700; }
   .manager-quick-btn { background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; border: none; padding: 9px 14px; border-radius: 20px; font-size: 12px; font-weight: 900; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 15px rgba(255,0,51,0.35); transition: transform 0.2s; }
   .manager-quick-btn:active { transform: scale(0.94); }
-  .manager-quick-btn i { font-size: 13px; }
   .content { padding: 20px; max-width: 600px; margin: 0 auto; }
   .page { display: none; }
   .page.active { display: block; animation: fadeIn 0.3s ease; }
@@ -109,9 +108,7 @@
         <h1>Samarid Music</h1>
         <div class="brand">CREATOR STUDIO</div>
       </div>
-      <a href="smpanel-2261.html" class="manager-quick-btn">
-        <i class="fas fa-cog"></i> Manager
-      </a>
+      <a href="smpanel-2261.html" class="manager-quick-btn"><i class="fas fa-cog"></i> Manager</a>
       <button class="eye-btn" onclick="logout()" style="position: static; transform: none;"><i class="fas fa-sign-out-alt"></i></button>
     </div>
 
@@ -131,7 +128,7 @@
 
         <div class="search-wrap">
           <i class="fas fa-search search-icon"></i>
-          <input type="text" id="songSearchInput" placeholder="Search songs by title, artist, category..." oninput="handleSongSearch()" autocomplete="off">
+          <input type="text" id="songSearchInput" placeholder="Search songs..." oninput="handleSongSearch()" autocomplete="off">
           <button class="clear-search" id="clearSongSearchBtn" onclick="clearSongSearch()">✕</button>
         </div>
         
@@ -144,12 +141,8 @@
         <input type="hidden" id="editingId" value="">
 
         <div class="release-toggle" id="releaseToggle">
-          <button class="release-btn active" id="btnMySong" onclick="setReleaseType('me')">
-            <span class="emoji">🎵</span><span>My Song</span>
-          </button>
-          <button class="release-btn" id="btnOtherArtist" onclick="setReleaseType('other')">
-            <span class="emoji">🎤</span><span>Other Artist</span>
-          </button>
+          <button class="release-btn active" id="btnMySong" onclick="setReleaseType('me')"><span class="emoji">🎵</span><span>My Song</span></button>
+          <button class="release-btn" id="btnOtherArtist" onclick="setReleaseType('other')"><span class="emoji">🎤</span><span>Other Artist</span></button>
         </div>
 
         <div class="other-artist-section" id="otherArtistSection">
@@ -173,15 +166,13 @@
 
         <div class="spotify-song-section">
           <div class="spotify-song-title"><i class="fab fa-spotify"></i> Spotify Link (for this song)</div>
-          <div class="spotify-song-note">Paste the Spotify link for THIS song. This will show a green Spotify button on the song's detail page. (Optional — leave blank if not on Spotify.)</div>
-          <div class="form-group" style="margin-bottom:0;">
-            <input type="text" id="songSpotify" placeholder="https://open.spotify.com/track/xxxxx">
-          </div>
+          <div class="spotify-song-note">Optional — leave blank if not on Spotify.</div>
+          <div class="form-group" style="margin-bottom:0;"><input type="text" id="songSpotify" placeholder="https://open.spotify.com/track/xxxxx"></div>
         </div>
 
         <div class="social-section">
           <div class="social-section-title">🎤 Artist Social Links</div>
-          <div class="social-section-note">Add the artist's social media. These will show in the ☰ menu on their artist page. (Leave blank if not available.)</div>
+          <div class="social-section-note">These show in the ☰ menu on their artist page.</div>
           <div class="form-group"><label>TikTok Link</label><input type="text" id="artistTiktok" placeholder="https://tiktok.com/@username"></div>
           <div class="form-group"><label>Instagram Link</label><input type="text" id="artistInstagram" placeholder="https://instagram.com/username"></div>
           <div class="form-group"><label>YouTube Link</label><input type="text" id="artistYoutube" placeholder="https://youtube.com/@channel"></div>
@@ -205,18 +196,14 @@
       <div class="page" id="pageChannel">
         <h1 class="page-title">YouTube Channel</h1>
         <p class="page-subtitle">Connect your channel to auto-sync videos</p>
-        
-        <div class="form-group">
-          <label>Channel Link</label>
-          <input type="text" id="channelLinkInput" placeholder="https://youtube.com/@yourchannel">
-        </div>
+        <div class="form-group"><label>Channel Link</label><input type="text" id="channelLinkInput" placeholder="https://youtube.com/@yourchannel"></div>
         <button class="main-btn" onclick="saveChannelLink()">Save & Sync Channel</button>
         <button class="secondary-btn" onclick="resetChannelLink()">Reset to Default Channel</button>
         <p id="channelStatus" class="status"></p>
 
         <div class="video-section-box">
           <div class="video-section-title"><i class="fas fa-video"></i> Add Video Link</div>
-          <div class="video-section-note">Add individual YouTube video links to display in your new video links section.</div>
+          <div class="video-section-note">Add individual YouTube video links to display in your video links section.</div>
           <div class="form-group"><label>Video Title</label><input type="text" id="videoTitle" placeholder="e.g. Samarid Back To Sender Visualizer"></div>
           <div class="form-group"><label>YouTube Link</label><input type="text" id="videoUrl" placeholder="https://youtube.com/watch?v=..."></div>
           <div class="form-group"><label>Release Date</label><input type="text" id="videoDate" placeholder="e.g. April 13, 2026"></div>
@@ -246,37 +233,36 @@
     let existingArtists = [];
     let allAdminSongs = [];
 
-    window.togglePassword = function() { 
-      const input = document.getElementById('passwordInput'); 
-      const icon = document.getElementById('eyeIcon'); 
-      if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; } 
-      else { input.type = 'password'; icon.innerText = '👁️'; } 
+    window.togglePassword = function() {
+      const input = document.getElementById('passwordInput');
+      const icon = document.getElementById('eyeIcon');
+      if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; }
+      else { input.type = 'password'; icon.innerText = '👁️'; }
     }
-    
-    window.checkPassword = async function() { 
-      const input = document.getElementById('passwordInput').value; 
-      const status = document.getElementById('loginStatus'); 
-      if (input === SECRET_PASSWORD) { 
-        document.getElementById('loginScreen').style.display = 'none'; 
-        document.getElementById('dashboard').style.display = 'block'; 
+
+    window.checkPassword = async function() {
+      const input = document.getElementById('passwordInput').value;
+      const status = document.getElementById('loginStatus');
+      if (input === SECRET_PASSWORD) {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
         await loadExistingArtists();
-        loadAdminSongs(); 
-      } else { 
-        status.innerText = '❌ Wrong password. Try again.'; 
+        loadAdminSongs();
+      } else {
+        status.innerText = '❌ Wrong password. Try again.';
         document.getElementById('passwordInput').value = '';
-      } 
+      }
     }
 
-    window.logout = function() { 
-      if (confirm('Log out?')) { location.reload(); } 
-    }
+    window.logout = function() { if (confirm('Log out?')) { location.reload(); } }
 
-    window.goToPage = function(page) { 
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); 
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')); 
-      document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); 
-      document.getElementById('nav' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active'); 
-      window.scrollTo(0, 0); 
+    window.goToPage = function(page) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('page' + page.charAt(0).toUpperCase() + page.slice(1)).classList.add('active');
+      const nav = document.getElementById('nav' + page.charAt(0).toUpperCase() + page.slice(1));
+      if (nav) nav.classList.add('active');
+      window.scrollTo(0, 0);
     }
 
     async function loadExistingArtists() {
@@ -289,7 +275,7 @@
           const names = [...new Set(data.map(s => (s.artist_name || 'Samarid').trim()))];
           existingArtists = names.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
         }
-      } catch (e) { console.error('Could not load artists:', e); }
+      } catch (e) { console.error(e); }
     }
 
     window.setReleaseType = function(type) {
@@ -363,9 +349,7 @@
         const songs = await res.json();
         allAdminSongs = Array.isArray(songs) ? songs : [];
         renderAdminSongs('');
-      } catch (e) { 
-        list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; 
-      }
+      } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; }
     }
 
     function renderAdminSongs(query) {
@@ -379,14 +363,14 @@
         );
       }
       if (filtered.length === 0) {
-        list.innerHTML = '<p class="empty-songs">' + (query ? '🔍 No songs match your search.' : 'No songs yet. Tap "Add Song" to start.') + '</p>';
+        list.innerHTML = '<p class="empty-songs">' + (query ? '🔍 No songs match.' : 'No songs yet.') + '</p>';
         return;
       }
       list.innerHTML = filtered.map(s => `
         <div class="admin-song">
           <img src="${s.cover}" alt="${s.title}">
           <div class="info">
-            <h4>${s.title}</h4>
+            <h4>${s.title}${s.verified ? ' <span style="color:#1d9bf0;">🔵</span>' : ''}</h4>
             <p>${s.artist_name || 'Samarid'} • ${s.category} • ${s.date}</p>
           </div>
           <div class="actions">
@@ -400,8 +384,7 @@
     window.handleSongSearch = function() {
       const query = document.getElementById('songSearchInput').value.toLowerCase().trim();
       const clearBtn = document.getElementById('clearSongSearchBtn');
-      if (query) clearBtn.classList.add('show');
-      else clearBtn.classList.remove('show');
+      if (query) clearBtn.classList.add('show'); else clearBtn.classList.remove('show');
       renderAdminSongs(query);
     }
 
@@ -571,8 +554,7 @@
         status.innerText = '❌ Please fill in the Video Title and YouTube Link.';
         return;
       }
-      status.className = 'status info';
-      status.innerText = '⏳ Publishing...';
+      status.className = 'status info'; status.innerText = '⏳ Publishing...';
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + VIDEOS_TABLE, {
           method: 'POST',

@@ -28,7 +28,7 @@
   .side-menu-close { background: transparent; border: none; color: #666; font-size: 22px; cursor: pointer; }
   .side-menu-artist { padding: 25px 20px; border-bottom: 1px solid #222; text-align: center; }
   .side-menu-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; border: 3px solid var(--accent); font-size: 28px; font-weight: 900; color: #fff; }
-  .side-menu-artist-name { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 4px; }
+  .side-menu-artist-name { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 4px; display: flex; align-items: center; justify-content: center; }
   .side-menu-artist-role { font-size: 11px; color: #666; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; }
   .side-menu-section-title { padding: 18px 20px 8px; font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
   .side-menu-item { display: flex; align-items: center; gap: 14px; padding: 14px 20px; color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; border-bottom: 1px solid #151515; transition: background 0.15s; cursor: pointer; background: transparent; border-left: none; border-right: none; border-top: none; width: 100%; font-family: inherit; text-align: left; }
@@ -60,7 +60,7 @@
     color: var(--text);
   }
 
-  /* === SONGS — CENTERED TEXT === */
+  /* === SONGS — COMPACT BLOG STYLE === */
   .song-list { display: flex; flex-direction: column; gap: 8px; }
   .song-card { 
     display: flex; 
@@ -106,6 +106,9 @@
     overflow: hidden; 
     text-overflow: ellipsis; 
     font-family: 'Inter', sans-serif; 
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
   .song-card-info h3 { 
     font-size: 13px; 
@@ -122,6 +125,16 @@
   .song-card-info .date { 
     font-size: 10px; 
     color: #999; 
+  }
+
+  /* Twitter/X-style verified badge */
+  .verify-badge {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    vertical-align: middle;
+    margin-left: 3px;
+    flex-shrink: 0;
   }
 
   .empty-state { text-align: center; padding: 60px 20px; background: #fff; border-radius: 8px; color: var(--text2); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
@@ -156,13 +169,11 @@
       <div class="side-menu-artist-role">Samarid Music Artist</div>
     </div>
 
-    <!-- SOCIAL LINKS -->
     <div class="side-menu-section-title">Follow on Social</div>
     <div id="menuSocialLinks">
       <p style="padding: 20px; text-align: center; color: #666; font-size: 13px;">Loading...</p>
     </div>
 
-    <!-- SHARE SECTION -->
     <div class="side-menu-section-title">📤 Share this Artist</div>
     <button class="side-menu-item" onclick="shareWhatsApp()">
       <i class="fab fa-whatsapp share-whatsapp-icon"></i>
@@ -201,12 +212,15 @@
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
 
+    // Twitter/X-style verified badge SVG
+    const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
+
     const params = new URLSearchParams(window.location.search);
     const artistName = params.get('name') || 'Samarid';
 
     document.title = artistName + ' - Samarid Music';
+    // ⚠️ "Browse - X" title kept CLEAN (no badge)
     document.getElementById('pageTitle').innerText = 'Browse - ' + artistName;
-    document.getElementById('menuArtistName').innerText = artistName;
     document.getElementById('menuAvatar').innerText = artistName.charAt(0).toUpperCase();
 
     window.toggleSideMenu = function(e) {
@@ -220,30 +234,22 @@
     }
 
     // === SHARE FUNCTIONS ===
-    function getArtistShareUrl() {
-      return window.location.href;
-    }
-
-    function getArtistShareText() {
-      return '🎤 Check out ' + artistName + ' on Samarid Music!';
-    }
+    function getArtistShareUrl() { return window.location.href; }
+    function getArtistShareText() { return '🎤 Check out ' + artistName + ' on Samarid Music!'; }
 
     window.shareWhatsApp = function() {
       const text = encodeURIComponent(getArtistShareText() + ' ' + getArtistShareUrl());
       window.open('https://wa.me/?text=' + text, '_blank');
     }
-
     window.shareFacebook = function() {
       const url = encodeURIComponent(getArtistShareUrl());
       window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, '_blank');
     }
-
     window.shareTwitter = function() {
       const text = encodeURIComponent(getArtistShareText());
       const url = encodeURIComponent(getArtistShareUrl());
       window.open('https://twitter.com/intent/tweet?text=' + text + '&url=' + url, '_blank');
     }
-
     window.copyArtistLink = async function() {
       const url = getArtistShareUrl();
       try {
@@ -289,6 +295,11 @@
         }
 
         const firstSong = songs[0];
+        const isVerified = songs.some(s => s.verified === true);
+
+        // Side menu artist name — WITH badge ✅
+        document.getElementById('menuArtistName').innerHTML = artistName + (isVerified ? VERIFY_BADGE : '');
+
         const socialHTML = [];
         if (firstSong.tiktok) socialHTML.push(`<a href="${firstSong.tiktok}" target="_blank" class="side-menu-item"><i class="fab fa-tiktok tiktok-icon"></i><span class="item-label">TikTok</span><span style="color:#444;">↗</span></a>`);
         if (firstSong.instagram) socialHTML.push(`<a href="${firstSong.instagram}" target="_blank" class="side-menu-item"><i class="fab fa-instagram insta-icon"></i><span class="item-label">Instagram</span><span style="color:#444;">↗</span></a>`);
@@ -300,11 +311,14 @@
           document.getElementById('menuSocialLinks').innerHTML = '<p style="padding: 20px; text-align: center; color: #666; font-size: 13px;">No social links added yet.</p>';
         }
 
+        // Song cards — WITH badge next to artist name ✅
         list.innerHTML = songs.map((s) => `
           <div class="song-card" onclick="window.location.href='song.html?id=${s.id}'">
             <div class="song-card-img"><img src="${s.cover}" loading="lazy"></div>
             <div class="song-card-info">
-              <div class="song-card-cat">${artistName} • ${s.category}</div>
+              <div class="song-card-cat">
+                <span>${artistName}${s.verified ? VERIFY_BADGE : ''} • ${s.category}</span>
+              </div>
               <h3>${s.title}</h3>
               <div class="date">${s.date}</div>
             </div>

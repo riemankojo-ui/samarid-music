@@ -28,6 +28,7 @@
   .tabs-scroll::-webkit-scrollbar { display: none; }
   .tab-btn { flex-shrink: 0; padding: 10px 16px; background: var(--card); border: 1px solid var(--border); color: var(--text2); font-size: 13px; font-weight: 700; cursor: pointer; border-radius: 20px; font-family: inherit; white-space: nowrap; }
   .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .tab-btn.verify-tab.active { background: #1d9bf0; border-color: #1d9bf0; }
   .search-wrap { position: relative; margin-bottom: 15px; }
   .search-wrap input { width: 100%; padding: 12px 40px 12px 40px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: #fff; font-size: 13px; font-family: inherit; }
   .search-wrap input:focus { outline: none; border-color: var(--accent); }
@@ -42,7 +43,6 @@
   .item .info p { font-size: 12px; color: var(--text2); word-break: break-word; line-height: 1.4; }
   .item .info .meta { font-size: 11px; color: var(--accent); font-weight: 700; margin-bottom: 6px; }
   .item .delete-btn { background: transparent; border: none; color: #ff0033; font-size: 18px; cursor: pointer; padding: 10px; border-radius: 8px; }
-  .item .delete-btn:active { background: rgba(255,0,51,0.15); }
   .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
   .stat-card img { width: 55px; height: 55px; border-radius: 8px; object-fit: cover; }
   .stat-card .stat-info { flex: 1; min-width: 0; }
@@ -68,7 +68,6 @@
   .section-note { font-size: 11px; color: #666; margin-bottom: 12px; line-height: 1.5; }
   .yt-note { background: #111; border: 1px dashed #333; border-radius: 10px; padding: 12px; font-size: 11px; color: #888; margin-bottom: 12px; line-height: 1.6; }
   .yt-note strong { color: #ffcc00; }
-  .yt-note a { color: var(--accent); }
   .status { font-size: 12px; margin-top: 12px; font-weight: bold; text-align: center; }
   .success { color: #00cc44; } .error { color: #ff0033; } .info { color: #ffcc00; }
   button.main-btn { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
@@ -78,18 +77,35 @@
   .scroll-top-btn.show { display: flex; animation: popIn 0.3s ease; }
   .scroll-top-btn:active { transform: scale(0.9); }
   @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-  .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 24px; }
   .modal.open { display: flex; }
-  .modal-inner { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 25px; width: 100%; max-width: 450px; }
-  .modal-inner h3 { font-size: 16px; font-weight: 800; margin-bottom: 15px; }
+  .modal-inner { background: #141414; border: 1px solid #2a2a2a; border-radius: 20px; padding: 28px 24px; width: 100%; max-width: 360px; animation: modalPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  @keyframes modalPop { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .modal-inner h3 { font-size: 17px; font-weight: 800; margin-bottom: 8px; text-align: center; }
+  .modal-inner p { font-size: 13px; color: #999; text-align: center; margin-bottom: 20px; line-height: 1.5; }
+  .modal-inner p strong { color: #fff; }
+  .modal-btns { display: flex; gap: 10px; }
+  .modal-btns button { flex: 1; padding: 13px; border-radius: 12px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; font-family: inherit; transition: 0.15s; }
+  .modal-btns button:active { transform: scale(0.96); }
+  .modal-btns .cancel { background: #222; color: #fff; }
+  .modal-btns .confirm-blue { background: #1d9bf0; color: #fff; }
+  .modal-btns .confirm-red { background: var(--accent); color: #fff; }
   .form-group { margin-bottom: 12px; }
   .form-group label { display: block; font-size: 11px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
   .form-group input { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; }
   .form-group input:focus { outline: none; border-color: var(--accent); }
-  .modal-btns { display: flex; gap: 10px; margin-top: 15px; }
-  .modal-btns button { flex: 1; padding: 12px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; font-family: inherit; }
-  .modal-btns .save { background: var(--accent); color: #fff; }
-  .modal-btns .cancel { background: #222; color: #fff; border: 1px solid #333; }
+
+  /* ===== VERIFY (Twitter/X style) ===== */
+  .verify-badge { display: inline-block; width: 16px; height: 16px; vertical-align: middle; margin-left: 5px; margin-bottom: 2px; }
+  .verify-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
+  .verify-card .verify-avatar { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; color: #fff; flex-shrink: 0; }
+  .verify-card .verify-info { flex: 1; min-width: 0; }
+  .verify-card .verify-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; display: flex; align-items: center; }
+  .verify-card .verify-info p { font-size: 11px; color: var(--text2); }
+  .verify-card .verify-btn { background: #1d9bf0; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; font-family: inherit; }
+  .verify-card .verify-btn:active { transform: scale(0.94); background: #0a7ac4; }
+  .verify-card .unverify-btn { background: transparent; color: #888; border: 1px solid #333; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; font-family: inherit; }
+  .verify-card .unverify-btn:active { background: rgba(255,0,51,0.1); color: #ff0033; border-color: #ff0033; }
 </style>
 </head>
 <body>
@@ -121,7 +137,7 @@
 
     <div class="content">
       <h1 class="page-title">Manage Everything</h1>
-      <p class="page-subtitle">Fanbase + Videos + All in one place</p>
+      <p class="page-subtitle">Fanbase + Videos + Verification</p>
 
       <div class="tabs-scroll">
         <button class="tab-btn active" onclick="switchTab('comments', this)">💬 Comments</button>
@@ -129,6 +145,7 @@
         <button class="tab-btn" onclick="switchTab('votes', this)">📊 Votes</button>
         <button class="tab-btn" onclick="switchTab('myvideos', this)">🎬 My Videos</button>
         <button class="tab-btn" onclick="switchTab('ytvideos', this)">📺 YouTube</button>
+        <button class="tab-btn verify-tab" onclick="switchTab('verify', this)">🔵 Verify</button>
       </div>
 
       <div class="search-wrap">
@@ -152,9 +169,13 @@
       </div>
       <div class="tab-content" id="tab-ytvideos">
         <div class="yt-note">
-          <strong>⚠️ Manage on YouTube:</strong> These videos are auto-synced from your YouTube channel. To edit/delete, tap the yellow arrow to open in YouTube Studio.
+          <strong>⚠️ Manage on YouTube:</strong> Auto-synced from your channel. Tap the yellow arrow to edit/delete in YouTube Studio.
         </div>
         <div id="youtubeVideosList"><div class="empty">Loading...</div></div>
+      </div>
+      <div class="tab-content" id="tab-verify">
+        <div class="section-note">🔵 Give the blue checkmark to trusted artists. Only you can verify.</div>
+        <div id="verifyList"><div class="empty">Loading...</div></div>
       </div>
     </div>
   </div>
@@ -163,6 +184,20 @@
     <i class="fas fa-arrow-up"></i>
   </button>
 
+  <!-- VERIFY CONFIRM MODAL (dark, quick) -->
+  <div class="modal" id="verifyModal" onclick="closeVerifyModal()">
+    <div class="modal-inner" onclick="event.stopPropagation()">
+      <div style="font-size: 44px; text-align: center; margin-bottom: 10px; line-height: 1;" id="verifyModalIcon">🔵</div>
+      <h3 id="verifyModalTitle">Verify Artist</h3>
+      <p id="verifyModalText">Are you sure you want to verify <strong>Samarid</strong>?</p>
+      <div class="modal-btns">
+        <button class="cancel" onclick="closeVerifyModal()">Cancel</button>
+        <button id="verifyModalConfirm" class="confirm-blue" onclick="confirmVerify()">Verify</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT VIDEO MODAL -->
   <div class="modal" id="editModal" onclick="closeEditModal()">
     <div class="modal-inner" onclick="event.stopPropagation()">
       <h3>✏️ Edit Video</h3>
@@ -172,7 +207,7 @@
       <div class="form-group"><label>Release Date</label><input type="text" id="editVideoDate"></div>
       <div class="modal-btns">
         <button class="cancel" onclick="closeEditModal()">Cancel</button>
-        <button class="save" onclick="saveVideoEdit()">Save</button>
+        <button class="confirm-blue" onclick="saveVideoEdit()">Save</button>
       </div>
     </div>
   </div>
@@ -184,8 +219,11 @@
     const CHANNEL_ID = localStorage.getItem('samarid_channel_id') || 'UC11ElndF459dLRfV-OzwmpA';
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
 
-    let allComments = [], allLikes = [], allManualVideos = [], allYouTubeVideos = [];
+    let allComments = [], allLikes = [], allManualVideos = [], allYouTubeVideos = [], allVerifyArtists = [];
     let currentTab = 'comments';
+    let pendingVerify = { name: null, value: null };
+
+    const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
     window.togglePassword = function() {
       const input = document.getElementById('passwordInput');
@@ -222,6 +260,7 @@
       if (tab === 'votes') loadVotes();
       if (tab === 'myvideos') loadManualVideos();
       if (tab === 'ytvideos') loadYouTubeVideos();
+      if (tab === 'verify') loadVerifyArtists();
     }
 
     function updateSearchPlaceholder() {
@@ -231,19 +270,22 @@
       else if (currentTab === 'votes') input.placeholder = 'Search not available';
       else if (currentTab === 'myvideos') input.placeholder = 'Search videos...';
       else if (currentTab === 'ytvideos') input.placeholder = 'Search YouTube videos...';
+      else if (currentTab === 'verify') input.placeholder = 'Search artists...';
     }
 
-    function loadAll() { loadComments(); loadLikes(); loadVotes(); loadManualVideos(); loadYouTubeVideos(); }
+    function loadAll() {
+      loadComments(); loadLikes(); loadVotes(); loadManualVideos(); loadYouTubeVideos(); loadVerifyArtists();
+    }
 
     window.handleSearch = function() {
       const query = document.getElementById('searchInput').value.toLowerCase().trim();
       const clearBtn = document.getElementById('clearSearchBtn');
-      if (query) clearBtn.classList.add('show');
-      else clearBtn.classList.remove('show');
+      if (query) clearBtn.classList.add('show'); else clearBtn.classList.remove('show');
       if (currentTab === 'comments') renderComments(query);
       else if (currentTab === 'likes') renderLikes(query);
       else if (currentTab === 'myvideos') renderManualVideos(query);
       else if (currentTab === 'ytvideos') renderYouTubeVideos(query);
+      else if (currentTab === 'verify') renderVerifyList(query);
     }
 
     window.clearSearch = function() {
@@ -253,6 +295,7 @@
       else if (currentTab === 'likes') renderLikes('');
       else if (currentTab === 'myvideos') renderManualVideos('');
       else if (currentTab === 'ytvideos') renderYouTubeVideos('');
+      else if (currentTab === 'verify') renderVerifyList('');
     }
 
     window.addEventListener('scroll', function() {
@@ -263,6 +306,7 @@
 
     window.scrollToTop = function() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
+    // === COMMENTS ===
     async function loadComments() {
       const container = document.getElementById('commentsList');
       try {
@@ -291,10 +335,7 @@
           (window._songMap[c.song_id] || '').toLowerCase().includes(query)
         );
       }
-      if (filtered.length === 0) {
-        container.innerHTML = '<div class="empty">' + (query ? 'No comments match.' : 'No comments yet.') + '</div>';
-        return;
-      }
+      if (filtered.length === 0) { container.innerHTML = '<div class="empty">' + (query ? 'No comments match.' : 'No comments yet.') + '</div>'; return; }
       container.innerHTML = filtered.map(c => `
         <div class="item">
           <div class="info">
@@ -316,9 +357,10 @@
       } catch (e) { alert('Could not delete.'); }
     }
 
+    // === LIKES ===
     async function loadLikes() {
       try {
-        const songsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id,title,cover,artist_name&order=id.desc', {
+        const songsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id,title,cover,artist_name,verified&order=id.desc', {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
         });
         const songs = await songsRes.json();
@@ -328,7 +370,7 @@
         const likes = await likesRes.json();
         const likeMap = {};
         likes.forEach(l => likeMap[l.song_id] = (likeMap[l.song_id] || 0) + 1);
-        allLikes = songs.map(s => ({ id: s.id, title: s.title, cover: s.cover, artist: s.artist_name || 'Samarid', count: likeMap[s.id] || 0 }));
+        allLikes = songs.map(s => ({ id: s.id, title: s.title, cover: s.cover, artist: s.artist_name || 'Samarid', verified: s.verified, count: likeMap[s.id] || 0 }));
         renderLikes('');
       } catch (e) { document.getElementById('likesList').innerHTML = '<div class="empty" style="color:#ff0033;">Error.</div>'; }
     }
@@ -337,19 +379,17 @@
       const container = document.getElementById('likesList');
       let filtered = allLikes;
       if (query) filtered = allLikes.filter(s => s.title.toLowerCase().includes(query) || s.artist.toLowerCase().includes(query));
-      if (filtered.length === 0) {
-        container.innerHTML = '<div class="empty">' + (query ? 'No songs match.' : 'No songs yet.') + '</div>';
-        return;
-      }
+      if (filtered.length === 0) { container.innerHTML = '<div class="empty">' + (query ? 'No songs match.' : 'No songs yet.') + '</div>'; return; }
       container.innerHTML = filtered.map(s => `
         <div class="stat-card">
           <img src="${s.cover}">
-          <div class="stat-info"><h4>${s.title}</h4><p>${s.artist}</p></div>
+          <div class="stat-info"><h4>${s.title}</h4><p>${s.artist}${s.verified ? VERIFY_BADGE : ''}</p></div>
           <div class="stat-num">❤️ ${s.count}</div>
         </div>
       `).join('');
     }
 
+    // === VOTES ===
     async function loadVotes() {
       const container = document.getElementById('votesList');
       try {
@@ -383,6 +423,7 @@
       } catch (e) { alert('Could not reset.'); }
     }
 
+    // === MANUAL VIDEOS ===
     async function loadManualVideos() {
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/videos?select=*&order=id.desc', {
@@ -406,10 +447,7 @@
       const container = document.getElementById('manualVideosList');
       let filtered = allManualVideos;
       if (query) filtered = allManualVideos.filter(v => (v.title || '').toLowerCase().includes(query));
-      if (filtered.length === 0) {
-        container.innerHTML = '<div class="empty">' + (query ? 'No videos match.' : 'No manual videos yet.') + '</div>';
-        return;
-      }
+      if (filtered.length === 0) { container.innerHTML = '<div class="empty">' + (query ? 'No videos match.' : 'No manual videos yet.') + '</div>'; return; }
       container.innerHTML = filtered.map(v => {
         const videoId = getYouTubeId(v.video_url);
         const thumb = videoId ? `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg` : '';
@@ -463,6 +501,7 @@
       } catch (e) { alert('Network error.'); }
     }
 
+    // === YOUTUBE VIDEOS ===
     async function loadYouTubeVideos() {
       const container = document.getElementById('youtubeVideosList');
       try {
@@ -486,10 +525,7 @@
       const container = document.getElementById('youtubeVideosList');
       let filtered = allYouTubeVideos;
       if (query) filtered = allYouTubeVideos.filter(v => v.title.toLowerCase().includes(query));
-      if (filtered.length === 0) {
-        container.innerHTML = '<div class="empty">' + (query ? 'No videos match.' : 'No YouTube videos.') + '</div>';
-        return;
-      }
+      if (filtered.length === 0) { container.innerHTML = '<div class="empty">' + (query ? 'No videos match.' : 'No YouTube videos.') + '</div>'; return; }
       container.innerHTML = filtered.map(v => `
         <div class="video-item">
           <img src="https://i.ytimg.com/vi/${v.videoId}/mqdefault.jpg">
@@ -497,6 +533,96 @@
           <a href="https://studio.youtube.com/video/${v.videoId}/edit" target="_blank" class="action-btn open-btn"><i class="fas fa-external-link-alt"></i></a>
         </div>
       `).join('');
+    }
+
+    // === VERIFY ARTISTS ===
+    async function loadVerifyArtists() {
+      const container = document.getElementById('verifyList');
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,verified', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const data = await res.json();
+        const artists = {};
+        data.forEach(s => {
+          const name = (s.artist_name || 'Samarid').trim();
+          if (!artists[name]) artists[name] = false;
+          if (s.verified) artists[name] = true;
+        });
+        const names = Object.keys(artists).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+        allVerifyArtists = names.map(n => ({ name: n, verified: artists[n] }));
+        renderVerifyList('');
+      } catch (e) { container.innerHTML = '<div class="empty" style="color:#ff0033;">Error loading artists.</div>'; }
+    }
+
+    function renderVerifyList(query) {
+      const container = document.getElementById('verifyList');
+      let filtered = allVerifyArtists;
+      if (query) filtered = allVerifyArtists.filter(a => a.name.toLowerCase().includes(query));
+      if (filtered.length === 0) { container.innerHTML = '<div class="empty">' + (query ? 'No artists match.' : 'No artists yet.') + '</div>'; return; }
+      container.innerHTML = filtered.map(a => `
+        <div class="verify-card">
+          <div class="verify-avatar">${a.name.charAt(0).toUpperCase()}</div>
+          <div class="verify-info">
+            <h4>${a.name}${a.verified ? VERIFY_BADGE : ''}</h4>
+            <p>${a.verified ? '✅ Verified' : 'Not verified'}</p>
+          </div>
+          <button class="${a.verified ? 'unverify-btn' : 'verify-btn'}" onclick="openVerifyModal('${a.name.replace(/'/g, "\\'")}', ${a.verified})">
+            ${a.verified ? 'Unverify' : 'Verify'}
+          </button>
+        </div>
+      `).join('');
+    }
+
+    window.openVerifyModal = function(artistName, currentlyVerified) {
+      pendingVerify.name = artistName;
+      pendingVerify.value = !currentlyVerified;
+      const modal = document.getElementById('verifyModal');
+      const icon = document.getElementById('verifyModalIcon');
+      const title = document.getElementById('verifyModalTitle');
+      const text = document.getElementById('verifyModalText');
+      const confirmBtn = document.getElementById('verifyModalConfirm');
+
+      if (pendingVerify.value) {
+        icon.innerText = '🔵';
+        title.innerText = 'Verify Artist';
+        text.innerHTML = 'Give the blue checkmark to <strong>' + artistName + '</strong>?';
+        confirmBtn.innerText = 'Verify';
+        confirmBtn.className = 'confirm-blue';
+      } else {
+        icon.innerText = '⚠️';
+        title.innerText = 'Unverify Artist';
+        text.innerHTML = 'Remove the blue checkmark from <strong>' + artistName + '</strong>?';
+        confirmBtn.innerText = 'Unverify';
+        confirmBtn.className = 'confirm-red';
+      }
+      modal.classList.add('open');
+    }
+
+    window.closeVerifyModal = function() {
+      document.getElementById('verifyModal').classList.remove('open');
+      pendingVerify = { name: null, value: null };
+    }
+
+    window.confirmVerify = async function() {
+      if (!pendingVerify.name) return;
+      const artistName = pendingVerify.name;
+      const newValue = pendingVerify.value;
+      closeVerifyModal();
+
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=eq.' + encodeURIComponent(artistName), {
+          method: 'PATCH',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ verified: newValue })
+        });
+        if (res.ok) {
+          loadVerifyArtists();
+          if (currentTab === 'likes') loadLikes();
+        } else {
+          alert('Could not update. Try again.');
+        }
+      } catch (e) { alert('Network error.'); }
     }
 
     updateSearchPlaceholder();
