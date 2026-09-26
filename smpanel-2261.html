@@ -18,18 +18,22 @@
   .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #666; font-size: 18px; cursor: pointer; }
 
   #dashboard { display: none; }
-  .top-bar { background: var(--card); border-bottom: 1px solid var(--border); padding: 14px 18px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
-  .top-bar .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 14px; }
-  .top-bar h1 { font-size: 15px; font-weight: 700; flex: 1; }
-  .top-bar .brand { color: var(--accent); font-size: 10px; letter-spacing: 1px; font-weight: 700; }
-  .logout-btn { background: transparent; border: none; color: #666; font-size: 18px; cursor: pointer; padding: 8px; }
+  .top-bar { background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 14px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100; }
+  .top-bar .avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 13px; flex-shrink: 0; }
+  .top-bar .title-block { flex: 1; min-width: 0; }
+  .top-bar h1 { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .top-bar .brand { color: var(--accent); font-size: 9px; letter-spacing: 1px; font-weight: 700; }
+  .studio-link { background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; text-decoration: none; padding: 7px 12px; border-radius: 16px; font-size: 11px; font-weight: 900; display: flex; align-items: center; gap: 5px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(255,0,51,0.35); transition: transform 0.15s; }
+  .studio-link:active { transform: scale(0.94); }
+  .studio-link i { font-size: 11px; }
+  .logout-btn { background: transparent; border: none; color: #666; font-size: 16px; cursor: pointer; padding: 6px; flex-shrink: 0; }
 
-  .content { padding: 18px; max-width: 700px; margin: 0 auto; }
+  .content { padding: 16px 14px; max-width: 700px; margin: 0 auto; }
   .page { display: none; }
   .page.active { display: block; animation: fadeIn 0.25s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   .page-title { font-size: 20px; font-weight: 900; margin-bottom: 4px; }
-  .page-subtitle { font-size: 12px; color: var(--text2); margin-bottom: 18px; }
+  .page-subtitle { font-size: 12px; color: var(--text2); margin-bottom: 16px; }
 
   .search-wrap { position: relative; margin-bottom: 14px; }
   .search-wrap input { width: 100%; padding: 11px 38px 11px 38px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: #fff; font-size: 13px; font-family: inherit; }
@@ -45,11 +49,11 @@
   .sub-content { display: none; }
   .sub-content.active { display: block; }
 
-  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
+  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
   .stat-card img { width: 52px; height: 52px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
   .stat-card .stat-info { flex: 1; min-width: 0; }
   .stat-card .stat-info h4 { font-size: 13px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .stat-card .stat-info p { font-size: 11px; color: var(--text2); }
+  .stat-card .stat-info p { font-size: 11px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
   .stat-card .stat-num { font-size: 16px; font-weight: 900; color: var(--accent); }
 
   .comment-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; gap: 10px; align-items: flex-start; }
@@ -80,11 +84,11 @@
   .yt-note strong { color: #ffcc00; }
   .yt-note a { color: var(--accent); }
 
-  /* ===== ARTISTS (Dressing Room) ===== */
+  /* ARTIST CARDS */
   .verify-badge { display: inline-block; width: 14px; height: 14px; vertical-align: middle; flex-shrink: 0; }
   .artist-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; }
   .artist-top { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
-  .artist-avatar { width: 52px; height: 52px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; color: #fff; border: 2px solid var(--border); }
+  .artist-avatar { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; color: #fff; }
   .artist-avatar img { width: 100%; height: 100%; object-fit: cover; }
   .artist-meta { flex: 1; min-width: 0; }
   .artist-meta h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; display: flex; align-items: center; gap: 4px; }
@@ -92,19 +96,18 @@
   .artist-actions { display: flex; gap: 6px; }
   .artist-actions button { background: transparent; border: 1px solid #2a2a2a; color: #aaa; font-size: 12px; font-weight: 700; cursor: pointer; padding: 8px 12px; border-radius: 10px; font-family: inherit; display: flex; align-items: center; gap: 5px; flex: 1; justify-content: center; }
   .artist-actions .edit-btn { color: #00cc44; border-color: #00cc4433; }
-  .artist-actions .verify-btn { color: #1d9bf0; border-color: #1d9bf033; }
-  .artist-actions .verified-btn { color: #1d9bf0; background: #1d9bf022; border-color: #1d9bf0; }
 
   .add-artist-btn { width: 100%; padding: 14px; background: #1d9bf0; color: #fff; border: none; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; margin-bottom: 14px; }
   .add-artist-btn:active { background: #0a7ac4; }
 
-  /* ===== VERIFY PAGE (quick cards) ===== */
-  .v-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
-  .v-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 18px; color: #fff; flex-shrink: 0; }
+  /* VERIFY */
+  .v-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
+  .v-avatar { width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 17px; color: #fff; flex-shrink: 0; overflow: hidden; }
+  .v-avatar img { width: 100%; height: 100%; object-fit: cover; }
   .v-info { flex: 1; min-width: 0; }
-  .v-info h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; display: flex; align-items: center; gap: 5px; }
+  .v-info h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; display: flex; align-items: center; gap: 5px; }
   .v-info p { font-size: 11px; color: var(--text2); }
-  .v-btn { background: #1d9bf0; color: #fff; border: none; padding: 9px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; font-family: inherit; flex-shrink: 0; }
+  .v-btn { background: #1d9bf0; color: #fff; border: none; padding: 8px 14px; border-radius: 18px; font-weight: 700; font-size: 11px; cursor: pointer; font-family: inherit; flex-shrink: 0; }
   .v-btn:active { background: #0a7ac4; transform: scale(0.94); }
   .v-btn.unverify { background: transparent; color: #888; border: 1px solid #333; }
   .v-btn.unverify:active { background: rgba(255,0,51,0.1); color: #ff0033; border-color: #ff0033; }
@@ -137,7 +140,7 @@
   .form-group textarea { min-height: 90px; }
   .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); }
 
-  .preview-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 28px; color: #fff; border: 3px solid var(--border); overflow: hidden; }
+  .preview-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 28px; color: #fff; overflow: hidden; }
   .preview-avatar img { width: 100%; height: 100%; object-fit: cover; }
 </style>
 </head>
@@ -160,16 +163,19 @@
   <div id="dashboard">
     <div class="top-bar">
       <div class="avatar">S</div>
-      <div style="flex: 1;">
+      <div class="title-block">
         <h1>Samarid Music</h1>
         <div class="brand">MANAGER</div>
       </div>
+      <a href="smstudio-8842.html" class="studio-link">
+        <i class="fas fa-arrow-left"></i> Studio
+      </a>
       <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
     </div>
 
     <div class="content">
 
-      <!-- ===== ARTISTS (Dressing Room) ===== -->
+      <!-- ARTISTS -->
       <div class="page active" data-page="artists">
         <h1 class="page-title">Artists 🎤</h1>
         <p class="page-subtitle">Bio, photos, socials</p>
@@ -187,7 +193,7 @@
         <div id="artistsList"><p class="empty">Loading...</p></div>
       </div>
 
-      <!-- ===== VIDEOS ===== -->
+      <!-- VIDEOS -->
       <div class="page" data-page="videos">
         <h1 class="page-title">Videos</h1>
         <p class="page-subtitle">All videos on your site</p>
@@ -204,7 +210,7 @@
         </div>
       </div>
 
-      <!-- ===== FANBASE ===== -->
+      <!-- FANBASE -->
       <div class="page" data-page="fanbase">
         <h1 class="page-title">Fanbase</h1>
         <p class="page-subtitle">Comments, likes, votes</p>
@@ -234,23 +240,20 @@
         </div>
       </div>
 
-      <!-- ===== VERIFY (Dedicated Page) ===== -->
+      <!-- VERIFY -->
       <div class="page" data-page="verify">
         <h1 class="page-title">Verify 🔵</h1>
         <p class="page-subtitle">Give the blue checkmark to trusted artists</p>
-
         <div class="search-wrap">
           <i class="fas fa-search search-icon"></i>
           <input type="text" id="verifySearch" placeholder="Search artists..." oninput="filterVerify()">
           <button class="clear-search" id="clearVerifySearch" onclick="clearVerifySearch()">✕</button>
         </div>
-
         <div id="verifyList"><p class="empty">Loading...</p></div>
       </div>
 
     </div>
 
-    <!-- BOTTOM NAV — 4 tabs -->
     <div class="bottom-nav" id="bottomNav">
       <button class="nav-item active" data-nav="artists" onclick="goTab('artists')">
         <div class="icon">🎤</div>
@@ -388,11 +391,10 @@
       document.getElementById(id).classList.add('active');
     }
 
-    // ===== ARTISTS (Dressing Room) =====
+    // ===== ARTISTS =====
     async function loadArtists() {
       const list = document.getElementById('artistsList');
       try {
-        // Get all artists from SONGS table
         const songsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songsData = await songsRes.json();
         const nameSet = new Map();
@@ -402,7 +404,6 @@
           if (s.verified) nameSet.set(name, true);
         });
 
-        // Get artist profiles
         let profiles = [];
         try {
           const aRes = await fetch(SUPABASE_URL + '/rest/v1/artists?select=*', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
@@ -519,11 +520,11 @@
         setTimeout(() => { closeArtistModal(); loadArtists(); loadVerifyList(); }, 700);
       } catch (e) {
         status.style.color = '#ff0033';
-        status.innerText = '❌ ' + (e.message.includes('duplicate') ? 'This artist already exists' : 'Save failed');
+        status.innerText = '❌ ' + (e.message.includes('duplicate') ? 'Artist name already exists' : e.message.substring(0, 80));
       }
     }
 
-    // ===== VERIFY PAGE =====
+    // ===== VERIFY =====
     async function loadVerifyList() {
       const list = document.getElementById('verifyList');
       list.innerHTML = '<p class="empty">Loading...</p>';
@@ -535,7 +536,6 @@
         const songs = await songsRes.json();
         const artistProfiles = await artistsRes.json();
 
-        // Merge data: verified state from either source
         const map = {};
         songs.forEach(s => {
           const name = (s.artist_name || 'Samarid').trim();
@@ -568,7 +568,7 @@
       list.innerHTML = filtered.map(a => `
         <div class="v-card">
           <div class="v-avatar">
-            ${a.profile_pic ? '<img src="' + a.profile_pic + '" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">' : a.name.charAt(0).toUpperCase()}
+            ${a.profile_pic ? '<img src="' + a.profile_pic + '">' : a.name.charAt(0).toUpperCase()}
           </div>
           <div class="v-info">
             <h4>${a.name}${a.verified ? ' ' + VERIFY_BADGE : ''}</h4>
@@ -624,13 +624,11 @@
       const { name, value } = pendingConfirm;
       closeConfirmModal();
       try {
-        // Update in songs table
         const res1 = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=eq.' + encodeURIComponent(name), {
           method: 'PATCH',
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
           body: JSON.stringify({ verified: value })
         });
-        // Also update in artists table if profile exists
         try {
           await fetch(SUPABASE_URL + '/rest/v1/artists?name=eq.' + encodeURIComponent(name), {
             method: 'PATCH',
@@ -707,14 +705,14 @@
     async function loadLikes() {
       try {
         const [songsRes, likesRes] = await Promise.all([
-          fetch(SUPABASE_URL + '/rest/v1/songs?select=id,title,cover,artist_name&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/songs?select=id,title,cover,artist_name,verified&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
           fetch(SUPABASE_URL + '/rest/v1/likes?select=song_id', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
         ]);
         const songs = await songsRes.json();
         const likes = await likesRes.json();
         const likeMap = {};
         likes.forEach(l => likeMap[l.song_id] = (likeMap[l.song_id] || 0) + 1);
-        allLikes = songs.map(s => ({ id: s.id, title: s.title, cover: s.cover, artist: s.artist_name || 'Samarid', count: likeMap[s.id] || 0 }));
+        allLikes = songs.map(s => ({ id: s.id, title: s.title, cover: s.cover, artist: s.artist_name || 'Samarid', verified: s.verified, count: likeMap[s.id] || 0 }));
         renderLikes('');
       } catch (e) { document.getElementById('likesList').innerHTML = '<p class="empty" style="color:#ff0033;">Error.</p>'; }
     }
@@ -727,7 +725,7 @@
       container.innerHTML = filtered.map(s => `
         <div class="stat-card">
           <img src="${s.cover}">
-          <div class="stat-info"><h4>${s.title}</h4><p>${s.artist}</p></div>
+          <div class="stat-info"><h4>${s.title}</h4><p>${s.artist}${s.verified ? ' ' + VERIFY_BADGE : ''}</p></div>
           <div class="stat-num">❤️ ${s.count}</div>
         </div>
       `).join('');
