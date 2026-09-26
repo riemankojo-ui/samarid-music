@@ -30,8 +30,8 @@
   .detail-cover-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .detail-title { font-size: 22px; font-weight: 900; line-height: 1.25; margin-bottom: 6px; text-align: center; }
-  .detail-meta { font-size: 13px; color: #999; margin-bottom: 8px; text-align: center; }
-  .detail-meta .artist { color: var(--accent); font-weight: 700; }
+  .detail-meta { font-size: 13px; color: #999; margin-bottom: 8px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; flex-wrap: wrap; }
+  .detail-meta .artist { color: var(--accent); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
 
   .play-count-wrapper { text-align: center; margin-bottom: 20px; }
   .play-count-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; box-shadow: 0 4px 15px rgba(255, 0, 51, 0.3); }
@@ -43,9 +43,18 @@
   .detail-section h4 { font-size: 12px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
   .detail-section p { font-size: 15px; line-height: 1.7; }
 
+  /* === AUDIO PLAYER === */
+  .audio-player-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center; }
+  .audio-player-box h4 { font-size: 12px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 15px; }
+  .play-pause-btn { width: 60px; height: 60px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; box-shadow: 0 8px 20px rgba(255, 0, 51, 0.35); transition: 0.2s; }
+  .play-pause-btn:active { transform: scale(0.9); }
+  .seek-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text2); font-weight: 600; }
+  input[type=range] { flex: 1; height: 5px; -webkit-appearance: none; background: var(--border); border-radius: 3px; outline: none; cursor: pointer; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); cursor: pointer; }
+
   .download-buttons { display: flex; flex-direction: column; gap: 12px; }
-  .btn-download, .btn-play { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; border-radius: 10px; font-size: 15px; font-weight: 700; text-decoration: none; color: #fff; background: #e74c3c; cursor: pointer; border: none; font-family: inherit; }
-  .btn-download:active, .btn-play:active { background: #c0392b; }
+  .btn-download { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; border-radius: 10px; font-size: 15px; font-weight: 700; text-decoration: none; color: #fff; background: #e74c3c; cursor: pointer; border: none; font-family: inherit; }
+  .btn-download:active { background: #c0392b; }
 
   /* === SHARE SECTION === */
   .share-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
@@ -73,7 +82,7 @@
 
   .artists-label { font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; padding-left: 4px; }
   .artists-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .artist-link { display: block; padding: 14px 12px; background: #111; border: 1px solid #222; border-radius: 10px; text-decoration: none; color: var(--accent); font-size: 14px; font-weight: 700; text-align: center; transition: 0.15s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .artist-link { display: flex; align-items: center; justify-content: center; gap: 5px; padding: 14px 12px; background: #111; border: 1px solid #222; border-radius: 10px; text-decoration: none; color: var(--accent); font-size: 14px; font-weight: 700; text-align: center; transition: 0.15s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .artist-link:active { background: #1a1a1a; transform: scale(0.97); }
 
   .dark-footer-note { text-align: center; font-size: 11px; color: #444; margin-top: 25px; letter-spacing: 1px; }
@@ -81,6 +90,21 @@
   .footer { padding: 30px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 40px; background: var(--card); }
   .footer .brand { color: var(--accent); font-weight: 700; }
   .loading { text-align: center; padding: 60px 20px; color: var(--text2); }
+  .error-box { text-align: center; padding: 40px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .error-box .icon { font-size: 50px; margin-bottom: 15px; }
+  .error-box h3 { font-size: 16px; margin-bottom: 8px; }
+  .error-box p { font-size: 13px; color: var(--text2); margin-bottom: 15px; }
+  .error-box a { display: inline-block; padding: 12px 24px; background: var(--accent); color: #fff; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 13px; }
+
+  /* Twitter/X-style verified badge */
+  .verify-badge {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+    margin-left: 2px;
+    flex-shrink: 0;
+  }
 </style>
 </head>
 <body>
@@ -108,145 +132,226 @@
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
     const CONTACT_EMAIL = "wunatehk@gmail.com";
 
+    // Twitter/X-style verified badge SVG
+    const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
+
     let currentSongData = null;
 
     async function loadSong() {
       const urlParams = new URLSearchParams(window.location.search);
-      const songId = urlParams.get('id');
+      let songId = urlParams.get('id');
       const container = document.getElementById('songDetail');
 
-      if (!songId) { container.innerHTML = '<div class="loading">Song not found.</div>'; return; }
+      if (!songId) {
+        try {
+          const fallbackRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id&order=id.desc&limit=1', {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+          });
+          const fallbackData = await fallbackRes.json();
+          if (Array.isArray(fallbackData) && fallbackData.length > 0) {
+            songId = fallbackData[0].id;
+            window.history.replaceState({}, '', '?id=' + songId);
+          } else {
+            container.innerHTML = `<div class="error-box"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>No songs have been added.</p><a href="index.html">Go Home</a></div>`;
+            return;
+          }
+        } catch (e) {
+          container.innerHTML = `<div class="error-box"><div class="icon">⚠️</div><h3>Connection Error</h3><p>Could not reach the database.</p><a href="index.html">Go Home</a></div>`;
+          return;
+        }
+      }
 
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + songId, {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
         });
         const data = await res.json();
+
+        if (!data || data.length === 0) {
+          container.innerHTML = `<div class="error-box"><div class="icon">🔍</div><h3>Song Not Found</h3><p>No song with ID <strong>${songId}</strong> exists.</p><a href="index.html">Browse Songs</a></div>`;
+          return;
+        }
+
         const s = data[0];
+        currentSongData = s;
+        const artist = s.artist_name || 'Samarid';
+        const badge = s.verified ? VERIFY_BADGE : '';
+        const downloadTitle = artist + ' - ' + s.title;
+        document.title = downloadTitle + ' - Samarid Music';
 
-        if (s) {
-          currentSongData = s;
-          const artist = s.artist_name || 'Samarid';
-          const downloadTitle = artist + ' - ' + s.title;
-          document.title = downloadTitle + ' - Samarid Music';
+        const audioSrc = s.audio_url || s.downloadurl || '';
+        const downloadSrc = s.downloadurl || s.audio_url || '#';
 
-          let artistsList = [];
-          try {
-            const artistsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name', {
-              headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-            });
-            const artistsData = await artistsRes.json();
-            const uniqueNames = [...new Set(artistsData.map(a => (a.artist_name || 'Samarid').trim()))];
-            artistsList = uniqueNames
-              .filter(n => n.toLowerCase() !== artist.toLowerCase())
-              .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
-          } catch (e) { console.error("Could not load artists", e); }
+        let artistsList = [];
+        try {
+          const artistsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,verified', {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+          });
+          const artistsData = await artistsRes.json();
+          const artistMap = {};
+          artistsData.forEach(a => {
+            const name = (a.artist_name || 'Samarid').trim();
+            if (!artistMap[name]) artistMap[name] = false;
+            if (a.verified) artistMap[name] = true;
+          });
+          artistsList = Object.keys(artistMap)
+            .filter(n => n.toLowerCase() !== artist.toLowerCase())
+            .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+            .map(n => ({ name: n, verified: artistMap[n] }));
+        } catch (e) { console.error("Could not load artists", e); }
 
-          const artistsHTML = artistsList.map(name => `
-            <a href="artist-template.html?name=${encodeURIComponent(name)}" class="artist-link">${name}</a>
-          `).join('') || '<p style="text-align:center; color:#444; font-size:12px; grid-column:1/-1;">More artists coming soon.</p>';
+        const artistsHTML = artistsList.map(a => `
+          <a href="artist-template.html?name=${encodeURIComponent(a.name)}" class="artist-link">${a.name}${a.verified ? VERIFY_BADGE : ''}</a>
+        `).join('') || '<p style="text-align:center; color:#444; font-size:12px; grid-column:1/-1;">More artists coming soon.</p>';
 
-          // Build share text
-          const shareText = encodeURIComponent('🎵 Listen to "' + s.title + '" by ' + artist + ' on Samarid Music!');
-          const shareUrl = encodeURIComponent(window.location.href);
+        const shareText = encodeURIComponent('🎵 Listen to "' + s.title + '" by ' + artist + ' on Samarid Music!');
+        const shareUrl = encodeURIComponent(window.location.href);
 
-          container.innerHTML = `
-            <div class="big-title">Download MP3 <span class="accent">${downloadTitle}</span></div>
+        container.innerHTML = `
+          <div class="big-title">Download MP3 <span class="accent">${downloadTitle}</span></div>
 
-            <div class="detail-cover-box"><img src="${s.cover}" alt="${s.title}"></div>
+          <div class="detail-cover-box"><img src="${s.cover}" alt="${s.title}"></div>
 
-            <h1 class="detail-title">${s.title}</h1>
-            <p class="detail-meta"><span class="artist">${artist}</span> • ${s.date} • ${s.category}</p>
+          <h1 class="detail-title">${s.title}</h1>
+          <p class="detail-meta">
+            <span class="artist">${artist}${badge}</span>
+            <span>•</span>
+            <span>${s.date}</span>
+            <span>•</span>
+            <span>${s.category}</span>
+          </p>
 
-            <div class="play-count-wrapper">
-              <span class="play-count-badge" id="playCountBadge">🔥 ${s.plays || 0} plays</span>
+          <div class="play-count-wrapper">
+            <span class="play-count-badge" id="playCountBadge">🔥 ${s.plays || 0} plays</span>
+          </div>
+
+          <p class="detail-label"><i class="fas fa-compact-disc"></i> A Samarid Music Release</p>
+
+          <div class="detail-section">
+            <h4>📖 About this Song</h4>
+            <p>${s.description || 'No description yet.'}</p>
+          </div>
+
+          <div class="presented-by">
+            🎵 <strong>SAMARID MUSIC</strong> presents this track • © 2026 Samarid Music
+          </div>
+
+          <div class="audio-player-box">
+            <h4>🎧 Listen Now</h4>
+            <audio id="audioPlayer" src="${audioSrc}" preload="metadata"></audio>
+            <button class="play-pause-btn" id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
+            <div class="seek-row">
+              <span id="currentTime">0:00</span>
+              <input type="range" id="seekSlider" value="0" max="100">
+              <span id="duration">0:00</span>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h4>⬇️ Get the Song</h4>
+            <div class="download-buttons">
+              <a href="${downloadSrc}" download="${artist} - ${s.title} [Samarid Music].mp3" id="detailDownload" class="btn-download" target="_blank">
+                <i class="fas fa-download"></i> Download MP3
+              </a>
+            </div>
+          </div>
+
+          <div class="share-section">
+            <h4>📤 Share this Song</h4>
+            <div class="share-grid">
+              <a href="https://wa.me/?text=${shareText}%20${shareUrl}" target="_blank" class="share-btn share-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-btn share-facebook"><i class="fab fa-facebook"></i> Facebook</a>
+              <a href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" class="share-btn share-twitter"><i class="fab fa-x-twitter"></i> X (Twitter)</a>
+              <button onclick="copyLink()" class="share-btn share-copy"><i class="fas fa-link"></i> Copy Link</button>
+            </div>
+          </div>
+
+          <div class="dark-section">
+            <h3 class="dark-section-title">Samarid Music</h3>
+            <p class="dark-section-subtitle">Record Label • Ghana</p>
+
+            <div class="contact-box">
+              <p class="contact-label">📧 Contact / Bookings</p>
+              <p class="contact-email">${CONTACT_EMAIL}</p>
+              <p class="contact-hint">(Tap and hold to copy the email)</p>
             </div>
 
-            <p class="detail-label"><i class="fas fa-compact-disc"></i> A Samarid Music Release</p>
+            <p class="artists-label">🎤 More Artists on Samarid Music</p>
+            <div class="artists-list">${artistsHTML}</div>
 
-            <div class="detail-section">
-              <h4>📖 About this Song</h4>
-              <p>${s.description}</p>
-            </div>
-
-            <div class="presented-by">
-              🎵 <strong>SAMARID MUSIC</strong> presents this track • © 2026 Samarid Music
-            </div>
-
-            <div class="detail-section">
-              <h4>⬇️ Get the Song</h4>
-              <div class="download-buttons">
-                <a href="${s.downloadurl}" download="${artist} - ${s.title} [Samarid Music].mp3" id="detailDownload" class="btn-download" target="_blank">
-                  <i class="fas fa-download"></i> Download MP3
-                </a>
-                <button onclick="playSong()" class="btn-play">
-                  <i class="fas fa-play"></i> Play Now
-                </button>
-              </div>
-            </div>
-
-            <!-- === SHARE SECTION === -->
-            <div class="share-section">
-              <h4>📤 Share this Song</h4>
-              <div class="share-grid">
-                <a href="https://wa.me/?text=${shareText}%20${shareUrl}" target="_blank" class="share-btn share-whatsapp">
-                  <i class="fab fa-whatsapp"></i> WhatsApp
-                </a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-btn share-facebook">
-                  <i class="fab fa-facebook"></i> Facebook
-                </a>
-                <a href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" class="share-btn share-twitter">
-                  <i class="fab fa-x-twitter"></i> X (Twitter)
-                </a>
-                <button onclick="copyLink()" class="share-btn share-copy">
-                  <i class="fas fa-link"></i> Copy Link
-                </button>
-              </div>
-            </div>
-
-            <div class="dark-section">
-              <h3 class="dark-section-title">Samarid Music</h3>
-              <p class="dark-section-subtitle">Record Label • Ghana</p>
-
-              <div class="contact-box">
-                <p class="contact-label">📧 Contact / Bookings</p>
-                <p class="contact-email">${CONTACT_EMAIL}</p>
-                <p class="contact-hint">(Tap and hold to copy the email)</p>
-              </div>
-
-              <p class="artists-label">🎤 More Artists on Samarid Music</p>
-              <div class="artists-list">
-                ${artistsHTML}
-              </div>
-
-              <p class="dark-footer-note">© 2026 SAMARID MUSIC • ALL RIGHTS RESERVED</p>
-            </div>
-          `;
-        } else { container.innerHTML = '<div class="loading">Song not found.</div>'; }
-      } catch (e) { console.error("Error getting song: ", e); container.innerHTML = '<div class="loading">Error loading song.</div>'; }
+            <p class="dark-footer-note">© 2026 SAMARID MUSIC • ALL RIGHTS RESERVED</p>
+          </div>
+        `;
+      } catch (e) {
+        console.error("Error getting song: ", e);
+        container.innerHTML = `<div class="error-box"><div class="icon">⚠️</div><h3>Error Loading Song</h3><p>${e.message || 'Something went wrong.'}</p><a href="index.html">Go Home</a></div>`;
+      }
     }
 
-    // === PLAY SONG — Increments plays counter ===
-    async function playSong() {
-      if (!currentSongData) return;
-      const songId = currentSongData.id;
-      const currentPlays = currentSongData.plays || 0;
-      const newPlays = currentPlays + 1;
-      const badge = document.getElementById('playCountBadge');
-      if (badge) badge.innerHTML = '🔥 ' + newPlays + ' plays';
-      currentSongData.plays = newPlays;
-      const playUrl = currentSongData.playurl || '#';
-      if (playUrl && playUrl !== '#') window.open(playUrl, '_blank');
-      try {
-        await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + songId, {
-          method: 'PATCH',
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ plays: newPlays })
-        });
-      } catch (e) { console.error('Could not save play count', e); }
+    window.togglePlay = function() {
+      const audio = document.getElementById('audioPlayer');
+      const btn = document.getElementById('playPauseBtn');
+      if (!audio || !btn) return;
+      if (audio.paused) {
+        audio.play();
+        btn.innerHTML = '<i class="fas fa-pause"></i>';
+        if (currentSongData) {
+          const newPlays = (currentSongData.plays || 0) + 1;
+          currentSongData.plays = newPlays;
+          const badge = document.getElementById('playCountBadge');
+          if (badge) badge.innerHTML = '🔥 ' + newPlays + ' plays';
+          fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + currentSongData.id, {
+            method: 'PATCH',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ plays: newPlays })
+          }).catch(e => console.log('Play count save failed'));
+        }
+      } else {
+        audio.pause();
+        btn.innerHTML = '<i class="fas fa-play"></i>';
+      }
     }
 
-    // === COPY LINK ===
+    document.addEventListener('timeupdate', function(e) {
+      if (e.target.id === 'audioPlayer') {
+        const audio = e.target;
+        const slider = document.getElementById('seekSlider');
+        const currentTimeEl = document.getElementById('currentTime');
+        if (audio.duration) {
+          slider.value = (audio.currentTime / audio.duration) * 100;
+          currentTimeEl.innerText = formatTime(audio.currentTime);
+        }
+      }
+    }, true);
+
+    document.addEventListener('loadedmetadata', function(e) {
+      if (e.target.id === 'audioPlayer') {
+        document.getElementById('duration').innerText = formatTime(e.target.duration);
+      }
+    }, true);
+
+    document.addEventListener('input', function(e) {
+      if (e.target.id === 'seekSlider') {
+        const audio = document.getElementById('audioPlayer');
+        audio.currentTime = (e.target.value / 100) * audio.duration;
+      }
+    });
+
+    document.addEventListener('ended', function(e) {
+      if (e.target.id === 'audioPlayer') {
+        document.getElementById('playPauseBtn').innerHTML = '<i class="fas fa-play"></i>';
+        document.getElementById('seekSlider').value = 0;
+        document.getElementById('currentTime').innerText = '0:00';
+      }
+    }, true);
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return '0:00';
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
     async function copyLink() {
       const url = window.location.href;
       try {
@@ -268,7 +373,6 @@
       }
     }
 
-    // === SIMPLE TOAST ===
     function showToast(msg) {
       const toast = document.createElement('div');
       toast.innerText = msg;
