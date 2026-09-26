@@ -50,7 +50,6 @@
   .nav-item .icon { font-size: 18px; } .nav-item .label { font-size: 10px; font-weight: 700; }
   .nav-item.active { color: var(--accent); }
 
-  /* Release Type Toggle */
   .release-toggle { display: flex; gap: 8px; margin-bottom: 20px; }
   .release-btn { flex: 1; padding: 14px 10px; background: var(--card); border: 2px solid #333; border-radius: 12px; color: var(--text2); font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; transition: 0.2s; display: flex; flex-direction: column; align-items: center; gap: 4px; }
   .release-btn .emoji { font-size: 22px; }
@@ -71,16 +70,15 @@
   .other-artist-section { display: none; }
   .other-artist-section.show { display: block; }
 
-  /* Social Links Section */
-  .social-section {
+  .social-section, .video-section-box {
     background: #111;
     border: 1px solid #222;
     border-radius: 12px;
     padding: 16px;
-    margin-top: 10px;
+    margin-top: 15px;
     margin-bottom: 15px;
   }
-  .social-section-title {
+  .social-section-title, .video-section-title {
     font-size: 12px;
     font-weight: 800;
     color: var(--accent);
@@ -91,14 +89,13 @@
     align-items: center;
     gap: 8px;
   }
-  .social-section-note {
+  .social-section-note, .video-section-note {
     font-size: 11px;
     color: #666;
     margin-bottom: 14px;
     line-height: 1.5;
   }
 
-  /* === SPOTIFY PER-SONG SECTION === */
   .spotify-song-section {
     background: linear-gradient(135deg, #0a1a0f 0%, #111 100%);
     border: 1px solid #1DB95433;
@@ -153,6 +150,7 @@
     </div>
 
     <div class="content">
+      <!-- HOME PAGE -->
       <div class="page active" id="pageHome">
         <h1 class="page-title">Dashboard</h1>
         <p class="page-subtitle">Manage your website and songs</p>
@@ -167,6 +165,7 @@
         <div id="homeSongList"></div>
       </div>
 
+      <!-- UPLOAD PAGE -->
       <div class="page" id="pageUpload">
         <h1 class="page-title" id="uploadTitle">Add New Song</h1>
         <p class="page-subtitle">Fill the form and publish instantly</p>
@@ -202,7 +201,6 @@
         <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="https://files.catbox.moe/....mp3"></div>
         <div class="form-group"><label>Play Now Link</label><input type="text" id="songPlay" placeholder="https://youtube.com/..."></div>
 
-        <!-- === SPOTIFY LINK FOR THIS SONG === -->
         <div class="spotify-song-section">
           <div class="spotify-song-title"><i class="fab fa-spotify"></i> Spotify Link (for this song)</div>
           <div class="spotify-song-note">Paste the Spotify link for THIS song. This will show a green Spotify button on the song's detail page. (Optional — leave blank if not on Spotify.)</div>
@@ -211,7 +209,6 @@
           </div>
         </div>
 
-        <!-- SOCIAL LINKS SECTION -->
         <div class="social-section">
           <div class="social-section-title">🎤 Artist Social Links</div>
           <div class="social-section-note">Add the artist's social media. These will show in the ☰ menu on their artist page. (Leave blank if not available.)</div>
@@ -234,6 +231,7 @@
         <p id="songStatus" class="status"></p>
       </div>
 
+      <!-- ABOUT PAGE -->
       <div class="page" id="pageProfile">
         <h1 class="page-title">Edit About Page</h1>
         <p class="page-subtitle">Update your photo and story</p>
@@ -244,34 +242,49 @@
         <p id="profileStatus" class="status"></p>
       </div>
 
+      <!-- YOUTUBE CHANNEL & VIDEOS PAGE -->
       <div class="page" id="pageChannel">
         <h1 class="page-title">YouTube Channel</h1>
         <p class="page-subtitle">Connect your channel to auto-sync videos</p>
-        <div class="form-group"><label>Channel Link</label><input type="text" id="channelInput" placeholder="https://youtube.com/@yourchannel"></div>
-        <button class="main-btn" onclick="saveChannel()">Save & Sync Channel</button>
-        <button class="secondary-btn" onclick="resetChannel()">Reset to Default Channel</button>
-        <p id="adminStatus" class="status"></p>
-      </div>
+        
+        <!-- Original Channel Link Section -->
+        <div class="form-group">
+          <label>Channel Link</label>
+          <input type="text" id="channelLinkInput" placeholder="https://youtube.com/@yourchannel">
+        </div>
+        <button class="main-btn" onclick="saveChannelLink()">Save & Sync Channel</button>
+        <button class="secondary-btn" onclick="resetChannelLink()">Reset to Default Channel</button>
+        <p id="channelStatus" class="status"></p>
 
-      <!-- Spotify Profile page removed -->
+        <!-- New Video Links Section Added Below -->
+        <div class="video-section-box">
+          <div class="video-section-title"><i class="fas fa-video"></i> Add Video Link</div>
+          <div class="video-section-note">Add individual YouTube video links to display in your new video links section.</div>
+          <div class="form-group"><label>Video Title</label><input type="text" id="videoTitle" placeholder="e.g. Samarid Back To Sender Visualizer"></div>
+          <div class="form-group"><label>YouTube Link</label><input type="text" id="videoUrl" placeholder="https://youtube.com/watch?v=..."></div>
+          <div class="form-group"><label>Release Date</label><input type="text" id="videoDate" placeholder="e.g. April 13, 2026"></div>
+          <button class="main-btn" onclick="saveVideo()">Publish Video Link</button>
+          <p id="videoStatus" class="status"></p>
+        </div>
+      </div>
     </div>
 
+    <!-- BOTTOM NAVIGATION -->
     <div class="bottom-nav">
       <button class="nav-item active" onclick="goToPage('home')" id="navHome"><div class="icon">🏠</div><div class="label">HOME</div></button>
       <button class="nav-item" onclick="goToPage('upload')" id="navUpload"><div class="icon">➕</div><div class="label">SONGS</div></button>
       <button class="nav-item" onclick="goToPage('profile')" id="navProfile"><div class="icon">👤</div><div class="label">ABOUT</div></button>
       <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon">📺</div><div class="label">CHANNEL</div></button>
-      <!-- Spotify nav button removed -->
     </div>
   </div>
 
   <script>
     const SECRET_PASSWORD = "samarid2026"; 
-    const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
     const SONGS_TABLE = "songs";
     const ABOUT_TABLE = "about";
+    const VIDEOS_TABLE = "videos";
 
     let currentReleaseType = 'me';
     let existingArtists = [];
@@ -345,10 +358,6 @@
       dd.classList.add('open');
     }
 
-    window.hideArtistDropdown = function() {
-      setTimeout(() => { document.getElementById('artistDropdown').classList.remove('open'); }, 200);
-    }
-
     function renderDropdown(list) {
       const dd = document.getElementById('artistDropdown');
       const input = document.getElementById('artistNameInput').value.toLowerCase();
@@ -411,11 +420,7 @@
       document.getElementById('songDescription').value = song.description;
       document.getElementById('songDownload').value = song.downloadurl || song.downloadUrl;
       document.getElementById('songPlay').value = song.playurl || song.playUrl;
-      
-      // Spotify per-song link
       document.getElementById('songSpotify').value = song.spotify_url || '';
-      
-      // Artist social links
       document.getElementById('artistTiktok').value = song.tiktok || '';
       document.getElementById('artistInstagram').value = song.instagram || '';
       document.getElementById('artistYoutube').value = song.youtube || '';
@@ -467,11 +472,7 @@
       const description = document.getElementById('songDescription').value.trim() || 'No description yet.';
       const downloadurl = document.getElementById('songDownload').value.trim() || '#';
       const playurl = document.getElementById('songPlay').value.trim() || '#';
-      
-      // Spotify per-song link
       const spotify_url = document.getElementById('songSpotify').value.trim();
-      
-      // Artist social links
       const tiktok = document.getElementById('artistTiktok').value.trim();
       const instagram = document.getElementById('artistInstagram').value.trim();
       const youtube = document.getElementById('artistYoutube').value.trim();
@@ -501,13 +502,13 @@
         if (editingId) {
           res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + editingId, {
             method: 'PATCH',
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
             body: JSON.stringify(payload)
           });
         } else {
           res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, {
             method: 'POST',
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
             body: JSON.stringify(payload)
           });
         }
@@ -526,7 +527,7 @@
       try {
         await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + id, {
           method: 'DELETE',
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Prefer': 'return=minimal' }
         });
         loadAdminSongs();
       } catch (e) { alert('Could not delete song.'); }
@@ -547,13 +548,13 @@
         if (existing && existing.length > 0) {
           res = await fetch(SUPABASE_URL + '/rest/v1/' + ABOUT_TABLE + '?id=eq.' + existing[0].id, {
             method: 'PATCH',
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
             body: JSON.stringify({ profile_pic, big_photo, story })
           });
         } else {
           res = await fetch(SUPABASE_URL + '/rest/v1/' + ABOUT_TABLE, {
             method: 'POST',
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
             body: JSON.stringify({ profile_pic, big_photo, story })
           });
         }
@@ -562,22 +563,63 @@
       } catch (e) { status.className = 'status error'; status.innerText = '❌ ' + e.message; }
     }
 
-    window.saveChannel = async function() {
-      const input = document.getElementById('channelInput').value.trim(); const status = document.getElementById('adminStatus');
-      if (!input) { status.className = 'status error'; status.innerText = 'Please paste a YouTube link first!'; return; }
-      status.className = 'status info'; status.innerText = 'Finding channel...';
-      try {
-        let handle = input; if (input.includes('youtube.com/')) handle = input.split('youtube.com/')[1].replace('@', '').split('/')[0].split('?')[0];
-        const res = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=' + handle + '&key=' + API_KEY);
-        const data = await res.json(); if (!data.items || data.items.length === 0) throw new Error('Not found');
-        localStorage.setItem('samarid_channel_id', data.items[0].snippet.channelId);
-        status.className = 'status success'; status.innerText = '✅ Channel updated successfully!'; document.getElementById('channelInput').value = '';
-      } catch (err) { status.className = 'status error'; status.innerText = '❌ Could not find that channel.'; }
+    window.saveChannelLink = function() {
+      const status = document.getElementById('channelStatus');
+      const link = document.getElementById('channelLinkInput').value.trim();
+      if (!link) { status.className = 'status error'; status.innerText = '❌ Please enter a channel link.'; return; }
+      status.className = 'status success';
+      status.innerText = '✅ Channel link saved successfully!';
     }
 
-    window.resetChannel = function() { localStorage.removeItem('samarid_channel_id'); document.getElementById('adminStatus').className = 'status success'; document.getElementById('adminStatus').innerText = '✅ Reset to default channel.'; }
+    window.resetChannelLink = function() {
+      document.getElementById('channelLinkInput').value = '';
+      const status = document.getElementById('channelStatus');
+      status.className = 'status info';
+      status.innerText = 'ℹ️ Reset to default channel.';
+    }
 
-    // Spotify profile save function removed
+    window.saveVideo = async function() {
+      const status = document.getElementById('videoStatus');
+      const title = document.getElementById('videoTitle').value.trim();
+      const videoUrl = document.getElementById('videoUrl').value.trim();
+      const date = document.getElementById('videoDate').value.trim() || new Date().toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'});
+
+      if (!title || !videoUrl) {
+        status.className = 'status error';
+        status.innerText = '❌ Please fill in the Video Title and YouTube Link.';
+        return;
+      }
+
+      status.className = 'status info';
+      status.innerText = '⏳ Publishing video link...';
+
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + VIDEOS_TABLE, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ title, videoUrl, date })
+        });
+
+        if (res.ok) {
+          status.className = 'status success';
+          status.innerText = '✅ Video link published successfully!';
+          document.getElementById('videoTitle').value = '';
+          document.getElementById('videoUrl').value = '';
+          document.getElementById('videoDate').value = '';
+        } else {
+          status.className = 'status error';
+          status.innerText = '❌ Error publishing video link.';
+        }
+      } catch (err) {
+        status.className = 'status error';
+        status.innerText = '❌ Network error.';
+      }
+    };
   </script>
 </body>
 </html>
