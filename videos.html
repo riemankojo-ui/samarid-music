@@ -122,14 +122,41 @@
     text-transform: uppercase;
   }
 
-  .trending-section { margin-top: 24px; background: #0a0a0a; border-radius: 16px; padding: 16px 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
-  .trending-title { text-align: center; font-size: 11px; font-weight: 900; letter-spacing: 2px; color: #888; text-transform: uppercase; margin-bottom: 12px; }
-  .trending-tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
-  .trending-tag { display: inline-block; padding: 5px 10px; background: #141414; border: 1px solid #2a2a2a; border-radius: 6px; color: #cccccc; font-size: 10px; font-weight: 600; text-decoration: none; transition: all 0.2s; white-space: nowrap; cursor: pointer; }
-  .trending-tag:active { transform: scale(0.96); }
-  .trending-tag.artist-tag { color: #ff8800; }
-  .trending-tag.category-tag { color: #8b5cf6; }
-  .trending-tag.brand-tag { color: #ff0033; }
+  /* ===== WELCOME SECTION ===== */
+  .welcome-section {
+    margin-top: 28px;
+    padding: 32px 22px;
+    background: linear-gradient(135deg, #fff0f3 0%, #fafafa 60%);
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(255, 0, 51, 0.08);
+  }
+  .welcome-section::before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 3px;
+    margin: 0 auto 20px;
+  }
+  .welcome-section h2 {
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 14px;
+    color: #0a0a0a;
+    letter-spacing: -0.6px;
+    line-height: 1.2;
+  }
+  .welcome-section h2 span { color: var(--accent); }
+  .welcome-section p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #555;
+    max-width: 500px;
+    margin: 0 auto;
+    font-weight: 500;
+  }
 
   .player-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
   .player-modal.open { display: flex; }
@@ -162,9 +189,10 @@
       <div class="loading">Loading videos...</div>
     </div>
 
-    <div class="trending-section">
-      <div class="trending-title">What's Trending</div>
-      <div class="trending-tags" id="trendingTagsVideos"><span class="trending-tag">Loading...</span></div>
+    <!-- ===== WELCOME SECTION ===== -->
+    <div class="welcome-section">
+      <h2>Welcome to <span>Samarid Music</span></h2>
+      <p>Ghana's newest music label. Discover fresh sounds, support underground artists, and stream exclusive releases. Follow us for weekly drops.</p>
     </div>
   </div>
 
@@ -183,8 +211,6 @@
     const CHANNEL_ID = localStorage.getItem('samarid_channel_id') || 'UC11ElndF459dLRfV-OzwmpA';
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
 
-    const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
-
     window.openPlayer = function(videoId) {
       document.getElementById('playerFrame').src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0';
       document.getElementById('playerModal').classList.add('open');
@@ -199,7 +225,6 @@
       grid.innerHTML = '<div class="loading">Loading videos...</div>';
       let allVideos = [];
 
-      // YouTube channel videos
       try {
         const channelRes = await fetch('https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' + CHANNEL_ID + '&key=' + API_KEY);
         const channelData = await channelRes.json();
@@ -218,7 +243,6 @@
         }
       } catch (err) { console.warn('YT fetch failed:', err); }
 
-      // Manual videos from Supabase
       try {
         const manualRes = await fetch(SUPABASE_URL + '/rest/v1/videos?select=*&order=id.desc', {
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
@@ -260,26 +284,7 @@
       `).join('');
     }
 
-    async function loadTrendingTags() {
-      const container = document.getElementById('trendingTagsVideos');
-      try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,category', {
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-        });
-        const songs = await res.json();
-        const artists = [...new Set(songs.map(s => (s.artist_name || 'Samarid').trim()))].sort();
-        const categories = [...new Set(songs.map(s => (s.category || 'Music').trim()))].sort();
-        const brandTags = ['SamaridMusic', 'GhanaMusic', 'NewMusic'];
-        let html = '';
-        artists.forEach(name => { html += '<a href="artist-template.html?name=' + encodeURIComponent(name) + '" class="trending-tag artist-tag">#' + name.replace(/\s+/g, '') + '</a>'; });
-        categories.forEach(cat => { html += '<a href="index.html" class="trending-tag category-tag">#' + cat.replace(/\s+/g, '') + '</a>'; });
-        brandTags.forEach(tag => { html += '<a href="index.html" class="trending-tag brand-tag">#' + tag + '</a>'; });
-        if (container) container.innerHTML = html;
-      } catch (e) { console.error(e); }
-    }
-
     loadVideos();
-    loadTrendingTags();
   </script>
 </body>
 </html>
