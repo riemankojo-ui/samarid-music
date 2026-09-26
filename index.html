@@ -13,6 +13,7 @@
   :root { --bg: #0a0a0a; --card: #141414; --border: #222; --text: #ffffff; --text2: #cccccc; --accent: #ff0033; }
   body.light { --bg: #ffffff; --card: #ffffff; --border: #e5e5e5; --text: #0a0a0a; --text2: #444444; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { overflow-x: hidden; max-width: 100vw; }
   body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; transition: background 0.3s, color 0.3s; padding-bottom: 40px; }
 
   .header { position: sticky; top: 0; background: #0a0a0a; border-bottom: 1px solid #222; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
@@ -33,7 +34,7 @@
   .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
   .slider-wrapper { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   .slider-wrapper::-webkit-scrollbar { display: none; }
-  .slide { flex: 0 0 100%; scroll-snap-align: start; padding: 20px 16px 30px; box-sizing: border-box; }
+  .slide { flex: 0 0 100%; scroll-snap-align: start; padding: 20px 16px 30px; box-sizing: border-box; min-width: 0; overflow: hidden; }
   .menu-dropdown { position: fixed; top: 58px; left: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); width: 260px; max-height: 80vh; overflow-y: auto; display: none; z-index: 9999; }
   .menu-dropdown.open { display: block; }
   .menu-title { padding: 12px 18px 8px; font-size: 10px; color: var(--text2); letter-spacing: 2px; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--border); margin-top: 5px; }
@@ -101,82 +102,21 @@
   .video-title { font-size: 13px; font-weight: 700; line-height: 1.35; margin-bottom: 5px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .video-meta { font-size: 11px; color: var(--text2); }
 
-  /* === SONGS — CENTERED TEXT === */
   .song-list { display: flex; flex-direction: column; gap: 8px; }
   .song-card { 
-    display: flex; 
-    gap: 10px; 
-    background: var(--card); 
-    border: 1px solid var(--border); 
-    border-radius: 8px; 
-    overflow: hidden; 
-    cursor: pointer; 
-    text-decoration: none; 
-    color: inherit; 
-    transition: all 0.2s; 
-    padding: 8px; 
-    box-shadow: 0 2px 8px rgba(0,0,0,0.04); 
-    align-items: center;
+    display: flex; gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; 
+    overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; 
+    padding: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); align-items: center;
   }
   .song-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
-  
-  .song-card-img { 
-    width: 30%; 
-    max-width: 90px; 
-    aspect-ratio: 1 / 1; 
-    flex-shrink: 0; 
-    overflow: hidden; 
-    background: #000; 
-    border-radius: 6px; 
-  }
+  .song-card-img { width: 30%; max-width: 90px; aspect-ratio: 1 / 1; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 6px; }
   .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  
-  .song-card-info { 
-    flex: 1; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center;
-    min-width: 0; 
-  }
-  .song-card-cat { 
-    font-size: 10px; 
-    color: #8b5cf6; 
-    font-weight: 700; 
-    margin-bottom: 2px; 
-    white-space: nowrap; 
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    font-family: 'Inter', sans-serif; 
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .song-card-info h3 { 
-    font-size: 13px; 
-    font-weight: 800; 
-    line-height: 1.2; 
-    margin-bottom: 4px; 
-    color: var(--text); 
-    font-family: 'Inter', sans-serif;
-    display: -webkit-box; 
-    -webkit-line-clamp: 2; 
-    -webkit-box-orient: vertical; 
-    overflow: hidden; 
-  }
-  .song-card-info .date { 
-    font-size: 10px; 
-    color: var(--text2); 
-  }
+  .song-card-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+  .song-card-cat { font-size: 10px; color: #8b5cf6; font-weight: 700; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 4px; }
+  .song-card-info h3 { font-size: 13px; font-weight: 800; line-height: 1.2; margin-bottom: 4px; color: var(--text); font-family: 'Inter', sans-serif; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .song-card-info .date { font-size: 10px; color: var(--text2); }
 
-  /* Twitter/X-style verified badge */
-  .verify-badge {
-    display: inline-block;
-    width: 13px;
-    height: 13px;
-    vertical-align: middle;
-    margin-left: 3px;
-    flex-shrink: 0;
-  }
+  .verify-badge { display: inline-block; width: 13px; height: 13px; vertical-align: middle; margin-left: 3px; flex-shrink: 0; }
 
   .empty-state { text-align: center; padding: 40px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text2); }
   .empty-state .icon { font-size: 40px; margin-bottom: 15px; }
@@ -217,7 +157,6 @@
     animation: pulseGlow 2s infinite; cursor: pointer;
   }
   .fanbase-btn:active { transform: scale(0.96); }
-  .fanbase-icon, .fanbase-text, .fanbase-arrow { pointer-events: none; }
   .fanbase-icon { width: 45px; height: 45px; border-radius: 50%; background: rgba(255, 255, 255, 0.25); display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.4); }
   .fanbase-icon i { font-size: 20px; color: #ffffff; }
   .fanbase-text { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -229,12 +168,11 @@
   .secondary-btn { 
     display: flex; align-items: center; gap: 14px; padding: 16px 20px; 
     background: linear-gradient(135deg, #141414 0%, #2a2a2a 100%); 
-    border-radius: 18px; text-decoration: none; color: #ffffff; margin-bottom: 18px; 
+    border-radius: 18px; text-decoration: none; color: #ffffff; margin-bottom: 12px; 
     position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
     transition: transform 0.2s ease; border: 1px solid #333; cursor: pointer;
   }
   .secondary-btn:active { transform: scale(0.96); }
-  .secondary-icon, .secondary-text, .secondary-arrow { pointer-events: none; }
   .secondary-icon { width: 45px; height: 45px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .secondary-icon i { font-size: 20px; color: #ffffff; }
   .secondary-text { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
@@ -242,6 +180,122 @@
   .secondary-sub { font-size: 11px; font-weight: 500; color: #aaa; }
   .secondary-arrow { width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .secondary-arrow i { font-size: 14px; color: #ffffff; }
+
+  /* ===== MUSIC DISTRIBUTERS BANNER ===== */
+  @keyframes btnRing {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.3); opacity: 0; }
+  }
+  @keyframes slideLogos {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .distributors-bounce {
+    position: relative;
+    background: #0f0f0f;
+    border: 1px solid #1e1e1e;
+    border-radius: 20px;
+    padding: 20px 0 26px;
+    margin-bottom: 18px;
+    overflow: hidden;
+    text-align: center;
+    max-width: 100%;
+  }
+  body.light .distributors-bounce {
+    background: #f5f5f5;
+    border: 1px solid #e5e5e5;
+  }
+
+  .logo-slider {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    margin-bottom: 18px;
+    height: 66px;
+    display: flex;
+    align-items: center;
+    contain: layout paint;
+  }
+  .logo-track {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    animation: slideLogos 22s linear infinite;
+    flex-shrink: 0;
+    padding-left: 30px;
+    width: max-content;
+    will-change: transform;
+  }
+  .logo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    min-width: 80px;
+  }
+  .logo-item img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    display: block;
+  }
+  .logo-item .logo-name {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: #888;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  body.light .logo-item .logo-name { color: #666; }
+
+  .dist-content {
+    padding: 0 20px;
+  }
+  .distributors-bounce h3 {
+    font-size: 20px;
+    font-weight: 900;
+    color: var(--text);
+    margin-bottom: 5px;
+    letter-spacing: -0.4px;
+  }
+  .distributors-bounce h3 span { color: #00cc44; }
+  .distributors-bounce p {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .distributors-bounce-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #00cc44 0%, #00a838 100%);
+    color: #fff;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.3px;
+    box-shadow: 0 8px 25px rgba(0,204,68,0.4);
+    transition: transform 0.15s;
+    position: relative;
+    cursor: pointer;
+  }
+  .distributors-bounce-btn:active { transform: scale(0.95); }
+  .distributors-bounce-btn i { font-size: 13px; }
+  .distributors-bounce-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 30px;
+    border: 2px solid rgba(0,204,68,0.6);
+    animation: btnRing 2s ease-out infinite;
+    pointer-events: none;
+  }
 
   .about-section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px 20px; margin-bottom: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
   .about-section::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, var(--accent) 0%, transparent 100%); border-radius: 16px 16px 0 0; }
@@ -313,7 +367,7 @@
         <h1 class="about-name">Samarid Music</h1>
         <p class="about-role">ARTIST • SONGWRITER • PRODUCER</p>
       </div>
-      
+
       <a href="fanbase.html" class="fanbase-btn">
         <div class="fanbase-icon"><i class="fas fa-heart"></i></div>
         <div class="fanbase-text">
@@ -322,7 +376,7 @@
         </div>
         <div class="fanbase-arrow"><i class="fas fa-arrow-right"></i></div>
       </a>
-      
+
       <a href="artists.html" class="secondary-btn">
         <div class="secondary-icon"><i class="fas fa-microphone"></i></div>
         <div class="secondary-text">
@@ -332,10 +386,68 @@
         <div class="secondary-arrow"><i class="fas fa-arrow-right"></i></div>
       </a>
 
+      <div class="distributors-bounce">
+        <div class="logo-slider">
+          <div class="logo-track">
+            <!-- Set 1 -->
+            <div class="logo-item">
+              <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_Green.png" alt="Spotify">
+              <span class="logo-name">Spotify</span>
+            </div>
+            <div class="logo-item">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Music" style="filter: invert(1);">
+              <span class="logo-name">Apple Music</span>
+            </div>
+            <div class="logo-item">
+              <img src="https://www.google.com/s2/favicons?domain=boomplay.com&sz=128" alt="Boomplay">
+              <span class="logo-name">Boomplay</span>
+            </div>
+            <div class="logo-item">
+              <img src="https://www.google.com/s2/favicons?domain=music.youtube.com&sz=128" alt="YouTube Music">
+              <span class="logo-name">YouTube</span>
+            </div>
+            <div class="logo-item">
+              <img src="https://www.google.com/s2/favicons?domain=music.amazon.com&sz=128" alt="Amazon Music">
+              <span class="logo-name">Amazon</span>
+            </div>
+            <!-- Set 2 (duplicate for seamless loop) -->
+            <div class="logo-item">
+              <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_Green.png" alt="Spotify">
+              <span class="logo-name">Spotify</span>
+            </div>
+            <div class="logo-item">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Music" style="filter: invert(1);">
+              <span class="logo-name">Apple Music</span>
+            </div>
+            <div class="logo-item">
+              <img src="https://www.google.com/s2/favicons?domain=boomplay.com&sz=128" alt="Boomplay">
+              <span class="logo-name">Boomplay</span>
+            </div>
+            <div class="logo-item">
+              <img src="https://www.google.com/s2/favicons?domain=music.youtube.com&sz=128" alt="YouTube Music">
+              <span class="logo-name">YouTube</span>
+            </div>
+            <div class="logo-item">
+              <img src="https://www.google.com/s2/favicons?domain=music.amazon.com&sz=128" alt="Amazon Music">
+              <span class="logo-name">Amazon</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dist-content">
+          <h3>Music <span>Distributers</span></h3>
+          <p>Spotify • Apple Music • Boomplay • YouTube</p>
+          <a href="distributors.html" class="distributors-bounce-btn">
+            <i class="fas fa-arrow-up-right-from-square"></i> See Distributers
+          </a>
+        </div>
+      </div>
+
       <div class="about-section">
         <h3><i class="fas fa-user" style="color: var(--accent);"></i> My Story</h3>
         <p id="aboutStoryText">Loading story...</p>
       </div>
+
       <div class="about-contact">
         <h3><i class="fas fa-envelope" style="color: var(--accent);"></i> Get In Touch</h3>
         <p>For bookings, features, or business inquiries.</p>
@@ -370,6 +482,8 @@
     <a href="artists.html" class="menu-item"><span class="label" style="font-weight: 900; font-size: 15px;">All Artists</span><span class="arrow">➡</span></a>
     <div class="menu-title">Fanbase</div>
     <a href="fanbase.html" class="menu-item"><span class="label">Connect To Fanbase</span><span class="arrow">➡</span></a>
+    <div class="menu-title">Resources</div>
+    <a href="distributors.html" class="menu-item"><span class="label">🎧 Get On Spotify</span><span class="arrow">➡</span></a>
   </div>
 
   <div class="player-modal" id="playerModal" onclick="closePlayer()">
@@ -395,7 +509,6 @@
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
 
-    // Twitter/X-style verified badge SVG
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
     const slider = document.getElementById('sliderWrapper');
