@@ -247,7 +247,7 @@
         <h1 class="page-title">YouTube Channel</h1>
         <p class="page-subtitle">Connect your channel to auto-sync videos</p>
         
-        <!-- Original Channel Link Section -->
+        <!-- Channel Link Section -->
         <div class="form-group">
           <label>Channel Link</label>
           <input type="text" id="channelLinkInput" placeholder="https://youtube.com/@yourchannel">
@@ -256,7 +256,7 @@
         <button class="secondary-btn" onclick="resetChannelLink()">Reset to Default Channel</button>
         <p id="channelStatus" class="status"></p>
 
-        <!-- New Video Links Section Added Below -->
+        <!-- Video Links Section -->
         <div class="video-section-box">
           <div class="video-section-title"><i class="fas fa-video"></i> Add Video Link</div>
           <div class="video-section-note">Add individual YouTube video links to display in your new video links section.</div>
@@ -578,6 +578,7 @@
       status.innerText = 'ℹ️ Reset to default channel.';
     }
 
+    // === FIXED saveVideo FUNCTION ===
     window.saveVideo = async function() {
       const status = document.getElementById('videoStatus');
       const title = document.getElementById('videoTitle').value.trim();
@@ -602,7 +603,7 @@
             'Content-Type': 'application/json',
             'Prefer': 'return=minimal'
           },
-          body: JSON.stringify({ title, videoUrl, date })
+          body: JSON.stringify({ title: title, video_url: videoUrl, video_date: date })
         });
 
         if (res.ok) {
@@ -612,12 +613,13 @@
           document.getElementById('videoUrl').value = '';
           document.getElementById('videoDate').value = '';
         } else {
+          const errText = await res.text();
           status.className = 'status error';
-          status.innerText = '❌ Error publishing video link.';
+          status.innerText = '❌ Error: ' + errText;
         }
       } catch (err) {
         status.className = 'status error';
-        status.innerText = '❌ Network error.';
+        status.innerText = '❌ Network error: ' + err.message;
       }
     };
   </script>

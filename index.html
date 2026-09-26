@@ -451,19 +451,80 @@
     const CHANNEL_ID = localStorage.getItem('samarid_channel_id') || 'UC11ElndF459dLRfV-OzwmpA';
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
 
+    // === UPDATED: Load videos from BOTH YouTube channel AND manual videos table ===
     async function loadVideos() {
-      const grid = document.getElementById('videoGrid'); grid.innerHTML = '<div class="loading">Loading videos...</div>';
+      const grid = document.getElementById('videoGrid');
+      grid.innerHTML = '<div class="loading">Loading videos...</div>';
+
+      let allVideos = [];
+
+      // 1. Load from YouTube channel (auto-sync)
       try {
         const channelRes = await fetch('https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' + CHANNEL_ID + '&key=' + API_KEY);
-        const channelData = await channelRes.json(); if (!channelData.items || channelData.items.length === 0) throw new Error('Channel not found');
-        const uploadsId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
-        const videosRes = await fetch('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=' + uploadsId + '&key=' + API_KEY);
-        const videosData = await videosRes.json();
-        if (!videosData.items || videosData.items.length === 0) { grid.innerHTML = '<div class="empty">No videos yet!</div>'; return; }
-        const videos = videosData.items.map(item => { const videoId = item.snippet.resourceId.videoId; const title = item.snippet.title; const published = item.snippet.publishedAt; const date = new Date(published).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); return { videoId, title, date, timestamp: new Date(published).getTime() }; });
-        videos.sort((a, b) => b.timestamp - a.timestamp);
-        grid.innerHTML = videos.map(v => `<div class="video-card" onclick="openPlayer('${v.videoId}')"><div class="video-thumb"><img src="https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg" alt="${v.title}" loading="lazy"><div class="video-play-overlay"></div></div><div class="video-card-info"><div class="video-title">${v.title}</div><div class="video-meta">${v.date}</div></div></div>`).join('');
-      } catch (err) { console.error(err); const link = localStorage.getItem('samarid_channel_id') ? 'https://www.youtube.com/channel/' + localStorage.getItem('samarid_channel_id') : 'https://youtube.com/@realsamarid'; grid.innerHTML = '<div class="empty">Could not load videos. <a href="' + link + '" style="color:var(--accent);">Visit YouTube →</a></div>'; }
+        const channelData = await channelRes.json();
+        if (channelData.items && channelData.items.length > 0) {
+          const uploadsId = channelData.items[0].contentDetails.relatedPlaylists.uploads;
+          const videosRes = await fetch('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=' + uploadsId + '&key=' + API_KEY);
+          const videosData = await videosRes.json();
+          if (videosData.items && videosData.items.length > 0) {
+            const ytVideos = videosData.items.map(item => {
+              const videoId = item.snippet.resourceId.videoId;
+              return {
+                videoId: videoId,
+                title: item.snippet.title,
+                date: new Date(item.snippet.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+                timestamp: new Date(item.snippet.publishedAt).getTime()
+              };
+            });
+            allVideos = allVideos.concat(ytVideos);
+          }
+        }
+      } catch (err) { console.warn('YouTube fetch failed:', err); }
+
+      // 2. Load manual videos from Supabase videos table
+      try {
+        const manualRes = await fetch(SUPABASE_URL + '/rest/v1/videos?select=*&order=id.desc', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const manualData = await manualRes.json();
+        if (Array.isArray(manualData) && manualData.length > 0) {
+          const manualVideos = manualData.map(v => {
+            let videoId = '';
+            const url = v.video_url || '';
+            if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
+            else if (url.includes('youtube.com/watch')) {
+              try { videoId = new URL(url).searchParams.get('v') || ''; } catch(e) {}
+            } else if (url.includes('youtube.com/embed/')) videoId = url.split('embed/')[1].split('?')[0];
+            return {
+              videoId: videoId,
+              title: v.title,
+              date: v.video_date || '',
+              timestamp: Date.now() + 1000
+            };
+          }).filter(v => v.videoId);
+          allVideos = allVideos.concat(manualVideos);
+        }
+      } catch (err) { console.warn('Manual videos fetch failed:', err); }
+
+      if (allVideos.length === 0) {
+        grid.innerHTML = '<div class="empty">No videos yet!</div>';
+        return;
+      }
+
+      allVideos.sort((a, b) => b.timestamp - a.timestamp);
+
+      grid.innerHTML = allVideos.map(v => `
+        <div class="video-card" onclick="openPlayer('${v.videoId}')">
+          <div class="video-thumb">
+            <img src="https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg" alt="${v.title}" loading="lazy">
+            <div class="video-play-overlay"></div>
+          </div>
+          <div class="video-card-info">
+            <div class="video-title">${v.title}</div>
+            <div class="video-meta">${v.date}</div>
+          </div>
+        </div>
+      `).join('');
     }
 
     async function loadTopSongs() {
