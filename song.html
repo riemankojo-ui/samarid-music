@@ -31,7 +31,8 @@
 
   .detail-title { font-size: 22px; font-weight: 900; line-height: 1.25; margin-bottom: 6px; text-align: center; }
   .detail-meta { font-size: 13px; color: #999; margin-bottom: 8px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; flex-wrap: wrap; }
-  .detail-meta .artist { color: var(--accent); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+  .detail-meta .artist { color: var(--accent); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+  .detail-meta .artist:active { opacity: 0.7; }
 
   .play-count-wrapper { text-align: center; margin-bottom: 20px; }
   .play-count-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; box-shadow: 0 4px 15px rgba(255, 0, 51, 0.3); }
@@ -39,7 +40,7 @@
   .detail-label { text-align: center; font-size: 11px; color: #999; margin-bottom: 25px; letter-spacing: 1px; font-weight: 600; text-transform: uppercase; }
   .detail-label i { color: var(--accent); margin-right: 4px; }
 
-  /* ===== COMPACT FOLLOW ROW — TIGHT, SINGLE LINE ===== */
+  /* ===== COMPACT FOLLOW ROW — TIGHT, SINGLE LINE, TAPPABLE ===== */
   .follow-row-compact {
     display: flex;
     align-items: center;
@@ -60,7 +61,10 @@
     color: #fff;
     font-weight: 900;
     font-size: 17px;
+    cursor: pointer;
+    transition: transform 0.15s;
   }
+  .follow-avatar-flat:active { transform: scale(0.92); }
   .follow-avatar-flat img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .follow-info-flat {
@@ -80,7 +84,10 @@
     gap: 4px;
     white-space: nowrap;
     flex-shrink: 0;
+    cursor: pointer;
+    transition: opacity 0.15s;
   }
+  .follow-name-flat:active { opacity: 0.6; }
   .follow-dot {
     color: #bbb;
     font-weight: 700;
@@ -224,6 +231,11 @@
     let isFollowingArtist = false;
     let currentArtistName = '';
 
+    // === OPEN ARTIST PAGE ===
+    window.openArtistPage = function(name) {
+      window.location.href = 'artist-template.html?name=' + encodeURIComponent(name);
+    }
+
     async function loadSong() {
       const urlParams = new URLSearchParams(window.location.search);
       let songId = urlParams.get('id');
@@ -269,6 +281,7 @@
 
         const audioSrc = s.audio_url || s.downloadurl || '';
         const downloadSrc = s.downloadurl || s.audio_url || '#';
+        const artistUrl = 'artist-template.html?name=' + encodeURIComponent(artist);
 
         // Artist profile + follower count
         let artistProfile = null;
@@ -338,7 +351,7 @@
 
           <h1 class="detail-title">${s.title}</h1>
           <p class="detail-meta">
-            <span class="artist">${artist}${badge}</span>
+            <span class="artist" onclick="openArtistPage('${artist.replace(/'/g, "\\'")}')">${artist}${badge}</span>
             <span>•</span>
             <span>${s.date}</span>
             <span>•</span>
@@ -380,11 +393,11 @@
             </div>
           </div>
 
-          <!-- COMPACT FLAT FOLLOW ROW — single line, tight -->
+          <!-- COMPACT FOLLOW ROW — avatar + name tappable -->
           <div class="follow-row-compact">
-            <div class="follow-avatar-flat">${avatarHTML}</div>
+            <div class="follow-avatar-flat" onclick="openArtistPage('${artist.replace(/'/g, "\\'")}')">${avatarHTML}</div>
             <div class="follow-info-flat">
-              <span class="follow-name-flat">${artist}${badge}</span>
+              <span class="follow-name-flat" onclick="openArtistPage('${artist.replace(/'/g, "\\'")}')">${artist}${badge}</span>
               <span class="follow-dot">·</span>
               <span class="follow-stats-flat"><span class="stat-num" id="followerCountNum">${followerCount.toLocaleString()}</span> <span id="followerCountLabel">followers</span></span>
             </div>
