@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Artist - Samarid Music</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root { --bg: #ffffff; --card: #f5f5f5; --border: #e5e5e5; --text: #0a0a0a; --text2: #666666; --accent: #ff0033; --purple: #8b5cf6; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { background: #fafafa; color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 40px; }
+
+  .header { position: sticky; top: 0; background: #fff; border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 10px; z-index: 100; }
+  .back-btn { background: #f5f5f5; color: var(--text); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+  .back-btn:active { background: var(--accent); color: #fff; }
+  .logo { font-size: 18px; font-weight: 900; color: var(--text); text-decoration: none; flex: 1; text-align: center; }
+  .logo span { color: var(--accent); }
+  .menu-btn { background: #f5f5f5; color: var(--text); border: 1px solid var(--border); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; flex-shrink: 0; }
+  .menu-btn:active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* SIDE MENU */
+  .side-menu { position: fixed; top: 0; right: -340px; width: 320px; max-width: 88%; height: 100vh; background: #0a0a0a; color: #fff; z-index: 9999; transition: right 0.3s ease; overflow-y: auto; box-shadow: -10px 0 40px rgba(0,0,0,0.3); }
+  .side-menu.open { right: 0; }
+  .side-menu-header { padding: 20px; border-bottom: 1px solid #222; display: flex; align-items: center; justify-content: space-between; }
+  .side-menu-title { font-size: 16px; font-weight: 900; color: #fff; }
+  .side-menu-close { background: transparent; border: none; color: #666; font-size: 22px; cursor: pointer; }
+  .side-menu-artist { padding: 25px 20px; border-bottom: 1px solid #222; text-align: center; }
+  .side-menu-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; border: 3px solid var(--accent); font-size: 28px; font-weight: 900; color: #fff; overflow: hidden; }
+  .side-menu-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .side-menu-artist-name { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .side-menu-artist-role { font-size: 11px; color: #666; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 14px; }
+
+  /* FOLLOW ROW INSIDE MENU */
+  .menu-follow-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .menu-follow-count {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #888;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .menu-follow-count .num {
+    color: #fff;
+    font-weight: 900;
+    font-size: 14px;
+  }
+  .menu-follow-btn {
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    border: 2px solid var(--accent);
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .menu-follow-btn:active { transform: scale(0.94); }
+  .menu-follow-btn:disabled { opacity: 0.6; cursor: wait; }
+  .menu-follow-btn.following {
+    background: transparent;
+    color: var(--accent);
+  }
+
+  .side-menu-section-title { padding: 18px 20px 8px; font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
+  .side-menu-item { display: flex; align-items: center; gap: 14px; padding: 14px 20px; color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; border-bottom: 1px solid #151515; transition: background 0.15s; cursor: pointer; background: transparent; border-left: none; border-right: none; border-top: none; width: 100%; font-family: inherit; text-align: left; }
+  .side-menu-item:active { background: #1a1a1a; }
+  .side-menu-item i { font-size: 18px; width: 24px; text-align: center; }
+  .side-menu-item .item-label { flex: 1; }
+  .side-menu-item .tiktok-icon { color: #ffffff; }
+  .side-menu-item .insta-icon { color: #E1306C; }
+  .side-menu-item .youtube-icon { color: #FF0000; }
+  .side-menu-item .share-whatsapp-icon { color: #25D366; }
+  .side-menu-item .share-facebook-icon { color: #1877F2; }
+  .side-menu-item .share-twitter-icon { color: #ffffff; }
+  .side-menu-item .share-copy-icon { color: #ff8800; }
+  .side-menu-footer { padding: 25px 20px; text-align: center; font-size: 10px; color: #444; letter-spacing: 1px; }
+  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9998; display: none; }
+  .menu-overlay.open { display: block; }
+
+  .container { max-width: 700px; margin: 0 auto; padding: 16px; }
+
+  .page-title {
+    font-size: 18px;
+    font-weight: 900;
+    text-align: center;
+    padding: 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  /* === SONGS === */
+  .song-list { display: flex; flex-direction: column; gap: 8px; }
+  .song-card { 
+    display: flex; 
+    gap: 10px; 
+    background: #ffffff; 
+    border: 1px solid #eeeeee; 
+    border-radius: 8px; 
+    overflow: hidden; 
+    cursor: pointer; 
+    text-decoration: none; 
+    color: inherit; 
+    transition: all 0.2s; 
+    padding: 8px; 
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04); 
+    align-items: center;
+  }
+  .song-card:active { transform: scale(0.99); background: #f9f9f9; }
+  
+  .song-card-img { 
+    width: 30%; 
+    max-width: 90px; 
+    aspect-ratio: 1 / 1; 
+    flex-shrink: 0; 
+    overflow: hidden; 
+    background: #000; 
+    border-radius: 6px; 
+  }
+  .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  
+  .song-card-info { 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center;
+    min-width: 0; 
+  }
+  .song-card-cat { 
+    font-size: 10px; 
+    color: var(--purple); 
+    font-weight: 700; 
+    margin-bottom: 2px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    font-family: 'Inter', sans-serif; 
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .song-card-info h3 { 
+    font-size: 13px; 
+    font-weight: 800; 
+    line-height: 1.2; 
+    margin-bottom: 4px; 
+    color: #1a1a1a; 
+    font-family: 'Inter', sans-serif; 
+    display: -webkit-box; 
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical; 
+    overflow: hidden; 
+  }
+  .song-card-info .date { 
+    font-size: 10px; 
+    color: #999; 
+  }
+
+  .verify-badge {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+
+  .empty-state { text-align: center; padding: 60px 20px; background: #fff; border-radius: 8px; color: var(--text2); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .empty-state .icon { font-size: 50px; margin-bottom: 15px; }
+  .empty-state h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
+  .loading { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 13px; }
+  .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 40px; }
+  .footer .brand { color: var(--accent); font-weight: 700; }
+
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 99999; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: opacity 0.3s; }
+</style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="artists.html" class="back-btn"><i class="fas fa-arrow-left"></i> Artists</a>
+    <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
+    <button class="menu-btn" onclick="toggleSideMenu(event)" id="menuBtn">☰</button>
+  </header>
+
+  <div class="menu-overlay" id="menuOverlay" onclick="closeSideMenu()"></div>
+  <div class="side-menu" id="sideMenu">
+    <div class="side-menu-header">
+      <span class="side-menu-title">Artist Info</span>
+      <button class="side-menu-close" onclick="closeSideMenu()">✕</button>
+    </div>
+    <div class="side-menu-artist">
+      <div class="side-menu-avatar" id="menuAvatar">K</div>
+      <div class="side-menu-artist-name" id="menuArtistName">Loading...</div>
+      <div class="side-menu-artist-role" id="menuArtistRole">Samarid Music Artist</div>
+
+      <!-- FOLLOW BUTTON + COUNT INSIDE MENU -->
+      <div class="menu-follow-row">
+        <button class="menu-follow-btn" id="followBtn" onclick="toggleFollow()">
+          <i class="fas fa-plus" id="followIcon"></i>
+          <span id="followText">Follow</span>
+        </button>
+        <div class="menu-follow-count">
+          <span class="num" id="countNum">0</span>
+          <span id="countLabel">followers</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-menu-section-title">Follow on Social</div>
+    <div id="menuSocialLinks">
+      <p style="padding: 20px; text-align: center; color: #666; font-size: 13px;">Loading...</p>
+    </div>
+
+    <div class="side-menu-section-title">📤 Share this Artist</div>
+    <button class="side-menu-item" onclick="shareWhatsApp()">
+      <i class="fab fa-whatsapp share-whatsapp-icon"></i>
+      <span class="item-label">WhatsApp</span>
+      <span style="color:#444;">↗</span>
+    </button>
+    <button class="side-menu-item" onclick="shareFacebook()">
+      <i class="fab fa-facebook share-facebook-icon"></i>
+      <span class="item-label">Facebook</span>
+      <span style="color:#444;">↗</span>
+    </button>
+    <button class="side-menu-item" onclick="shareTwitter()">
+      <i class="fab fa-x-twitter share-twitter-icon"></i>
+      <span class="item-label">X (Twitter)</span>
+      <span style="color:#444;">↗</span>
+    </button>
+    <button class="side-menu-item" onclick="copyArtistLink()">
+      <i class="fas fa-link share-copy-icon"></i>
+      <span class="item-label">Copy Link</span>
+      <span style="color:#444;">📋</span>
+    </button>
+
+    <div class="side-menu-footer">© 2026 SAMARID MUSIC</div>
+  </div>
+
+  <div class="container">
+    <div class="page-title" id="pageTitle">Loading...</div>
+    <div class="song-list" id="songList">
+      <div class="loading">Loading songs...</div>
+    </div>
+  </div>
+
+  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
+
+  <script>
+    const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+
+    const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
+
+    const params = new URLSearchParams(window.location.search);
+    const artistName = params.get('name') || 'Samarid';
+
+    document.title = artistName + ' - Samarid Music';
+    document.getElementById('pageTitle').innerText = 'Browse - ' + artistName;
+
+    let visitorId = localStorage.getItem('samarid_visitor_id');
+    if (!visitorId) {
+      visitorId = 'v_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('samarid_visitor_id', visitorId);
+    }
+
+    let isFollowing = false;
+
+    window.toggleSideMenu = function(e) {
+      e.stopPropagation();
+      document.getElementById('sideMenu').classList.add('open');
+      document.getElementById('menuOverlay').classList.add('open');
+    }
+    window.closeSideMenu = function() {
+      document.getElementById('sideMenu').classList.remove('open');
+      document.getElementById('menuOverlay').classList.remove('open');
+    }
+
+    // === SHARE ===
+    function getArtistShareUrl() { return window.location.href; }
+    function getArtistShareText() { return '🎤 Check out ' + artistName + ' on Samarid Music!'; }
+
+    window.shareWhatsApp = function() {
+      const text = encodeURIComponent(getArtistShareText() + ' ' + getArtistShareUrl());
+      window.open('https://wa.me/?text=' + text, '_blank');
+    }
+    window.shareFacebook = function() {
+      const url = encodeURIComponent(getArtistShareUrl());
+      window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, '_blank');
+    }
+    window.shareTwitter = function() {
+      const text = encodeURIComponent(getArtistShareText());
+      const url = encodeURIComponent(getArtistShareUrl());
+      window.open('https://twitter.com/intent/tweet?text=' + text + '&url=' + url, '_blank');
+    }
+    window.copyArtistLink = async function() {
+      const url = getArtistShareUrl();
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(url);
+        } else {
+          const ta = document.createElement('textarea');
+          ta.value = url;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+        showToast('✅ Link copied!');
+        closeSideMenu();
+      } catch (e) {
+        showToast('❌ Could not copy link');
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.createElement('div');
+      toast.innerText = msg;
+      toast.className = 'toast';
+      document.body.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = '0'; }, 1800);
+      setTimeout(() => { if (toast.parentNode) document.body.removeChild(toast); }, 2200);
+    }
+
+    // === FOLLOW ===
+    async function loadFollowState() {
+      try {
+        const [countRes, myRes] = await Promise.all([
+          fetch(SUPABASE_URL + '/rest/v1/follows?artist_name=eq.' + encodeURIComponent(artistName) + '&select=id', {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+          }),
+          fetch(SUPABASE_URL + '/rest/v1/follows?artist_name=eq.' + encodeURIComponent(artistName) + '&visitor_id=eq.' + visitorId + '&select=id', {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+          })
+        ]);
+        const countData = await countRes.json();
+        const myData = await myRes.json();
+        isFollowing = Array.isArray(myData) && myData.length > 0;
+        updateFollowUI(Array.isArray(countData) ? countData.length : 0);
+      } catch (e) { console.error('Follow state load failed', e); }
+    }
+
+    function updateFollowUI(count) {
+      const btn = document.getElementById('followBtn');
+      const countNum = document.getElementById('countNum');
+      const countLabel = document.getElementById('countLabel');
+      const icon = document.getElementById('followIcon');
+      const text = document.getElementById('followText');
+
+      countNum.innerText = count.toLocaleString();
+      countLabel.innerText = count === 1 ? 'follower' : 'followers';
+
+      if (isFollowing) {
+        btn.classList.add('following');
+        icon.className = 'fas fa-check';
+        text.innerText = 'Following';
+      } else {
+        btn.classList.remove('following');
+        icon.className = 'fas fa-plus';
+        text.innerText = 'Follow';
+      }
+    }
+
+    // INSTANT toggle — no popup, optimistic update
+    window.toggleFollow = async function() {
+      const btn = document.getElementById('followBtn');
+      btn.disabled = true;
+
+      // Flip UI instantly
+      isFollowing = !isFollowing;
+      const currentCount = parseInt(document.getElementById('countNum').innerText.replace(/,/g, '')) || 0;
+      const newCount = isFollowing ? currentCount + 1 : Math.max(0, currentCount - 1);
+      updateFollowUI(newCount);
+
+      try {
+        if (isFollowing) {
+          await fetch(SUPABASE_URL + '/rest/v1/follows', {
+            method: 'POST',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ artist_name: artistName, visitor_id: visitorId })
+          });
+        } else {
+          await fetch(SUPABASE_URL + '/rest/v1/follows?artist_name=eq.' + encodeURIComponent(artistName) + '&visitor_id=eq.' + visitorId, {
+            method: 'DELETE',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+          });
+        }
+      } catch (e) {
+        // Rollback on error
+        isFollowing = !isFollowing;
+        updateFollowUI(currentCount);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    // === LOAD PAGE ===
+    async function loadArtistPage() {
+      const list = document.getElementById('songList');
+
+      let artistProfile = null;
+      try {
+        const profileRes = await fetch(SUPABASE_URL + '/rest/v1/artists?name=eq.' + encodeURIComponent(artistName) + '&limit=1', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const profileData = await profileRes.json();
+        if (Array.isArray(profileData) && profileData.length > 0) artistProfile = profileData[0];
+      } catch (e) { console.error(e); }
+
+      let songs = [];
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=eq.' + encodeURIComponent(artistName) + '&select=*&order=id.desc', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        songs = await res.json();
+        if (!Array.isArray(songs)) songs = [];
+      } catch (e) { console.error(e); }
+
+      const firstSong = songs[0] || {};
+      const songsVerified = songs.some(s => s.verified === true);
+      const isVerified = (artistProfile && artistProfile.verified) || songsVerified;
+      const profilePic = artistProfile && artistProfile.profile_pic ? artistProfile.profile_pic : null;
+      const tiktok = (artistProfile && artistProfile.tiktok) || firstSong.tiktok || null;
+      const instagram = (artistProfile && artistProfile.instagram) || firstSong.instagram || null;
+      const youtube = (artistProfile && artistProfile.youtube) || firstSong.youtube || null;
+
+      // Menu avatar
+      const menuAvatar = document.getElementById('menuAvatar');
+      if (profilePic) menuAvatar.innerHTML = '<img src="' + profilePic + '" alt="' + artistName + '">';
+      else menuAvatar.innerText = artistName.charAt(0).toUpperCase();
+      document.getElementById('menuArtistName').innerHTML = artistName + (isVerified ? VERIFY_BADGE : '');
+
+      // Socials
+      const socialHTML = [];
+      if (tiktok) socialHTML.push('<a href="' + tiktok + '" target="_blank" class="side-menu-item"><i class="fab fa-tiktok tiktok-icon"></i><span class="item-label">TikTok</span><span style="color:#444;">↗</span></a>');
+      if (instagram) socialHTML.push('<a href="' + instagram + '" target="_blank" class="side-menu-item"><i class="fab fa-instagram insta-icon"></i><span class="item-label">Instagram</span><span style="color:#444;">↗</span></a>');
+      if (youtube) socialHTML.push('<a href="' + youtube + '" target="_blank" class="side-menu-item"><i class="fab fa-youtube youtube-icon"></i><span class="item-label">YouTube</span><span style="color:#444;">↗</span></a>');
+      document.getElementById('menuSocialLinks').innerHTML = socialHTML.length > 0 ? socialHTML.join('') : '<p style="padding: 20px; text-align: center; color: #666; font-size: 13px;">No social links added yet.</p>';
+
+      // Songs
+      if (songs.length === 0) {
+        list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>Check back soon for new music!</p></div>';
+      } else {
+        list.innerHTML = songs.map((s) => {
+          const badge = isVerified ? VERIFY_BADGE : '';
+          return `
+            <div class="song-card" onclick="window.location.href='song.html?id=${s.id}'">
+              <div class="song-card-img"><img src="${s.cover}" loading="lazy"></div>
+              <div class="song-card-info">
+                <div class="song-card-cat">
+                  <span>${artistName}${badge} • ${s.category}</span>
+                </div>
+                <h3>${s.title}</h3>
+                <div class="date">${s.date}</div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    loadArtistPage();
+    loadFollowState();
+  </script>
+</body>
+</html>
