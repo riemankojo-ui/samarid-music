@@ -54,8 +54,10 @@
   .section-head .icon-new { color: #00cc44; font-size: 18px; }
   .section-head .icon-cat { color: #8b5cf6; font-size: 18px; }
   .section-head .icon-artist { color: #ff8800; font-size: 18px; }
-  .section-head .icon-tag { color: #ff8800; font-size: 18px; }
+  .section-head .icon-trend { color: #ff8800; font-size: 18px; }
   .section-head .icon-social { color: #0084ff; font-size: 18px; }
+  .section-head .icon-mail { color: #ff8800; font-size: 18px; }
+  .section-head .icon-album { color: #ff8800; font-size: 18px; }
 
   .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
   .pill { display: inline-block; padding: 8px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; color: var(--text); font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.2s; cursor: pointer; }
@@ -70,14 +72,53 @@
   .social-btn:active { transform: scale(0.96); }
   .social-btn i { font-size: 16px; }
 
-  .trending-section { margin-top: 20px; background: #0a0a0a; border-radius: 16px; padding: 16px 12px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
-  body.light .trending-section { background: #0a0a0a; }
-  .trending-tags { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
-  .trending-tag { display: inline-block; padding: 5px 10px; background: #141414; border: 1px solid #2a2a2a; border-radius: 6px; color: #cccccc; font-size: 10px; font-weight: 600; text-decoration: none; transition: all 0.2s; white-space: nowrap; cursor: pointer; }
-  .trending-tag:active { transform: scale(0.96); }
-  .trending-tag.artist-tag { color: #ff8800; }
-  .trending-tag.category-tag { color: #8b5cf6; }
-  .trending-tag.brand-tag { color: #ff0033; }
+  /* TRENDING ARTISTS */
+  .trending-artists-list { display: flex; flex-direction: column; gap: 8px; }
+  .trending-artist-item { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; text-decoration: none; color: inherit; transition: all 0.2s; }
+  .trending-artist-item:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
+  .trending-rank { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; flex-shrink: 0; color: #fff; background: linear-gradient(135deg, #ff0033, #b3002d); }
+  .trending-rank.rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
+  .trending-rank.rank-2 { background: linear-gradient(135deg, #C0C0C0, #808080); color: #000; }
+  .trending-rank.rank-3 { background: linear-gradient(135deg, #CD7F32, #8B4513); }
+  .trending-artist-name { flex: 1; font-size: 14px; font-weight: 900; color: var(--text); display: flex; align-items: center; gap: 5px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .trending-artist-plays { font-size: 12px; font-weight: 800; color: #ff8800; display: flex; align-items: center; gap: 4px; flex-shrink: 0; background: rgba(255, 136, 0, 0.12); padding: 4px 10px; border-radius: 12px; }
+  .trending-empty { text-align: center; padding: 30px 20px; background: var(--card); border: 1px dashed var(--border); border-radius: 12px; color: var(--text2); font-size: 13px; line-height: 1.6; }
+  .trending-empty strong { color: #ff8800; }
+
+  /* TOP ALBUMS */
+  .top-albums-list { display: flex; flex-direction: column; gap: 14px; }
+  .top-album-card { display: flex; gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; padding: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.05); align-items: center; }
+  .top-album-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
+
+  .top-album-cover { width: 40%; max-width: 130px; aspect-ratio: 1 / 1; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 10px; position: relative; }
+  .top-album-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .top-album-rank { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 10px; letter-spacing: 0.3px; box-shadow: 0 3px 10px rgba(255, 200, 0, 0.5); z-index: 2; }
+  .top-album-rank.rank-2 { background: linear-gradient(135deg, #C0C0C0, #808080); color: #000; box-shadow: 0 3px 10px rgba(192, 192, 192, 0.5); }
+  .top-album-rank.rank-3 { background: linear-gradient(135deg, #CD7F32, #8B4513); color: #fff; box-shadow: 0 3px 10px rgba(205, 127, 50, 0.5); }
+  .top-album-rank.rank-4 { background: linear-gradient(135deg, #ff0033, #b3002d); color: #fff; box-shadow: 0 3px 10px rgba(255, 0, 51, 0.4); }
+
+  .top-album-info { flex: 1; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .top-album-label { font-size: 9px; color: #ff8800; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; }
+  .top-album-name { font-size: 15px; font-weight: 900; color: var(--text); line-height: 1.25; letter-spacing: -0.3px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .top-album-artist { font-size: 12px; color: #ff8800; font-weight: 800; display: flex; align-items: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .top-album-meta { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--text2); font-weight: 700; margin-top: 2px; }
+  .top-album-meta .songs { display: flex; align-items: center; gap: 4px; }
+
+  /* EMAIL SIGNUP */
+  .email-signup-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-top: 8px; }
+  .email-signup-title { font-size: 15px; font-weight: 900; color: var(--text); margin-bottom: 6px; letter-spacing: -0.3px; }
+  .email-signup-sub { font-size: 12px; color: var(--text2); line-height: 1.5; margin-bottom: 14px; }
+  .email-signup-form { display: flex; gap: 8px; }
+  .email-signup-input { flex: 1; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 13px; font-family: inherit; min-width: 0; }
+  .email-signup-input:focus { outline: none; border-color: #ff8800; }
+  .email-signup-btn { padding: 12px 18px; background: linear-gradient(135deg, #ff8800 0%, #cc6600 100%); color: #fff; border: none; border-radius: 10px; font-size: 13px; font-weight: 900; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px; flex-shrink: 0; box-shadow: 0 4px 15px rgba(255, 136, 0, 0.35); transition: transform 0.15s; }
+  .email-signup-btn:active { transform: scale(0.96); }
+  .email-signup-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .email-signup-note { font-size: 11px; color: var(--text2); margin-top: 10px; font-weight: 600; text-align: center; }
+  .email-signup-success { display: none; text-align: center; padding: 10px 0; }
+  .email-signup-success .title { font-size: 15px; font-weight: 900; color: #00cc44; margin-bottom: 4px; }
+  .email-signup-success .text { font-size: 12px; color: var(--text2); line-height: 1.5; }
 
   .song-list { display: flex; flex-direction: column; gap: 8px; }
   .song-card { display: flex; gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; padding: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); align-items: center; }
@@ -142,10 +183,8 @@
     <div class="section-head"><i class="fas fa-microphone icon-artist"></i><h3>Our Artists</h3></div>
     <div class="pill-row" id="artistPills"><span class="pill">Loading...</span></div>
 
-    <div class="section-head"><i class="fas fa-hashtag icon-tag"></i><h3>Trending Tags</h3></div>
-    <div class="trending-section" style="margin-top:0;">
-      <div class="trending-tags" id="trendingTags"><span class="trending-tag">Loading...</span></div>
-    </div>
+    <div class="section-head"><i class="fas fa-chart-line icon-trend"></i><h3>Trending Artists</h3></div>
+    <div class="trending-artists-list" id="trendingArtistsList"><div class="loading">Loading...</div></div>
 
     <div class="section-head"><i class="fas fa-share-nodes icon-social"></i><h3>Follow Us</h3></div>
     <div class="social-grid">
@@ -154,6 +193,28 @@
       <a href="https://instagram.com/realsamarid" target="_blank" class="social-btn"><i class="fab fa-instagram" style="color: #E1306C;"></i> Instagram</a>
       <a href="mailto:wunatehk@gmail.com" class="social-btn"><i class="fas fa-envelope" style="color: #EA4335;"></i> Email</a>
     </div>
+
+    <div class="section-head"><i class="fas fa-envelope-open-text icon-mail"></i><h3>Never Miss A Drop</h3></div>
+    <div class="email-signup-box">
+      <div id="emailFormArea">
+        <div class="email-signup-title">Get Notified</div>
+        <div class="email-signup-sub">Enter your email to get notified when new music drops from Samarid Music.</div>
+        <div class="email-signup-form">
+          <input type="email" id="emailInput" class="email-signup-input" placeholder="your@email.com" onkeypress="if(event.key==='Enter')submitEmail()">
+          <button class="email-signup-btn" id="emailBtn" onclick="submitEmail()">
+            <i class="fas fa-bell"></i> Notify
+          </button>
+        </div>
+        <div class="email-signup-note">Only new music. No spam.</div>
+      </div>
+      <div id="emailSuccessArea" class="email-signup-success">
+        <div class="title">Logged In Successfully</div>
+        <div class="text">You'll be notified when new songs drop. Thanks for joining!</div>
+      </div>
+    </div>
+
+    <div class="section-head"><i class="fas fa-compact-disc icon-album"></i><h3>Top Albums</h3></div>
+    <div class="top-albums-list" id="topAlbumsList"><div class="loading">Loading albums...</div></div>
   </div>
 
   <div class="menu-dropdown" id="menuDropdown" onclick="event.stopPropagation()">
@@ -190,9 +251,11 @@
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
 
-    // 🎯 CHANGE THESE NUMBERS TO ADJUST HOW MANY SONGS SHOW
-    const TOP_SONGS_LIMIT = 4;      // Top Songs — currently 4
-    const LATEST_SONGS_LIMIT = 7;   // Latest Releases — currently 7
+    const TOP_SONGS_LIMIT = 4;
+    const LATEST_SONGS_LIMIT = 7;
+    const TRENDING_MIN_PLAYS = 100;
+    const TRENDING_MAX_SHOW = 10;
+    const TOP_ALBUMS_LIMIT = 4;
 
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
@@ -217,7 +280,6 @@
     }
     window.setTheme = (theme) => { localStorage.setItem('samarid-theme', theme); applySettings(); }
 
-    // ===== TOP SONGS (LIMIT: 4) =====
     async function loadTopSongs() {
       const container = document.getElementById('topSongsList');
       try {
@@ -232,7 +294,6 @@
       } catch (e) { container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>Error</h3></div>'; }
     }
 
-    // ===== LATEST RELEASES (LIMIT: 7) =====
     async function renderSongs() {
       const list = document.getElementById('songList');
       try {
@@ -268,7 +329,6 @@
       clearBtn.style.display = 'inline-block';
       list.innerHTML = '<div class="loading">Loading...</div>';
       try {
-        // When filtering by category, show all in that category (no limit)
         const res = await fetch(SUPABASE_URL + '/rest/v1/songs?category=ilike.' + encodeURIComponent(category) + '&select=*&order=plays.desc.nullslast,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
         if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No ' + category + ' songs yet</h3></div>'; return; }
@@ -303,20 +363,185 @@
       } catch (e) {}
     }
 
-    async function loadTrendingTags() {
-      const container = document.getElementById('trendingTags');
+    // TRENDING ARTISTS
+    async function loadTrendingArtists() {
+      const container = document.getElementById('trendingArtistsList');
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,category', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,plays,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
-        const artists = [...new Set(songs.map(s => (s.artist_name || 'Samarid').trim()))].sort();
-        const categories = [...new Set(songs.map(s => (s.category || 'Music').trim()))].sort();
-        const brandTags = ['SamaridMusic', 'GhanaMusic', 'NewMusic'];
-        let html = '';
-        artists.forEach(name => { html += '<a href="artist-template.html?name=' + encodeURIComponent(name) + '" class="trending-tag artist-tag">#' + name.replace(/\s+/g, '') + '</a>'; });
-        categories.forEach(cat => { html += '<span class="trending-tag category-tag" onclick="filterByCategory(\'' + cat.replace(/'/g, "\\'") + '\', event)">#' + cat.replace(/\s+/g, '') + '</span>'; });
-        brandTags.forEach(tag => { html += '<span class="trending-tag brand-tag">#' + tag + '</span>'; });
-        if (container) container.innerHTML = html;
-      } catch (e) {}
+        if (!Array.isArray(songs) || songs.length === 0) { container.innerHTML = '<div class="trending-empty">No artists yet.</div>'; return; }
+
+        const artistMap = {};
+        songs.forEach(s => {
+          const name = (s.artist_name || 'Samarid').trim();
+          if (!artistMap[name]) artistMap[name] = { name: name, plays: 0, verified: false };
+          artistMap[name].plays += (s.plays || 0);
+          if (s.verified) artistMap[name].verified = true;
+        });
+
+        const trending = Object.values(artistMap).filter(a => a.plays >= TRENDING_MIN_PLAYS).sort((a, b) => b.plays - a.plays).slice(0, TRENDING_MAX_SHOW);
+
+        if (trending.length === 0) {
+          container.innerHTML = '<div class="trending-empty">No trending artists yet.<br>Reach <strong>' + TRENDING_MIN_PLAYS + '+ plays</strong> to appear here!</div>';
+          return;
+        }
+
+        container.innerHTML = trending.map((a, index) => {
+          const rank = index + 1;
+          const rankClass = rank <= 3 ? 'rank-' + rank : '';
+          const badge = a.verified ? VERIFY_BADGE : '';
+          return `
+            <a href="artist-template.html?name=${encodeURIComponent(a.name)}" class="trending-artist-item">
+              <div class="trending-rank ${rankClass}">${rank}</div>
+              <div class="trending-artist-name">${a.name}${badge}</div>
+              <div class="trending-artist-plays"><i class="fas fa-fire"></i> ${a.plays.toLocaleString()}</div>
+            </a>
+          `;
+        }).join('');
+      } catch (e) { container.innerHTML = '<div class="trending-empty">Error loading trending artists.</div>'; }
+    }
+
+    // TOP ALBUMS — checks BOTH song.verified AND artist.verified
+    async function loadTopAlbums() {
+      const container = document.getElementById('topAlbumsList');
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?album_name=not.is.null&album_name=neq.&select=*&order=id.desc', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const songs = await res.json();
+
+        if (!Array.isArray(songs) || songs.length === 0) {
+          container.innerHTML = '<div class="trending-empty">No albums yet.</div>';
+          return;
+        }
+
+        // 1. Fetch verified artists list first
+        let verifiedArtists = {};
+        try {
+          const artistRes = await fetch(SUPABASE_URL + '/rest/v1/artists?select=name,verified', {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+          });
+          const artistData = await artistRes.json();
+          if (Array.isArray(artistData)) {
+            artistData.forEach(a => {
+              if (a.verified && a.name) verifiedArtists[a.name.trim().toLowerCase()] = true;
+            });
+          }
+        } catch (e) { console.warn('Artist fetch failed:', e); }
+
+        // 2. Group songs by album
+        const albumMap = {};
+        songs.forEach(s => {
+          const albumName = s.album_name.trim();
+          if (!albumMap[albumName]) {
+            albumMap[albumName] = {
+              name: albumName,
+              cover: s.cover,
+              artist: (s.artist_name || 'Samarid').trim(),
+              verified: false,
+              category: s.category || 'Music',
+              date: s.date || '',
+              songCount: 0,
+              totalPlays: 0
+            };
+          }
+          albumMap[albumName].songCount++;
+          albumMap[albumName].totalPlays += (s.plays || 0);
+          if (s.verified) albumMap[albumName].verified = true;
+        });
+
+        // 3. Mark album verified if the ARTIST is verified
+        Object.values(albumMap).forEach(album => {
+          if (verifiedArtists[album.artist.toLowerCase()]) {
+            album.verified = true;
+          }
+        });
+
+        const albums = Object.values(albumMap).sort((a, b) => b.totalPlays - a.totalPlays).slice(0, TOP_ALBUMS_LIMIT);
+
+        container.innerHTML = albums.map((album, index) => {
+          const rank = index + 1;
+          const rankClass = rank <= 3 ? 'rank-' + rank : 'rank-4';
+          const badge = album.verified ? VERIFY_BADGE : '';
+          const songLabel = album.songCount === 1 ? '1 song' : album.songCount + ' songs';
+          const linkUrl = 'album.html?name=' + encodeURIComponent(album.name);
+
+          return `
+            <a href="${linkUrl}" class="top-album-card">
+              <div class="top-album-cover">
+                <span class="top-album-rank ${rankClass}">#${rank}</span>
+                <img src="${album.cover}" alt="${album.name}" loading="lazy">
+              </div>
+              <div class="top-album-info">
+                <div class="top-album-label">Top Album</div>
+                <div class="top-album-name">${album.name}</div>
+                <div class="top-album-artist">${album.artist}${badge}</div>
+                <div class="top-album-meta">
+                  <span class="songs"><i class="fas fa-music"></i> ${songLabel}</span>
+                </div>
+              </div>
+            </a>
+          `;
+        }).join('');
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = '<div class="trending-empty">Error loading albums.</div>';
+      }
+    }
+
+    // EMAIL SIGNUP
+    (function() {
+      const alreadySubscribed = localStorage.getItem('samarid_subscribed') === 'true';
+      if (alreadySubscribed) {
+        const savedEmail = localStorage.getItem('samarid_subscriber_email');
+        document.getElementById('emailFormArea').style.display = 'none';
+        const success = document.getElementById('emailSuccessArea');
+        success.style.display = 'block';
+        success.querySelector('.text').innerText = 'You\'re subscribed as ' + (savedEmail || 'you') + '. We\'ll notify you when new songs drop!';
+      }
+    })();
+
+    window.submitEmail = async function() {
+      const input = document.getElementById('emailInput');
+      const btn = document.getElementById('emailBtn');
+      const email = input.value.trim().toLowerCase();
+
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        input.style.borderColor = '#ff0033';
+        setTimeout(() => { input.style.borderColor = ''; }, 1500);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/subscribers', {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': 'Bearer ' + SUPABASE_KEY,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ email: email })
+        });
+
+        if (res.ok || res.status === 409) {
+          localStorage.setItem('samarid_subscribed', 'true');
+          localStorage.setItem('samarid_subscriber_email', email);
+          document.getElementById('emailFormArea').style.display = 'none';
+          const success = document.getElementById('emailSuccessArea');
+          success.style.display = 'block';
+          success.querySelector('.text').innerText = 'You\'re subscribed as ' + email + '. We\'ll notify you when new songs drop!';
+        } else {
+          throw new Error('Save failed');
+        }
+      } catch (e) {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-bell"></i> Notify';
+        alert('Something went wrong. Please try again.');
+      }
     }
 
     applySettings();
@@ -324,7 +549,8 @@
     renderSongs();
     loadCategories();
     loadArtists();
-    loadTrendingTags();
+    loadTrendingArtists();
+    loadTopAlbums();
   </script>
 </body>
 </html>

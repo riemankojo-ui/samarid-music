@@ -16,6 +16,7 @@
   .password-wrapper { position: relative; width: 100%; margin-bottom: 15px; }
   .password-wrapper input { width: 100%; padding: 14px 45px 14px 14px; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; }
   .eye-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #666; font-size: 18px; cursor: pointer; }
+  .login-btn { width:100%; padding:14px; background:var(--accent); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; }
 
   #dashboard { display: none; }
   .top-bar { background: var(--card); border-bottom: 1px solid var(--border); padding: 12px 14px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100; }
@@ -25,7 +26,6 @@
   .top-bar .brand { color: var(--accent); font-size: 9px; letter-spacing: 1px; font-weight: 700; }
   .studio-link { background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; text-decoration: none; padding: 7px 12px; border-radius: 16px; font-size: 11px; font-weight: 900; display: flex; align-items: center; gap: 5px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(255,0,51,0.35); transition: transform 0.15s; }
   .studio-link:active { transform: scale(0.94); }
-  .studio-link i { font-size: 11px; }
   .logout-btn { background: transparent; border: none; color: #666; font-size: 16px; cursor: pointer; padding: 6px; flex-shrink: 0; }
 
   .content { padding: 16px 14px; max-width: 700px; margin: 0 auto; }
@@ -84,7 +84,6 @@
   .yt-note strong { color: #ffcc00; }
   .yt-note a { color: var(--accent); }
 
-  /* ARTIST CARDS */
   .verify-badge { display: inline-block; width: 14px; height: 14px; vertical-align: middle; flex-shrink: 0; }
   .artist-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; }
   .artist-top { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
@@ -100,7 +99,6 @@
   .add-artist-btn { width: 100%; padding: 14px; background: #1d9bf0; color: #fff; border: none; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; margin-bottom: 14px; }
   .add-artist-btn:active { background: #0a7ac4; }
 
-  /* VERIFY */
   .v-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
   .v-avatar { width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 17px; color: #fff; flex-shrink: 0; overflow: hidden; }
   .v-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -112,18 +110,15 @@
   .v-btn.unverify { background: transparent; color: #888; border: 1px solid #333; }
   .v-btn.unverify:active { background: rgba(255,0,51,0.1); color: #ff0033; border-color: #ff0033; }
 
-  /* BOTTOM NAV */
   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 6px 0 max(6px, env(safe-area-inset-bottom)); z-index: 1000; }
   .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; color: var(--text2); cursor: pointer; background: transparent; border: none; font-family: inherit; }
   .nav-item .icon { font-size: 22px; line-height: 1; }
   .nav-item .label { font-size: 10px; font-weight: 800; letter-spacing: 0.3px; }
   .nav-item.active { color: var(--accent); }
 
-  /* MODALS */
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
   .modal.open { display: flex; }
-  .modal-inner { background: #141414; border: 1px solid #2a2a2a; border-radius: 20px; padding: 24px 20px; width: 100%; max-width: 420px; animation: modalPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-height: 90vh; overflow-y: auto; }
-  @keyframes modalPop { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .modal-inner { background: #141414; border: 1px solid #2a2a2a; border-radius: 20px; padding: 24px 20px; width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
   .modal-inner h3 { font-size: 17px; font-weight: 800; margin-bottom: 15px; text-align: center; }
   .modal-inner p { font-size: 13px; color: #999; text-align: center; margin-bottom: 18px; line-height: 1.5; }
   .modal-inner p strong { color: #fff; }
@@ -155,7 +150,7 @@
         <input type="password" id="passwordInput" placeholder="Enter Password" onkeypress="if(event.key==='Enter')checkPassword()">
         <button class="eye-btn" onclick="togglePassword()" id="eyeIcon">👁️</button>
       </div>
-      <button style="width:100%; padding:14px; background:var(--accent); color:#fff; border:none; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit;" onclick="checkPassword()">Unlock</button>
+      <button class="login-btn" onclick="checkPassword()">Unlock</button>
       <p id="loginStatus" style="font-size:12px; margin-top:12px; font-weight:bold; text-align:center; color:#ff0033;"></p>
     </div>
   </div>
@@ -167,33 +162,23 @@
         <h1>Samarid Music</h1>
         <div class="brand">MANAGER</div>
       </div>
-      <a href="smstudio-8842.html" class="studio-link">
-        <i class="fas fa-arrow-left"></i> Studio
-      </a>
+      <a href="smstudio-8842.html" class="studio-link"><i class="fas fa-arrow-left"></i> Studio</a>
       <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
     </div>
 
     <div class="content">
-
-      <!-- ARTISTS -->
       <div class="page active" data-page="artists">
         <h1 class="page-title">Artists 🎤</h1>
         <p class="page-subtitle">Bio, photos, socials</p>
-
-        <button class="add-artist-btn" onclick="openArtistModal()">
-          <i class="fas fa-plus"></i> Add New Artist
-        </button>
-
+        <button class="add-artist-btn" onclick="openArtistModal()"><i class="fas fa-plus"></i> Add New Artist</button>
         <div class="search-wrap">
           <i class="fas fa-search search-icon"></i>
           <input type="text" id="artistSearch" placeholder="Search artists..." oninput="filterArtists()">
           <button class="clear-search" id="clearArtistSearch" onclick="clearArtistSearch()">✕</button>
         </div>
-
         <div id="artistsList"><p class="empty">Loading...</p></div>
       </div>
 
-      <!-- VIDEOS -->
       <div class="page" data-page="videos">
         <h1 class="page-title">Videos</h1>
         <p class="page-subtitle">All videos on your site</p>
@@ -201,16 +186,13 @@
           <button class="sub-tab active" onclick="subTab('vd-mine', this)">🎬 My Videos</button>
           <button class="sub-tab" onclick="subTab('vd-yt', this)">▶️ YouTube</button>
         </div>
-        <div class="sub-content active" id="vd-mine">
-          <div id="manualVideosList"><p class="empty">Loading...</p></div>
-        </div>
+        <div class="sub-content active" id="vd-mine"><div id="manualVideosList"><p class="empty">Loading...</p></div></div>
         <div class="sub-content" id="vd-yt">
           <div class="yt-note"><strong>⚠️ Manage on YouTube:</strong> Tap the yellow arrow to edit/delete in YouTube Studio.</div>
           <div id="youtubeVideosList"><p class="empty">Loading...</p></div>
         </div>
       </div>
 
-      <!-- FANBASE -->
       <div class="page" data-page="fanbase">
         <h1 class="page-title">Fanbase</h1>
         <p class="page-subtitle">Comments, likes, votes</p>
@@ -235,12 +217,9 @@
           </div>
           <div id="likesList"><p class="empty">Loading...</p></div>
         </div>
-        <div class="sub-content" id="fb-votes">
-          <div id="votesList"><p class="empty">Loading...</p></div>
-        </div>
+        <div class="sub-content" id="fb-votes"><div id="votesList"><p class="empty">Loading...</p></div></div>
       </div>
 
-      <!-- VERIFY -->
       <div class="page" data-page="verify">
         <h1 class="page-title">Verify 🔵</h1>
         <p class="page-subtitle">Give the blue checkmark to trusted artists</p>
@@ -251,30 +230,16 @@
         </div>
         <div id="verifyList"><p class="empty">Loading...</p></div>
       </div>
-
     </div>
 
     <div class="bottom-nav" id="bottomNav">
-      <button class="nav-item active" data-nav="artists" onclick="goTab('artists')">
-        <div class="icon">🎤</div>
-        <div class="label">ARTISTS</div>
-      </button>
-      <button class="nav-item" data-nav="videos" onclick="goTab('videos')">
-        <div class="icon">🎬</div>
-        <div class="label">VIDEOS</div>
-      </button>
-      <button class="nav-item" data-nav="fanbase" onclick="goTab('fanbase')">
-        <div class="icon">💬</div>
-        <div class="label">FANBASE</div>
-      </button>
-      <button class="nav-item" data-nav="verify" onclick="goTab('verify')">
-        <div class="icon">🔵</div>
-        <div class="label">VERIFY</div>
-      </button>
+      <button class="nav-item active" data-nav="artists" onclick="goTab('artists')"><div class="icon">🎤</div><div class="label">ARTISTS</div></button>
+      <button class="nav-item" data-nav="videos" onclick="goTab('videos')"><div class="icon">🎬</div><div class="label">VIDEOS</div></button>
+      <button class="nav-item" data-nav="fanbase" onclick="goTab('fanbase')"><div class="icon">💬</div><div class="label">FANBASE</div></button>
+      <button class="nav-item" data-nav="verify" onclick="goTab('verify')"><div class="icon">🔵</div><div class="label">VERIFY</div></button>
     </div>
   </div>
 
-  <!-- ARTIST MODAL -->
   <div class="modal" id="artistModal" onclick="closeArtistModal()">
     <div class="modal-inner" onclick="event.stopPropagation()">
       <h3 id="artistModalTitle">Add New Artist</h3>
@@ -282,10 +247,10 @@
       <input type="hidden" id="artistId">
       <div class="form-group"><label>Artist Name *</label><input type="text" id="artistName" placeholder="e.g. Samarid" oninput="updateAvatarPreview()"></div>
       <div class="form-group"><label>Profile Photo URL</label><input type="text" id="artistPic" placeholder="https://...jpg" oninput="updateAvatarPreview()"></div>
-      <div class="form-group"><label>Bio / Story</label><textarea id="artistBio" placeholder="Write a short bio about this artist..."></textarea></div>
-      <div class="form-group"><label>TikTok Link</label><input type="text" id="artistTiktok" placeholder="https://tiktok.com/@username"></div>
-      <div class="form-group"><label>Instagram Link</label><input type="text" id="artistInstagram" placeholder="https://instagram.com/username"></div>
-      <div class="form-group"><label>YouTube Link</label><input type="text" id="artistYoutube" placeholder="https://youtube.com/@channel"></div>
+      <div class="form-group"><label>Bio / Story</label><textarea id="artistBio"></textarea></div>
+      <div class="form-group"><label>TikTok Link</label><input type="text" id="artistTiktok"></div>
+      <div class="form-group"><label>Instagram Link</label><input type="text" id="artistInstagram"></div>
+      <div class="form-group"><label>YouTube Link</label><input type="text" id="artistYoutube"></div>
       <div class="modal-btns">
         <button class="cancel" onclick="closeArtistModal()">Cancel</button>
         <button class="confirm-green" onclick="saveArtist()">Save</button>
@@ -294,7 +259,6 @@
     </div>
   </div>
 
-  <!-- CONFIRM MODAL -->
   <div class="modal" id="confirmModal" onclick="closeConfirmModal()">
     <div class="modal-inner" onclick="event.stopPropagation()">
       <div style="font-size: 40px; text-align: center; margin-bottom: 10px;" id="confirmIcon">🔵</div>
@@ -307,7 +271,6 @@
     </div>
   </div>
 
-  <!-- EDIT VIDEO MODAL -->
   <div class="modal" id="editVideoModal" onclick="closeEditVideoModal()">
     <div class="modal-inner" onclick="event.stopPropagation()">
       <h3>✏️ Edit Video</h3>
@@ -323,7 +286,7 @@
   </div>
 
   <script>
-    const SECRET_PASSWORD = "Samarid2026";
+    const SECRET_PASSWORD = "samarid2026";
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
     const CHANNEL_ID = localStorage.getItem('samarid_channel_id') || 'UC11ElndF459dLRfV-OzwmpA';
@@ -436,12 +399,10 @@
       list.innerHTML = filtered.map(a => `
         <div class="artist-card">
           <div class="artist-top">
-            <div class="artist-avatar">
-              ${a.profile_pic ? '<img src="' + a.profile_pic + '">' : (a.name || '?').charAt(0).toUpperCase()}
-            </div>
+            <div class="artist-avatar">${a.profile_pic ? '<img src="' + a.profile_pic + '">' : (a.name || '?').charAt(0).toUpperCase()}</div>
             <div class="artist-meta">
               <h4>${a.name}${a.verified ? ' ' + VERIFY_BADGE : ''}${!a.id ? ' <span style="font-size:10px; color:#666;">(no profile)</span>' : ''}</h4>
-              <p>${a.bio ? a.bio.substring(0, 50) + (a.bio.length > 50 ? '…' : '') : 'No bio yet — tap Edit to add'}</p>
+              <p>${a.bio ? a.bio.substring(0, 50) + (a.bio.length > 50 ? '…' : '') : 'No bio yet'}</p>
             </div>
           </div>
           <div class="artist-actions">
@@ -520,7 +481,7 @@
         setTimeout(() => { closeArtistModal(); loadArtists(); loadVerifyList(); }, 700);
       } catch (e) {
         status.style.color = '#ff0033';
-        status.innerText = '❌ ' + (e.message.includes('duplicate') ? 'Artist name already exists' : e.message.substring(0, 80));
+        status.innerText = '❌ ' + (e.message.includes('duplicate') ? 'Artist already exists' : e.message.substring(0, 80));
       }
     }
 
@@ -552,9 +513,7 @@
 
         allVerifyList = Object.values(map).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
         renderVerifyList('');
-      } catch (e) {
-        list.innerHTML = '<p class="empty" style="color:#ff0033;">Error loading.</p>';
-      }
+      } catch (e) { list.innerHTML = '<p class="empty" style="color:#ff0033;">Error.</p>'; }
     }
 
     function renderVerifyList(query) {
@@ -567,12 +526,10 @@
       }
       list.innerHTML = filtered.map(a => `
         <div class="v-card">
-          <div class="v-avatar">
-            ${a.profile_pic ? '<img src="' + a.profile_pic + '">' : a.name.charAt(0).toUpperCase()}
-          </div>
+          <div class="v-avatar">${a.profile_pic ? '<img src="' + a.profile_pic + '">' : a.name.charAt(0).toUpperCase()}</div>
           <div class="v-info">
             <h4>${a.name}${a.verified ? ' ' + VERIFY_BADGE : ''}</h4>
-            <p>${a.verified ? '✅ Verified artist' : 'Not verified'}</p>
+            <p>${a.verified ? '✅ Verified' : 'Not verified'}</p>
           </div>
           <button class="v-btn ${a.verified ? 'unverify' : ''}" onclick="askVerify('${a.name.replace(/'/g, "\\'")}', ${a.verified})">
             ${a.verified ? 'Unverify' : 'Verify'}
@@ -599,17 +556,13 @@
       const text = document.getElementById('confirmText');
       const btn = document.getElementById('confirmBtn');
       if (pendingConfirm.value) {
-        icon.innerText = '🔵';
-        title.innerText = 'Verify Artist';
-        text.innerHTML = 'Give the blue checkmark to <strong>' + name + '</strong>?';
-        btn.innerText = 'Verify';
-        btn.className = 'confirm-blue';
+        icon.innerText = '🔵'; title.innerText = 'Verify Artist';
+        text.innerHTML = 'Give the blue checkmark to <strong>' + name + '</strong>?<br><br><small style="color:#999">This will update ALL their songs and profile.</small>';
+        btn.innerText = 'Verify'; btn.className = 'confirm-blue';
       } else {
-        icon.innerText = '⚠️';
-        title.innerText = 'Unverify Artist';
-        text.innerHTML = 'Remove the blue checkmark from <strong>' + name + '</strong>?';
-        btn.innerText = 'Unverify';
-        btn.className = 'confirm-red';
+        icon.innerText = '⚠️'; title.innerText = 'Unverify Artist';
+        text.innerHTML = 'Remove the blue checkmark from <strong>' + name + '</strong>?<br><br><small style="color:#999">This will update ALL their songs and profile.</small>';
+        btn.innerText = 'Unverify'; btn.className = 'confirm-red';
       }
       document.getElementById('confirmModal').classList.add('open');
     }
@@ -624,20 +577,29 @@
       const { name, value } = pendingConfirm;
       closeConfirmModal();
       try {
-        const res1 = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=eq.' + encodeURIComponent(name), {
+        // 1. Update ALL songs by this artist (case-insensitive match)
+        const res1 = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=ilike.' + encodeURIComponent(name), {
           method: 'PATCH',
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
           body: JSON.stringify({ verified: value })
         });
+
+        // 2. Update the artist profile (case-insensitive)
         try {
-          await fetch(SUPABASE_URL + '/rest/v1/artists?name=eq.' + encodeURIComponent(name), {
+          await fetch(SUPABASE_URL + '/rest/v1/artists?name=ilike.' + encodeURIComponent(name), {
             method: 'PATCH',
             headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
             body: JSON.stringify({ verified: value })
           });
-        } catch (e) {}
-        if (res1.ok) { loadVerifyList(); loadArtists(); loadLikes(); }
-        else alert('Could not update.');
+        } catch (e) { console.warn('Artist profile update failed:', e); }
+
+        if (res1.ok) {
+          loadVerifyList();
+          loadArtists();
+          loadLikes();
+        } else {
+          alert('Could not update songs.');
+        }
       } catch (e) { alert('Network error.'); }
     }
 
@@ -694,9 +656,7 @@
     window.deleteComment = async function(id) {
       if (!confirm('Delete this comment?')) return;
       try {
-        await fetch(SUPABASE_URL + '/rest/v1/comments?id=eq.' + id, {
-          method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-        });
+        await fetch(SUPABASE_URL + '/rest/v1/comments?id=eq.' + id, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         loadComments();
       } catch (e) { alert('Could not delete.'); }
     }
@@ -767,9 +727,7 @@
     window.resetVotes = async function() {
       if (!confirm('Delete ALL votes?')) return;
       try {
-        await fetch(SUPABASE_URL + '/rest/v1/votes?id=gt.0', {
-          method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-        });
+        await fetch(SUPABASE_URL + '/rest/v1/votes?id=gt.0', { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         loadVotes();
       } catch (e) { alert('Could not reset.'); }
     }
@@ -816,9 +774,7 @@
     window.deleteManualVideo = async function(id) {
       if (!confirm('Delete this video?')) return;
       try {
-        await fetch(SUPABASE_URL + '/rest/v1/videos?id=eq.' + id, {
-          method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-        });
+        await fetch(SUPABASE_URL + '/rest/v1/videos?id=eq.' + id, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         loadManualVideos();
       } catch (e) { alert('Could not delete.'); }
     }
