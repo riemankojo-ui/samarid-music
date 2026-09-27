@@ -13,7 +13,7 @@
   body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; padding-bottom: 40px; }
 
   .header { position: sticky; top: 0; background: var(--header-bg); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
-  .back-btn { background: #222; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+  .back-btn { background: #222; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; text-decoration: none; }
   .back-btn:active { background: var(--accent); }
   .logo { font-size: 18px; font-weight: 900; color: #fff; text-decoration: none; flex: 1; text-align: center; }
   .logo span { color: var(--accent); }
@@ -31,8 +31,7 @@
 
   .detail-title { font-size: 22px; font-weight: 900; line-height: 1.25; margin-bottom: 6px; text-align: center; }
   .detail-meta { font-size: 13px; color: #999; margin-bottom: 8px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; flex-wrap: wrap; }
-  .detail-meta .artist { color: var(--accent); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
-  .detail-meta .artist:active { opacity: 0.7; }
+  .detail-meta .artist { color: var(--accent); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
 
   .play-count-wrapper { text-align: center; margin-bottom: 20px; }
   .play-count-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; box-shadow: 0 4px 15px rgba(255, 0, 51, 0.3); }
@@ -40,95 +39,19 @@
   .detail-label { text-align: center; font-size: 11px; color: #999; margin-bottom: 25px; letter-spacing: 1px; font-weight: 600; text-transform: uppercase; }
   .detail-label i { color: var(--accent); margin-right: 4px; }
 
-  /* ===== COMPACT FOLLOW ROW — TIGHT, SINGLE LINE, TAPPABLE ===== */
-  .follow-row-compact {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 0;
-    margin-bottom: 16px;
-  }
-  .follow-avatar-flat {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    overflow: hidden;
-    background: #ddd;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-weight: 900;
-    font-size: 17px;
-    cursor: pointer;
-    transition: transform 0.15s;
-  }
-  .follow-avatar-flat:active { transform: scale(0.92); }
+  .follow-row-compact { display: flex; align-items: center; gap: 10px; padding: 8px 0; margin-bottom: 16px; }
+  .follow-avatar-flat { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; overflow: hidden; background: #ddd; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 17px; }
   .follow-avatar-flat img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-  .follow-info-flat {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    overflow: hidden;
-  }
-  .follow-name-flat {
-    font-size: 14px;
-    font-weight: 900;
-    color: var(--text);
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
-  .follow-name-flat:active { opacity: 0.6; }
-  .follow-dot {
-    color: #bbb;
-    font-weight: 700;
-    font-size: 12px;
-    flex-shrink: 0;
-  }
-  .follow-stats-flat {
-    font-size: 12px;
-    color: #999;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  .follow-info-flat { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; overflow: hidden; }
+  .follow-name-flat { font-size: 14px; font-weight: 900; color: var(--accent); display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; flex-shrink: 0; text-decoration: none; }
+  .follow-dot { color: #bbb; font-weight: 700; font-size: 12px; flex-shrink: 0; }
+  .follow-stats-flat { font-size: 12px; color: #999; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .follow-stats-flat .stat-num { color: var(--text2); font-weight: 800; }
 
-  .follow-btn-flat {
-    padding: 7px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 800;
-    border: none;
-    background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%);
-    color: #fff;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
+  .follow-btn-flat { padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; border: none; background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; cursor: pointer; font-family: inherit; transition: all 0.15s; display: flex; align-items: center; gap: 5px; flex-shrink: 0; white-space: nowrap; }
   .follow-btn-flat:active { transform: scale(0.94); }
   .follow-btn-flat:disabled { opacity: 0.6; cursor: wait; }
-  .follow-btn-flat.following {
-    background: transparent;
-    color: var(--accent);
-    border: 1.5px solid var(--accent);
-    padding: 5.5px 14.5px;
-  }
+  .follow-btn-flat.following { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); padding: 5.5px 14.5px; }
 
   .detail-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
   .detail-section h4 { font-size: 12px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
@@ -185,19 +108,13 @@
   .error-box p { font-size: 13px; color: var(--text2); margin-bottom: 15px; }
   .error-box a { display: inline-block; padding: 12px 24px; background: var(--accent); color: #fff; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 13px; }
 
-  .verify-badge {
-    display: inline-block;
-    width: 13px;
-    height: 13px;
-    vertical-align: middle;
-    flex-shrink: 0;
-  }
+  .verify-badge { display: inline-block; width: 13px; height: 13px; vertical-align: middle; flex-shrink: 0; }
 </style>
 </head>
 <body>
 
   <header class="header">
-    <button class="back-btn" onclick="history.back()"><i class="fas fa-arrow-left"></i> Back</button>
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
     <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
     <div style="width: 70px;"></div>
   </header>
@@ -219,6 +136,10 @@
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
     const CONTACT_EMAIL = "wunatehk@gmail.com";
 
+    // 🎯 PLAY COUNT RULES
+    const PLAY_SECONDS_REQUIRED = 30;   // Must listen 30 seconds to count as a play
+    const MAX_PLAYS_PER_SESSION = 3;    // Max 3 plays per visitor per song
+
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
     let visitorId = localStorage.getItem('samarid_visitor_id');
@@ -230,11 +151,13 @@
     let currentSongData = null;
     let isFollowingArtist = false;
     let currentArtistName = '';
+    let isSongLiked = false;
 
-    // === OPEN ARTIST PAGE ===
-    window.openArtistPage = function(name) {
-      window.location.href = 'artist-template.html?name=' + encodeURIComponent(name);
-    }
+    // Play counting state
+    let secondsListened = 0;
+    let playCountTimer = null;
+    let hasCountedThisPlay = false;
+    let playsCountedThisSession = 0;
 
     async function loadSong() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -243,33 +166,18 @@
 
       if (!songId) {
         try {
-          const fallbackRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id&order=id.desc&limit=1', {
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-          });
+          const fallbackRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id&order=id.desc&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
           const fallbackData = await fallbackRes.json();
-          if (Array.isArray(fallbackData) && fallbackData.length > 0) {
-            songId = fallbackData[0].id;
-            window.history.replaceState({}, '', '?id=' + songId);
-          } else {
-            container.innerHTML = '<div class="error-box"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>No songs have been added.</p><a href="index.html">Go Home</a></div>';
-            return;
-          }
-        } catch (e) {
-          container.innerHTML = '<div class="error-box"><div class="icon">⚠️</div><h3>Connection Error</h3><p>Could not reach the database.</p><a href="index.html">Go Home</a></div>';
-          return;
-        }
+          if (Array.isArray(fallbackData) && fallbackData.length > 0) { songId = fallbackData[0].id; window.history.replaceState({}, '', '?id=' + songId); }
+          else { container.innerHTML = '<div class="error-box"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>No songs have been added.</p><a href="index.html">Go Home</a></div>'; return; }
+        } catch (e) { container.innerHTML = '<div class="error-box"><div class="icon">⚠️</div><h3>Connection Error</h3><p>Could not reach the database.</p><a href="index.html">Go Home</a></div>'; return; }
       }
 
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + songId, {
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-        });
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + songId, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const data = await res.json();
 
-        if (!data || data.length === 0) {
-          container.innerHTML = '<div class="error-box"><div class="icon">🔍</div><h3>Song Not Found</h3><p>No song with ID <strong>' + songId + '</strong> exists.</p><a href="index.html">Browse Songs</a></div>';
-          return;
-        }
+        if (!data || data.length === 0) { container.innerHTML = '<div class="error-box"><div class="icon">🔍</div><h3>Song Not Found</h3><p>No song with ID <strong>' + songId + '</strong> exists.</p><a href="index.html">Browse Songs</a></div>'; return; }
 
         const s = data[0];
         currentSongData = s;
@@ -281,19 +189,16 @@
 
         const audioSrc = s.audio_url || s.downloadurl || '';
         const downloadSrc = s.downloadurl || s.audio_url || '#';
-        const artistUrl = 'artist-template.html?name=' + encodeURIComponent(artist);
 
-        // Artist profile + follower count
+        // Check if this visitor already played max times
+        playsCountedThisSession = parseInt(localStorage.getItem('plays_' + visitorId + '_' + songId) || '0');
+
         let artistProfile = null;
         let followerCount = 0;
         try {
           const [profileRes, followsRes] = await Promise.all([
-            fetch(SUPABASE_URL + '/rest/v1/artists?name=eq.' + encodeURIComponent(artist) + '&limit=1', {
-              headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-            }),
-            fetch(SUPABASE_URL + '/rest/v1/follows?artist_name=eq.' + encodeURIComponent(artist) + '&select=id', {
-              headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-            })
+            fetch(SUPABASE_URL + '/rest/v1/artists?name=ilike.' + encodeURIComponent(artist) + '&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+            fetch(SUPABASE_URL + '/rest/v1/follows?artist_name=ilike.' + encodeURIComponent(artist) + '&select=id', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
           ]);
           const profileData = await profileRes.json();
           const followsData = await followsRes.json();
@@ -301,12 +206,9 @@
           followerCount = Array.isArray(followsData) ? followsData.length : 0;
         } catch (e) { console.error(e); }
 
-        // Am I following?
         let myFollow = false;
         try {
-          const myFollowRes = await fetch(SUPABASE_URL + '/rest/v1/follows?artist_name=eq.' + encodeURIComponent(artist) + '&visitor_id=eq.' + visitorId + '&select=id', {
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-          });
+          const myFollowRes = await fetch(SUPABASE_URL + '/rest/v1/follows?artist_name=ilike.' + encodeURIComponent(artist) + '&visitor_id=eq.' + visitorId + '&select=id', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
           const myFollowData = await myFollowRes.json();
           myFollow = Array.isArray(myFollowData) && myFollowData.length > 0;
         } catch (e) {}
@@ -314,16 +216,11 @@
         isFollowingArtist = myFollow;
 
         const profilePic = artistProfile && artistProfile.profile_pic ? artistProfile.profile_pic : null;
-        const avatarHTML = profilePic
-          ? '<img src="' + profilePic + '" alt="' + artist + '">'
-          : artist.charAt(0).toUpperCase();
+        const avatarHTML = profilePic ? '<img src="' + profilePic + '" alt="' + artist + '">' : artist.charAt(0).toUpperCase();
 
-        // Other artists
         let artistsList = [];
         try {
-          const artistsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,verified', {
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-          });
+          const artistsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
           const artistsData = await artistsRes.json();
           const map = {};
           artistsData.forEach(a => {
@@ -331,17 +228,14 @@
             if (!map[n]) map[n] = false;
             if (a.verified) map[n] = true;
           });
-          artistsList = Object.keys(map)
-            .filter(n => n.toLowerCase() !== artist.toLowerCase())
-            .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-            .map(n => ({ name: n, verified: map[n] }));
+          artistsList = Object.keys(map).filter(n => n.toLowerCase() !== artist.toLowerCase()).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())).map(n => ({ name: n, verified: map[n] }));
         } catch (e) {}
 
         const artistsHTML = artistsList.map(a => `
           <a href="artist-template.html?name=${encodeURIComponent(a.name)}" class="artist-link">${a.name}${a.verified ? VERIFY_BADGE : ''}</a>
         `).join('') || '<p style="text-align:center; color:#444; font-size:12px; grid-column:1/-1;">More artists coming soon.</p>';
 
-        const shareText = encodeURIComponent('🎵 Listen to "' + s.title + '" by ' + artist + ' on Samarid Music!');
+        const shareText = encodeURIComponent('Listen to "' + s.title + '" by ' + artist + ' on Samarid Music!');
         const shareUrl = encodeURIComponent(window.location.href);
 
         container.innerHTML = `
@@ -351,7 +245,7 @@
 
           <h1 class="detail-title">${s.title}</h1>
           <p class="detail-meta">
-            <span class="artist" onclick="openArtistPage('${artist.replace(/'/g, "\\'")}')">${artist}${badge}</span>
+            <a href="artist-template.html?name=${encodeURIComponent(artist)}" class="artist">${artist}${badge}</a>
             <span>•</span>
             <span>${s.date}</span>
             <span>•</span>
@@ -365,16 +259,16 @@
           <p class="detail-label"><i class="fas fa-compact-disc"></i> A Samarid Music Release</p>
 
           <div class="detail-section">
-            <h4>📖 About this Song</h4>
+            <h4>About this Song</h4>
             <p>${s.description || 'No description yet.'}</p>
           </div>
 
           <div class="presented-by">
-            🎵 <strong>SAMARID MUSIC</strong> presents this track • © 2026 Samarid Music
+            <strong>SAMARID MUSIC</strong> presents this track • © 2026 Samarid Music
           </div>
 
           <div class="audio-player-box">
-            <h4>🎧 Listen Now</h4>
+            <h4>Listen Now</h4>
             <audio id="audioPlayer" src="${audioSrc}" preload="metadata"></audio>
             <button class="play-pause-btn" id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
             <div class="seek-row">
@@ -385,7 +279,7 @@
           </div>
 
           <div class="detail-section">
-            <h4>⬇️ Get the Song</h4>
+            <h4>Get the Song</h4>
             <div class="download-buttons">
               <a href="${downloadSrc}" download="${artist} - ${s.title} [Samarid Music].mp3" id="detailDownload" class="btn-download" target="_blank">
                 <i class="fas fa-download"></i> Download MP3
@@ -393,11 +287,10 @@
             </div>
           </div>
 
-          <!-- COMPACT FOLLOW ROW — avatar + name tappable -->
           <div class="follow-row-compact">
-            <div class="follow-avatar-flat" onclick="openArtistPage('${artist.replace(/'/g, "\\'")}')">${avatarHTML}</div>
+            <div class="follow-avatar-flat">${avatarHTML}</div>
             <div class="follow-info-flat">
-              <span class="follow-name-flat" onclick="openArtistPage('${artist.replace(/'/g, "\\'")}')">${artist}${badge}</span>
+              <a href="artist-template.html?name=${encodeURIComponent(artist)}" class="follow-name-flat">${artist}${badge}</a>
               <span class="follow-dot">·</span>
               <span class="follow-stats-flat"><span class="stat-num" id="followerCountNum">${followerCount.toLocaleString()}</span> <span id="followerCountLabel">followers</span></span>
             </div>
@@ -407,8 +300,28 @@
             </button>
           </div>
 
+          <div class="detail-section" style="text-align:center;">
+            <h4>Show Some Love</h4>
+            <button id="likeBtn" onclick="toggleLikeSong()" style="background:transparent; border:2px solid #eee; padding:12px 24px; border-radius:30px; cursor:pointer; display:inline-flex; align-items:center; gap:10px; font-family:inherit; font-size:15px; font-weight:800; color:#888; transition:all 0.2s;">
+              <i class="far fa-heart" id="likeIcon" style="font-size:18px;"></i>
+              <span id="likeCount">0</span> Likes
+            </button>
+          </div>
+
+          <div class="detail-section">
+            <h4>Comments</h4>
+            <div id="commentsList" style="max-height:300px; overflow-y:auto; margin-bottom:15px;">
+              <p style="color:#999; font-size:13px; text-align:center;">Loading comments...</p>
+            </div>
+            <div style="display:flex; gap:8px; margin-top:15px;">
+              <input type="text" id="commentName" placeholder="Your name" style="flex:1; padding:12px; border:1px solid #ddd; border-radius:10px; font-family:inherit; font-size:13px;" maxlength="30">
+              <input type="text" id="commentMsg" placeholder="Write a comment..." style="flex:3; padding:12px; border:1px solid #ddd; border-radius:10px; font-family:inherit; font-size:13px;" maxlength="300" onkeypress="if(event.key==='Enter')postComment()">
+              <button onclick="postComment()" style="background:#ff0033; color:#fff; border:none; padding:12px 16px; border-radius:10px; cursor:pointer; font-weight:700;"><i class="fas fa-paper-plane"></i></button>
+            </div>
+          </div>
+
           <div class="share-section">
-            <h4>📤 Share this Song</h4>
+            <h4>Share this Song</h4>
             <div class="share-grid">
               <a href="https://wa.me/?text=${shareText}%20${shareUrl}" target="_blank" class="share-btn share-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
               <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-btn share-facebook"><i class="fab fa-facebook"></i> Facebook</a>
@@ -422,91 +335,102 @@
             <p class="dark-section-subtitle">Record Label • Ghana</p>
 
             <div class="contact-box">
-              <p class="contact-label">📧 Contact / Bookings</p>
+              <p class="contact-label">Contact / Bookings</p>
               <p class="contact-email">${CONTACT_EMAIL}</p>
               <p class="contact-hint">(Tap and hold to copy the email)</p>
             </div>
 
-            <p class="artists-label">🎤 More Artists on Samarid Music</p>
+            <p class="artists-label">More Artists on Samarid Music</p>
             <div class="artists-list">${artistsHTML}</div>
 
             <p class="dark-footer-note">© 2026 SAMARID MUSIC • ALL RIGHTS RESERVED</p>
           </div>
         `;
+
+        loadLikeState(s.id);
+        loadComments(s.id);
       } catch (e) {
         console.error(e);
         container.innerHTML = '<div class="error-box"><div class="icon">⚠️</div><h3>Error Loading Song</h3><p>' + (e.message || 'Something went wrong.') + '</p><a href="index.html">Go Home</a></div>';
       }
     }
 
-    // === FOLLOW ===
-    window.toggleFollowSong = async function() {
-      const btn = document.getElementById('songFollowBtn');
-      const icon = document.getElementById('songFollowIcon');
-      const text = document.getElementById('songFollowText');
-      const countNum = document.getElementById('followerCountNum');
-      btn.disabled = true;
-
-      const currentCount = parseInt(countNum.innerText.replace(/,/g, '')) || 0;
-      isFollowingArtist = !isFollowingArtist;
-      const newCount = isFollowingArtist ? currentCount + 1 : Math.max(0, currentCount - 1);
-      countNum.innerText = newCount.toLocaleString();
-
-      if (isFollowingArtist) {
-        btn.classList.add('following');
-        icon.className = 'fas fa-check';
-        text.innerText = 'Following';
-      } else {
-        btn.classList.remove('following');
-        icon.className = 'fas fa-plus';
-        text.innerText = 'Follow';
-      }
-
-      try {
-        if (isFollowingArtist) {
-          await fetch(SUPABASE_URL + '/rest/v1/follows', {
-            method: 'POST',
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ artist_name: currentArtistName, visitor_id: visitorId })
-          });
-        } else {
-          await fetch(SUPABASE_URL + '/rest/v1/follows?artist_name=eq.' + encodeURIComponent(currentArtistName) + '&visitor_id=eq.' + visitorId, {
-            method: 'DELETE',
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-          });
-        }
-      } catch (e) {
-        isFollowingArtist = !isFollowingArtist;
-        countNum.innerText = currentCount.toLocaleString();
-      } finally {
-        btn.disabled = false;
-      }
-    }
-
-    // === AUDIO ===
+    // ===== NEW PLAY COUNTING LOGIC =====
     window.togglePlay = function() {
       const audio = document.getElementById('audioPlayer');
       const btn = document.getElementById('playPauseBtn');
       if (!audio || !btn) return;
+
       if (audio.paused) {
+        // ▶️ PLAYING
         audio.play();
         btn.innerHTML = '<i class="fas fa-pause"></i>';
-        if (currentSongData) {
-          const newPlays = (currentSongData.plays || 0) + 1;
-          currentSongData.plays = newPlays;
-          const badge = document.getElementById('playCountBadge');
-          if (badge) badge.innerHTML = '🔥 ' + newPlays + ' plays';
-          fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + currentSongData.id, {
-            method: 'PATCH',
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ plays: newPlays })
-          }).catch(e => console.log('Play count save failed'));
+
+        // Check if already at max plays for this visitor
+        if (playsCountedThisSession >= MAX_PLAYS_PER_SESSION) {
+          console.log('Max plays reached for this visitor. No more counts.');
+          return;
         }
+
+        // Reset play counter for this session
+        hasCountedThisPlay = false;
+        secondsListened = 0;
+
+        // Clear any previous timer
+        if (playCountTimer) clearInterval(playCountTimer);
+
+        // Start counting seconds
+        playCountTimer = setInterval(() => {
+          secondsListened++;
+          console.log('Listening: ' + secondsListened + 's / ' + PLAY_SECONDS_REQUIRED + 's');
+
+          // If they hit 30 seconds AND haven't been counted yet → count +1
+          if (secondsListened >= PLAY_SECONDS_REQUIRED && !hasCountedThisPlay) {
+            hasCountedThisPlay = true;
+            incrementPlayCount();
+            playsCountedThisSession++;
+            localStorage.setItem('plays_' + visitorId + '_' + currentSongData.id, playsCountedThisSession);
+            clearInterval(playCountTimer);
+          }
+        }, 1000);
+
       } else {
+        // ⏸️ PAUSING
         audio.pause();
         btn.innerHTML = '<i class="fas fa-play"></i>';
+
+        // Stop counting when paused
+        if (playCountTimer) {
+          clearInterval(playCountTimer);
+          playCountTimer = null;
+        }
       }
     }
+
+    // Actually increment the play count in Supabase
+    async function incrementPlayCount() {
+      if (!currentSongData) return;
+      const newPlays = (currentSongData.plays || 0) + 1;
+      currentSongData.plays = newPlays;
+      const badge = document.getElementById('playCountBadge');
+      if (badge) badge.innerHTML = '🔥 ' + newPlays + ' plays';
+
+      try {
+        await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + currentSongData.id, {
+          method: 'PATCH',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plays: newPlays })
+        });
+        console.log('✅ Play counted! New total: ' + newPlays);
+      } catch (e) {
+        console.error('Play count save failed:', e);
+      }
+    }
+
+    // Stop counting if user leaves the page
+    window.addEventListener('beforeunload', () => {
+      if (playCountTimer) clearInterval(playCountTimer);
+    });
 
     document.addEventListener('timeupdate', function(e) {
       if (e.target.id === 'audioPlayer') {
@@ -538,6 +462,7 @@
         document.getElementById('playPauseBtn').innerHTML = '<i class="fas fa-play"></i>';
         document.getElementById('seekSlider').value = 0;
         document.getElementById('currentTime').innerText = '0:00';
+        if (playCountTimer) { clearInterval(playCountTimer); playCountTimer = null; }
       }
     }, true);
 
@@ -548,25 +473,112 @@
       return m + ':' + (s < 10 ? '0' : '') + s;
     }
 
+    // LIKE
+    async function loadLikeState(songId) {
+      try {
+        const [myLikeRes, allLikesRes] = await Promise.all([
+          fetch(SUPABASE_URL + '/rest/v1/likes?song_id=eq.' + songId + '&visitor_id=eq.' + visitorId + '&select=id', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/likes?song_id=eq.' + songId + '&select=id', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
+        ]);
+        const myLike = await myLikeRes.json();
+        const allLikes = await allLikesRes.json();
+        isSongLiked = Array.isArray(myLike) && myLike.length > 0;
+        updateLikeUI(Array.isArray(allLikes) ? allLikes.length : 0);
+      } catch (e) { console.error('Like load error:', e); }
+    }
+
+    function updateLikeUI(count) {
+      const btn = document.getElementById('likeBtn');
+      const icon = document.getElementById('likeIcon');
+      const countEl = document.getElementById('likeCount');
+      if (!btn || !icon || !countEl) return;
+      countEl.innerText = count;
+      if (isSongLiked) { btn.style.borderColor = '#ff0033'; btn.style.color = '#ff0033'; btn.style.background = 'rgba(255,0,51,0.08)'; icon.classList.remove('far'); icon.classList.add('fas'); }
+      else { btn.style.borderColor = '#eee'; btn.style.color = '#888'; btn.style.background = 'transparent'; icon.classList.remove('fas'); icon.classList.add('far'); }
+    }
+
+    window.toggleLikeSong = async function() {
+      if (!currentSongData) return;
+      const songId = currentSongData.id;
+      const countEl = document.getElementById('likeCount');
+      const currentCount = parseInt(countEl.innerText) || 0;
+      isSongLiked = !isSongLiked;
+      updateLikeUI(isSongLiked ? currentCount + 1 : Math.max(0, currentCount - 1));
+
+      try {
+        if (isSongLiked) {
+          await fetch(SUPABASE_URL + '/rest/v1/likes', { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ song_id: songId, visitor_id: visitorId }) });
+        } else {
+          await fetch(SUPABASE_URL + '/rest/v1/likes?song_id=eq.' + songId + '&visitor_id=eq.' + visitorId, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        }
+      } catch (e) { console.error('Like toggle failed:', e); }
+    }
+
+    // FOLLOW
+    window.toggleFollowSong = async function() {
+      const btn = document.getElementById('songFollowBtn');
+      const icon = document.getElementById('songFollowIcon');
+      const text = document.getElementById('songFollowText');
+      const countNum = document.getElementById('followerCountNum');
+      btn.disabled = true;
+
+      const currentCount = parseInt(countNum.innerText.replace(/,/g, '')) || 0;
+      isFollowingArtist = !isFollowingArtist;
+      const newCount = isFollowingArtist ? currentCount + 1 : Math.max(0, currentCount - 1);
+      countNum.innerText = newCount.toLocaleString();
+
+      if (isFollowingArtist) { btn.classList.add('following'); icon.className = 'fas fa-check'; text.innerText = 'Following'; }
+      else { btn.classList.remove('following'); icon.className = 'fas fa-plus'; text.innerText = 'Follow'; }
+
+      try {
+        if (isFollowingArtist) {
+          await fetch(SUPABASE_URL + '/rest/v1/follows', { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ artist_name: currentArtistName, visitor_id: visitorId }) });
+        } else {
+          await fetch(SUPABASE_URL + '/rest/v1/follows?artist_name=ilike.' + encodeURIComponent(currentArtistName) + '&visitor_id=eq.' + visitorId, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        }
+      } catch (e) { isFollowingArtist = !isFollowingArtist; countNum.innerText = currentCount.toLocaleString(); }
+      finally { btn.disabled = false; }
+    }
+
+    // COMMENTS
+    async function loadComments(songId) {
+      const container = document.getElementById('commentsList');
+      if (!container) return;
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/comments?song_id=eq.' + songId + '&select=*&order=id.desc&limit=50', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const comments = await res.json();
+        if (!Array.isArray(comments) || comments.length === 0) { container.innerHTML = '<p style="color:#999; font-size:13px; text-align:center; padding:15px;">Be the first to comment!</p>'; return; }
+        container.innerHTML = comments.map(c => `
+          <div style="padding:10px 0; border-bottom:1px solid #f0f0f0;">
+            <div style="font-size:12px; font-weight:800; color:#ff0033; margin-bottom:4px;">${c.name || 'Anonymous'}</div>
+            <div style="font-size:13px; color:#333; line-height:1.5; word-break:break-word;">${c.message}</div>
+          </div>
+        `).join('');
+      } catch (e) { container.innerHTML = '<p style="color:#999; font-size:13px; text-align:center;">Could not load comments.</p>'; }
+    }
+
+    window.postComment = async function() {
+      if (!currentSongData) return;
+      const nameInput = document.getElementById('commentName');
+      const msgInput = document.getElementById('commentMsg');
+      const name = nameInput.value.trim() || 'Anonymous';
+      const message = msgInput.value.trim();
+      if (!message) { showToast('Please write something'); return; }
+
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/comments', { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ song_id: currentSongData.id, name: name, message: message }) });
+        if (res.ok) { msgInput.value = ''; showToast('Comment posted!'); loadComments(currentSongData.id); }
+        else { showToast('Could not post'); }
+      } catch (e) { showToast('Network error'); }
+    }
+
     async function copyLink() {
       const url = window.location.href;
       try {
-        if (navigator.clipboard && window.isSecureContext) {
-          await navigator.clipboard.writeText(url);
-        } else {
-          const ta = document.createElement('textarea');
-          ta.value = url;
-          ta.style.position = 'fixed';
-          ta.style.opacity = '0';
-          document.body.appendChild(ta);
-          ta.select();
-          document.execCommand('copy');
-          document.body.removeChild(ta);
-        }
-        showToast('✅ Link copied!');
-      } catch (e) {
-        showToast('❌ Could not copy link');
-      }
+        if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(url); }
+        else { const ta = document.createElement('textarea'); ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }
+        showToast('Link copied!');
+      } catch (e) { showToast('Could not copy link'); }
     }
 
     function showToast(msg) {
