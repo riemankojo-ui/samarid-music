@@ -167,6 +167,8 @@
   </div>
 
   <div class="page-content">
+
+    <!-- 1. SONGS (TOP + LATEST) -->
     <div class="section-head"><i class="fas fa-fire icon-fire"></i><h3>Top Songs</h3></div>
     <div class="song-list" id="topSongsList"><div class="loading">Loading top songs...</div></div>
 
@@ -177,23 +179,7 @@
     </div>
     <div class="song-list" id="songList"><div class="loading">Loading songs...</div></div>
 
-    <div class="section-head"><i class="fas fa-music icon-cat"></i><h3>Browse by Category</h3></div>
-    <div class="pill-row" id="categoryPills"><span class="pill">Loading...</span></div>
-
-    <div class="section-head"><i class="fas fa-microphone icon-artist"></i><h3>Our Artists</h3></div>
-    <div class="pill-row" id="artistPills"><span class="pill">Loading...</span></div>
-
-    <div class="section-head"><i class="fas fa-chart-line icon-trend"></i><h3>Trending Artists</h3></div>
-    <div class="trending-artists-list" id="trendingArtistsList"><div class="loading">Loading...</div></div>
-
-    <div class="section-head"><i class="fas fa-share-nodes icon-social"></i><h3>Follow Us</h3></div>
-    <div class="social-grid">
-      <a href="https://youtube.com/@realsamarid" target="_blank" class="social-btn"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
-      <a href="https://tiktok.com/@realsamarid" target="_blank" class="social-btn"><i class="fab fa-tiktok" style="color: #ffffff;"></i> TikTok</a>
-      <a href="https://instagram.com/realsamarid" target="_blank" class="social-btn"><i class="fab fa-instagram" style="color: #E1306C;"></i> Instagram</a>
-      <a href="mailto:wunatehk@gmail.com" class="social-btn"><i class="fas fa-envelope" style="color: #EA4335;"></i> Email</a>
-    </div>
-
+    <!-- 2. NEVER MISS A DROP -->
     <div class="section-head"><i class="fas fa-envelope-open-text icon-mail"></i><h3>Never Miss A Drop</h3></div>
     <div class="email-signup-box">
       <div id="emailFormArea">
@@ -213,8 +199,27 @@
       </div>
     </div>
 
+    <!-- 3. TOP ALBUMS -->
     <div class="section-head"><i class="fas fa-compact-disc icon-album"></i><h3>Top Albums</h3></div>
     <div class="top-albums-list" id="topAlbumsList"><div class="loading">Loading albums...</div></div>
+
+    <!-- 4. FOLLOW US -->
+    <div class="section-head"><i class="fas fa-share-nodes icon-social"></i><h3>Follow Us</h3></div>
+    <div class="social-grid">
+      <a href="https://youtube.com/@realsamarid" target="_blank" class="social-btn"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
+      <a href="https://tiktok.com/@realsamarid" target="_blank" class="social-btn"><i class="fab fa-tiktok" style="color: #ffffff;"></i> TikTok</a>
+      <a href="https://instagram.com/realsamarid" target="_blank" class="social-btn"><i class="fab fa-instagram" style="color: #E1306C;"></i> Instagram</a>
+      <a href="mailto:wunatehk@gmail.com" class="social-btn"><i class="fas fa-envelope" style="color: #EA4335;"></i> Email</a>
+    </div>
+
+    <!-- 5. TRENDING ARTISTS -->
+    <div class="section-head"><i class="fas fa-chart-line icon-trend"></i><h3>Trending Artists</h3></div>
+    <div class="trending-artists-list" id="trendingArtistsList"><div class="loading">Loading...</div></div>
+
+    <!-- 6. CATEGORIES -->
+    <div class="section-head"><i class="fas fa-music icon-cat"></i><h3>Browse by Category</h3></div>
+    <div class="pill-row" id="categoryPills"><span class="pill">Loading...</span></div>
+
   </div>
 
   <div class="menu-dropdown" id="menuDropdown" onclick="event.stopPropagation()">
@@ -289,7 +294,7 @@
         container.innerHTML = songs.map((s) => {
           const artist = s.artist_name || 'Samarid';
           const badge = s.verified ? VERIFY_BADGE : '';
-          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+          return '<div class="song-card" onclick="window.location.href=\'song-details.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
         }).join('');
       } catch (e) { container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>Error</h3></div>'; }
     }
@@ -303,7 +308,7 @@
         list.innerHTML = songs.map((s) => {
           const artist = s.artist_name || 'Samarid';
           const badge = s.verified ? VERIFY_BADGE : '';
-          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+          return '<div class="song-card" onclick="window.location.href=\'song-details.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
         }).join('');
       } catch (e) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Error</h3></div>'; }
     }
@@ -328,6 +333,8 @@
       title.innerText = category;
       clearBtn.style.display = 'inline-block';
       list.innerHTML = '<div class="loading">Loading...</div>';
+      // Scroll up to the songs section
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/songs?category=ilike.' + encodeURIComponent(category) + '&select=*&order=plays.desc.nullslast,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
@@ -335,7 +342,7 @@
         list.innerHTML = songs.map((s) => {
           const artist = s.artist_name || 'Samarid';
           const badge = s.verified ? VERIFY_BADGE : '';
-          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+          return '<div class="song-card" onclick="window.location.href=\'song-details.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
         }).join('');
       } catch (e) {}
     }
@@ -345,22 +352,6 @@
       document.getElementById('clearFilterBtn').style.display = 'none';
       document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
       renderSongs();
-    }
-
-    async function loadArtists() {
-      const container = document.getElementById('artistPills');
-      try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        const songs = await res.json();
-        const artistMap = {};
-        songs.forEach(s => {
-          const name = (s.artist_name || 'Samarid').trim();
-          if (!artistMap[name]) artistMap[name] = false;
-          if (s.verified) artistMap[name] = true;
-        });
-        const artists = Object.keys(artistMap).sort();
-        container.innerHTML = artists.map(a => '<a href="artist-template.html?name=' + encodeURIComponent(a) + '" class="pill artist-pill">' + a + (artistMap[a] ? VERIFY_BADGE : '') + '</a>').join('');
-      } catch (e) {}
     }
 
     // TRENDING ARTISTS
@@ -401,7 +392,7 @@
       } catch (e) { container.innerHTML = '<div class="trending-empty">Error loading trending artists.</div>'; }
     }
 
-    // TOP ALBUMS — checks BOTH song.verified AND artist.verified
+    // TOP ALBUMS
     async function loadTopAlbums() {
       const container = document.getElementById('topAlbumsList');
       try {
@@ -415,7 +406,6 @@
           return;
         }
 
-        // 1. Fetch verified artists list first
         let verifiedArtists = {};
         try {
           const artistRes = await fetch(SUPABASE_URL + '/rest/v1/artists?select=name,verified', {
@@ -429,7 +419,6 @@
           }
         } catch (e) { console.warn('Artist fetch failed:', e); }
 
-        // 2. Group songs by album
         const albumMap = {};
         songs.forEach(s => {
           const albumName = s.album_name.trim();
@@ -450,7 +439,6 @@
           if (s.verified) albumMap[albumName].verified = true;
         });
 
-        // 3. Mark album verified if the ARTIST is verified
         Object.values(albumMap).forEach(album => {
           if (verifiedArtists[album.artist.toLowerCase()]) {
             album.verified = true;
@@ -548,7 +536,6 @@
     loadTopSongs();
     renderSongs();
     loadCategories();
-    loadArtists();
     loadTrendingArtists();
     loadTopAlbums();
   </script>
