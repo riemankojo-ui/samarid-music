@@ -4,66 +4,184 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Promo - Samarid Music</title>
-<meta name="google-site-verification" content="ERHvKE-6CNknsGMv75ePLrVpOGaURdtsnmuMh1VxG-4" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  :root { --bg: #0a0a0a; --card: #141414; --border: #222; --text: #ffffff; --text2: #cccccc; --accent: #ff0033; }
-  body.light { --bg: #ffffff; --card: #ffffff; --border: #e5e5e5; --text: #0a0a0a; --text2: #444444; }
+  :root { --bg: #ffffff; --text: #0a0a0a; --text2: #666; --accent: #ff0033; --border: #e5e5e5; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html, body { overflow-x: hidden; max-width: 100vw; }
-  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; transition: background 0.3s, color 0.3s; padding-bottom: 40px; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 40px; }
 
-  .header { position: sticky; top: 0; background: #0a0a0a; border-bottom: 1px solid #222; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
-  .menu-btn { width: 38px; height: 38px; border-radius: 50%; background: #222; border: 1px solid #333; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #ffffff; font-size: 18px; font-weight: 700; transition: all 0.15s; flex-shrink: 0; }
-  .menu-btn:active { background: var(--accent); }
+  .header { position: sticky; top: 0; background: #0a0a0a; border-bottom: 1px solid #222; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; gap: 10px; }
+  .back-btn { background: #222; color: #fff; border: 1px solid #333; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .back-btn:active { background: var(--accent); }
   .logo { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; color: #ffffff; text-decoration: none; flex: 1; text-align: center; }
   .logo span { color: var(--accent); }
-  .header-spacer { width: 38px; flex-shrink: 0; }
-
-  .tabs-container { position: sticky; top: 58px; z-index: 90; display: flex; gap: 28px; padding: 14px 18px; background: var(--bg); overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; border-bottom: 1px solid var(--border); white-space: nowrap; }
-  .tabs-container::-webkit-scrollbar { display: none; }
-  .text-tab { flex-shrink: 0; padding: 6px 0; color: #999; font-weight: 700; font-size: 15px; text-decoration: none; position: relative; transition: color 0.2s ease; white-space: nowrap; letter-spacing: 0.3px; }
-  .text-tab::after { content: ''; position: absolute; bottom: -4px; left: 0; right: 0; height: 3px; background: var(--accent); border-radius: 3px; transform: scaleX(0); transition: transform 0.25s ease; }
-  .text-tab:active { color: var(--accent); }
-  .text-tab.active { color: var(--text); font-weight: 900; }
-  .text-tab.active::after { transform: scaleX(1); }
-  body.light .text-tab { color: #888; }
-  body.light .text-tab.active { color: #0a0a0a; }
+  .header-spacer { width: 78px; flex-shrink: 0; }
 
   .page-content { padding: 20px 16px 30px; max-width: 700px; margin: 0 auto; }
-
-  .menu-dropdown { position: fixed; top: 58px; left: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); width: 260px; max-height: 80vh; overflow-y: auto; display: none; z-index: 9999; }
-  .menu-dropdown.open { display: block; }
-  .menu-title { padding: 12px 18px 8px; font-size: 10px; color: var(--text2); letter-spacing: 2px; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--border); margin-top: 5px; }
-  .menu-item { padding: 12px 18px; font-size: 13px; color: var(--text); cursor: pointer; display: flex; align-items: center; gap: 12px; text-decoration: none; border-bottom: 1px solid var(--border); transition: background 0.15s; }
-  .menu-item:last-child { border-bottom: none; }
-  .menu-item:active { background: var(--border); }
-  .menu-item .label { flex: 1; color: var(--text); }
-  .menu-item .arrow { color: var(--text2); font-size: 11px; }
-  .theme-row { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-  .theme-label { font-size: 13px; color: var(--text); }
-  .theme-toggle { display: flex; gap: 6px; }
-  .theme-btn { padding: 6px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 11px; cursor: pointer; transition: all 0.15s; }
-  .theme-btn.active { border-color: var(--accent); color: var(--accent); font-weight: 700; }
 
   /* HERO */
   .promo-hero { background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); border-radius: 20px; padding: 32px 24px; text-align: center; color: #fff; box-shadow: 0 15px 40px rgba(255,0,51,0.3); margin-bottom: 24px; position: relative; overflow: hidden; }
   .promo-hero::before { content: ''; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; border-radius: 50%; background: rgba(255,255,255,0.08); }
   .promo-hero::after { content: ''; position: absolute; bottom: -30px; left: -30px; width: 100px; height: 100px; border-radius: 50%; background: rgba(255,255,255,0.06); }
   .promo-hero .badge-top { display: inline-block; font-size: 10px; font-weight: 900; letter-spacing: 3px; padding: 5px 12px; background: rgba(255,255,255,0.2); border-radius: 20px; margin-bottom: 16px; }
-  .promo-hero h1 { font-size: 28px; font-weight: 900; line-height: 1.15; margin-bottom: 12px; letter-spacing: -0.8px; position: relative; z-index: 1; }
+  .promo-hero h1 { font-size: 26px; font-weight: 900; line-height: 1.15; margin-bottom: 12px; letter-spacing: -0.8px; position: relative; z-index: 1; }
   .promo-hero p { font-size: 14px; line-height: 1.6; opacity: 0.95; margin-bottom: 22px; position: relative; z-index: 1; }
-  .promo-hero-btn { display: inline-flex; align-items: center; gap: 8px; background: #ffffff; color: #ff0033; padding: 14px 26px; border-radius: 30px; text-decoration: none; font-weight: 900; font-size: 13px; letter-spacing: 0.5px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); transition: transform 0.15s; position: relative; z-index: 1; }
+  .promo-hero-btn { display: inline-flex; align-items: center; gap: 8px; background: #ffffff; color: #ff0033; padding: 14px 26px; border-radius: 30px; text-decoration: none; font-weight: 900; font-size: 13px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); position: relative; z-index: 1; }
   .promo-hero-btn:active { transform: scale(0.95); }
 
-  /* SERVICE CARDS */
-  .promo-section-title { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); font-weight: 800; margin: 28px 0 14px; padding-left: 4px; }
+  /* STATS */
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 24px 0; }
+  .stat-box { background: #fafafa; border: 1px solid var(--border); border-radius: 14px; padding: 18px 8px; text-align: center; }
+  .stat-box .num { font-size: 22px; font-weight: 900; color: var(--accent); margin-bottom: 4px; }
+  .stat-box .lbl { font-size: 10px; color: var(--text2); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; }
 
-  .service-card { display: flex; gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 12px; align-items: flex-start; transition: transform 0.2s; }
-  .service-card:active { transform: scale(0.99); }
+  /* ===== LIVE DISTRIBUTORS SLIDER BOX ===== */
+  @keyframes slideLogos {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .distributors-bounce {
+    position: relative;
+    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+    border: 1px solid #86efac;
+    border-radius: 20px;
+    padding: 24px 0 26px;
+    margin-top: 26px;
+    overflow: hidden;
+    text-align: center;
+  }
+  .distributors-bounce::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(0, 204, 68, 0.08);
+    pointer-events: none;
+  }
+
+  .dist-label {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #16a34a;
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 3;
+  }
+  .dist-label span { color: #0a0a0a; }
+
+  .logo-slider {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    margin-bottom: 20px;
+    height: 66px;
+    display: flex;
+    align-items: center;
+    contain: layout paint;
+  }
+  .logo-slider::before,
+  .logo-slider::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .logo-slider::before {
+    left: 0;
+    background: linear-gradient(to right, #f5fdf8 0%, rgba(245,253,248,0) 100%);
+  }
+  .logo-slider::after {
+    right: 0;
+    background: linear-gradient(to left, #f5fdf8 0%, rgba(245,253,248,0) 100%);
+  }
+
+  .logo-track {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    animation: slideLogos 22s linear infinite;
+    flex-shrink: 0;
+    padding-left: 30px;
+    width: max-content;
+    will-change: transform;
+  }
+  .logo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    min-width: 80px;
+  }
+  .logo-item img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    display: block;
+  }
+  .logo-item .logo-name {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: #16a34a;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .dist-content {
+    padding: 0 20px;
+    position: relative;
+    z-index: 3;
+  }
+  .dist-content h3 {
+    font-size: 20px;
+    font-weight: 900;
+    color: #0a0a0a;
+    margin-bottom: 5px;
+    letter-spacing: -0.4px;
+  }
+  .dist-content h3 span { color: #16a34a; }
+  .dist-content p {
+    font-size: 12px;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .distributors-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #00cc44 0%, #00a838 100%);
+    color: #fff;
+    border-radius: 30px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.3px;
+    box-shadow: 0 8px 25px rgba(0, 204, 68, 0.4);
+    transition: transform 0.15s;
+    position: relative;
+  }
+  .distributors-btn:active { transform: scale(0.95); }
+  .distributors-btn i { font-size: 13px; }
+
+  /* SERVICES */
+  .promo-section-title { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); font-weight: 800; margin: 28px 0 14px; padding-left: 4px; }
+  .service-card { display: flex; gap: 14px; background: #fafafa; border: 1px solid var(--border); border-radius: 16px; padding: 18px; margin-bottom: 12px; align-items: flex-start; }
   .service-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; color: #fff; }
   .service-icon.red { background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); }
   .service-icon.purple { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); }
@@ -71,43 +189,29 @@
   .service-icon.blue { background: linear-gradient(135deg, #0084ff 0%, #0055cc 100%); }
   .service-icon.orange { background: linear-gradient(135deg, #ff8800 0%, #cc6600 100%); }
   .service-info { flex: 1; min-width: 0; }
-  .service-info h4 { font-size: 15px; font-weight: 900; margin-bottom: 4px; letter-spacing: -0.3px; }
+  .service-info h4 { font-size: 15px; font-weight: 900; margin-bottom: 4px; letter-spacing: -0.3px; color: #0a0a0a; }
   .service-info p { font-size: 12px; line-height: 1.55; color: var(--text2); }
 
-  /* STATS BAR */
-  .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 24px 0; }
-  .stat-box { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px 8px; text-align: center; }
-  .stat-box .num { font-size: 22px; font-weight: 900; color: var(--accent); margin-bottom: 4px; }
-  .stat-box .lbl { font-size: 10px; color: var(--text2); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; }
-
-  /* CTA BOX */
+  /* CTA */
   .cta-box { background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 20px; padding: 28px 22px; text-align: center; margin-top: 24px; }
-  .cta-box h3 { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .cta-box h3 { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 8px; }
   .cta-box p { font-size: 13px; color: #aaa; line-height: 1.6; margin-bottom: 20px; }
   .cta-box .email-box { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; background: #141414; border: 1px solid #2a2a2a; border-radius: 12px; color: #fff; font-size: 13px; font-weight: 700; text-decoration: none; margin-bottom: 12px; word-break: break-all; }
   .cta-box .email-box i { color: var(--accent); }
-  .cta-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; max-width: 280px; padding: 15px; background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; border-radius: 30px; text-decoration: none; font-weight: 900; font-size: 14px; letter-spacing: 0.3px; box-shadow: 0 10px 25px rgba(255,0,51,0.4); transition: transform 0.15s; }
+  .cta-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%; max-width: 280px; padding: 15px; background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; border-radius: 30px; text-decoration: none; font-weight: 900; font-size: 14px; box-shadow: 0 10px 25px rgba(255,0,51,0.4); }
   .cta-btn:active { transform: scale(0.96); }
 
   .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); letter-spacing: 1px; border-top: 1px solid var(--border); margin-top: 30px; }
   .footer .brand { color: var(--accent); font-weight: 700; }
 </style>
 </head>
-<body class="light">
+<body>
 
   <header class="header">
-    <button class="menu-btn" onclick="toggleMenu(event)">☰</button>
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
     <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
     <div class="header-spacer"></div>
   </header>
-
-  <div class="tabs-container">
-    <a href="index.html" class="text-tab">Music</a>
-    <a href="albums.html" class="text-tab">Albums</a>
-    <a href="promo.html" class="text-tab active">Promo</a>
-    <a href="about.html" class="text-tab">About</a>
-    <a href="videos.html" class="text-tab">Videos</a>
-  </div>
 
   <div class="page-content">
 
@@ -126,52 +230,67 @@
       <div class="stat-box"><div class="num">24/7</div><div class="lbl">Support</div></div>
     </div>
 
+    <!-- LIVE DISTRIBUTORS SLIDER (NEW!) -->
+    <div class="distributors-bounce">
+      <div class="dist-label">Live On <span>Every Platform</span></div>
+
+      <div class="logo-slider">
+        <div class="logo-track">
+          <!-- Set 1 -->
+          <div class="logo-item"><img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_Green.png" alt="Spotify"><span class="logo-name">Spotify</span></div>
+          <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Music"><span class="logo-name">Apple Music</span></div>
+          <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=boomplay.com&sz=128" alt="Boomplay"><span class="logo-name">Boomplay</span></div>
+          <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=music.youtube.com&sz=128" alt="YouTube Music"><span class="logo-name">YouTube</span></div>
+          <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=music.amazon.com&sz=128" alt="Amazon Music"><span class="logo-name">Amazon</span></div>
+          <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=audiomack.com&sz=128" alt="Audiomack"><span class="logo-name">Audiomack</span></div>
+          <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=tidal.com&sz=128" alt="Tidal"><span class="logo-name">Tidal</span></div>
+          <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=deezer.com&sz=128" alt="Deezer"><span class="logo-name">Deezer</span></div>
+          <!-- Set 2 (duplicate for seamless loop) -->
+          <div class="logo-item"><img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_Green.png" alt="Spotify"><span class="logo-name">Spotify</span></div>
+          <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Music"><span class="logo-name">Apple Music</span></div>
+          <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=boomplay.com&sz=128" alt="Boomplay"><span class="logo-name">Boomplay</span></div>
+          <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=music.youtube.com&sz=128" alt="YouTube Music"><span class="logo-name">YouTube</span></div>
+          <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=music.amazon.com&sz=128" alt="Amazon Music"><span class="logo-name">Amazon</span></div>
+          <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=audiomack.com&sz=128" alt="Audiomack"><span class="logo-name">Audiomack</span></div>
+          <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=tidal.com&sz=128" alt="Tidal"><span class="logo-name">Tidal</span></div>
+          <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=deezer.com&sz=128" alt="Deezer"><span class="logo-name">Deezer</span></div>
+        </div>
+      </div>
+
+      <div class="dist-content">
+        <h3>Music <span>Distributers</span></h3>
+        <p>Spotify • Apple Music • Boomplay • YouTube</p>
+        <a href="distributors.html" class="distributors-btn"><i class="fas fa-arrow-up-right-from-square"></i> See Distributers</a>
+      </div>
+    </div>
+
     <!-- SERVICES -->
     <div class="promo-section-title">What We Offer</div>
 
     <div class="service-card">
       <div class="service-icon red"><i class="fas fa-music"></i></div>
-      <div class="service-info">
-        <h4>Music Distribution</h4>
-        <p>Get your songs on Spotify, Apple Music, Boomplay, YouTube Music & Amazon Music. Fast upload, worldwide reach.</p>
-      </div>
+      <div class="service-info"><h4>Music Distribution</h4><p>Get your songs on Spotify, Apple Music, Boomplay, YouTube Music & Amazon Music. Fast upload, worldwide reach.</p></div>
     </div>
-
     <div class="service-card">
       <div class="service-icon purple"><i class="fas fa-bullhorn"></i></div>
-      <div class="service-info">
-        <h4>Artist Promotion</h4>
-        <p>Playlist placements, social media push, blog features, and targeted ads to grow your fanbase fast.</p>
-      </div>
+      <div class="service-info"><h4>Artist Promotion</h4><p>Playlist placements, social media push, blog features, and targeted ads to grow your fanbase fast.</p></div>
     </div>
-
     <div class="service-card">
       <div class="service-icon green"><i class="fas fa-microphone"></i></div>
-      <div class="service-info">
-        <h4>Recording & Production</h4>
-        <p>Professional recording sessions, mixing & mastering. Bring your idea to life with studio-quality sound.</p>
-      </div>
+      <div class="service-info"><h4>Recording & Production</h4><p>Professional recording sessions, mixing & mastering. Bring your idea to life with studio-quality sound.</p></div>
     </div>
-
     <div class="service-card">
       <div class="service-icon blue"><i class="fas fa-video"></i></div>
-      <div class="service-info">
-        <h4>Video Production</h4>
-        <p>Music videos, visualizers, and lyric videos shot, edited, and delivered ready for YouTube.</p>
-      </div>
+      <div class="service-info"><h4>Video Production</h4><p>Music videos, visualizers, and lyric videos shot, edited, and delivered ready for YouTube.</p></div>
     </div>
-
     <div class="service-card">
       <div class="service-icon orange"><i class="fas fa-crown"></i></div>
-      <div class="service-info">
-        <h4>Artist Development</h4>
-        <p>Brand building, image consulting, social media strategy, and one-on-one coaching for emerging artists.</p>
-      </div>
+      <div class="service-info"><h4>Artist Development</h4><p>Brand building, image consulting, social media strategy, and one-on-one coaching for emerging artists.</p></div>
     </div>
 
     <!-- CTA -->
     <div class="cta-box">
-      <h3>Ready To Blow Up? 🚀</h3>
+      <h3>Ready To Blow Up?</h3>
       <p>Send us a message and let's take your music career to the next level. We respond within 24 hours.</p>
       <a href="mailto:wunatehk@gmail.com" class="email-box"><i class="fas fa-envelope"></i> wunatehk@gmail.com</a>
       <br>
@@ -180,59 +299,7 @@
 
   </div>
 
-  <div class="menu-dropdown" id="menuDropdown" onclick="event.stopPropagation()">
-    <div class="menu-title">Subscribe</div>
-    <a href="#" onclick="fakeSubscribe(event)" class="menu-item"><span class="label" style="color: #ff0033; font-weight: 900;"><i class="fab fa-youtube" style="margin-right: 8px;"></i>Subscribe on YouTube</span><span class="arrow">➡</span></a>
-    <div class="menu-title">Settings</div>
-    <div class="theme-row">
-      <span class="theme-label">Theme</span>
-      <div class="theme-toggle">
-        <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">Dark</button>
-        <button class="theme-btn" data-theme="light" onclick="setTheme('light')">Light</button>
-      </div>
-    </div>
-    <a href="artists.html" class="menu-item"><span class="label" style="font-weight: 900; font-size: 15px;">All Artists</span><span class="arrow">➡</span></a>
-    <div class="menu-title">Fanbase</div>
-    <a href="fanbase.html" class="menu-item"><span class="label">Connect To Fanbase</span><span class="arrow">➡</span></a>
-    <div class="menu-title">Resources</div>
-    <a href="distributors.html" class="menu-item"><span class="label">🎧 Get On Spotify</span><span class="arrow">➡</span></a>
-  </div>
-
-  <div class="sub-modal" id="subModal" onclick="closeSubModal()">
-    <div class="sub-modal-inner" onclick="event.stopPropagation()">
-      <div style="font-size: 40px; margin-bottom: 10px;">🎵</div>
-      <h2 style="font-size: 20px; font-weight: 900; margin-bottom: 10px;">Support Samarid Music</h2>
-      <p style="font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.5;">Subscribe to the official YouTube channel!</p>
-      <a href="#" id="popupSubBtn" target="_blank" class="sub-modal-btn confirm">Subscribe on YouTube</a>
-      <button onclick="closeSubModal()" class="sub-modal-btn close">I'll do it later</button>
-    </div>
-  </div>
-
   <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
 
-  <script>
-    window.toggleMenu = function(e) { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('open'); }
-    document.addEventListener('click', () => document.getElementById('menuDropdown').classList.remove('open'));
-
-    window.fakeSubscribe = function(e) {
-      e.preventDefault();
-      const channelId = localStorage.getItem('samarid_channel_id');
-      const subLink = channelId ? 'https://www.youtube.com/channel/' + channelId + '?sub_confirmation=1' : 'https://youtube.com/@realsamarid?sub_confirmation=1';
-      document.getElementById('popupSubBtn').href = subLink;
-      document.getElementById('subModal').classList.add('open');
-    }
-    window.closeSubModal = () => document.getElementById('subModal').classList.remove('open');
-
-    window.applySettings = function() {
-      const theme = localStorage.getItem('samarid-theme') || 'light';
-      const accent = localStorage.getItem('samarid-accent') || '#ff0033';
-      document.body.classList.toggle('light', theme === 'light');
-      document.documentElement.style.setProperty('--accent', accent);
-      document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
-    }
-    window.setTheme = (theme) => { localStorage.setItem('samarid-theme', theme); applySettings(); }
-
-    applySettings();
-  </script>
 </body>
 </html>
