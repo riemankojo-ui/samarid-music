@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Song - Samarid Music</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root { --bg: #f2f2f2; --card: #ffffff; --border: #e0e0e0; --text: #1a1a1a; --text2: #666666; --accent: #ff0033; --header-bg: #111111; --dark: #0a0a0a; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; padding-bottom: 40px; }
+
+  .header { position: sticky; top: 0; background: var(--header-bg); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
+  .back-btn { background: #222; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; text-decoration: none; }
+  .back-btn:active { background: var(--accent); }
+  .logo { font-size: 18px; font-weight: 900; color: #fff; text-decoration: none; flex: 1; text-align: center; }
+  .logo span { color: var(--accent); }
+
+  .label-banner { background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); color: #fff; padding: 12px 20px; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 900; letter-spacing: 2px; font-size: 13px; box-shadow: 0 4px 15px rgba(255, 0, 51, 0.3); }
+  .label-banner .label-text { text-transform: uppercase; }
+
+  .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
+
+  .big-title { font-size: 18px; font-weight: 900; line-height: 1.3; text-align: center; margin-bottom: 20px; padding: 15px 10px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); }
+  .big-title .accent { color: var(--accent); }
+
+  .detail-cover-box { width: 100%; max-width: 300px; margin: 0 auto 25px; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.12); background: #000; }
+  .detail-cover-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .detail-title { font-size: 22px; font-weight: 900; line-height: 1.25; margin-bottom: 6px; text-align: center; }
+  .detail-meta { font-size: 13px; color: #999; margin-bottom: 8px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; flex-wrap: wrap; }
+  .detail-meta .artist { color: var(--accent); font-weight: 700; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
+
+  .play-count-wrapper { text-align: center; margin-bottom: 20px; }
+  .play-count-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; box-shadow: 0 4px 15px rgba(255, 0, 51, 0.3); }
+
+  .detail-label { text-align: center; font-size: 11px; color: #999; margin-bottom: 25px; letter-spacing: 1px; font-weight: 600; text-transform: uppercase; }
+  .detail-label i { color: var(--accent); margin-right: 4px; }
+
+  .follow-row-compact { display: flex; align-items: center; gap: 10px; padding: 8px 0; margin-bottom: 16px; }
+  .follow-avatar-flat { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; overflow: hidden; background: #ddd; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 17px; }
+  .follow-avatar-flat img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .follow-info-flat { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; overflow: hidden; }
+  .follow-name-flat { font-size: 14px; font-weight: 900; color: var(--accent); display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; flex-shrink: 0; text-decoration: none; }
+  .follow-dot { color: #bbb; font-weight: 700; font-size: 12px; flex-shrink: 0; }
+  .follow-stats-flat { font-size: 12px; color: #999; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .follow-stats-flat .stat-num { color: var(--text2); font-weight: 800; }
+
+  .follow-btn-flat { padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; border: none; background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; cursor: pointer; font-family: inherit; transition: all 0.15s; display: flex; align-items: center; gap: 5px; flex-shrink: 0; white-space: nowrap; }
+  .follow-btn-flat:active { transform: scale(0.94); }
+  .follow-btn-flat:disabled { opacity: 0.6; cursor: wait; }
+  .follow-btn-flat.following { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); padding: 5.5px 14.5px; }
+
+  .detail-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .detail-section h4 { font-size: 12px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
+  .detail-section p { font-size: 15px; line-height: 1.7; }
+
+  .audio-player-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center; }
+  .audio-player-box h4 { font-size: 12px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 15px; }
+  .play-pause-btn { width: 60px; height: 60px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; box-shadow: 0 8px 20px rgba(255, 0, 51, 0.35); transition: 0.2s; }
+  .play-pause-btn:active { transform: scale(0.9); }
+  .seek-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text2); font-weight: 600; }
+  input[type=range] { flex: 1; height: 5px; -webkit-appearance: none; background: var(--border); border-radius: 3px; outline: none; cursor: pointer; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); cursor: pointer; }
+
+  .download-buttons { display: flex; flex-direction: column; gap: 12px; }
+  .btn-download { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; border-radius: 10px; font-size: 15px; font-weight: 700; text-decoration: none; color: #fff; background: #e74c3c; cursor: pointer; border: none; font-family: inherit; }
+  .btn-download:active { background: #c0392b; }
+
+  .share-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .share-section h4 { font-size: 12px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 15px; text-align: center; }
+  .share-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .share-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; font-family: inherit; text-decoration: none; transition: all 0.2s; }
+  .share-btn:active { transform: scale(0.96); }
+  .share-btn i { font-size: 16px; }
+  .share-whatsapp { background: #25D366; color: #fff; }
+  .share-facebook { background: #1877F2; color: #fff; }
+  .share-twitter { background: #000; color: #fff; }
+  .share-copy { background: var(--accent); color: #fff; }
+
+  .presented-by { text-align: center; padding: 15px; margin-bottom: 15px; background: var(--card); border: 1px dashed var(--border); border-radius: 10px; font-size: 12px; color: #666; font-weight: 600; }
+  .presented-by strong { color: var(--accent); }
+
+  .dark-section { background: var(--dark); color: #fff; border-radius: 16px; padding: 30px 20px; margin-top: 30px; border: 1px solid #222; }
+  .dark-section-title { font-size: 14px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); text-align: center; margin-bottom: 6px; }
+  .dark-section-subtitle { font-size: 12px; color: #888; text-align: center; margin-bottom: 20px; }
+
+  .contact-box { text-align: center; padding: 20px 15px; background: #111; border: 1px solid #222; border-radius: 12px; margin-bottom: 25px; }
+  .contact-label { font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
+  .contact-email { font-size: 16px; font-weight: 700; color: #fff; text-decoration: line-through; text-decoration-color: var(--accent); text-decoration-thickness: 2px; letter-spacing: 0.5px; word-break: break-all; }
+  .contact-hint { font-size: 11px; color: #666; margin-top: 10px; font-style: italic; }
+
+  .artists-label { font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; padding-left: 4px; }
+  .artists-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .artist-link { display: flex; align-items: center; justify-content: center; gap: 5px; padding: 14px 12px; background: #111; border: 1px solid #222; border-radius: 10px; text-decoration: none; color: var(--accent); font-size: 14px; font-weight: 700; text-align: center; transition: 0.15s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .artist-link:active { background: #1a1a1a; transform: scale(0.97); }
+
+  .dark-footer-note { text-align: center; font-size: 11px; color: #444; margin-top: 25px; letter-spacing: 1px; }
+
+  .footer { padding: 30px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 40px; background: var(--card); }
+  .footer .brand { color: var(--accent); font-weight: 700; }
+  .loading { text-align: center; padding: 60px 20px; color: var(--text2); }
+  .error-box { text-align: center; padding: 40px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
+  .error-box .icon { font-size: 50px; margin-bottom: 15px; }
+  .error-box h3 { font-size: 16px; margin-bottom: 8px; }
+  .error-box p { font-size: 13px; color: var(--text2); margin-bottom: 15px; }
+  .error-box a { display: inline-block; padding: 12px 24px; background: var(--accent); color: #fff; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 13px; }
+
+  .verify-badge { display: inline-block; width: 13px; height: 13px; vertical-align: middle; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+    <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
+    <div style="width: 70px;"></div>
+  </header>
+
+  <div class="label-banner">
+    <i class="fas fa-compact-disc"></i>
+    <span class="label-text">Samarid Music Release</span>
+    <i class="fas fa-compact-disc"></i>
+  </div>
+
+  <div class="container" id="songDetail">
+    <div class="loading">Loading song...</div>
+  </div>
+
+  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
+
+  <script>
+    const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+    const CONTACT_EMAIL = "wunatehk@gmail.com";
+
+    const PLAY_SECONDS_REQUIRED = 30;
+    const PLAY_COOLDOWN_HOURS = 6;
+
+    const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
+
+    let visitorId = localStorage.getItem('samarid_visitor_id');
+    if (!visitorId) {
+      visitorId = 'v_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('samarid_visitor_id', visitorId);
+    }
+
+    let currentSongData = null;
+    let isFollowingArtist = false;
+    let currentArtistName = '';
+    let isSongLiked = false;
+    let secondsListened = 0;
+    let playCountTimer = null;
+    let hasCountedThisPlay = false;
+
+    function hasRecentPlay(songId) {
+      const key = 'lastplay_' + visitorId + '_' + songId;
+      const lastPlay = localStorage.getItem(key);
+      if (!lastPlay) return false;
+      const hoursSince = (Date.now() - parseInt(lastPlay)) / (1000 * 60 * 60);
+      return hoursSince < PLAY_COOLDOWN_HOURS;
+    }
+
+    function markPlayed(songId) {
+      const key = 'lastplay_' + visitorId + '_' + songId;
+      localStorage.setItem(key, Date.now().toString());
+    }
+
+    async function loadSong() {
+      const urlParams = new URLSearchParams(window.location.search);
+      let songId = urlParams.get('id');
+      const container = document.getElementById('songDetail');
+
+      if (!songId) {
+        try {
+          const fallbackRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id&order=id.desc&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+          const fallbackData = await fallbackRes.json();
+          if (Array.isArray(fallbackData) && fallbackData.length > 0) { songId = fallbackData[0].id; window.history.replaceState({}, '', '?id=' + songId); }
+          else { container.innerHTML = '<div class="error-box"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>No songs have been added.</p><a href="index.html">Go Home</a></div>'; return; }
+        } catch (e) { container.innerHTML = '<div class="error-box"><div class="icon">⚠️</div><h3>Connection Error</h3><p>Could not reach the database.</p><a href="index.html">Go Home</a></div>'; return; }
+      }
+
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + songId, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const data = await res.json();
+
+        if (!data || data.length === 0) { container.innerHTML = '<div class="error-box"><div class="icon">🔍</div><h3>Song Not Found</h3><p>No song with ID <strong>' + songId + '</strong> exists.</p><a href="index.html">Browse Songs</a></div>'; return; }
+
+        const s = data[0];
+        currentSongData = s;
+        const artist = s.artist_name || 'Samarid';
+        currentArtistName = artist;
+        const badge = s.verified ? VERIFY_BADGE : '';
+        const downloadTitle = artist + ' - ' + s.title;
+        document.title = downloadTitle + ' - Samarid Music';
+
+        const audioSrc = s.audio_url || s.downloadurl || '';
+        const downloadSrc = s.downloadurl || s.audio_url || '#';
+
+        let artistProfile = null;
+        let followerCount = 0;
+        try {
+          const [profileRes, followsRes] = await Promise.all([
+            fetch(SUPABASE_URL + '/rest/v1/artists?name=ilike.' + encodeURIComponent(artist) + '&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+            fetch(SUPABASE_URL + '/rest/v1/follows?artist_name=ilike.' + encodeURIComponent(artist) + '&select=id', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
+          ]);
+          const profileData = await profileRes.json();
+          const followsData = await followsRes.json();
+          if (Array.isArray(profileData) && profileData.length > 0) artistProfile = profileData[0];
+          followerCount = Array.isArray(followsData) ? followsData.length : 0;
+        } catch (e) { console.error(e); }
+
+        let myFollow = false;
+        try {
+          const myFollowRes = await fetch(SUPABASE_URL + '/rest/v1/follows?artist_name=ilike.' + encodeURIComponent(artist) + '&visitor_id=eq.' + visitorId + '&select=id', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+          const myFollowData = await myFollowRes.json();
+          myFollow = Array.isArray(myFollowData) && myFollowData.length > 0;
+        } catch (e) {}
+
+        isFollowingArtist = myFollow;
+
+        const profilePic = artistProfile && artistProfile.profile_pic ? artistProfile.profile_pic : null;
+        const avatarHTML = profilePic ? '<img src="' + profilePic + '" alt="' + artist + '">' : artist.charAt(0).toUpperCase();
+
+        let artistsList = [];
+        try {
+          const artistsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+          const artistsData = await artistsRes.json();
+          const map = {};
+          artistsData.forEach(a => {
+            const n = (a.artist_name || 'Samarid').trim();
+            if (!map[n]) map[n] = false;
+            if (a.verified) map[n] = true;
+          });
+          artistsList = Object.keys(map).filter(n => n.toLowerCase() !== artist.toLowerCase()).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())).map(n => ({ name: n, verified: map[n] }));
+        } catch (e) {}
+
+        const artistsHTML = artistsList.map(a => `
+          <a href="artist-template.html?name=${encodeURIComponent(a.name)}" class="artist-link">${a.name}${a.verified ? VERIFY_BADGE : ''}</a>
+        `).join('') || '<p style="text-align:center; color:#444; font-size:12px; grid-column:1/-1;">More artists coming soon.</p>';
+
+        const shareText = encodeURIComponent('Listen to "' + s.title + '" by ' + artist + ' on Samarid Music!');
+        const shareUrl = encodeURIComponent(window.location.href);
+
+        container.innerHTML = `
+          <div class="big-title">Download MP3 <span class="accent">${downloadTitle}</span></div>
+
+          <div class="detail-cover-box"><img src="${s.cover}" alt="${s.title}"></div>
+
+          <h1 class="detail-title">${s.title}</h1>
+          <p class="detail-meta">
+            <a href="artist-template.html?name=${encodeURIComponent(artist)}" class="artist">${artist}${badge}</a>
+            <span>•</span>
+            <span>${s.date}</span>
+            <span>•</span>
+            <span>${s.category}</span>
+          </p>
+
+          <div class="play-count-wrapper">
+            <span class="play-count-badge" id="playCountBadge">🔥 ${s.plays || 0} plays</span>
+          </div>
+
+          <p class="detail-label"><i class="fas fa-compact-disc"></i> A Samarid Music Release</p>
+
+          <div class="detail-section">
+            <h4>About this Song</h4>
+            <p>${s.description || 'No description yet.'}</p>
+          </div>
+
+          <div class="presented-by">
+            <strong>SAMARID MUSIC</strong> presents this track • © 2026 Samarid Music
+          </div>
+
+          <div class="audio-player-box">
+            <h4>Listen Now</h4>
+            <audio id="audioPlayer" src="${audioSrc}" preload="metadata"></audio>
+            <button class="play-pause-btn" id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
+            <div class="seek-row">
+              <span id="currentTime">0:00</span>
+              <input type="range" id="seekSlider" value="0" max="100">
+              <span id="duration">0:00</span>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h4>Get the Song</h4>
+            <div class="download-buttons">
+              <a href="${downloadSrc}" download="${artist} - ${s.title} [Samarid Music].mp3" id="detailDownload" class="btn-download" target="_blank">
+                <i class="fas fa-download"></i> Download MP3
+              </a>
+            </div>
+          </div>
+
+          <div class="follow-row-compact">
+            <div class="follow-avatar-flat">${avatarHTML}</div>
+            <div class="follow-info-flat">
+              <a href="artist-template.html?name=${encodeURIComponent(artist)}" class="follow-name-flat">${artist}${badge}</a>
+              <span class="follow-dot">·</span>
+              <span class="follow-stats-flat"><span class="stat-num" id="followerCountNum">${followerCount.toLocaleString()}</span> <span id="followerCountLabel">followers</span></span>
+            </div>
+            <button class="follow-btn-flat ${myFollow ? 'following' : ''}" id="songFollowBtn" onclick="toggleFollowSong()">
+              <i class="fas fa-${myFollow ? 'check' : 'plus'}" id="songFollowIcon"></i>
+              <span id="songFollowText">${myFollow ? 'Following' : 'Follow'}</span>
+            </button>
+          </div>
+
+          <div class="detail-section" style="text-align:center;">
+            <h4>Show Some Love</h4>
+            <button id="likeBtn" onclick="toggleLikeSong()" style="background:transparent; border:2px solid #eee; padding:12px 24px; border-radius:30px; cursor:pointer; display:inline-flex; align-items:center; gap:10px; font-family:inherit; font-size:15px; font-weight:800; color:#888; transition:all 0.2s;">
+              <i class="far fa-heart" id="likeIcon" style="font-size:18px;"></i>
+              <span id="likeCount">0</span> Likes
+            </button>
+          </div>
+
+          <div class="share-section">
+            <h4>Share this Song</h4>
+            <div class="share-grid">
+              <a href="https://wa.me/?text=${shareText}%20${shareUrl}" target="_blank" class="share-btn share-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrl}" target="_blank" class="share-btn share-facebook"><i class="fab fa-facebook"></i> Facebook</a>
+              <a href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}" target="_blank" class="share-btn share-twitter"><i class="fab fa-x-twitter"></i> X (Twitter)</a>
+              <button onclick="copyLink()" class="share-btn share-copy"><i class="fas fa-link"></i> Copy Link</button>
+            </div>
+          </div>
+
+          <div class="dark-section">
+            <h3 class="dark-section-title">Samarid Music</h3>
+            <p class="dark-section-subtitle">Record Label • Ghana</p>
+
+            <div class="contact-box">
+              <p class="contact-label">Contact / Bookings</p>
+              <p class="contact-email">${CONTACT_EMAIL}</p>
+              <p class="contact-hint">(Tap and hold to copy the email)</p>
+            </div>
+
+            <p class="artists-label">More Artists on Samarid Music</p>
+            <div class="artists-list">${artistsHTML}</div>
+
+            <p class="dark-footer-note">© 2026 SAMARID MUSIC • ALL RIGHTS RESERVED</p>
+          </div>
+        `;
+
+        loadLikeState(s.id);
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = '<div class="error-box"><div class="icon">⚠️</div><h3>Error Loading Song</h3><p>' + (e.message || 'Something went wrong.') + '</p><a href="index.html">Go Home</a></div>';
+      }
+    }
+
+    // PLAY COUNTING
+    window.togglePlay = function() {
+      const audio = document.getElementById('audioPlayer');
+      const btn = document.getElementById('playPauseBtn');
+      if (!audio || !btn) return;
+
+      if (audio.paused) {
+        audio.play();
+        btn.innerHTML = '<i class="fas fa-pause"></i>';
+
+        if (hasRecentPlay(currentSongData.id)) {
+          console.log('Cooldown active — no play counted.');
+          return;
+        }
+
+        hasCountedThisPlay = false;
+        secondsListened = 0;
+
+        if (playCountTimer) clearInterval(playCountTimer);
+
+        playCountTimer = setInterval(() => {
+          secondsListened++;
+          if (secondsListened >= PLAY_SECONDS_REQUIRED && !hasCountedThisPlay) {
+            hasCountedThisPlay = true;
+            incrementPlayCount();
+            markPlayed(currentSongData.id);
+            clearInterval(playCountTimer);
+          }
+        }, 1000);
+
+      } else {
+        audio.pause();
+        btn.innerHTML = '<i class="fas fa-play"></i>';
+        if (playCountTimer) { clearInterval(playCountTimer); playCountTimer = null; }
+      }
+    }
+
+    async function incrementPlayCount() {
+      if (!currentSongData) return;
+      const newPlays = (currentSongData.plays || 0) + 1;
+      currentSongData.plays = newPlays;
+      const badge = document.getElementById('playCountBadge');
+      if (badge) badge.innerHTML = '🔥 ' + newPlays + ' plays';
+
+      try {
+        await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + currentSongData.id, {
+          method: 'PATCH',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plays: newPlays })
+        });
+      } catch (e) { console.error('Play count save failed:', e); }
+    }
+
+    window.addEventListener('beforeunload', () => {
+      if (playCountTimer) clearInterval(playCountTimer);
+    });
+
+    document.addEventListener('timeupdate', function(e) {
+      if (e.target.id === 'audioPlayer') {
+        const audio = e.target;
+        const slider = document.getElementById('seekSlider');
+        const currentTimeEl = document.getElementById('currentTime');
+        if (audio.duration) {
+          slider.value = (audio.currentTime / audio.duration) * 100;
+          currentTimeEl.innerText = formatTime(audio.currentTime);
+        }
+      }
+    }, true);
+
+    document.addEventListener('loadedmetadata', function(e) {
+      if (e.target.id === 'audioPlayer') {
+        document.getElementById('duration').innerText = formatTime(e.target.duration);
+      }
+    }, true);
+
+    document.addEventListener('input', function(e) {
+      if (e.target.id === 'seekSlider') {
+        const audio = document.getElementById('audioPlayer');
+        audio.currentTime = (e.target.value / 100) * audio.duration;
+      }
+    });
+
+    document.addEventListener('ended', function(e) {
+      if (e.target.id === 'audioPlayer') {
+        document.getElementById('playPauseBtn').innerHTML = '<i class="fas fa-play"></i>';
+        document.getElementById('seekSlider').value = 0;
+        document.getElementById('currentTime').innerText = '0:00';
+        if (playCountTimer) { clearInterval(playCountTimer); playCountTimer = null; }
+      }
+    }, true);
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return '0:00';
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return m + ':' + (s < 10 ? '0' : '') + s;
+    }
+
+    // LIKE
+    async function loadLikeState(songId) {
+      try {
+        const [myLikeRes, allLikesRes] = await Promise.all([
+          fetch(SUPABASE_URL + '/rest/v1/likes?song_id=eq.' + songId + '&visitor_id=eq.' + visitorId + '&select=id', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/likes?song_id=eq.' + songId + '&select=id', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
+        ]);
+        const myLike = await myLikeRes.json();
+        const allLikes = await allLikesRes.json();
+        isSongLiked = Array.isArray(myLike) && myLike.length > 0;
+        updateLikeUI(Array.isArray(allLikes) ? allLikes.length : 0);
+      } catch (e) { console.error('Like load error:', e); }
+    }
+
+    function updateLikeUI(count) {
+      const btn = document.getElementById('likeBtn');
+      const icon = document.getElementById('likeIcon');
+      const countEl = document.getElementById('likeCount');
+      if (!btn || !icon || !countEl) return;
+      countEl.innerText = count;
+      if (isSongLiked) { btn.style.borderColor = '#ff0033'; btn.style.color = '#ff0033'; btn.style.background = 'rgba(255,0,51,0.08)'; icon.classList.remove('far'); icon.classList.add('fas'); }
+      else { btn.style.borderColor = '#eee'; btn.style.color = '#888'; btn.style.background = 'transparent'; icon.classList.remove('fas'); icon.classList.add('far'); }
+    }
+
+    window.toggleLikeSong = async function() {
+      if (!currentSongData) return;
+      const songId = currentSongData.id;
+      const countEl = document.getElementById('likeCount');
+      const currentCount = parseInt(countEl.innerText) || 0;
+      isSongLiked = !isSongLiked;
+      updateLikeUI(isSongLiked ? currentCount + 1 : Math.max(0, currentCount - 1));
+
+      try {
+        if (isSongLiked) {
+          await fetch(SUPABASE_URL + '/rest/v1/likes', { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ song_id: songId, visitor_id: visitorId }) });
+        } else {
+          await fetch(SUPABASE_URL + '/rest/v1/likes?song_id=eq.' + songId + '&visitor_id=eq.' + visitorId, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        }
+      } catch (e) { console.error('Like toggle failed:', e); }
+    }
+
+    // FOLLOW
+    window.toggleFollowSong = async function() {
+      const btn = document.getElementById('songFollowBtn');
+      const icon = document.getElementById('songFollowIcon');
+      const text = document.getElementById('songFollowText');
+      const countNum = document.getElementById('followerCountNum');
+      btn.disabled = true;
+
+      const currentCount = parseInt(countNum.innerText.replace(/,/g, '')) || 0;
+      isFollowingArtist = !isFollowingArtist;
+      const newCount = isFollowingArtist ? currentCount + 1 : Math.max(0, currentCount - 1);
+      countNum.innerText = newCount.toLocaleString();
+
+      if (isFollowingArtist) { btn.classList.add('following'); icon.className = 'fas fa-check'; text.innerText = 'Following'; }
+      else { btn.classList.remove('following'); icon.className = 'fas fa-plus'; text.innerText = 'Follow'; }
+
+      try {
+        if (isFollowingArtist) {
+          await fetch(SUPABASE_URL + '/rest/v1/follows', { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ artist_name: currentArtistName, visitor_id: visitorId }) });
+        } else {
+          await fetch(SUPABASE_URL + '/rest/v1/follows?artist_name=ilike.' + encodeURIComponent(currentArtistName) + '&visitor_id=eq.' + visitorId, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        }
+      } catch (e) { isFollowingArtist = !isFollowingArtist; countNum.innerText = currentCount.toLocaleString(); }
+      finally { btn.disabled = false; }
+    }
+
+    async function copyLink() {
+      const url = window.location.href;
+      try {
+        if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(url); }
+        else { const ta = document.createElement('textarea'); ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }
+        showToast('Link copied!');
+      } catch (e) { showToast('Could not copy link'); }
+    }
+
+    function showToast(msg) {
+      const toast = document.createElement('div');
+      toast.innerText = msg;
+      toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:600;z-index:99999;box-shadow:0 10px 30px rgba(0,0,0,0.3);transition:opacity 0.3s;';
+      document.body.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = '0'; }, 1800);
+      setTimeout(() => { document.body.removeChild(toast); }, 2200);
+    }
+
+    loadSong();
+  </script>
+</body>
+</html>
