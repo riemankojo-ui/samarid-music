@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fanbase - Samarid Music</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root { --bg: #0a0a0a; --card: #141414; --border: #222; --text: #ffffff; --text2: #cccccc; --accent: #ff0033; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; padding-bottom: 40px; }
+
+  #nameGate { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: flex; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+  .name-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 35px 25px; text-align: center; width: 100%; max-width: 400px; }
+  .name-box h2 { font-size: 22px; font-weight: 900; margin-bottom: 10px; }
+  .name-box p { font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.5; }
+  .name-box label { display: block; text-align: left; font-size: 11px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; margin-top: 12px; }
+  .name-box input { width: 100%; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 15px; font-family: inherit; }
+  .name-box input:focus { outline: none; border-color: var(--accent); }
+  .name-box button { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; margin-top: 20px; }
+  .name-box button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .header { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 10px; z-index: 100; }
+  .back-btn { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+  .back-btn:active { background: var(--accent); color: #fff; }
+  .logo { font-size: 18px; font-weight: 900; color: var(--text); text-decoration: none; flex: 1; text-align: center; }
+  .logo span { color: var(--accent); }
+  .user-badge { display: flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--border); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; color: var(--text2); cursor: pointer; }
+  .user-badge i { color: var(--accent); }
+
+  .name-menu { position: fixed; top: 55px; right: 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); display: none; z-index: 999; overflow: hidden; min-width: 180px; }
+  .name-menu.open { display: block; }
+  .name-menu button { display: block; width: 100%; padding: 14px 18px; background: transparent; border: none; color: var(--text); font-size: 13px; font-weight: 600; text-align: left; cursor: pointer; font-family: inherit; }
+  .name-menu button:active { background: rgba(255,255,255,0.05); }
+  .name-menu button i { margin-right: 10px; color: var(--accent); width: 14px; }
+
+  .container { max-width: 700px; margin: 0 auto; padding: 20px 16px 0; }
+  .page-title { font-size: 15px; font-weight: 900; text-align: center; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; }
+
+  .section-head { display: flex; align-items: center; gap: 8px; margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
+  .section-head:first-of-type { margin-top: 0; }
+  .section-head h3 { font-size: 13px; font-weight: 900; flex: 1; }
+  .section-head .icon-fire { color: var(--accent); font-size: 14px; }
+  .section-head .icon-new { color: #00cc44; font-size: 14px; }
+
+  /* === TOP SONGS (VERY SMALL ROWS) === */
+  .top-list { display: flex; flex-direction: column; gap: 6px; }
+  .top-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 10px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+  .top-row:active { transform: scale(0.98); }
+  .top-rank {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff0033, #b3002d);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+  .top-rank.rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
+  .top-rank.rank-2 { background: linear-gradient(135deg, #C0C0C0, #808080); color: #000; }
+  .top-rank.rank-3 { background: linear-gradient(135deg, #CD7F32, #8B4513); }
+  .top-thumb {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #000;
+    flex-shrink: 0;
+  }
+  .top-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .top-info { flex: 1; min-width: 0; }
+  .top-info h4 {
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 1px;
+  }
+  .top-info p {
+    font-size: 9px;
+    color: var(--text2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .top-plays {
+    font-size: 9px;
+    color: #ff8800;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* === LATEST RELEASES === */
+  .latest-list { display: flex; flex-direction: column; gap: 8px; }
+  .latest-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.15s;
+  }
+  .latest-row:active { transform: scale(0.99); background: rgba(255,255,255,0.03); }
+  .latest-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #000;
+    flex-shrink: 0;
+  }
+  .latest-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .latest-info { flex: 1; min-width: 0; }
+  .latest-info h4 {
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+  }
+  .latest-info .artist {
+    font-size: 10px;
+    color: #d4a017;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .latest-info .stats {
+    font-size: 9px;
+    color: var(--text2);
+    display: flex;
+    gap: 8px;
+  }
+  .stat-plays { color: #ff8800; font-weight: 700; }
+  .stat-likes { color: var(--accent); font-weight: 700; }
+
+  .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 40px; }
+  .footer .brand { color: var(--accent); font-weight: 700; }
+  .loading { text-align: center; padding: 30px; color: var(--text2); font-size: 13px; }
+
+  /* Twitter/X-style verified badge */
+  .verify-badge {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+  .verify-badge-lg {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+  <div id="nameGate">
+    <div class="name-box">
+      <div style="font-size: 50px; margin-bottom: 15px;">👋</div>
+      <h2>Welcome To The Fanbase!</h2>
+      <p>Enter your name to like songs, leave comments, and vote.</p>
+      <label>First Name *</label>
+      <input type="text" id="firstNameInput" placeholder="e.g. Samarid" maxlength="20">
+      <label>Second Name *</label>
+      <input type="text" id="secondNameInput" placeholder="e.g. Kojo" maxlength="20">
+      <button id="enterBtn" onclick="saveName()" disabled>Fill Both Names To Enter</button>
+    </div>
+  </div>
+
+  <header class="header">
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+    <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
+    <div class="user-badge" onclick="toggleNameMenu(event)"><i class="fas fa-user"></i> <span id="headerName">Fan</span></div>
+  </header>
+
+  <div class="name-menu" id="nameMenu">
+    <button onclick="editName()"><i class="fas fa-edit"></i> Change My Name</button>
+  </div>
+
+  <div class="container">
+    <div class="page-title">❤️ Like & Comment on Songs</div>
+
+    <div class="section-head">
+      <i class="fas fa-fire icon-fire"></i>
+      <h3>Top Songs</h3>
+    </div>
+    <div class="top-list" id="topSongsList"><div class="loading">Loading...</div></div>
+
+    <div class="section-head">
+      <i class="fas fa-bolt icon-new"></i>
+      <h3>Latest Releases</h3>
+    </div>
+    <div class="latest-list" id="latestList"><div class="loading">Loading...</div></div>
+  </div>
+
+  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
+
+  <script>
+    const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+
+    // Twitter/X-style verified badge SVG
+    const VERIFY_BADGE_SM = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
+
+    const VERIFY_BADGE_LG = '<svg class="verify-badge-lg" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
+
+    let visitorId = localStorage.getItem('samarid_visitor_id');
+    if (!visitorId) {
+      visitorId = 'v_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('samarid_visitor_id', visitorId);
+    }
+
+    let fanName = localStorage.getItem('samarid_fan_name');
+    let fanFirstName = localStorage.getItem('samarid_fan_first_name');
+
+    const firstInput = document.getElementById('firstNameInput');
+    const secondInput = document.getElementById('secondNameInput');
+    const enterBtn = document.getElementById('enterBtn');
+
+    function checkBothFilled() {
+      const f = firstInput.value.trim();
+      const s = secondInput.value.trim();
+      if (f && s) { enterBtn.disabled = false; enterBtn.innerText = 'Enter Fanbase'; }
+      else { enterBtn.disabled = true; enterBtn.innerText = 'Fill Both Names To Enter'; }
+    }
+
+    firstInput.addEventListener('input', checkBothFilled);
+    secondInput.addEventListener('input', checkBothFilled);
+    firstInput.addEventListener('keypress', e => { if (e.key === 'Enter') secondInput.focus(); });
+    secondInput.addEventListener('keypress', e => { if (e.key === 'Enter' && !enterBtn.disabled) saveName(); });
+
+    function saveName() {
+      const first = firstInput.value.trim();
+      const second = secondInput.value.trim();
+      if (!first || !second) { alert('Please fill both names.'); return; }
+      const fullName = first + ' ' + second;
+      localStorage.setItem('samarid_fan_name', fullName);
+      localStorage.setItem('samarid_fan_first_name', first);
+      fanName = fullName;
+      fanFirstName = first;
+      document.getElementById('nameGate').style.display = 'none';
+      document.getElementById('headerName').innerText = first;
+    }
+
+    function checkName() {
+      if (fanName && fanFirstName) {
+        document.getElementById('nameGate').style.display = 'none';
+        document.getElementById('headerName').innerText = fanFirstName;
+      }
+    }
+
+    window.toggleNameMenu = function(event) {
+      event.stopPropagation();
+      document.getElementById('nameMenu').classList.toggle('open');
+    }
+
+    document.addEventListener('click', () => {
+      document.getElementById('nameMenu').classList.remove('open');
+    });
+
+    window.editName = function() {
+      document.getElementById('nameMenu').classList.remove('open');
+      if (confirm('Do you want to change your name?')) {
+        localStorage.removeItem('samarid_fan_name');
+        localStorage.removeItem('samarid_fan_first_name');
+        location.reload();
+      }
+    }
+
+    // === TOP SONGS (small rows) ===
+    async function loadTopSongs() {
+      const container = document.getElementById('topSongsList');
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=*&order=plays.desc.nullslast,id.desc&limit=5', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const songs = await res.json();
+        if (!Array.isArray(songs) || songs.length === 0) {
+          container.innerHTML = '<div class="loading">No top songs yet.</div>';
+          return;
+        }
+        container.innerHTML = songs.map((s, index) => {
+          const rank = index + 1;
+          const rankClass = rank <= 3 ? 'rank-' + rank : '';
+          const badge = s.verified ? VERIFY_BADGE_SM : '';
+          const artist = s.artist_name || 'Samarid';
+          return `
+            <div class="top-row" onclick="window.location.href='song-detail.html?id=${s.id}'">
+              <div class="top-rank ${rankClass}">${rank}</div>
+              <div class="top-thumb"><img src="${s.cover}" alt="${s.title}"></div>
+              <div class="top-info">
+                <h4>${s.title}</h4>
+                <p>${artist}${badge}</p>
+              </div>
+              <div class="top-plays">🔥 ${s.plays || 0}</div>
+            </div>
+          `;
+        }).join('');
+      } catch (e) { console.error(e); container.innerHTML = '<div class="loading">Error.</div>'; }
+    }
+
+    // === LATEST RELEASES ===
+    async function loadLatest() {
+      const container = document.getElementById('latestList');
+      container.innerHTML = '<div class="loading">Loading...</div>';
+      try {
+        const [songsRes, likesRes] = await Promise.all([
+          fetch(SUPABASE_URL + '/rest/v1/songs?select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/likes?select=song_id,visitor_id', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
+        ]);
+        const songs = await songsRes.json();
+        const likesData = await likesRes.json();
+
+        if (!Array.isArray(songs) || songs.length === 0) {
+          container.innerHTML = '<div class="loading">No songs yet.</div>';
+          return;
+        }
+
+        const likeCounts = {};
+        likesData.forEach(l => { likeCounts[l.song_id] = (likeCounts[l.song_id] || 0) + 1; });
+
+        container.innerHTML = songs.map(s => {
+          const badge = s.verified ? VERIFY_BADGE_LG : '';
+          const artist = s.artist_name || 'Samarid';
+          return `
+            <div class="latest-row" onclick="window.location.href='song-detail.html?id=${s.id}'">
+              <div class="latest-thumb"><img src="${s.cover}" alt="${s.title}"></div>
+              <div class="latest-info">
+                <h4>${s.title}</h4>
+                <div class="artist">${artist}${badge}</div>
+                <div class="stats">
+                  <span class="stat-plays">🔥 ${s.plays || 0}</span>
+                  <span class="stat-likes">❤️ ${likeCounts[s.id] || 0}</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (e) { container.innerHTML = '<div class="loading" style="color:#ff0033;">Error.</div>'; }
+    }
+
+    checkName();
+    loadTopSongs();
+    loadLatest();
+  </script>
+</body>
+</html>
