@@ -136,9 +136,8 @@
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
     const CONTACT_EMAIL = "wunatehk@gmail.com";
 
-    // 🎯 PLAY COUNT RULES
-    const PLAY_SECONDS_REQUIRED = 30;         // Must listen 30 sec to count
-    const PLAY_COOLDOWN_HOURS = 6;            // Can't count again for same song within 6 hours
+    const PLAY_SECONDS_REQUIRED = 30;
+    const PLAY_COOLDOWN_HOURS = 6;
 
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
@@ -152,13 +151,10 @@
     let isFollowingArtist = false;
     let currentArtistName = '';
     let isSongLiked = false;
-
-    // Play counting state
     let secondsListened = 0;
     let playCountTimer = null;
     let hasCountedThisPlay = false;
 
-    // 🎯 Check if we already counted a play for this song recently
     function hasRecentPlay(songId) {
       const key = 'lastplay_' + visitorId + '_' + songId;
       const lastPlay = localStorage.getItem(key);
@@ -167,7 +163,6 @@
       return hoursSince < PLAY_COOLDOWN_HOURS;
     }
 
-    // 🎯 Mark this play as counted
     function markPlayed(songId) {
       const key = 'lastplay_' + visitorId + '_' + songId;
       localStorage.setItem(key, Date.now().toString());
@@ -319,18 +314,6 @@
             </button>
           </div>
 
-          <div class="detail-section">
-            <h4>Comments</h4>
-            <div id="commentsList" style="max-height:300px; overflow-y:auto; margin-bottom:15px;">
-              <p style="color:#999; font-size:13px; text-align:center;">Loading comments...</p>
-            </div>
-            <div style="display:flex; gap:8px; margin-top:15px;">
-              <input type="text" id="commentName" placeholder="Your name" style="flex:1; padding:12px; border:1px solid #ddd; border-radius:10px; font-family:inherit; font-size:13px;" maxlength="30">
-              <input type="text" id="commentMsg" placeholder="Write a comment..." style="flex:3; padding:12px; border:1px solid #ddd; border-radius:10px; font-family:inherit; font-size:13px;" maxlength="300" onkeypress="if(event.key==='Enter')postComment()">
-              <button onclick="postComment()" style="background:#ff0033; color:#fff; border:none; padding:12px 16px; border-radius:10px; cursor:pointer; font-weight:700;"><i class="fas fa-paper-plane"></i></button>
-            </div>
-          </div>
-
           <div class="share-section">
             <h4>Share this Song</h4>
             <div class="share-grid">
@@ -359,27 +342,24 @@
         `;
 
         loadLikeState(s.id);
-        loadComments(s.id);
       } catch (e) {
         console.error(e);
         container.innerHTML = '<div class="error-box"><div class="icon">⚠️</div><h3>Error Loading Song</h3><p>' + (e.message || 'Something went wrong.') + '</p><a href="index.html">Go Home</a></div>';
       }
     }
 
-    // ===== PLAY COUNTING WITH COOLDOWN =====
+    // PLAY COUNTING
     window.togglePlay = function() {
       const audio = document.getElementById('audioPlayer');
       const btn = document.getElementById('playPauseBtn');
       if (!audio || !btn) return;
 
       if (audio.paused) {
-        // ▶️ PLAYING
         audio.play();
         btn.innerHTML = '<i class="fas fa-pause"></i>';
 
-        // Check cooldown — if played recently, don't count
         if (hasRecentPlay(currentSongData.id)) {
-          console.log('Cooldown active — no play counted (already played in last ' + PLAY_COOLDOWN_HOURS + 'h).');
+          console.log('Cooldown active — no play counted.');
           return;
         }
 
@@ -399,7 +379,6 @@
         }, 1000);
 
       } else {
-        // ⏸️ PAUSING
         audio.pause();
         btn.innerHTML = '<i class="fas fa-play"></i>';
         if (playCountTimer) { clearInterval(playCountTimer); playCountTimer = null; }
@@ -419,7 +398,6 @@
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
           body: JSON.stringify({ plays: newPlays })
         });
-        console.log('✅ Play counted! New total: ' + newPlays);
       } catch (e) { console.error('Play count save failed:', e); }
     }
 
@@ -533,38 +511,6 @@
         }
       } catch (e) { isFollowingArtist = !isFollowingArtist; countNum.innerText = currentCount.toLocaleString(); }
       finally { btn.disabled = false; }
-    }
-
-    // COMMENTS
-    async function loadComments(songId) {
-      const container = document.getElementById('commentsList');
-      if (!container) return;
-      try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/comments?song_id=eq.' + songId + '&select=*&order=id.desc&limit=50', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        const comments = await res.json();
-        if (!Array.isArray(comments) || comments.length === 0) { container.innerHTML = '<p style="color:#999; font-size:13px; text-align:center; padding:15px;">Be the first to comment!</p>'; return; }
-        container.innerHTML = comments.map(c => `
-          <div style="padding:10px 0; border-bottom:1px solid #f0f0f0;">
-            <div style="font-size:12px; font-weight:800; color:#ff0033; margin-bottom:4px;">${c.name || 'Anonymous'}</div>
-            <div style="font-size:13px; color:#333; line-height:1.5; word-break:break-word;">${c.message}</div>
-          </div>
-        `).join('');
-      } catch (e) { container.innerHTML = '<p style="color:#999; font-size:13px; text-align:center;">Could not load comments.</p>'; }
-    }
-
-    window.postComment = async function() {
-      if (!currentSongData) return;
-      const nameInput = document.getElementById('commentName');
-      const msgInput = document.getElementById('commentMsg');
-      const name = nameInput.value.trim() || 'Anonymous';
-      const message = msgInput.value.trim();
-      if (!message) { showToast('Please write something'); return; }
-
-      try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/comments', { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ song_id: currentSongData.id, name: name, message: message }) });
-        if (res.ok) { msgInput.value = ''; showToast('Comment posted!'); loadComments(currentSongData.id); }
-        else { showToast('Could not post'); }
-      } catch (e) { showToast('Network error'); }
     }
 
     async function copyLink() {
