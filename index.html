@@ -72,7 +72,6 @@
   .social-btn:active { transform: scale(0.96); }
   .social-btn i { font-size: 16px; }
 
-  /* TRENDING ARTISTS */
   .trending-artists-list { display: flex; flex-direction: column; gap: 8px; }
   .trending-artist-item { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; text-decoration: none; color: inherit; transition: all 0.2s; }
   .trending-artist-item:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
@@ -85,7 +84,6 @@
   .trending-empty { text-align: center; padding: 30px 20px; background: var(--card); border: 1px dashed var(--border); border-radius: 12px; color: var(--text2); font-size: 13px; line-height: 1.6; }
   .trending-empty strong { color: #ff8800; }
 
-  /* TOP ALBUMS */
   .top-albums-list { display: flex; flex-direction: column; gap: 14px; }
   .top-album-card { display: flex; gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; padding: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.05); align-items: center; }
   .top-album-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
@@ -105,7 +103,6 @@
   .top-album-meta { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--text2); font-weight: 700; margin-top: 2px; }
   .top-album-meta .songs { display: flex; align-items: center; gap: 4px; }
 
-  /* EMAIL SIGNUP */
   .email-signup-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-top: 8px; }
   .email-signup-title { font-size: 15px; font-weight: 900; color: var(--text); margin-bottom: 6px; letter-spacing: -0.3px; }
   .email-signup-sub { font-size: 12px; color: var(--text2); line-height: 1.5; margin-bottom: 14px; }
@@ -168,7 +165,6 @@
 
   <div class="page-content">
 
-    <!-- 1. SONGS (TOP + LATEST) -->
     <div class="section-head"><i class="fas fa-fire icon-fire"></i><h3>Top Songs</h3></div>
     <div class="song-list" id="topSongsList"><div class="loading">Loading top songs...</div></div>
 
@@ -179,7 +175,6 @@
     </div>
     <div class="song-list" id="songList"><div class="loading">Loading songs...</div></div>
 
-    <!-- 2. NEVER MISS A DROP -->
     <div class="section-head"><i class="fas fa-envelope-open-text icon-mail"></i><h3>Never Miss A Drop</h3></div>
     <div class="email-signup-box">
       <div id="emailFormArea">
@@ -199,11 +194,9 @@
       </div>
     </div>
 
-    <!-- 3. TOP ALBUMS -->
     <div class="section-head"><i class="fas fa-compact-disc icon-album"></i><h3>Top Albums</h3></div>
     <div class="top-albums-list" id="topAlbumsList"><div class="loading">Loading albums...</div></div>
 
-    <!-- 4. FOLLOW US -->
     <div class="section-head"><i class="fas fa-share-nodes icon-social"></i><h3>Follow Us</h3></div>
     <div class="social-grid">
       <a href="https://youtube.com/@realsamarid" target="_blank" class="social-btn"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
@@ -212,11 +205,9 @@
       <a href="mailto:wunatehk@gmail.com" class="social-btn"><i class="fas fa-envelope" style="color: #EA4335;"></i> Email</a>
     </div>
 
-    <!-- 5. TRENDING ARTISTS -->
     <div class="section-head"><i class="fas fa-chart-line icon-trend"></i><h3>Trending Artists</h3></div>
     <div class="trending-artists-list" id="trendingArtistsList"><div class="loading">Loading...</div></div>
 
-    <!-- 6. CATEGORIES -->
     <div class="section-head"><i class="fas fa-music icon-cat"></i><h3>Browse by Category</h3></div>
     <div class="pill-row" id="categoryPills"><span class="pill">Loading...</span></div>
 
@@ -294,7 +285,7 @@
         container.innerHTML = songs.map((s) => {
           const artist = s.artist_name || 'Samarid';
           const badge = s.verified ? VERIFY_BADGE : '';
-          return '<div class="song-card" onclick="window.location.href=\'song-details.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
         }).join('');
       } catch (e) { container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>Error</h3></div>'; }
     }
@@ -308,7 +299,7 @@
         list.innerHTML = songs.map((s) => {
           const artist = s.artist_name || 'Samarid';
           const badge = s.verified ? VERIFY_BADGE : '';
-          return '<div class="song-card" onclick="window.location.href=\'song-details.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
         }).join('');
       } catch (e) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Error</h3></div>'; }
     }
@@ -333,7 +324,6 @@
       title.innerText = category;
       clearBtn.style.display = 'inline-block';
       list.innerHTML = '<div class="loading">Loading...</div>';
-      // Scroll up to the songs section
       window.scrollTo({ top: 0, behavior: 'smooth' });
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/songs?category=ilike.' + encodeURIComponent(category) + '&select=*&order=plays.desc.nullslast,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
@@ -342,7 +332,7 @@
         list.innerHTML = songs.map((s) => {
           const artist = s.artist_name || 'Samarid';
           const badge = s.verified ? VERIFY_BADGE : '';
-          return '<div class="song-card" onclick="window.location.href=\'song-details.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
         }).join('');
       } catch (e) {}
     }
@@ -354,7 +344,6 @@
       renderSongs();
     }
 
-    // TRENDING ARTISTS
     async function loadTrendingArtists() {
       const container = document.getElementById('trendingArtistsList');
       try {
@@ -392,7 +381,6 @@
       } catch (e) { container.innerHTML = '<div class="trending-empty">Error loading trending artists.</div>'; }
     }
 
-    // TOP ALBUMS
     async function loadTopAlbums() {
       const container = document.getElementById('topAlbumsList');
       try {
@@ -477,7 +465,6 @@
       }
     }
 
-    // EMAIL SIGNUP
     (function() {
       const alreadySubscribed = localStorage.getItem('samarid_subscribed') === 'true';
       if (alreadySubscribed) {
