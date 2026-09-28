@@ -21,7 +21,7 @@
   .header { position: sticky; top: 0; background: #0a0a0a; border-bottom: 1px solid #222; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
   .menu-btn { width: 38px; height: 38px; border-radius: 50%; background: #222; border: 1px solid #333; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #ffffff; font-size: 18px; font-weight: 700; transition: all 0.15s; flex-shrink: 0; }
   .menu-btn:active { background: var(--accent); }
-  .logo { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; color: #ffffff; text-decoration: none; flex: 1; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .logo { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; color: #ffffff; text-decoration: none; flex: 1; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px; }
   .logo span { color: var(--accent); }
   .header-spacer { width: 38px; flex-shrink: 0; }
 
@@ -52,16 +52,108 @@
   .section-head { display: flex; align-items: center; gap: 10px; margin: 30px 0 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border); min-width: 0; }
   .section-head:first-of-type { margin-top: 0; }
   .section-head h3 { font-size: 16px; font-weight: 900; letter-spacing: -0.3px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
-  .section-head .icon-fire { color: var(--accent); font-size: 18px; }
-  .section-head .icon-new { color: #00cc44; font-size: 18px; }
   .section-head .icon-social { color: #0084ff; font-size: 18px; }
   .section-head .icon-mail { color: #ff8800; font-size: 18px; }
-  .section-head .icon-album { color: #ff8800; font-size: 18px; }
 
   .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .social-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; color: var(--text); font-size: 13px; font-weight: 700; transition: 0.2s; overflow: hidden; }
   .social-btn:active { transform: scale(0.96); }
   .social-btn i { font-size: 16px; flex-shrink: 0; }
+
+  /* ===== CLEAN CARDS ===== */
+  .song-list, .top-albums-list { display: flex; flex-direction: column; }
+
+  .song-card, .top-album-card {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    align-items: center;
+    transition: opacity 0.15s;
+  }
+  .song-card:last-child, .top-album-card:last-child { border-bottom: none; }
+  .song-card:active, .top-album-card:active { opacity: 0.7; }
+
+  /* Song cover — now 96px (matches album) */
+  .song-card-img {
+    width: 96px;
+    height: 96px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #000;
+    border-radius: 12px;
+    position: relative;
+  }
+  .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* Album cover — now bigger, 115px */
+  .top-album-cover {
+    width: 115px;
+    height: 115px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #000;
+    border-radius: 14px;
+    position: relative;
+  }
+  .top-album-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .song-card-info, .top-album-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    overflow: hidden;
+    gap: 6px;
+  }
+
+  /* Song title */
+  .song-card-info h3 {
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.35;
+    color: var(--text);
+    letter-spacing: -0.3px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  /* Album title — bigger */
+  .top-album-name {
+    font-size: 17px;
+    font-weight: 900;
+    line-height: 1.35;
+    color: var(--text);
+    letter-spacing: -0.4px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Date */
+  .song-card-info .date, .top-album-date {
+    font-size: 12.5px;
+    color: var(--text2);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Hide any legacy album elements */
+  .top-album-rank, .top-album-label, .top-album-artist, .top-album-meta { display: none !important; }
 
   /* ===== HOT ARTISTS ===== */
   .hot-artists-section { background: #0a0a0a; color: #ffffff; margin: 0 -16px 0; padding: 40px 0 44px; position: relative; overflow: hidden; }
@@ -119,32 +211,6 @@
   .empty-state .icon { font-size: 40px; margin-bottom: 15px; }
   .empty-state h3 { font-size: 16px; margin-bottom: 8px; color: var(--text); }
 
-  .song-list { display: flex; flex-direction: column; gap: 8px; }
-  .song-card { display: flex; gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; padding: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); align-items: center; }
-  .song-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
-  .song-card-img { width: 30%; max-width: 90px; aspect-ratio: 1 / 1; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 6px; }
-  .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .song-card-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; overflow: hidden; }
-  .song-card-cat { font-size: 10px; color: #8b5cf6; font-weight: 700; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 4px; }
-  .song-card-info h3 { font-size: 13px; font-weight: 800; line-height: 1.2; margin-bottom: 4px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; word-break: break-word; }
-  .song-card-info .date { font-size: 10px; color: var(--text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-  .top-albums-list { display: flex; flex-direction: column; gap: 14px; }
-  .top-album-card { display: flex; gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; padding: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.05); align-items: center; }
-  .top-album-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
-  .top-album-cover { width: 40%; max-width: 130px; aspect-ratio: 1 / 1; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 10px; position: relative; }
-  .top-album-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .top-album-rank { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 10px; letter-spacing: 0.3px; box-shadow: 0 3px 10px rgba(255, 200, 0, 0.5); z-index: 2; }
-  .top-album-rank.rank-2 { background: linear-gradient(135deg, #C0C0C0, #808080); color: #000; box-shadow: 0 3px 10px rgba(192, 192, 192, 0.5); }
-  .top-album-rank.rank-3 { background: linear-gradient(135deg, #CD7F32, #8B4513); color: #fff; box-shadow: 0 3px 10px rgba(205, 127, 50, 0.5); }
-  .top-album-rank.rank-4 { background: linear-gradient(135deg, #ff0033, #b3002d); color: #fff; box-shadow: 0 3px 10px rgba(255, 0, 51, 0.4); }
-  .top-album-info { flex: 1; display: flex; flex-direction: column; gap: 5px; min-width: 0; overflow: hidden; }
-  .top-album-label { font-size: 9px; color: #ff8800; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; }
-  .top-album-name { font-size: 15px; font-weight: 900; color: var(--text); line-height: 1.25; letter-spacing: -0.3px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; word-break: break-word; }
-  .top-album-artist { font-size: 12px; color: #ff8800; font-weight: 800; display: flex; align-items: center; gap: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .top-album-meta { display: flex; align-items: center; gap: 10px; font-size: 11px; color: var(--text2); font-weight: 700; margin-top: 2px; }
-  .top-album-meta .songs { display: flex; align-items: center; gap: 4px; }
-
   .email-signup-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-top: 8px; }
   .email-signup-title { font-size: 15px; font-weight: 900; color: var(--text); margin-bottom: 6px; letter-spacing: -0.3px; }
   .email-signup-sub { font-size: 12px; color: var(--text2); line-height: 1.5; margin-bottom: 14px; }
@@ -183,11 +249,10 @@
 
   <div class="page-content">
 
-    <div class="section-head"><i class="fas fa-fire icon-fire"></i><h3>Top Songs</h3></div>
+    <div class="section-head"><h3>Top Songs</h3></div>
     <div class="song-list" id="topSongsList"><div class="loading">Loading top songs...</div></div>
 
     <div class="section-head">
-      <i class="fas fa-bolt icon-new"></i>
       <h3 id="latestTitle">Latest Releases</h3>
     </div>
     <div class="song-list" id="songList"><div class="loading">Loading songs...</div></div>
@@ -211,7 +276,7 @@
       </div>
     </div>
 
-    <div class="section-head"><i class="fas fa-compact-disc icon-album"></i><h3>Top Albums</h3></div>
+    <div class="section-head"><h3>Top Albums</h3></div>
     <div class="top-albums-list" id="topAlbumsList"><div class="loading">Loading albums...</div></div>
 
     <div class="section-head"><i class="fas fa-share-nodes icon-social"></i><h3>Follow Us</h3></div>
@@ -289,7 +354,7 @@
     const TOP_ALBUMS_LIMIT = 4;
     const HOT_ARTISTS_LIMIT = 30;
 
-    const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22" style="width:13px;height:13px;vertical-align:middle;display:inline-block;flex-shrink:0;"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
+    const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22" style="width:14px;height:14px;vertical-align:middle;display:inline-block;flex-shrink:0;"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
     function escapeHtml(s) {
       if (s === null || s === undefined) return '';
@@ -322,17 +387,47 @@
     }
     window.setTheme = (theme) => { localStorage.setItem('samarid-theme', theme); applySettings(); }
 
+    // ===== CLEAN CARD RENDERERS =====
+    function renderSongCard(s) {
+      const artist = s.artist_name || 'Samarid';
+      const badge = s.verified ? VERIFY_BADGE : '';
+      const date = s.date || '';
+      return `
+        <a href="song-details.html?id=${s.id}" class="song-card">
+          <div class="song-card-img"><img src="${escapeHtml(s.cover)}" alt="${escapeHtml(s.title)}" loading="lazy"></div>
+          <div class="song-card-info">
+            <h3>${escapeHtml(artist)}${badge} — ${escapeHtml(s.title)}</h3>
+            <div class="date">${escapeHtml(date)}</div>
+          </div>
+        </a>
+      `;
+    }
+
+    function renderAlbumCard(album) {
+      const badge = album.verified ? VERIFY_BADGE : '';
+      const artist = album.artist || 'Samarid';
+      const date = album.date || '';
+      const linkUrl = 'album.html?name=' + encodeURIComponent(album.name);
+      return `
+        <a href="${linkUrl}" class="top-album-card">
+          <div class="top-album-cover">
+            <img src="${escapeHtml(album.cover)}" alt="${escapeHtml(album.name)}" loading="lazy">
+          </div>
+          <div class="top-album-info">
+            <div class="top-album-name">${escapeHtml(artist)}${badge} — ${escapeHtml(album.name)}</div>
+            <div class="top-album-date">${escapeHtml(date)}</div>
+          </div>
+        </a>
+      `;
+    }
+
     async function loadTopSongs() {
       const container = document.getElementById('topSongsList');
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=*&order=plays.desc.nullslast,id.desc&limit=' + TOP_SONGS_LIMIT, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
         if (!Array.isArray(songs) || songs.length === 0) { container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>No Top Songs Yet</h3></div>'; return; }
-        container.innerHTML = songs.map((s) => {
-          const artist = s.artist_name || 'Samarid';
-          const badge = s.verified ? VERIFY_BADGE : '';
-          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + escapeHtml(s.cover) + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + escapeHtml(artist) + badge + ' • ' + escapeHtml(s.category) + '</div><h3>' + escapeHtml(s.title) + '</h3><div class="date">' + escapeHtml(s.date) + '</div></div></div>';
-        }).join('');
+        container.innerHTML = songs.map(renderSongCard).join('');
       } catch (e) { container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>Error</h3></div>'; }
     }
 
@@ -342,11 +437,7 @@
         const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=*&order=id.desc&limit=' + LATEST_SONGS_LIMIT, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
         if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3></div>'; return; }
-        list.innerHTML = songs.map((s) => {
-          const artist = s.artist_name || 'Samarid';
-          const badge = s.verified ? VERIFY_BADGE : '';
-          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + escapeHtml(s.cover) + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + escapeHtml(artist) + badge + ' • ' + escapeHtml(s.category) + '</div><h3>' + escapeHtml(s.title) + '</h3><div class="date">' + escapeHtml(s.date) + '</div></div></div>';
-        }).join('');
+        list.innerHTML = songs.map(renderSongCard).join('');
       } catch (e) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Error</h3></div>'; }
     }
 
@@ -501,30 +592,7 @@
 
         const albums = Object.values(albumMap).sort((a, b) => b.totalPlays - a.totalPlays).slice(0, TOP_ALBUMS_LIMIT);
 
-        container.innerHTML = albums.map((album, index) => {
-          const rank = index + 1;
-          const rankClass = rank <= 3 ? 'rank-' + rank : 'rank-4';
-          const badge = album.verified ? VERIFY_BADGE : '';
-          const songLabel = album.songCount === 1 ? '1 song' : album.songCount + ' songs';
-          const linkUrl = 'album.html?name=' + encodeURIComponent(album.name);
-
-          return `
-            <a href="${linkUrl}" class="top-album-card">
-              <div class="top-album-cover">
-                <span class="top-album-rank ${rankClass}">#${rank}</span>
-                <img src="${escapeHtml(album.cover)}" alt="${escapeHtml(album.name)}" loading="lazy">
-              </div>
-              <div class="top-album-info">
-                <div class="top-album-label">Top Album</div>
-                <div class="top-album-name">${escapeHtml(album.name)}</div>
-                <div class="top-album-artist">${escapeHtml(album.artist)}${badge}</div>
-                <div class="top-album-meta">
-                  <span class="songs"><i class="fas fa-music"></i> ${songLabel}</span>
-                </div>
-              </div>
-            </a>
-          `;
-        }).join('');
+        container.innerHTML = albums.map(renderAlbumCard).join('');
       } catch (e) {
         console.error(e);
         container.innerHTML = '<div class="empty-state"><div class="icon">📀</div><h3>Error loading albums.</h3></div>';

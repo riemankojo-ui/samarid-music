@@ -6,22 +6,22 @@
 <title>Artist - Samarid Music</title>
 <meta name="description" content="Listen to music from artists on Samarid Music — Ghana's newest music label.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  :root { --bg: #ffffff; --card: #f5f5f5; --border: #e5e5e5; --text: #0a0a0a; --text2: #666; --accent: #ff8800; --purple: #8b5cf6; --red: #ff0033; }
+  :root { --bg: #ffffff; --card: #f5f5f5; --border: #e5e5e5; --text: #0a0a0a; --text2: #666; --accent: #ff8800; --red: #ff0033; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
   html, body { overflow-x: hidden; max-width: 100vw; }
   body { background: #fafafa; color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 40px; }
   img { max-width: 100%; }
 
-  .header { position: sticky; top: 0; background: #fff; border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 10px; z-index: 100; }
-  .back-btn { background: #f5f5f5; color: var(--text); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-  .back-btn:active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .logo { font-size: 18px; font-weight: 900; color: var(--text); text-decoration: none; flex: 1; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .header { position: sticky; top: 0; background: #fff; border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 8px; z-index: 100; }
+  .menu-btn { background: transparent; color: var(--text); border: none; width: 40px; height: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; }
+  .menu-btn span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: background 0.2s; }
+  .menu-btn:active span { background: var(--accent); }
+  .logo { font-size: 18px; font-weight: 900; color: var(--text); text-decoration: none; flex: 1; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px; }
   .logo span { color: var(--red); }
-  .menu-btn { background: #f5f5f5; color: var(--text); border: 1px solid var(--border); width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; flex-shrink: 0; }
-  .menu-btn:active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .header-spacer { width: 40px; flex-shrink: 0; }
 
   /* SIDE MENU */
   .side-menu { position: fixed; top: 0; right: -340px; width: 320px; max-width: 88%; height: 100vh; background: #0a0a0a; color: #fff; z-index: 9999; transition: right 0.3s ease; overflow-y: auto; box-shadow: -10px 0 40px rgba(0,0,0,0.3); }
@@ -50,6 +50,7 @@
   .side-menu-item .tiktok-icon { color: #ffffff; }
   .side-menu-item .insta-icon { color: #E1306C; }
   .side-menu-item .youtube-icon { color: #FF0000; }
+  .side-menu-item .spotify-icon { color: #1DB954; }
   .side-menu-item .share-whatsapp-icon { color: #25D366; }
   .side-menu-item .share-facebook-icon { color: #1877F2; }
   .side-menu-item .share-twitter-icon { color: #ffffff; }
@@ -58,21 +59,92 @@
   .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9998; display: none; }
   .menu-overlay.open { display: block; }
 
-  .container { max-width: 700px; margin: 0 auto; padding: 16px; }
+  .container { max-width: 700px; margin: 0 auto; padding: 8px 16px 16px; }
 
-  .page-title { font-size: 18px; font-weight: 900; text-align: center; padding: 18px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 16px; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+  .page-title {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text2);
+    letter-spacing: 0.5px;
+    padding: 8px 0 14px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    text-transform: uppercase;
+  }
+  .page-title .accent { color: var(--text); font-weight: 900; }
 
-  .song-list { display: flex; flex-direction: column; gap: 8px; }
-  .song-card { display: flex; gap: 10px; background: #ffffff; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; padding: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); align-items: center; }
-  .song-card:active { transform: scale(0.99); background: #fafafa; }
-  .song-card-img { width: 30%; max-width: 90px; aspect-ratio: 1 / 1; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 6px; }
+  /* ===== CLEAN SONG LIST ===== */
+  .song-list { display: flex; flex-direction: column; }
+
+  .song-card {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    align-items: center;
+    transition: opacity 0.15s;
+  }
+  .song-card:last-child { border-bottom: none; }
+  .song-card:active { opacity: 0.7; }
+
+  .song-card-img {
+    width: 96px;
+    height: 96px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #000;
+    border-radius: 12px;
+    position: relative;
+  }
   .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .song-card-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; overflow: hidden; }
-  .song-card-cat { font-size: 10px; color: var(--purple); font-weight: 700; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 4px; }
-  .song-card-info h3 { font-size: 13px; font-weight: 800; line-height: 1.2; margin-bottom: 4px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; word-break: break-word; }
-  .song-card-info .date { font-size: 10px; color: #999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  .verify-badge { display: inline-block; width: 13px; height: 13px; vertical-align: middle; flex-shrink: 0; }
+  .song-card-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    gap: 6px;
+  }
+  /* Smaller title */
+  .song-card-info h3 {
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.35;
+    color: var(--text);
+    letter-spacing: -0.2px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    max-width: 100%;
+  }
+  .song-card-info h3 .dash {
+    font-weight: 600;
+    color: var(--text);
+    margin: 0 2px;
+  }
+  /* Date — no clock icon */
+  .song-card-info .date {
+    font-size: 12.5px;
+    color: var(--text2);
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .verify-badge { display: inline-block; width: 14px; height: 14px; vertical-align: middle; flex-shrink: 0; margin: 0 2px; }
 
   .empty-state { text-align: center; padding: 60px 20px; background: #fff; border-radius: 8px; color: var(--text2); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
   .empty-state .icon { font-size: 50px; margin-bottom: 15px; }
@@ -86,9 +158,13 @@
 <body>
 
   <header class="header">
-    <a href="artists.html" class="back-btn"><i class="fas fa-arrow-left"></i> Artists</a>
+    <button class="menu-btn" onclick="toggleSideMenu(event)" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
-    <button class="menu-btn" onclick="toggleSideMenu(event)" id="menuBtn">☰</button>
+    <div class="header-spacer"></div>
   </header>
 
   <div class="menu-overlay" id="menuOverlay" onclick="closeSideMenu()"></div>
@@ -126,7 +202,7 @@
   </div>
 
   <div class="container">
-    <div class="page-title" id="pageTitle">Loading...</div>
+    <div class="page-title">Browse <span class="accent" id="pageTitle">Artist</span></div>
     <div class="song-list" id="songList">
       <div class="loading">Loading songs...</div>
     </div>
@@ -163,7 +239,7 @@
     const artistName = params.get('name') || 'Samarid';
 
     document.title = artistName + ' - Samarid Music';
-    document.getElementById('pageTitle').innerText = 'Browse - ' + artistName;
+    document.getElementById('pageTitle').innerText = artistName;
 
     let visitorId = localStorage.getItem('samarid_visitor_id');
     if (!visitorId) {
@@ -263,6 +339,7 @@
       const tiktok = safeUrl((artistProfile && artistProfile.tiktok) || firstSong.tiktok);
       const instagram = safeUrl((artistProfile && artistProfile.instagram) || firstSong.instagram);
       const youtube = safeUrl((artistProfile && artistProfile.youtube) || firstSong.youtube);
+      const spotify = safeUrl((artistProfile && artistProfile.spotify) || firstSong.spotify);
 
       const menuAvatar = document.getElementById('menuAvatar');
       if (profilePic) menuAvatar.innerHTML = '<img src="' + escapeHtml(profilePic) + '" alt="' + escapeHtml(artistName) + '">';
@@ -277,6 +354,7 @@
       if (tiktok) socialHTML.push('<a href="' + escapeHtml(tiktok) + '" target="_blank" rel="noopener" class="side-menu-item"><i class="fab fa-tiktok tiktok-icon"></i><span class="item-label">TikTok</span><span style="color:#444;">↗</span></a>');
       if (instagram) socialHTML.push('<a href="' + escapeHtml(instagram) + '" target="_blank" rel="noopener" class="side-menu-item"><i class="fab fa-instagram insta-icon"></i><span class="item-label">Instagram</span><span style="color:#444;">↗</span></a>');
       if (youtube) socialHTML.push('<a href="' + escapeHtml(youtube) + '" target="_blank" rel="noopener" class="side-menu-item"><i class="fab fa-youtube youtube-icon"></i><span class="item-label">YouTube</span><span style="color:#444;">↗</span></a>');
+      if (spotify) socialHTML.push('<a href="' + escapeHtml(spotify) + '" target="_blank" rel="noopener" class="side-menu-item"><i class="fab fa-spotify spotify-icon"></i><span class="item-label">Spotify</span><span style="color:#444;">↗</span></a>');
       document.getElementById('menuSocialLinks').innerHTML = socialHTML.length > 0 ? socialHTML.join('') : '<p style="padding: 20px; text-align: center; color: #666; font-size: 13px;">No social links added yet.</p>';
 
       if (songs.length === 0) {
@@ -285,16 +363,13 @@
         list.innerHTML = songs.map((s) => {
           const badge = isVerified ? VERIFY_BADGE : '';
           return `
-            <div class="song-card" onclick="window.location.href='song.html?id=${s.id}'">
-              <div class="song-card-img"><img src="${escapeHtml(s.cover)}" loading="lazy"></div>
+            <a href="song-details.html?id=${s.id}" class="song-card">
+              <div class="song-card-img"><img src="${escapeHtml(s.cover)}" alt="${escapeHtml(s.title)}" loading="lazy"></div>
               <div class="song-card-info">
-                <div class="song-card-cat">
-                  <span>${escapeHtml(artistName)}${badge} • ${escapeHtml(s.category || 'Music')}</span>
-                </div>
-                <h3>${escapeHtml(s.title)}</h3>
+                <h3>${escapeHtml(artistName)}${badge}<span class="dash"> - </span>${escapeHtml(s.title)}</h3>
                 <div class="date">${escapeHtml(s.date || '')}</div>
               </div>
-            </div>
+            </a>
           `;
         }).join('');
       }
