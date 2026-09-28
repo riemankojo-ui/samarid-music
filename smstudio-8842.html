@@ -8,8 +8,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
   :root { --accent: #ff8800; --bg: #0a0a0a; --card: #141414; --border: #222; --text2: #888; }
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
+  html, body { overflow-x: hidden; max-width: 100vw; }
   body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; padding-bottom: 80px; }
+  img { max-width: 100%; }
 
   #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
   .login-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 35px 25px; width: 100%; max-width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
@@ -61,7 +63,7 @@
   .admin-song .delete-btn { color: #ff0033; }
   .empty-songs { text-align: center; padding: 30px 20px; color: #666; font-size: 13px; }
 
-  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 8px 0; z-index: 1000; }
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 8px 0 max(8px, env(safe-area-inset-bottom)); z-index: 1000; }
   .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; color: var(--text2); cursor: pointer; background: transparent; border: none; font-family: inherit; }
   .nav-item .icon { font-size: 18px; }
   .nav-item .label { font-size: 9px; font-weight: 700; }
@@ -137,6 +139,7 @@
         <div class="form-group"><label>Release Date</label><input type="text" id="songDate" placeholder="e.g. April 13, 2026"></div>
         <div class="form-group"><label>Description</label><textarea id="songDescription" placeholder="About this song..."></textarea></div>
         <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="https://...mp3"></div>
+        <div class="form-group"><label>Spotify Link 🎧</label><input type="text" id="songSpotify" placeholder="https://open.spotify.com/track/..."></div>
         <button class="main-btn" id="submitBtn" onclick="saveSong()">Publish Song</button>
         <button class="secondary-btn" id="cancelBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
         <p id="songStatus" class="status"></p>
@@ -271,12 +274,13 @@
       }
       list.innerHTML = filtered.map(s => {
         const albumTag = s.album_name ? ' • <span style="color:#ff8800;">📀 ' + s.album_name + '</span>' : '';
+        const spotifyTag = s.spotify ? ' • <span style="color:#1DB954;">🎧</span>' : '';
         return `
           <div class="admin-song">
             <img src="${s.cover}" alt="${s.title}">
             <div class="info">
               <h4>${s.title}</h4>
-              <p>${s.artist_name || 'Samarid'} • ${s.category} • ${s.date}${albumTag}</p>
+              <p>${s.artist_name || 'Samarid'} • ${s.category} • ${s.date}${albumTag}${spotifyTag}</p>
             </div>
             <div class="actions">
               <button class="action-btn edit-btn" onclick='editSong(${JSON.stringify(s).replace(/'/g, "&#39;")})'><i class="fas fa-edit"></i></button>
@@ -301,6 +305,7 @@
       document.getElementById('songDate').value = song.date;
       document.getElementById('songDescription').value = song.description || '';
       document.getElementById('songDownload').value = song.downloadurl || '';
+      document.getElementById('songSpotify').value = song.spotify || '';
       document.getElementById('uploadTitle').innerText = 'Edit Song';
       document.getElementById('submitBtn').innerText = 'Update Song';
       document.getElementById('cancelBtn').style.display = 'block';
@@ -309,7 +314,7 @@
 
     window.cancelEdit = function() {
       document.getElementById('editingId').value = '';
-      ['songTitle','songCover','songArtist','songCategory','songDate','songDescription','songDownload'].forEach(id => {
+      ['songTitle','songCover','songArtist','songCategory','songDate','songDescription','songDownload','songSpotify'].forEach(id => {
         document.getElementById(id).value = '';
       });
       document.getElementById('uploadTitle').innerText = 'Add New Song';
@@ -328,12 +333,13 @@
       const date = document.getElementById('songDate').value.trim() || new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
       const description = document.getElementById('songDescription').value.trim() || 'No description yet.';
       const downloadurl = document.getElementById('songDownload').value.trim() || '#';
+      const spotify = document.getElementById('songSpotify').value.trim();
 
       if (!title || !cover) { status.className = 'status error'; status.innerText = 'Title and Cover required!'; return; }
       status.className = 'status info'; status.innerText = 'Saving...';
 
       try {
-        const payload = { title, cover, category, date, description, downloadurl, artist_name: artist };
+        const payload = { title, cover, category, date, description, downloadurl, artist_name: artist, spotify: spotify };
         let res;
         if (editingId) {
           res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + editingId, {
