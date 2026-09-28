@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Song - Samarid Music</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root { --bg: #0a0a0a; --card: #141414; --border: #222; --text: #ffffff; --text2: #cccccc; --accent: #ff0033; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; padding-bottom: 40px; overflow-x: hidden; }
+
+  .header { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 10px; z-index: 100; }
+  .back-btn { background: var(--card); color: var(--text); border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+  .back-btn:active { background: var(--accent); color: #fff; }
+  .logo { font-size: 18px; font-weight: 900; color: var(--text); text-decoration: none; flex: 1; text-align: center; }
+  .logo span { color: var(--accent); }
+  .user-badge { display: flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--border); padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; color: var(--text2); cursor: pointer; }
+  .user-badge i { color: var(--accent); }
+
+  .mini-tabs-wrapper { position: sticky; top: 58px; z-index: 90; background: var(--bg); border-bottom: 1px solid var(--border); }
+  .mini-tabs { display: flex; justify-content: center; gap: 8px; padding: 16px 16px 0; max-width: 700px; margin: 0 auto; position: relative; }
+  .mini-tab { padding: 10px 20px; background: transparent; border: none; color: var(--text2); font-weight: 700; font-size: 14px; cursor: pointer; font-family: inherit; transition: color 0.25s ease; position: relative; z-index: 2; }
+  .mini-tab.active { color: var(--accent); }
+  .mini-tabs-underline { position: absolute; bottom: 0; height: 3px; background: var(--accent); border-radius: 3px; transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1; }
+
+  .slides-viewport { overflow: hidden; touch-action: pan-y; }
+  .slides-track { display: flex; transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); will-change: transform; }
+  .slide-page { flex: 0 0 100%; width: 100%; min-width: 0; }
+
+  .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
+
+  .song-hero { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 15px; }
+  .song-cover { width: 220px; height: 220px; border-radius: 12px; overflow: hidden; margin: 0 auto 18px; box-shadow: 0 15px 40px rgba(0,0,0,0.5); background: #000; }
+  .song-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .song-title { font-size: 22px; font-weight: 900; margin-bottom: 6px; letter-spacing: -0.5px; }
+  .song-artist { font-size: 13px; color: var(--accent); font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+  .song-meta { font-size: 11px; color: var(--text2); margin-bottom: 18px; }
+
+  .action-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px; }
+  .action-btn { display: flex; align-items: center; gap: 6px; padding: 10px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 20px; color: var(--text2); font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; transition: 0.15s; text-decoration: none; }
+  .action-btn:active { transform: scale(0.94); }
+  .action-btn.liked { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .action-btn.plays-btn { color: #ff8800; cursor: default; background: var(--card); }
+
+  .detail-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .detail-section h4 { font-size: 11px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; }
+  .detail-section p { font-size: 13px; line-height: 1.6; color: var(--text); }
+
+  /* COMMENTS */
+  .comments-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .comments-list { max-height: 400px; overflow-y: auto; margin-bottom: 14px; }
+  .comments-list::-webkit-scrollbar { width: 4px; }
+  .comments-list::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+  .comment-item { padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .comment-item:last-child { border-bottom: none; }
+  .comment-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .comment-avatar { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #ff0033, #b3002d); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; flex-shrink: 0; }
+  .comment-name { font-size: 12px; font-weight: 800; color: var(--accent); }
+  .comment-text { font-size: 13px; color: #ddd; line-height: 1.5; word-break: break-word; padding-left: 36px; }
+  .comments-empty { text-align: center; padding: 20px; color: var(--text2); font-size: 13px; }
+
+  .comment-form { display: flex; gap: 8px; }
+  .comment-form input { flex: 1; padding: 12px 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 13px; font-family: inherit; min-width: 0; }
+  .comment-form input:focus { outline: none; border-color: var(--accent); }
+  .comment-form button { background: var(--accent); color: #fff; border: none; padding: 12px 18px; border-radius: 10px; cursor: pointer; font-weight: 900; font-family: inherit; font-size: 14px; flex-shrink: 0; }
+  .comment-form button:active { transform: scale(0.96); }
+
+  .spotify-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 40px 20px; text-align: center; }
+  .spotify-card i { font-size: 50px; color: #1DB954; margin-bottom: 15px; }
+  .spotify-card h3 { font-size: 18px; font-weight: 800; margin-bottom: 10px; }
+  .spotify-card p { font-size: 13px; color: var(--text2); margin-bottom: 20px; }
+
+  .poll-boxes { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .poll-box { background: var(--card); border: 2px solid var(--border); border-radius: 14px; padding: 20px 10px; text-align: center; cursor: pointer; transition: 0.2s; }
+  .poll-box:active { transform: scale(0.96); }
+  .poll-box.selected { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .poll-box .emoji { font-size: 28px; margin-bottom: 8px; display: block; }
+  .poll-box .poll-label { font-size: 11px; font-weight: 700; line-height: 1.3; }
+  .poll-box .poll-votes { font-size: 10px; color: var(--text2); margin-top: 6px; display: block; font-weight: 500; }
+  .poll-box.selected .poll-votes { color: rgba(255,255,255,0.8); }
+
+  .page-title { font-size: 15px; font-weight: 900; text-align: center; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 16px; }
+
+  .verify-badge { display: inline-block; width: 14px; height: 14px; vertical-align: middle; flex-shrink: 0; }
+
+  .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 40px; }
+  .footer .brand { color: var(--accent); font-weight: 700; }
+  .loading { text-align: center; padding: 40px; color: var(--text2); font-size: 13px; }
+</style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="fanbase.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+    <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
+    <div class="user-badge"><i class="fas fa-user"></i> <span id="headerName">Fan</span></div>
+  </header>
+
+  <div class="mini-tabs-wrapper">
+    <div class="mini-tabs" id="miniTabs">
+      <button class="mini-tab active" id="tabSongs" onclick="switchMini(0, this)">Songs</button>
+      <button class="mini-tab" id="tabSpotify" onclick="switchMini(1, this)">Spotify</button>
+      <button class="mini-tab" id="tabPoll" onclick="switchMini(2, this)">Poll</button>
+      <div class="mini-tabs-underline" id="tabsUnderline"></div>
+    </div>
+  </div>
+
+  <div class="slides-viewport" id="slidesViewport">
+    <div class="slides-track" id="slidesTrack">
+
+      <!-- PAGE 1: SONG DETAIL -->
+      <div class="slide-page">
+        <div class="container" id="songContent">
+          <div class="loading">Loading song...</div>
+        </div>
+      </div>
+
+      <!-- PAGE 2: SPOTIFY -->
+      <div class="slide-page">
+        <div class="container">
+          <div class="page-title">🎧 Listen on Spotify</div>
+          <div class="spotify-card">
+            <i class="fab fa-spotify"></i>
+            <h3>Samarid Music on Spotify</h3>
+            <p>My Spotify artist profile is coming soon!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE 3: POLL -->
+      <div class="slide-page">
+        <div class="container">
+          <div class="page-title">💬 How Do You Like Samarid?</div>
+          <div class="poll-boxes">
+            <div class="poll-box" id="poll-love" onclick="vote('love')">
+              <span class="emoji">❤️</span>
+              <span class="poll-label">Love this artist</span>
+              <span class="poll-votes" id="votes-love">0</span>
+            </div>
+            <div class="poll-box" id="poll-sometimes" onclick="vote('sometimes')">
+              <span class="emoji">⏰</span>
+              <span class="poll-label">Sometimes</span>
+              <span class="poll-votes" id="votes-sometimes">0</span>
+            </div>
+            <div class="poll-box" id="poll-one" onclick="vote('one')">
+              <span class="emoji">🎵</span>
+              <span class="poll-label">One song only</span>
+              <span class="poll-votes" id="votes-one">0</span>
+            </div>
+          </div>
+          <p id="pollStatus" style="text-align:center; font-size:12px; color:#00cc44; margin-top:20px; font-weight:700;"></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
+
+  <script>
+    const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+
+    const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
+
+    let visitorId = localStorage.getItem('samarid_visitor_id');
+    if (!visitorId) {
+      visitorId = 'v_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('samarid_visitor_id', visitorId);
+    }
+
+    let fanName = localStorage.getItem('samarid_fan_name') || 'Anonymous Fan';
+    let fanFirstName = localStorage.getItem('samarid_fan_first_name') || 'Fan';
+    let currentSong = null;
+    let countRefreshTimer = null;
+    let currentPage = 0;
+    let myLikes = JSON.parse(localStorage.getItem('samarid_my_likes') || '[]');
+    function saveMyLikes() { localStorage.setItem('samarid_my_likes', JSON.stringify(myLikes)); }
+
+    document.getElementById('headerName').innerText = fanFirstName;
+
+    const slidesTrack = document.getElementById('slidesTrack');
+    const slidesViewport = document.getElementById('slidesViewport');
+    const miniTabs = document.getElementById('miniTabs');
+
+    window.switchMini = function(pageIndex, btn) {
+      goToPage(pageIndex);
+      document.querySelectorAll('.mini-tab').forEach(t => t.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      moveUnderline(btn || document.querySelectorAll('.mini-tab')[pageIndex]);
+    }
+
+    function goToPage(index) {
+      currentPage = index;
+      slidesTrack.style.transform = 'translateX(-' + (index * 100) + '%)';
+      document.querySelectorAll('.mini-tab').forEach((t, i) => {
+        if (i === index) t.classList.add('active');
+        else t.classList.remove('active');
+      });
+      moveUnderline(document.querySelectorAll('.mini-tab')[index]);
+    }
+
+    function moveUnderline(btn) {
+      if (!btn) return;
+      const underline = document.getElementById('tabsUnderline');
+      const tabsRect = miniTabs.getBoundingClientRect();
+      const btnRect = btn.getBoundingClientRect();
+      underline.style.left = (btnRect.left - tabsRect.left) + 'px';
+      underline.style.width = btnRect.width + 'px';
+    }
+
+    window.addEventListener('load', () => setTimeout(() => moveUnderline(document.querySelector('.mini-tab.active')), 100));
+    window.addEventListener('resize', () => moveUnderline(document.querySelector('.mini-tab.active')));
+
+    let touchStartX = 0, touchStartY = 0;
+    slidesViewport.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+    slidesViewport.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].screenX - touchStartX;
+      const dy = e.changedTouches[0].screenY - touchStartY;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+        if (dx < 0 && currentPage < 2) goToPage(currentPage + 1);
+        else if (dx > 0 && currentPage > 0) goToPage(currentPage - 1);
+      }
+    }, { passive: true });
+
+    // === LOAD SONG ===
+    async function loadSong() {
+      const params = new URLSearchParams(window.location.search);
+      let songId = params.get('id');
+      const container = document.getElementById('songContent');
+
+      if (!songId) {
+        try {
+          const fallbackRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id&order=id.desc&limit=1', {
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+          });
+          const fallbackData = await fallbackRes.json();
+          if (Array.isArray(fallbackData) && fallbackData.length > 0) {
+            songId = fallbackData[0].id;
+            window.history.replaceState({}, '', '?id=' + songId);
+          } else {
+            container.innerHTML = '<div class="loading">No songs yet.</div>';
+            return;
+          }
+        } catch (e) {
+          container.innerHTML = '<div class="loading">Connection error.</div>';
+          return;
+        }
+      }
+
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + songId, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const data = await res.json();
+
+        if (!data || data.length === 0) {
+          container.innerHTML = '<div class="loading">Song not found.</div>';
+          return;
+        }
+
+        const s = data[0];
+        currentSong = s;
+        const artist = s.artist_name || 'Samarid';
+        const badge = s.verified ? VERIFY_BADGE : '';
+
+        container.innerHTML = `
+          <div class="song-hero">
+            <div class="song-cover"><img src="${s.cover}" alt="${s.title}"></div>
+            <h1 class="song-title">${s.title}</h1>
+            <p class="song-artist"><span>${artist}</span>${badge}</p>
+            <p class="song-meta">${s.category} • ${s.date}</p>
+
+            <div class="action-row">
+              <button class="action-btn" id="likeBtn" onclick="toggleLike(${s.id}, this)">
+                <i class="fas fa-heart"></i> <span id="likeCount">0</span>
+              </button>
+              <div class="action-btn plays-btn">
+                <i class="fas fa-fire"></i> <span id="playsCount">${s.plays || 0}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h4>📖 About This Song</h4>
+            <p>${s.description || 'No description yet.'}</p>
+          </div>
+
+          <div class="comments-box">
+            <div style="font-size: 11px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px;">💬 Comments</div>
+            <div class="comments-list" id="commentsList">
+              <div class="comments-empty">Loading comments...</div>
+            </div>
+            <div class="comment-form">
+              <input type="text" id="commentInput" placeholder="Write a comment..." maxlength="300" onkeypress="if(event.key==='Enter')postComment()">
+              <button onclick="postComment()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+          </div>
+        `;
+
+        if (myLikes.includes(s.id)) document.getElementById('likeBtn').classList.add('liked');
+
+        await refreshLikeCount(s.id);
+        loadComments(s.id);
+
+        if (countRefreshTimer) clearInterval(countRefreshTimer);
+        countRefreshTimer = setInterval(() => refreshLikeCount(s.id), 8000);
+      } catch (e) {
+        console.error(e);
+        container.innerHTML = '<div class="loading">Error loading song.</div>';
+      }
+    }
+
+    async function refreshLikeCount(songId) {
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/likes?song_id=eq.' + songId + '&select=visitor_id', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const data = await res.json();
+        const el = document.getElementById('likeCount');
+        if (el) el.innerText = data.length;
+        const serverHasMyLike = data.some(l => l.visitor_id === visitorId);
+        const btn = document.getElementById('likeBtn');
+        if (btn) {
+          if (serverHasMyLike) {
+            btn.classList.add('liked');
+            if (!myLikes.includes(songId)) { myLikes.push(songId); saveMyLikes(); }
+          } else if (myLikes.includes(songId)) {
+            myLikes = myLikes.filter(id => id !== songId);
+            saveMyLikes();
+            btn.classList.remove('liked');
+          }
+        }
+      } catch (e) { console.error(e); }
+    }
+
+    window.toggleLike = async function(songId, btn) {
+      const isLiked = btn.classList.contains('liked');
+      const countSpan = document.getElementById('likeCount');
+      const currentCount = parseInt(countSpan.innerText) || 0;
+
+      if (isLiked) {
+        btn.classList.remove('liked');
+        countSpan.innerText = Math.max(0, currentCount - 1);
+        myLikes = myLikes.filter(id => id !== songId);
+      } else {
+        btn.classList.add('liked');
+        countSpan.innerText = currentCount + 1;
+        if (!myLikes.includes(songId)) myLikes.push(songId);
+      }
+      saveMyLikes();
+      btn.disabled = true;
+
+      try {
+        if (isLiked) {
+          await fetch(SUPABASE_URL + '/rest/v1/likes?song_id=eq.' + songId + '&visitor_id=eq.' + visitorId, {
+            method: 'DELETE',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+          });
+        } else {
+          await fetch(SUPABASE_URL + '/rest/v1/likes', {
+            method: 'POST',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ song_id: songId, visitor_id: visitorId, name: fanName })
+          });
+        }
+      } catch (e) { console.error(e); }
+      finally { btn.disabled = false; }
+    }
+
+    // === COMMENTS ===
+    async function loadComments(songId) {
+      const container = document.getElementById('commentsList');
+      if (!container) return;
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/comments?song_id=eq.' + songId + '&select=*&order=id.desc&limit=50', {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+        });
+        const comments = await res.json();
+        if (!Array.isArray(comments) || comments.length === 0) {
+          container.innerHTML = '<div class="comments-empty">Be the first to comment! 💬</div>';
+          return;
+        }
+        container.innerHTML = comments.map(c => `
+          <div class="comment-item">
+            <div class="comment-meta">
+              <div class="comment-avatar">${(c.name || 'A').charAt(0).toUpperCase()}</div>
+              <span class="comment-name">${c.name || 'Anonymous'}</span>
+            </div>
+            <div class="comment-text">${c.message}</div>
+          </div>
+        `).join('');
+      } catch (e) {
+        container.innerHTML = '<div class="comments-empty">Could not load comments.</div>';
+      }
+    }
+
+    window.postComment = async function() {
+      if (!currentSong) return;
+      const input = document.getElementById('commentInput');
+      const message = input.value.trim();
+      if (!message) return;
+
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/comments', {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ song_id: currentSong.id, name: fanName, message: message })
+        });
+        if (res.ok) {
+          input.value = '';
+          loadComments(currentSong.id);
+        } else {
+          alert('Could not post comment.');
+        }
+      } catch (e) { alert('Network error.'); }
+    }
+
+    // === POLL ===
+    async function loadPoll() {
+      try {
+        const [res, myVoteRes] = await Promise.all([
+          fetch(SUPABASE_URL + '/rest/v1/votes?select=choice', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/votes?visitor_id=eq.' + visitorId, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
+        ]);
+        const data = await res.json();
+        const myVoteData = await myVoteRes.json();
+        const counts = { love: 0, sometimes: 0, one: 0 };
+        data.forEach(v => { if (counts[v.choice] !== undefined) counts[v.choice]++; });
+        const myVote = myVoteData.length > 0 ? myVoteData[0].choice : null;
+        document.getElementById('votes-love').innerText = counts.love;
+        document.getElementById('votes-sometimes').innerText = counts.sometimes;
+        document.getElementById('votes-one').innerText = counts.one;
+        ['love', 'sometimes', 'one'].forEach(key => {
+          const box = document.getElementById('poll-' + key);
+          if (key === myVote) box.classList.add('selected');
+          else box.classList.remove('selected');
+        });
+      } catch (e) { console.error(e); }
+    }
+
+    window.vote = async function(choice) {
+      try {
+        const check = await fetch(SUPABASE_URL + '/rest/v1/votes?visitor_id=eq.' + visitorId, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const existing = await check.json();
+        if (existing && existing.length > 0) {
+          await fetch(SUPABASE_URL + '/rest/v1/votes?id=eq.' + existing[0].id, {
+            method: 'PATCH',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ choice: choice })
+          });
+        } else {
+          await fetch(SUPABASE_URL + '/rest/v1/votes', {
+            method: 'POST',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ choice: choice, visitor_id: visitorId })
+          });
+        }
+        document.getElementById('pollStatus').innerText = '✅ Thanks for voting!';
+        loadPoll();
+      } catch (e) { alert('Could not save vote.'); }
+    }
+
+    loadSong();
+    loadPoll();
+  </script>
+</body>
+</html>
