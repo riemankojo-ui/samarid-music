@@ -23,7 +23,6 @@
   .logo span { color: var(--accent); }
   .header-spacer { width: 40px; flex-shrink: 0; }
 
-  /* MENU DROPDOWN */
   .menu-dropdown { position: fixed; top: 66px; left: 12px; background: #141414; border: 1px solid #2a2a2a; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.7); width: 250px; max-width: calc(100vw - 24px); max-height: 70vh; overflow-y: auto; display: none; z-index: 9999; }
   .menu-dropdown.open { display: block; animation: menuPop 0.2s ease; }
   @keyframes menuPop { from { opacity: 0; transform: translateY(-8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
@@ -36,21 +35,7 @@
   .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; display: none; }
   .menu-overlay.open { display: block; }
 
-  /* Small red banner */
-  .label-banner {
-    background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%);
-    color: #fff;
-    padding: 6px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    font-size: 10px;
-    text-transform: uppercase;
-    overflow: hidden;
-  }
+  .label-banner { background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); color: #fff; padding: 6px 16px; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 800; letter-spacing: 1.5px; font-size: 10px; text-transform: uppercase; overflow: hidden; }
   .label-banner .label-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .label-banner i { font-size: 10px; opacity: 0.85; flex-shrink: 0; }
 
@@ -86,36 +71,11 @@
   .follow-btn-flat:disabled { opacity: 0.6; cursor: wait; }
   .follow-btn-flat.following { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); padding: 5.5px 14.5px; }
 
-  /* ===== CLEAN DESCRIPTION (no card) ===== */
-  .detail-description {
-    padding: 8px 4px 24px;
-    margin-bottom: 12px;
-    text-align: left;
-  }
-  .detail-description h4 {
-    font-size: 11px;
-    color: var(--text2);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 800;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .detail-description h4 i {
-    color: var(--accent);
-    font-size: 11px;
-  }
-  .detail-description p {
-    font-size: 15px;
-    line-height: 1.75;
-    color: var(--text);
-    font-weight: 500;
-    letter-spacing: -0.1px;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-  }
+  /* Clean description */
+  .detail-description { padding: 8px 4px 24px; margin-bottom: 12px; text-align: left; }
+  .detail-description h4 { font-size: 11px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .detail-description h4 i { color: var(--accent); font-size: 11px; }
+  .detail-description p { font-size: 15px; line-height: 1.75; color: var(--text); font-weight: 500; letter-spacing: -0.1px; overflow-wrap: anywhere; word-break: break-word; }
 
   .detail-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
   .detail-section h4 { font-size: 12px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
@@ -130,8 +90,9 @@
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); cursor: pointer; }
 
   .download-buttons { display: flex; flex-direction: column; gap: 12px; }
-  .btn-download { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; border-radius: 10px; font-size: 15px; font-weight: 700; text-decoration: none; color: #fff; background: #e74c3c; cursor: pointer; border: none; font-family: inherit; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .btn-download { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 16px; border-radius: 10px; font-size: 15px; font-weight: 700; text-decoration: none; color: #fff; background: #e74c3c; cursor: pointer; border: none; font-family: inherit; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; transition: background 0.15s; }
   .btn-download:active { background: #c0392b; }
+  .btn-download:disabled { opacity: 0.7; cursor: wait; }
 
   .share-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
   .share-section h4 { font-size: 12px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 15px; text-align: center; }
@@ -264,6 +225,63 @@
       localStorage.setItem(key, Date.now().toString());
     }
 
+    // ===== SMART DOWNLOAD =====
+    window.smartDownload = async function(btn) {
+      if (!currentSongData) return;
+
+      const url = currentSongData.downloadurl || currentSongData.audio_url || '';
+      const artist = currentSongData.artist_name || 'Samarid';
+      const title = currentSongData.title || 'Song';
+
+      if (!url || url === '#') {
+        showToast('No download link available');
+        return;
+      }
+
+      // Sanitize filename for safety
+      const cleanArtist = artist.replace(/[^\w\s\-\.]/g, '').trim();
+      const cleanTitle = title.replace(/[^\w\s\-\.]/g, '').trim();
+      const filename = cleanArtist + ' - ' + cleanTitle + ' [Samarid Music].mp3';
+
+      const originalHTML = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
+
+      try {
+        // Try to fetch the file as a blob (works only if CORS allows)
+        const response = await fetch(url, { mode: 'cors' });
+        if (!response.ok) throw new Error('Fetch failed');
+        const blob = await response.blob();
+
+        // Create a local blob URL and trigger download with the nice filename
+        const blobUrl = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+
+        showToast('Download started!');
+      } catch (e) {
+        // CORS blocked — fall back to direct download (wrong name, but works)
+        console.warn('Blob download failed, using direct link fallback:', e);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.target = '_blank';
+        a.rel = 'noopener';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast('Downloading... (name may show as code)');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+      }
+    };
+
     async function loadSong() {
       const urlParams = new URLSearchParams(window.location.search);
       let songId = urlParams.get('id');
@@ -293,7 +311,6 @@
         document.title = downloadTitle + ' - Samarid Music';
 
         const audioSrc = s.audio_url || s.downloadurl || '';
-        const downloadSrc = s.downloadurl || s.audio_url || '#';
 
         let artistProfile = null;
         let followerCount = 0;
@@ -383,9 +400,9 @@
           <div class="detail-section">
             <h4>Get the Song</h4>
             <div class="download-buttons">
-              <a href="${escapeHtml(downloadSrc)}" download="${escapeHtml(artist)} - ${escapeHtml(s.title)} [Samarid Music].mp3" id="detailDownload" class="btn-download" target="_blank" rel="noopener">
+              <button onclick="smartDownload(this)" class="btn-download" id="downloadBtn">
                 <i class="fas fa-download"></i> Download MP3
-              </a>
+              </button>
             </div>
           </div>
 
