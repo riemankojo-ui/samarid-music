@@ -16,13 +16,43 @@
   img { max-width: 100%; }
 
   .header { position: sticky; top: 0; background: var(--header-bg); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
-  .back-btn { background: #222; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; text-decoration: none; flex-shrink: 0; }
-  .back-btn:active { background: var(--accent); }
+  .menu-btn { background: transparent; color: #fff; border: none; width: 40px; height: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; }
+  .menu-btn span { display: block; width: 22px; height: 2px; background: #fff; border-radius: 2px; transition: background 0.2s; }
+  .menu-btn:active span { background: var(--accent); }
   .logo { font-size: 18px; font-weight: 900; color: #fff; text-decoration: none; flex: 1; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px; }
   .logo span { color: var(--accent); }
+  .header-spacer { width: 40px; flex-shrink: 0; }
 
-  .label-banner { background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); color: #fff; padding: 12px 20px; display: flex; align-items: center; justify-content: center; gap: 12px; font-weight: 900; letter-spacing: 2px; font-size: 13px; box-shadow: 0 4px 15px rgba(255, 0, 51, 0.3); overflow: hidden; }
-  .label-banner .label-text { text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* MENU DROPDOWN */
+  .menu-dropdown { position: fixed; top: 66px; left: 12px; background: #141414; border: 1px solid #2a2a2a; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.7); width: 250px; max-width: calc(100vw - 24px); max-height: 70vh; overflow-y: auto; display: none; z-index: 9999; }
+  .menu-dropdown.open { display: block; animation: menuPop 0.2s ease; }
+  @keyframes menuPop { from { opacity: 0; transform: translateY(-8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .menu-title { padding: 14px 18px 8px; font-size: 10px; color: #666; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
+  .menu-item { padding: 13px 18px; font-size: 14px; color: #fff; cursor: pointer; display: flex; align-items: center; gap: 12px; text-decoration: none; transition: background 0.15s; background: transparent; border: none; width: 100%; font-family: inherit; text-align: left; }
+  .menu-item:active { background: #1f1f1f; }
+  .menu-item i { width: 20px; text-align: center; font-size: 15px; color: var(--accent); flex-shrink: 0; }
+  .menu-item .label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .menu-divider { height: 1px; background: #222; margin: 4px 0; }
+  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; display: none; }
+  .menu-overlay.open { display: block; }
+
+  /* Small red banner */
+  .label-banner {
+    background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%);
+    color: #fff;
+    padding: 6px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    font-size: 10px;
+    text-transform: uppercase;
+    overflow: hidden;
+  }
+  .label-banner .label-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .label-banner i { font-size: 10px; opacity: 0.85; flex-shrink: 0; }
 
   .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
 
@@ -55,6 +85,37 @@
   .follow-btn-flat:active { transform: scale(0.94); }
   .follow-btn-flat:disabled { opacity: 0.6; cursor: wait; }
   .follow-btn-flat.following { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); padding: 5.5px 14.5px; }
+
+  /* ===== CLEAN DESCRIPTION (no card) ===== */
+  .detail-description {
+    padding: 8px 4px 24px;
+    margin-bottom: 12px;
+    text-align: left;
+  }
+  .detail-description h4 {
+    font-size: 11px;
+    color: var(--text2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .detail-description h4 i {
+    color: var(--accent);
+    font-size: 11px;
+  }
+  .detail-description p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text);
+    font-weight: 500;
+    letter-spacing: -0.1px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
 
   .detail-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
   .detail-section h4 { font-size: 12px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
@@ -117,10 +178,28 @@
 <body>
 
   <header class="header">
-    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+    <button class="menu-btn" onclick="toggleMenu(event)" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
     <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
-    <div style="width: 70px; flex-shrink: 0;"></div>
+    <div class="header-spacer"></div>
   </header>
+
+  <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+  <div class="menu-dropdown" id="menuDropdown" onclick="event.stopPropagation()">
+    <div class="menu-title">Navigation</div>
+    <a href="index.html" class="menu-item"><i class="fas fa-music"></i><span class="label">Music</span></a>
+    <a href="albums.html" class="menu-item"><i class="fas fa-compact-disc"></i><span class="label">Albums</span></a>
+    <a href="artists.html" class="menu-item"><i class="fas fa-user-group"></i><span class="label">Artists</span></a>
+    <a href="videos.html" class="menu-item"><i class="fas fa-video"></i><span class="label">Videos</span></a>
+    <div class="menu-divider"></div>
+    <div class="menu-title">More</div>
+    <a href="about.html" class="menu-item"><i class="fas fa-info-circle"></i><span class="label">About</span></a>
+    <a href="promo.html" class="menu-item"><i class="fas fa-bullhorn"></i><span class="label">Promo</span></a>
+    <a href="distributors.html" class="menu-item"><i class="fas fa-headphones"></i><span class="label">Get On Spotify</span></a>
+  </div>
 
   <div class="label-banner">
     <i class="fas fa-compact-disc"></i>
@@ -146,13 +225,17 @@
 
     function escapeHtml(s) {
       if (s === null || s === undefined) return '';
-      return String(s)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
+
+    window.toggleMenu = function(e) {
+      e.stopPropagation();
+      const menu = document.getElementById('menuDropdown');
+      const overlay = document.getElementById('menuOverlay');
+      if (menu.classList.contains('open')) { menu.classList.remove('open'); overlay.classList.remove('open'); }
+      else { menu.classList.add('open'); overlay.classList.add('open'); }
+    }
+    window.closeMenu = function() { document.getElementById('menuDropdown').classList.remove('open'); document.getElementById('menuOverlay').classList.remove('open'); }
 
     let visitorId = localStorage.getItem('samarid_visitor_id');
     if (!visitorId) {
@@ -277,8 +360,8 @@
 
           <p class="detail-label"><i class="fas fa-compact-disc"></i> A Samarid Music Release</p>
 
-          <div class="detail-section">
-            <h4>About this Song</h4>
+          <div class="detail-description">
+            <h4><i class="fas fa-info-circle"></i> About this Song</h4>
             <p>${escapeHtml(s.description || 'No description yet.')}</p>
           </div>
 
@@ -367,18 +450,13 @@
       if (!audio || !btn) return;
 
       if (audio.paused) {
-        audio.play().catch(() => {
-          showToast('Tap play to start the audio');
-        });
+        audio.play().catch(() => { showToast('Tap play to start the audio'); });
         btn.innerHTML = '<i class="fas fa-pause"></i>';
 
-        if (hasRecentPlay(currentSongData.id)) {
-          return;
-        }
+        if (hasRecentPlay(currentSongData.id)) return;
 
         hasCountedThisPlay = false;
         secondsListened = 0;
-
         if (playCountTimer) clearInterval(playCountTimer);
 
         playCountTimer = setInterval(() => {
@@ -390,7 +468,6 @@
             clearInterval(playCountTimer);
           }
         }, 1000);
-
       } else {
         audio.pause();
         btn.innerHTML = '<i class="fas fa-play"></i>';
@@ -404,7 +481,6 @@
       currentSongData.plays = newPlays;
       const badge = document.getElementById('playCountBadge');
       if (badge) badge.innerHTML = '🔥 ' + newPlays + ' plays';
-
       try {
         await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + currentSongData.id, {
           method: 'PATCH',
@@ -414,9 +490,7 @@
       } catch (e) { console.error('Play count save failed:', e); }
     }
 
-    window.addEventListener('beforeunload', () => {
-      if (playCountTimer) clearInterval(playCountTimer);
-    });
+    window.addEventListener('beforeunload', () => { if (playCountTimer) clearInterval(playCountTimer); });
 
     document.addEventListener('timeupdate', function(e) {
       if (e.target.id === 'audioPlayer') {
@@ -489,7 +563,6 @@
       const currentCount = parseInt(countEl.innerText) || 0;
       isSongLiked = !isSongLiked;
       updateLikeUI(isSongLiked ? currentCount + 1 : Math.max(0, currentCount - 1));
-
       try {
         if (isSongLiked) {
           await fetch(SUPABASE_URL + '/rest/v1/likes', { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ song_id: songId, visitor_id: visitorId }) });
