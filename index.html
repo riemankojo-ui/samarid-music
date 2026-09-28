@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Samarid Music</title>
 <meta name="google-site-verification" content="ERHvKE-6CNknsGMv75ePLrVpOGaURdtsnmuMh1VxG-4" />
+<meta name="description" content="Samarid Music — Ghana's newest music label. Discover fresh Afrobeats, Hip Hop, and Afropop releases from underground artists.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
@@ -31,7 +32,7 @@
   body.light .text-tab { color: #888; }
   body.light .text-tab.active { color: #0a0a0a; }
 
-  .page-content { padding: 20px 16px 30px; max-width: 700px; margin: 0 auto; }
+  .page-content { padding: 20px 16px 0; max-width: 700px; margin: 0 auto; }
 
   .menu-dropdown { position: fixed; top: 58px; left: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); width: 260px; max-height: 80vh; overflow-y: auto; display: none; z-index: 9999; }
   .menu-dropdown.open { display: block; }
@@ -52,50 +53,238 @@
   .section-head h3 { font-size: 16px; font-weight: 900; letter-spacing: -0.3px; flex: 1; }
   .section-head .icon-fire { color: var(--accent); font-size: 18px; }
   .section-head .icon-new { color: #00cc44; font-size: 18px; }
-  .section-head .icon-cat { color: #8b5cf6; font-size: 18px; }
-  .section-head .icon-artist { color: #ff8800; font-size: 18px; }
-  .section-head .icon-trend { color: #ff8800; font-size: 18px; }
   .section-head .icon-social { color: #0084ff; font-size: 18px; }
   .section-head .icon-mail { color: #ff8800; font-size: 18px; }
   .section-head .icon-album { color: #ff8800; font-size: 18px; }
-
-  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
-  .pill { display: inline-block; padding: 8px 16px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; color: var(--text); font-size: 13px; font-weight: 700; text-decoration: none; transition: all 0.2s; cursor: pointer; }
-  .pill:active { transform: scale(0.96); }
-  .pill.cat-pill { color: #8b5cf6; border-color: #8b5cf644; }
-  .pill.cat-pill.active { background: #8b5cf6; color: #fff; border-color: #8b5cf6; }
-  .pill.artist-pill { color: #ff8800; border-color: #ff880044; }
-  .pill.artist-pill:active { background: #ff8800; color: #fff; border-color: #ff8800; }
 
   .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .social-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; color: var(--text); font-size: 13px; font-weight: 700; transition: 0.2s; }
   .social-btn:active { transform: scale(0.96); }
   .social-btn i { font-size: 16px; }
 
-  .trending-artists-list { display: flex; flex-direction: column; gap: 8px; }
-  .trending-artist-item { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; text-decoration: none; color: inherit; transition: all 0.2s; }
-  .trending-artist-item:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
-  .trending-rank { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; flex-shrink: 0; color: #fff; background: linear-gradient(135deg, #ff0033, #b3002d); }
-  .trending-rank.rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; }
-  .trending-rank.rank-2 { background: linear-gradient(135deg, #C0C0C0, #808080); color: #000; }
-  .trending-rank.rank-3 { background: linear-gradient(135deg, #CD7F32, #8B4513); }
-  .trending-artist-name { flex: 1; font-size: 14px; font-weight: 900; color: var(--text); display: flex; align-items: center; gap: 5px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .trending-artist-plays { font-size: 12px; font-weight: 800; color: #ff8800; display: flex; align-items: center; gap: 4px; flex-shrink: 0; background: rgba(255, 136, 0, 0.12); padding: 4px 10px; border-radius: 12px; }
-  .trending-empty { text-align: center; padding: 30px 20px; background: var(--card); border: 1px dashed var(--border); border-radius: 12px; color: var(--text2); font-size: 13px; line-height: 1.6; }
-  .trending-empty strong { color: #ff8800; }
+  /* ===== HOT ARTISTS — full-bleed dark section, blends with tagline ===== */
+  .hot-artists-section {
+    background: #0a0a0a;
+    color: #ffffff;
+    margin: 0 -16px 0;
+    padding: 40px 0 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .dark-tagline + .hot-artists-section { margin-top: 0; }
+
+  .hot-artists-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px 24px;
+    gap: 12px;
+  }
+  .hot-artists-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 30px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: #ffffff;
+    line-height: 1;
+  }
+  .hot-artists-title::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 32px;
+    background: #c47600;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .hot-artists-all {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #a0a0a0;
+    font-size: 16px;
+    font-weight: 800;
+    text-decoration: none;
+    letter-spacing: -0.3px;
+    flex-shrink: 0;
+    transition: color 0.2s;
+  }
+  .hot-artists-all:active { color: #ffffff; }
+  .hot-artists-all i { font-size: 14px; }
+
+  .hot-artists-viewport {
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    scroll-snap-type: x proximity;
+    padding: 4px 0 8px;
+  }
+  .hot-artists-viewport::-webkit-scrollbar { display: none; }
+  .hot-artists-track {
+    display: flex;
+    gap: 22px;
+    padding: 0 22px;
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .hot-artist {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    width: 92px;
+    flex-shrink: 0;
+    cursor: pointer;
+    scroll-snap-align: start;
+  }
+  .hot-artist-avatar {
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a1a1a 0%, #262626 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 900;
+    color: #555;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    transition: transform 0.25s ease;
+    position: relative;
+    border: none;
+  }
+  .hot-artist-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hot-artist:active .hot-artist-avatar { transform: scale(0.94); }
+
+  .hot-artist-name {
+    font-size: 14px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.2px;
+    text-align: center;
+    max-width: 92px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .hot-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: none;
+    color: #0a0a0a;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    z-index: 5;
+    transition: transform 0.15s, opacity 0.2s;
+  }
+  .hot-arrow:active { transform: translateY(-50%) scale(0.9); }
+  .hot-arrow.left { left: 6px; }
+  .hot-arrow.right { right: 6px; }
+  .hot-arrow.hidden { opacity: 0; pointer-events: none; }
+
+  .hot-artists-empty {
+    padding: 40px 22px;
+    text-align: center;
+    color: #666;
+    font-size: 13px;
+    width: 100%;
+  }
+
+  /* ===== DARK TAGLINE SECTION ===== */
+  .dark-tagline {
+    background: #0a0a0a;
+    color: #ffffff;
+    margin: 0 -16px;
+    padding: 50px 28px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .dark-tagline::before {
+    content: '';
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 0, 51, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .dark-tagline::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: -80px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 136, 0, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .dark-tagline-label { font-size: 10px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; position: relative; z-index: 1; }
+  .dark-tagline h2 { font-size: 24px; font-weight: 900; line-height: 1.25; letter-spacing: -0.6px; margin-bottom: 14px; position: relative; z-index: 1; }
+  .dark-tagline h2 span { color: var(--accent); }
+  .dark-tagline p { font-size: 14px; line-height: 1.7; color: #b0b0b0; max-width: 420px; margin: 0 auto 22px; position: relative; z-index: 1; font-weight: 500; }
+  .dark-tagline-divider { width: 60px; height: 3px; background: linear-gradient(90deg, var(--accent) 0%, #ff8800 100%); border-radius: 3px; margin: 0 auto 22px; position: relative; z-index: 1; }
+  .dark-tagline-cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 26px; background: var(--accent); color: #fff; text-decoration: none; border-radius: 30px; font-size: 13px; font-weight: 900; letter-spacing: 0.5px; box-shadow: 0 10px 30px rgba(255, 0, 51, 0.4); transition: transform 0.15s; position: relative; z-index: 1; }
+  .dark-tagline-cta:active { transform: scale(0.95); }
+  .dark-tagline-cta i { font-size: 13px; }
+
+  .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+  .sub-modal.open { display: flex; }
+  .sub-modal-inner { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 30px 24px; text-align: center; max-width: 340px; width: 100%; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .sub-modal-btn { display: block; width: 100%; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; margin-bottom: 10px; }
+  .sub-modal-btn.confirm { background: #ff0033; color: #ffffff; }
+  .sub-modal-btn.close { background: transparent; color: var(--text2); font-size: 12px; }
+
+  .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); letter-spacing: 1px; border-top: 1px solid var(--border); margin-top: 20px; }
+  .footer .brand { color: var(--accent); font-weight: 700; }
+  .loading, .empty { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 13px; }
+  .empty-state { text-align: center; padding: 40px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text2); }
+  .empty-state .icon { font-size: 40px; margin-bottom: 15px; }
+  .empty-state h3 { font-size: 16px; margin-bottom: 8px; color: var(--text); }
+
+  .song-list { display: flex; flex-direction: column; gap: 8px; }
+  .song-card { display: flex; gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; padding: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); align-items: center; }
+  .song-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
+  .song-card-img { width: 30%; max-width: 90px; aspect-ratio: 1 / 1; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 6px; }
+  .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .song-card-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
+  .song-card-cat { font-size: 10px; color: #8b5cf6; font-weight: 700; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 4px; }
+  .song-card-info h3 { font-size: 13px; font-weight: 800; line-height: 1.2; margin-bottom: 4px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .song-card-info .date { font-size: 10px; color: var(--text2); }
 
   .top-albums-list { display: flex; flex-direction: column; gap: 14px; }
   .top-album-card { display: flex; gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; padding: 12px; box-shadow: 0 3px 12px rgba(0,0,0,0.05); align-items: center; }
   .top-album-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
-
   .top-album-cover { width: 40%; max-width: 130px; aspect-ratio: 1 / 1; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 10px; position: relative; }
   .top-album-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
   .top-album-rank { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #FFD700, #FFA500); color: #000; font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 10px; letter-spacing: 0.3px; box-shadow: 0 3px 10px rgba(255, 200, 0, 0.5); z-index: 2; }
   .top-album-rank.rank-2 { background: linear-gradient(135deg, #C0C0C0, #808080); color: #000; box-shadow: 0 3px 10px rgba(192, 192, 192, 0.5); }
   .top-album-rank.rank-3 { background: linear-gradient(135deg, #CD7F32, #8B4513); color: #fff; box-shadow: 0 3px 10px rgba(205, 127, 50, 0.5); }
   .top-album-rank.rank-4 { background: linear-gradient(135deg, #ff0033, #b3002d); color: #fff; box-shadow: 0 3px 10px rgba(255, 0, 51, 0.4); }
-
   .top-album-info { flex: 1; display: flex; flex-direction: column; gap: 5px; min-width: 0; }
   .top-album-label { font-size: 9px; color: #ff8800; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; }
   .top-album-name { font-size: 15px; font-weight: 900; color: var(--text); line-height: 1.25; letter-spacing: -0.3px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -117,32 +306,8 @@
   .email-signup-success .title { font-size: 15px; font-weight: 900; color: #00cc44; margin-bottom: 4px; }
   .email-signup-success .text { font-size: 12px; color: var(--text2); line-height: 1.5; }
 
-  .song-list { display: flex; flex-direction: column; gap: 8px; }
-  .song-card { display: flex; gap: 10px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; cursor: pointer; text-decoration: none; color: inherit; transition: all 0.2s; padding: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); align-items: center; }
-  .song-card:active { transform: scale(0.99); background: rgba(255,255,255,0.05); }
-  .song-card-img { width: 30%; max-width: 90px; aspect-ratio: 1 / 1; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 6px; }
-  .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .song-card-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; }
-  .song-card-cat { font-size: 10px; color: #8b5cf6; font-weight: 700; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 4px; }
-  .song-card-info h3 { font-size: 13px; font-weight: 800; line-height: 1.2; margin-bottom: 4px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .song-card-info .date { font-size: 10px; color: var(--text2); }
-
-  .verify-badge { display: inline-block; width: 13px; height: 13px; vertical-align: middle; flex-shrink: 0; }
-
-  .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
-  .sub-modal.open { display: flex; }
-  .sub-modal-inner { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 30px 24px; text-align: center; max-width: 340px; width: 100%; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-  @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-  .sub-modal-btn { display: block; width: 100%; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; margin-bottom: 10px; }
-  .sub-modal-btn.confirm { background: #ff0033; color: #ffffff; }
-  .sub-modal-btn.close { background: transparent; color: var(--text2); font-size: 12px; }
-
-  .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); letter-spacing: 1px; border-top: 1px solid var(--border); margin-top: 20px; }
-  .footer .brand { color: var(--accent); font-weight: 700; }
-  .loading, .empty { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 13px; }
-  .empty-state { text-align: center; padding: 40px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text2); }
-  .empty-state .icon { font-size: 40px; margin-bottom: 15px; }
-  .empty-state h3 { font-size: 16px; margin-bottom: 8px; color: var(--text); }
+  .footer-wrapper { margin: 0 -16px; }
+  .footer-wrapper .footer { margin-top: 0; }
 </style>
 </head>
 <body class="light">
@@ -165,16 +330,18 @@
 
   <div class="page-content">
 
+    <!-- 1. TOP SONGS -->
     <div class="section-head"><i class="fas fa-fire icon-fire"></i><h3>Top Songs</h3></div>
     <div class="song-list" id="topSongsList"><div class="loading">Loading top songs...</div></div>
 
+    <!-- 2. LATEST RELEASES -->
     <div class="section-head">
       <i class="fas fa-bolt icon-new"></i>
       <h3 id="latestTitle">Latest Releases</h3>
-      <button id="clearFilterBtn" onclick="clearFilter()" style="display:none; background: var(--accent); color: #fff; border: none; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; cursor: pointer;">✕ Clear</button>
     </div>
     <div class="song-list" id="songList"><div class="loading">Loading songs...</div></div>
 
+    <!-- 3. NEVER MISS A DROP -->
     <div class="section-head"><i class="fas fa-envelope-open-text icon-mail"></i><h3>Never Miss A Drop</h3></div>
     <div class="email-signup-box">
       <div id="emailFormArea">
@@ -194,23 +361,48 @@
       </div>
     </div>
 
+    <!-- 4. TOP ALBUMS -->
     <div class="section-head"><i class="fas fa-compact-disc icon-album"></i><h3>Top Albums</h3></div>
     <div class="top-albums-list" id="topAlbumsList"><div class="loading">Loading albums...</div></div>
 
+    <!-- 5. FOLLOW US -->
     <div class="section-head"><i class="fas fa-share-nodes icon-social"></i><h3>Follow Us</h3></div>
     <div class="social-grid">
       <a href="https://youtube.com/@realsamarid" target="_blank" class="social-btn"><i class="fab fa-youtube" style="color: #FF0000;"></i> YouTube</a>
-      <a href="https://tiktok.com/@realsamarid" target="_blank" class="social-btn"><i class="fab fa-tiktok" style="color: #ffffff;"></i> TikTok</a>
+      <a href="https://tiktok.com/@realsamarid" target="_blank" class="social-btn"><i class="fab fa-tiktok" style="color: #888888;"></i> TikTok</a>
       <a href="https://instagram.com/realsamarid" target="_blank" class="social-btn"><i class="fab fa-instagram" style="color: #E1306C;"></i> Instagram</a>
       <a href="mailto:wunatehk@gmail.com" class="social-btn"><i class="fas fa-envelope" style="color: #EA4335;"></i> Email</a>
     </div>
 
-    <div class="section-head"><i class="fas fa-chart-line icon-trend"></i><h3>Trending Artists</h3></div>
-    <div class="trending-artists-list" id="trendingArtistsList"><div class="loading">Loading...</div></div>
+  </div>
 
-    <div class="section-head"><i class="fas fa-music icon-cat"></i><h3>Browse by Category</h3></div>
-    <div class="pill-row" id="categoryPills"><span class="pill">Loading...</span></div>
+  <!-- 6. DARK BLOCK: TAGLINE + HOT ARTISTS (seamless, full-bleed, black joined) -->
+  <div class="dark-tagline">
+    <div class="dark-tagline-label">Samarid Music • Ghana</div>
+    <h2>From The Streets Of Ghana <span>To The World</span></h2>
+    <div class="dark-tagline-divider"></div>
+    <p>We are building the future of African music — one artist, one song, one dream at a time. This is more than a label. It's a movement.</p>
+    <a href="about.html" class="dark-tagline-cta">
+      <i class="fas fa-arrow-right"></i> Read Our Story
+    </a>
+  </div>
 
+  <div class="hot-artists-section" id="hotArtistsSection">
+    <div class="hot-artists-header">
+      <div class="hot-artists-title">Hot Artists</div>
+      <a href="artists.html" class="hot-artists-all">All Artists <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="hot-artists-viewport" id="hotArtistsViewport">
+      <div class="hot-artists-track" id="hotArtistsTrack">
+        <div class="hot-artists-empty">Loading artists...</div>
+      </div>
+      <button class="hot-arrow left hidden" id="hotArrowLeft" onclick="scrollHotArtists(-1)" aria-label="Scroll left"><i class="fas fa-arrow-left"></i></button>
+      <button class="hot-arrow right hidden" id="hotArrowRight" onclick="scrollHotArtists(1)" aria-label="Scroll right"><i class="fas fa-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <div class="footer-wrapper">
+    <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
   </div>
 
   <div class="menu-dropdown" id="menuDropdown" onclick="event.stopPropagation()">
@@ -241,19 +433,26 @@
     </div>
   </div>
 
-  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
-
   <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
 
     const TOP_SONGS_LIMIT = 4;
     const LATEST_SONGS_LIMIT = 7;
-    const TRENDING_MIN_PLAYS = 100;
-    const TRENDING_MAX_SHOW = 10;
     const TOP_ALBUMS_LIMIT = 4;
+    const HOT_ARTISTS_LIMIT = 30;
 
-    const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
+    const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22" style="width:13px;height:13px;vertical-align:middle;display:inline-block;"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
+
+    function escapeHtml(s) {
+      if (s === null || s === undefined) return '';
+      return String(s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
 
     window.toggleMenu = function(e) { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('open'); }
     document.addEventListener('click', () => document.getElementById('menuDropdown').classList.remove('open'));
@@ -285,7 +484,7 @@
         container.innerHTML = songs.map((s) => {
           const artist = s.artist_name || 'Samarid';
           const badge = s.verified ? VERIFY_BADGE : '';
-          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + escapeHtml(s.cover) + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + escapeHtml(artist) + badge + ' • ' + escapeHtml(s.category) + '</div><h3>' + escapeHtml(s.title) + '</h3><div class="date">' + escapeHtml(s.date) + '</div></div></div>';
         }).join('');
       } catch (e) { container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>Error</h3></div>'; }
     }
@@ -299,88 +498,110 @@
         list.innerHTML = songs.map((s) => {
           const artist = s.artist_name || 'Samarid';
           const badge = s.verified ? VERIFY_BADGE : '';
-          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
+          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + escapeHtml(s.cover) + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + escapeHtml(artist) + badge + ' • ' + escapeHtml(s.category) + '</div><h3>' + escapeHtml(s.title) + '</h3><div class="date">' + escapeHtml(s.date) + '</div></div></div>';
         }).join('');
       } catch (e) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Error</h3></div>'; }
     }
 
-    async function loadCategories() {
-      const container = document.getElementById('categoryPills');
+    // ===== HOT ARTISTS — smaller avatars, slides horizontally =====
+    async function loadHotArtists() {
+      const track = document.getElementById('hotArtistsTrack');
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=category', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        const songs = await res.json();
-        const cats = [...new Set(songs.map(s => (s.category || 'Music').trim()))].sort();
-        if (cats.length === 0) { container.innerHTML = '<span class="pill">No categories yet</span>'; return; }
-        container.innerHTML = cats.map(c => '<span class="pill cat-pill" onclick="filterByCategory(\'' + c.replace(/'/g, "\\'") + '\', event)">' + c + '</span>').join('');
-      } catch (e) { container.innerHTML = '<span class="pill">Error</span>'; }
-    }
+        const [artistsRes, songsRes] = await Promise.all([
+          fetch(SUPABASE_URL + '/rest/v1/artists?select=name,profile_pic,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }).catch(() => null),
+          fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
+        ]);
 
-    window.filterByCategory = async function(category, event) {
-      const list = document.getElementById('songList');
-      const title = document.getElementById('latestTitle');
-      const clearBtn = document.getElementById('clearFilterBtn');
-      document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
-      if (event && event.target) event.target.classList.add('active');
-      title.innerText = category;
-      clearBtn.style.display = 'inline-block';
-      list.innerHTML = '<div class="loading">Loading...</div>';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?category=ilike.' + encodeURIComponent(category) + '&select=*&order=plays.desc.nullslast,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        const songs = await res.json();
-        if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No ' + category + ' songs yet</h3></div>'; return; }
-        list.innerHTML = songs.map((s) => {
-          const artist = s.artist_name || 'Samarid';
-          const badge = s.verified ? VERIFY_BADGE : '';
-          return '<div class="song-card" onclick="window.location.href=\'song.html?id=' + s.id + '\'"><div class="song-card-img"><img src="' + s.cover + '" loading="lazy"></div><div class="song-card-info"><div class="song-card-cat">' + artist + badge + ' • ' + s.category + '</div><h3>' + s.title + '</h3><div class="date">' + s.date + '</div></div></div>';
-        }).join('');
-      } catch (e) {}
-    }
-
-    window.clearFilter = function() {
-      document.getElementById('latestTitle').innerText = 'Latest Releases';
-      document.getElementById('clearFilterBtn').style.display = 'none';
-      document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
-      renderSongs();
-    }
-
-    async function loadTrendingArtists() {
-      const container = document.getElementById('trendingArtistsList');
-      try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,plays,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        const songs = await res.json();
-        if (!Array.isArray(songs) || songs.length === 0) { container.innerHTML = '<div class="trending-empty">No artists yet.</div>'; return; }
-
-        const artistMap = {};
-        songs.forEach(s => {
-          const name = (s.artist_name || 'Samarid').trim();
-          if (!artistMap[name]) artistMap[name] = { name: name, plays: 0, verified: false };
-          artistMap[name].plays += (s.plays || 0);
-          if (s.verified) artistMap[name].verified = true;
-        });
-
-        const trending = Object.values(artistMap).filter(a => a.plays >= TRENDING_MIN_PLAYS).sort((a, b) => b.plays - a.plays).slice(0, TRENDING_MAX_SHOW);
-
-        if (trending.length === 0) {
-          container.innerHTML = '<div class="trending-empty">No trending artists yet.<br>Reach <strong>' + TRENDING_MIN_PLAYS + '+ plays</strong> to appear here!</div>';
+        let profiles = [];
+        if (artistsRes) {
+          const pj = await artistsRes.json();
+          if (Array.isArray(pj)) profiles = pj;
+        }
+        const songs = await songsRes.json();
+        if (!Array.isArray(songs) || songs.length === 0) {
+          track.innerHTML = '<div class="hot-artists-empty">No artists yet — check back soon.</div>';
+          updateHotArrows();
           return;
         }
 
-        container.innerHTML = trending.map((a, index) => {
-          const rank = index + 1;
-          const rankClass = rank <= 3 ? 'rank-' + rank : '';
-          const badge = a.verified ? VERIFY_BADGE : '';
-          return `
-            <a href="artist-template.html?name=${encodeURIComponent(a.name)}" class="trending-artist-item">
-              <div class="trending-rank ${rankClass}">${rank}</div>
-              <div class="trending-artist-name">${a.name}${badge}</div>
-              <div class="trending-artist-plays"><i class="fas fa-fire"></i> ${a.plays.toLocaleString()}</div>
-            </a>
-          `;
+        const profileMap = {};
+        profiles.forEach(p => {
+          if (p.name) profileMap[p.name.trim().toLowerCase()] = p;
+        });
+
+        const map = {};
+        songs.forEach(s => {
+          const name = (s.artist_name || 'Samarid').trim();
+          const key = name.toLowerCase();
+          if (!map[key]) map[key] = { name: name, verified: false, profile_pic: null };
+          if (s.verified) map[key].verified = true;
+        });
+
+        Object.keys(map).forEach(key => {
+          const p = profileMap[key];
+          if (p) {
+            if (p.verified) map[key].verified = true;
+            if (p.profile_pic) map[key].profile_pic = p.profile_pic;
+            if (p.name) map[key].name = p.name;
+          }
+        });
+
+        let artists = Object.values(map);
+        artists.sort((a, b) => {
+          if (a.verified !== b.verified) return a.verified ? -1 : 1;
+          return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+        });
+        artists = artists.slice(0, HOT_ARTISTS_LIMIT);
+
+        track.innerHTML = artists.map(a => {
+          const avatarInner = a.profile_pic
+            ? '<img src="' + escapeHtml(a.profile_pic) + '" alt="' + escapeHtml(a.name) + '" loading="lazy">'
+            : escapeHtml(a.name.charAt(0).toUpperCase());
+          const badge = a.verified ? ' ' + VERIFY_BADGE : '';
+          return '<a href="artist-template.html?name=' + encodeURIComponent(a.name) + '" class="hot-artist">' +
+            '<div class="hot-artist-avatar">' + avatarInner + '</div>' +
+            '<div class="hot-artist-name">' + escapeHtml(a.name) + badge + '</div>' +
+          '</a>';
         }).join('');
-      } catch (e) { container.innerHTML = '<div class="trending-empty">Error loading trending artists.</div>'; }
+
+        const vp = document.getElementById('hotArtistsViewport');
+        if (vp) vp.scrollLeft = 0;
+        requestAnimationFrame(updateHotArrows);
+      } catch (e) {
+        console.error(e);
+        track.innerHTML = '<div class="hot-artists-empty">Could not load artists.</div>';
+        updateHotArrows();
+      }
     }
 
+    window.scrollHotArtists = function(dir) {
+      const vp = document.getElementById('hotArtistsViewport');
+      if (!vp) return;
+      const amount = vp.clientWidth * 0.75;
+      vp.scrollBy({ left: dir * amount, behavior: 'smooth' });
+    }
+
+    function updateHotArrows() {
+      const vp = document.getElementById('hotArtistsViewport');
+      const left = document.getElementById('hotArrowLeft');
+      const right = document.getElementById('hotArrowRight');
+      if (!vp || !left || !right) return;
+      const overflow = vp.scrollWidth > vp.clientWidth + 4;
+      if (!overflow) { left.classList.add('hidden'); right.classList.add('hidden'); return; }
+      left.classList.toggle('hidden', vp.scrollLeft <= 4);
+      right.classList.toggle('hidden', vp.scrollLeft + vp.clientWidth >= vp.scrollWidth - 4);
+    }
+
+    window.addEventListener('load', () => {
+      const vp = document.getElementById('hotArtistsViewport');
+      if (vp) {
+        vp.addEventListener('scroll', updateHotArrows, { passive: true });
+        window.addEventListener('resize', updateHotArrows);
+        setTimeout(updateHotArrows, 200);
+      }
+    });
+
+    // ===== TOP ALBUMS =====
     async function loadTopAlbums() {
       const container = document.getElementById('topAlbumsList');
       try {
@@ -390,7 +611,7 @@
         const songs = await res.json();
 
         if (!Array.isArray(songs) || songs.length === 0) {
-          container.innerHTML = '<div class="trending-empty">No albums yet.</div>';
+          container.innerHTML = '<div class="empty-state"><div class="icon">📀</div><h3>No albums yet.</h3></div>';
           return;
         }
 
@@ -446,12 +667,12 @@
             <a href="${linkUrl}" class="top-album-card">
               <div class="top-album-cover">
                 <span class="top-album-rank ${rankClass}">#${rank}</span>
-                <img src="${album.cover}" alt="${album.name}" loading="lazy">
+                <img src="${escapeHtml(album.cover)}" alt="${escapeHtml(album.name)}" loading="lazy">
               </div>
               <div class="top-album-info">
                 <div class="top-album-label">Top Album</div>
-                <div class="top-album-name">${album.name}</div>
-                <div class="top-album-artist">${album.artist}${badge}</div>
+                <div class="top-album-name">${escapeHtml(album.name)}</div>
+                <div class="top-album-artist">${escapeHtml(album.artist)}${badge}</div>
                 <div class="top-album-meta">
                   <span class="songs"><i class="fas fa-music"></i> ${songLabel}</span>
                 </div>
@@ -461,7 +682,7 @@
         }).join('');
       } catch (e) {
         console.error(e);
-        container.innerHTML = '<div class="trending-empty">Error loading albums.</div>';
+        container.innerHTML = '<div class="empty-state"><div class="icon">📀</div><h3>Error loading albums.</h3></div>';
       }
     }
 
@@ -522,9 +743,8 @@
     applySettings();
     loadTopSongs();
     renderSongs();
-    loadCategories();
-    loadTrendingArtists();
     loadTopAlbums();
+    loadHotArtists();
   </script>
 </body>
 </html>
