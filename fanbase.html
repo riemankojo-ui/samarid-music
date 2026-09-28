@@ -40,7 +40,6 @@
 
   .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
 
-  /* ===== SMALL SONG CARDS ===== */
   .song-list { display: flex; flex-direction: column; gap: 8px; }
 
   .song-card {
@@ -186,7 +185,6 @@
     let fanFirstName = localStorage.getItem('samarid_fan_first_name') || 'Fan';
     document.getElementById('headerName').innerText = fanFirstName;
 
-    // ===== MENU =====
     window.toggleMenu = function(e) {
       e.stopPropagation();
       const menu = document.getElementById('menuDropdown');
@@ -204,7 +202,7 @@
       document.getElementById('menuOverlay').classList.remove('open');
     }
 
-    // ===== LOAD ALL SONGS =====
+    // ===== LOAD ALL SONGS — tap opens song-details.html =====
     async function loadAllSongs() {
       const container = document.getElementById('songList');
       try {
@@ -223,7 +221,7 @@
           const badge = s.verified ? VERIFY_BADGE : '';
           const plays = (s.plays || 0).toLocaleString();
           return `
-            <a href="song.html?id=${s.id}" class="song-card">
+            <a href="song-details.html?id=${s.id}" class="song-card">
               <div class="song-card-img"><img src="${escapeHtml(s.cover)}" alt="${escapeHtml(s.title)}" loading="lazy"></div>
               <div class="song-card-info">
                 <div class="song-card-cat">${escapeHtml(artist)}${badge} • ${escapeHtml(s.category || 'Music')}</div>
