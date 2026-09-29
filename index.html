@@ -3,9 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Samarid Music</title>
+<title>Mp3 Download 2026 Ghana | Nigeria Songs Free - Samarid Music</title>
 <meta name="google-site-verification" content="ERHvKE-6CNknsGMv75ePLrVpOGaURdtsnmuMh1VxG-4" />
-<meta name="description" content="Samarid Music — Ghana's newest music label. Discover fresh Afrobeats, Hip Hop, and Afropop releases from underground artists.">
+<meta name="description" content="Download Mp3 songs 2026 from Ghana and Nigeria. Free HD audio downloads from Samarid Music. Latest Afrobeats, Hip Hop, Afropop releases.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Samarid Music">
+<meta property="og:title" content="Mp3 Download 2026 Ghana | Nigeria Songs Free - Samarid Music">
+<meta property="og:description" content="Download Mp3 songs 2026 from Ghana and Nigeria. Free HD audio downloads from Samarid Music. Latest Afrobeats, Hip Hop, Afropop releases.">
+<meta property="og:image" content="https://samarid-music.vercel.app/logo.png">
+<meta property="og:url" content="https://samarid-music.vercel.app/">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mp3 Download 2026 Ghana | Nigeria Songs Free - Samarid Music">
+<meta name="twitter:description" content="Download Mp3 songs 2026 from Ghana and Nigeria. Free HD audio downloads from Samarid Music.">
+<meta name="twitter:image" content="https://samarid-music.vercel.app/logo.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -60,23 +75,15 @@
   .social-btn:active { transform: scale(0.96); }
   .social-btn i { font-size: 16px; flex-shrink: 0; }
 
-  /* CLEAN CARDS */
   .song-list, .top-albums-list { display: flex; flex-direction: column; }
-
-  .song-card, .top-album-card {
-    display: flex; gap: 14px; padding: 14px 0;
-    background: transparent; border: none;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer; text-decoration: none; color: inherit;
-    align-items: center; transition: opacity 0.15s;
-  }
+  .song-card, .top-album-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; transition: opacity 0.15s; }
   .song-card:last-child, .top-album-card:last-child { border-bottom: none; }
   .song-card:active, .top-album-card:active { opacity: 0.7; }
 
-  .song-card-img { width: 96px; height: 96px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 12px; }
+  .song-card-img { width: 96px; height: 96px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 12px; position: relative; }
   .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-  .top-album-cover { width: 115px; height: 115px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 14px; }
+  .top-album-cover { width: 115px; height: 115px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 14px; position: relative; }
   .top-album-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
   .song-card-info, .top-album-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; overflow: hidden; gap: 6px; }
@@ -88,7 +95,6 @@
 
   .top-album-rank, .top-album-label, .top-album-artist, .top-album-meta { display: none !important; }
 
-  /* HOT ARTISTS */
   .hot-artists-section { background: #0a0a0a; color: #ffffff; margin: 0 -16px 0; padding: 40px 0 44px; position: relative; overflow: hidden; }
   .dark-tagline + .hot-artists-section { margin-top: 0; }
   .hot-artists-header { display: flex; align-items: center; justify-content: space-between; padding: 0 22px 24px; gap: 12px; overflow: hidden; }
@@ -112,7 +118,6 @@
   .hot-arrow.hidden { opacity: 0; pointer-events: none; }
   .hot-artists-empty { padding: 40px 22px; text-align: center; color: #666; font-size: 13px; width: 100%; }
 
-  /* DARK TAGLINE */
   .dark-tagline { background: #0a0a0a; color: #ffffff; margin: 0 -16px; padding: 50px 28px 20px; text-align: center; position: relative; overflow: hidden; }
   .dark-tagline::before { content: ''; position: absolute; top: -60px; right: -60px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 0, 51, 0.15) 0%, transparent 70%); pointer-events: none; }
   .dark-tagline::after { content: ''; position: absolute; bottom: -80px; left: -80px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 136, 0, 0.12) 0%, transparent 70%); pointer-events: none; }
@@ -308,7 +313,6 @@
     }
     window.setTheme = (theme) => { localStorage.setItem('samarid-theme', theme); applySettings(); }
 
-    // ===== RENDERERS — links to song.html =====
     function renderSongCard(s) {
       const artist = s.artist_name || 'Samarid';
       const badge = s.verified ? VERIFY_BADGE : '';

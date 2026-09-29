@@ -3,8 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Song - Samarid Music</title>
-<meta name="description" content="Listen and download music from Samarid Music — Ghana's newest music label.">
+<title>Download Mp3 Song | Samarid Music</title>
+<meta name="description" content="Download Mp3 songs from Samarid Music — Ghana's newest music label.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="music.song">
+<meta property="og:site_name" content="Samarid Music">
+<meta property="og:title" id="ogTitle" content="Download Mp3 | Samarid Music">
+<meta property="og:description" id="ogDescription" content="Download Mp3 songs from Samarid Music.">
+<meta property="og:image" id="ogImage" content="https://samarid-music.vercel.app/logo.png">
+<meta property="og:url" id="ogUrl" content="https://samarid-music.vercel.app/song.html">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" id="twTitle" content="Download Mp3 | Samarid Music">
+<meta name="twitter:description" id="twDescription" content="Download Mp3 songs from Samarid Music.">
+<meta name="twitter:image" id="twImage" content="https://samarid-music.vercel.app/logo.png">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -71,7 +86,6 @@
   .follow-btn-flat:disabled { opacity: 0.6; cursor: wait; }
   .follow-btn-flat.following { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); padding: 5.5px 14.5px; }
 
-  /* Clean description */
   .detail-description { padding: 8px 4px 24px; margin-bottom: 12px; text-align: left; }
   .detail-description h4 { font-size: 11px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
   .detail-description h4 i { color: var(--accent); font-size: 11px; }
@@ -178,6 +192,8 @@
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
     const CONTACT_EMAIL = "wunatehk@gmail.com";
+    const SITE_URL = "https://samarid-music.vercel.app";
+    const DEFAULT_OG_IMAGE = SITE_URL + "/logo.png";
 
     const PLAY_SECONDS_REQUIRED = 30;
     const PLAY_COOLDOWN_HOURS = 6;
@@ -228,17 +244,11 @@
     // ===== SMART DOWNLOAD =====
     window.smartDownload = async function(btn) {
       if (!currentSongData) return;
-
       const url = currentSongData.downloadurl || currentSongData.audio_url || '';
       const artist = currentSongData.artist_name || 'Samarid';
       const title = currentSongData.title || 'Song';
+      if (!url || url === '#') { showToast('No download link available'); return; }
 
-      if (!url || url === '#') {
-        showToast('No download link available');
-        return;
-      }
-
-      // Sanitize filename for safety
       const cleanArtist = artist.replace(/[^\w\s\-\.]/g, '').trim();
       const cleanTitle = title.replace(/[^\w\s\-\.]/g, '').trim();
       const filename = cleanArtist + ' - ' + cleanTitle + ' [Samarid Music].mp3';
@@ -248,12 +258,9 @@
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
 
       try {
-        // Try to fetch the file as a blob (works only if CORS allows)
         const response = await fetch(url, { mode: 'cors' });
         if (!response.ok) throw new Error('Fetch failed');
         const blob = await response.blob();
-
-        // Create a local blob URL and trigger download with the nice filename
         const blobUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = blobUrl;
@@ -262,10 +269,8 @@
         a.click();
         document.body.removeChild(a);
         setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
-
         showToast('Download started!');
       } catch (e) {
-        // CORS blocked — fall back to direct download (wrong name, but works)
         console.warn('Blob download failed, using direct link fallback:', e);
         const a = document.createElement('a');
         a.href = url;
@@ -307,9 +312,40 @@
         const artist = s.artist_name || 'Samarid';
         currentArtistName = artist;
         const badge = s.verified ? VERIFY_BADGE : '';
-        const downloadTitle = artist + ' - ' + s.title;
-        document.title = downloadTitle + ' - Samarid Music';
 
+        // ===== DYNAMIC SEO — TITLE + DESCRIPTION + OG TAGS =====
+        const seoTitle = 'Download Mp3 ' + artist + ' ' + s.title + ' | Samarid Music';
+        const seoDesc = 'Download "' + s.title + '" by ' + artist + ' in MP3. 2026 ' + (s.category || 'music') + ' from Samarid Music. Free HD audio downloads on Samarid Music Ghana.';
+        const seoImage = s.cover || DEFAULT_OG_IMAGE;
+        const seoUrl = window.location.href;
+
+        document.title = seoTitle;
+        document.querySelector('meta[name="description"]').setAttribute('content', seoDesc);
+        document.getElementById('ogTitle').setAttribute('content', seoTitle);
+        document.getElementById('ogDescription').setAttribute('content', seoDesc);
+        document.getElementById('ogImage').setAttribute('content', seoImage);
+        document.getElementById('ogUrl').setAttribute('content', seoUrl);
+        document.getElementById('twTitle').setAttribute('content', seoTitle);
+        document.getElementById('twDescription').setAttribute('content', seoDesc);
+        document.getElementById('twImage').setAttribute('content', seoImage);
+
+        // JSON-LD structured data
+        const jsonLd = {
+          "@context": "https://schema.org",
+          "@type": "MusicRecording",
+          "name": s.title,
+          "byArtist": { "@type": "MusicGroup", "name": artist },
+          "image": seoImage,
+          "datePublished": s.date || '',
+          "genre": s.category || 'Music',
+          "url": seoUrl
+        };
+        let scriptLd = document.getElementById('jsonLdScript');
+        if (!scriptLd) { scriptLd = document.createElement('script'); scriptLd.id = 'jsonLdScript'; scriptLd.type = 'application/ld+json'; document.head.appendChild(scriptLd); }
+        scriptLd.textContent = JSON.stringify(jsonLd);
+
+        // ===== Continue normal page load =====
+        const downloadTitle = artist + ' - ' + s.title;
         const audioSrc = s.audio_url || s.downloadurl || '';
 
         let artistProfile = null;
@@ -354,7 +390,7 @@
           <a href="artist-template.html?name=${encodeURIComponent(a.name)}" class="artist-link">${escapeHtml(a.name)}${a.verified ? VERIFY_BADGE : ''}</a>
         `).join('') || '<p style="text-align:center; color:#444; font-size:12px; grid-column:1/-1;">More artists coming soon.</p>';
 
-        const shareText = encodeURIComponent('Listen to "' + s.title + '" by ' + artist + ' on Samarid Music!');
+        const shareText = encodeURIComponent('Download "' + s.title + '" by ' + artist + ' on Samarid Music!');
         const shareUrl = encodeURIComponent(window.location.href);
 
         container.innerHTML = `
@@ -469,13 +505,10 @@
       if (audio.paused) {
         audio.play().catch(() => { showToast('Tap play to start the audio'); });
         btn.innerHTML = '<i class="fas fa-pause"></i>';
-
         if (hasRecentPlay(currentSongData.id)) return;
-
         hasCountedThisPlay = false;
         secondsListened = 0;
         if (playCountTimer) clearInterval(playCountTimer);
-
         playCountTimer = setInterval(() => {
           secondsListened++;
           if (secondsListened >= PLAY_SECONDS_REQUIRED && !hasCountedThisPlay) {
@@ -595,15 +628,12 @@
       const text = document.getElementById('songFollowText');
       const countNum = document.getElementById('followerCountNum');
       btn.disabled = true;
-
       const currentCount = parseInt(countNum.innerText.replace(/,/g, '')) || 0;
       isFollowingArtist = !isFollowingArtist;
       const newCount = isFollowingArtist ? currentCount + 1 : Math.max(0, currentCount - 1);
       countNum.innerText = newCount.toLocaleString();
-
       if (isFollowingArtist) { btn.classList.add('following'); icon.className = 'fas fa-check'; text.innerText = 'Following'; }
       else { btn.classList.remove('following'); icon.className = 'fas fa-plus'; text.innerText = 'Follow'; }
-
       try {
         if (isFollowingArtist) {
           await fetch(SUPABASE_URL + '/rest/v1/follows', { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ artist_name: currentArtistName, visitor_id: visitorId }) });
