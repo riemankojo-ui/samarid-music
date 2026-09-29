@@ -64,45 +64,19 @@
   .empty-songs { text-align: center; padding: 30px 20px; color: #666; font-size: 13px; }
 
   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 8px 0 max(8px, env(safe-area-inset-bottom)); z-index: 1000; }
-  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px; color: var(--text2); cursor: pointer; background: transparent; border: none; font-family: inherit; }
+  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 2px; color: var(--text2); cursor: pointer; background: transparent; border: none; font-family: inherit; }
   .nav-item .icon { font-size: 18px; }
   .nav-item .label { font-size: 9px; font-weight: 700; }
   .nav-item.active { color: var(--accent); }
 
-  /* SUBTABS (Single/Album switcher) */
-  .subtabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 6px;
-  }
-  .subtab {
-    flex: 1;
-    padding: 12px 16px;
-    background: transparent;
-    border: none;
-    color: var(--text2);
-    font-size: 13px;
-    font-weight: 800;
-    cursor: pointer;
-    font-family: inherit;
-    border-radius: 10px;
-    transition: 0.15s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
+  .subtabs { display: flex; gap: 8px; margin-bottom: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 6px; }
+  .subtab { flex: 1; padding: 12px 16px; background: transparent; border: none; color: var(--text2); font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; border-radius: 10px; transition: 0.15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .subtab.active { background: var(--accent); color: #fff; }
   .subtab i { font-size: 14px; }
 
   .subcontent { display: none; }
   .subcontent.active { display: block; }
 
-  /* ALBUM UI */
   .album-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
   .album-box-title { font-size: 13px; font-weight: 900; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
   .album-song-item { background: #0a0a0a; border: 1px solid #222; border-radius: 12px; padding: 14px; padding-top: 22px; margin-bottom: 12px; position: relative; }
@@ -122,7 +96,6 @@
   .video-section-title { font-size: 12px; font-weight: 800; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
   .video-section-note { font-size: 11px; color: #666; margin-bottom: 14px; line-height: 1.5; }
 
-  /* DATE/TIME PICKER */
   .datetime-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 15px; }
   .datetime-section-title { font-size: 12px; font-weight: 800; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
   .datetime-row { display: flex; gap: 8px; margin-bottom: 12px; }
@@ -149,9 +122,60 @@
   .scheduled-card .when { font-size: 11px; font-weight: 800; color: var(--accent); white-space: nowrap; padding: 4px 10px; background: rgba(255,136,0,0.12); border-radius: 10px; }
   .scheduled-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
   .scheduled-header h4 { font-size: 12px; font-weight: 800; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; }
+
+  .import-intro { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 16px; font-size: 12px; color: #ccc; line-height: 1.6; }
+  .import-intro strong { color: var(--accent); }
+  .import-intro code { background: #0a0a0a; padding: 2px 6px; border-radius: 4px; color: var(--accent); font-size: 11px; }
+
+  .import-methods { display: flex; gap: 10px; margin-bottom: 16px; }
+  .import-method { flex: 1; padding: 14px; background: var(--card); border: 2px solid var(--border); border-radius: 12px; color: #ccc; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; text-align: center; transition: 0.15s; }
+  .import-method.active { border-color: var(--accent); color: var(--accent); background: rgba(255,136,0,0.08); }
+
+  .upload-zone { border: 2px dashed #333; border-radius: 14px; padding: 40px 20px; text-align: center; background: var(--card); cursor: pointer; transition: 0.2s; margin-bottom: 16px; }
+  .upload-zone:active { background: rgba(255,136,0,0.08); border-color: var(--accent); }
+  .upload-zone .icon { font-size: 42px; color: var(--accent); margin-bottom: 10px; }
+  .upload-zone h3 { font-size: 15px; font-weight: 900; margin-bottom: 6px; }
+  .upload-zone p { font-size: 12px; color: #666; }
+  .upload-zone .filename { font-size: 12px; color: #00cc44; margin-top: 10px; font-weight: 800; word-break: break-all; }
+
+  .import-textarea { width: 100%; min-height: 250px; padding: 14px; background: var(--card); border: 1px solid #333; border-radius: 12px; color: #fff; font-family: 'SF Mono', Monaco, Consolas, monospace; font-size: 13px; line-height: 1.6; resize: vertical; margin-bottom: 14px; }
+  .import-textarea:focus { outline: none; border-color: var(--accent); }
+
+  .import-method-panel { display: none; }
+  .import-method-panel.active { display: block; }
+
+  .import-preview { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-top: 16px; display: none; }
+  .import-preview.active { display: block; animation: fadeIn 0.3s ease; }
+  .import-preview-title { font-size: 12px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-weight: 900; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+
+  .preview-row { display: flex; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .preview-row:last-of-type { border-bottom: none; }
+  .preview-row .label { color: var(--text2); font-weight: 700; min-width: 100px; font-size: 11px; letter-spacing: 0.5px; text-transform: uppercase; padding-top: 2px; }
+  .preview-row .value { color: #fff; flex: 1; word-break: break-word; font-weight: 600; }
+  .preview-row .value.empty { color: #555; font-style: italic; font-weight: 400; }
+  .preview-row .value.new-artist { color: #1d9bf0; }
+
+  .preview-badge { display: inline-block; padding: 3px 10px; border-radius: 8px; font-size: 10px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
+  .preview-badge.badge-single { background: rgba(0,204,68,0.15); color: #00cc44; }
+  .preview-badge.badge-album { background: rgba(255,136,0,0.15); color: var(--accent); }
+  .preview-badge.badge-new { background: rgba(29,155,240,0.15); color: #1d9bf0; }
+  .preview-badge.badge-existing { background: rgba(255,255,255,0.08); color: #aaa; }
+  .preview-badge.badge-scheduled { background: rgba(255,204,0,0.15); color: #ffcc00; }
+  .preview-badge.badge-instant { background: rgba(0,204,68,0.15); color: #00cc44; }
+
+  .preview-actions { display: flex; gap: 10px; margin-top: 18px; }
+  .preview-actions button { flex: 1; padding: 13px; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; border: none; font-family: inherit; }
+  .btn-confirm { background: var(--accent); color: #fff; }
+  .btn-cancel { background: #222; color: #fff; }
+  .preview-actions button:active { transform: scale(0.96); }
+
+  .import-status { font-size: 12px; margin-top: 14px; font-weight: bold; text-align: center; min-height: 18px; }
+
+  .template-box { background: #0a0a0a; border: 1px solid #222; border-radius: 12px; padding: 14px; margin-bottom: 14px; font-family: monospace; font-size: 12px; line-height: 1.7; color: #ccc; white-space: pre-wrap; word-break: break-word; max-height: 240px; overflow-y: auto; }
+  .copy-template-btn { background: #222; border: 1px solid #333; border-radius: 10px; color: #fff; padding: 10px 14px; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+  .copy-template-btn:active { background: var(--accent); }
 </style>
-</head>
-<body>
+</head><body>
 
   <div id="loginScreen">
     <div class="login-box">
@@ -189,7 +213,7 @@
         <div id="homeSongList"></div>
       </div>
 
-      <!-- ➕ ADD (Single + Album sub-tabs) -->
+      <!-- ADD -->
       <div class="page" id="pageAdd">
         <h1 class="page-title">Add New</h1>
         <p class="page-subtitle">Publish instantly — no scheduling</p>
@@ -203,7 +227,6 @@
           </button>
         </div>
 
-        <!-- SINGLE SUB-CONTENT -->
         <div class="subcontent active" id="addContentSingle">
           <input type="hidden" id="editingId" value="">
           <div class="form-group"><label>Song Title</label><input type="text" id="songTitle" placeholder="e.g. Back To Sender"></div>
@@ -219,7 +242,6 @@
           <p id="songStatus" class="status"></p>
         </div>
 
-        <!-- ALBUM SUB-CONTENT -->
         <div class="subcontent" id="addContentAlbum">
           <div class="album-box">
             <div class="album-box-title"><i class="fas fa-compact-disc"></i> Album Details</div>
@@ -246,7 +268,7 @@
         </div>
       </div>
 
-      <!-- 📅 RELEASE (Single + Album sub-tabs, scheduled) -->
+      <!-- RELEASE -->
       <div class="page" id="pageRelease">
         <h1 class="page-title">Schedule Release</h1>
         <p class="page-subtitle">Silent drop — appears automatically at the set time</p>
@@ -260,7 +282,6 @@
           </button>
         </div>
 
-        <!-- SINGLE SCHEDULE -->
         <div class="subcontent active" id="releaseContentSingle">
           <div class="form-group"><label>Song Title *</label><input type="text" id="schTitle" placeholder="e.g. Back To Sender"></div>
           <div class="form-group"><label>Cover Art Image URL *</label><input type="text" id="schCover" placeholder="https://...png"></div>
@@ -299,7 +320,6 @@
           <p id="scheduleSingleStatus" class="status"></p>
         </div>
 
-        <!-- ALBUM SCHEDULE -->
         <div class="subcontent" id="releaseContentAlbum">
           <div class="album-box">
             <div class="album-box-title"><i class="fas fa-compact-disc"></i> Album Details</div>
@@ -349,12 +369,102 @@
           <p id="scheduleAlbumStatus" class="status"></p>
         </div>
 
-        <!-- SCHEDULED LIST -->
         <div class="album-box" style="margin-top: 25px;">
           <div class="scheduled-header">
             <h4><i class="fas fa-clock"></i> Scheduled Releases</h4>
           </div>
           <div id="scheduledList"><p class="empty-songs">Loading...</p></div>
+        </div>
+      </div>      <!-- IMPORT (NEW) -->
+      <div class="page" id="pageImport">
+        <h1 class="page-title">Import 📥</h1>
+        <p class="page-subtitle">Upload or paste song details — auto-fills everything</p>
+
+        <div class="import-intro">
+          <strong>How it works:</strong> Upload a <code>.txt</code> file or paste text below. The importer reads the details, detects if it's a <strong>Single</strong> or <strong>Album</strong>, checks <strong>Release: Now</strong> or <strong>Release: Schedule</strong>, and creates the artist automatically if they're new. You'll review everything before publishing.
+        </div>
+
+        <div class="import-methods">
+          <button class="import-method active" id="importBtnUpload" onclick="switchImportMethod('upload', this)">
+            <i class="fas fa-file-upload"></i> Upload File
+          </button>
+          <button class="import-method" id="importBtnPaste" onclick="switchImportMethod('paste', this)">
+            <i class="fas fa-paste"></i> Paste Text
+          </button>
+        </div>
+
+        <div class="import-method-panel active" id="importPanelUpload">
+          <div class="upload-zone" onclick="document.getElementById('importFileInput').click()">
+            <div class="icon">📁</div>
+            <h3>Tap to choose a .txt file</h3>
+            <p>Only .txt files supported</p>
+            <div class="filename" id="importFilename"></div>
+          </div>
+          <input type="file" id="importFileInput" accept=".txt,text/plain" style="display: none;" onchange="handleImportFile(event)">
+        </div>
+
+        <div class="import-method-panel" id="importPanelPaste">
+          <textarea class="import-textarea" id="importPasteArea" placeholder="Paste song details here...
+
+Example:
+Title: Back To Sender
+Artist: Trapkid
+Type: Single
+Release: Now
+Category: Afrobeats
+Description: A hard-hitting afrobeats banger from the streets of Accra.
+Cover: https://example.com/cover.jpg
+Download: https://example.com/back-to-sender.mp3
+Spotify: https://open.spotify.com/track/xxxxx"></textarea>
+        </div>
+
+        <details style="margin-bottom: 14px;">
+          <summary style="cursor: pointer; font-size: 12px; color: var(--accent); font-weight: 800; padding: 10px 0; list-style: none;">📋 Show template (copy for artists)</summary>
+          <div class="template-box" id="importTemplate">Title: Back To Sender
+Artist: Trapkid
+Type: Single
+Release: Now
+Category: Afrobeats
+Description: A hard-hitting afrobeats banger from the streets of Accra.
+Cover: https://example.com/cover.jpg
+Download: https://example.com/back-to-sender.mp3
+Spotify: https://open.spotify.com/track/xxxxx
+
+--- OR FOR SCHEDULED ---
+Release: Schedule
+Date: April 13, 2026
+Time: 3:30 PM
+
+--- OR FOR ALBUM ---
+Album: Lonely
+Artist: Trapkid
+Type: Album
+Release: Now
+Category: Afrobeats
+Cover: https://example.com/lonely-cover.jpg
+
+Track 1: Missing You
+Download: https://example.com/missing-you.mp3
+
+Track 2: Cry Baby
+Download: https://example.com/cry-baby.mp3</div>
+          <button class="copy-template-btn" onclick="copyImportTemplate()"><i class="fas fa-copy"></i> Copy Template</button>
+        </details>
+
+        <button class="main-btn" onclick="parseImport()" style="margin-top: 10px;">
+          <i class="fas fa-magic"></i> Read & Fill Form
+        </button>
+
+        <div class="import-preview" id="importPreview">
+          <div class="import-preview-title"><i class="fas fa-check-circle"></i> Detected Details</div>
+          <div id="importPreviewRows"></div>
+          <div class="preview-actions">
+            <button class="btn-cancel" onclick="cancelImport()">Cancel</button>
+            <button class="btn-confirm" id="importConfirmBtn" onclick="confirmImport()">
+              <i class="fas fa-check"></i> Confirm & Publish
+            </button>
+          </div>
+          <p class="import-status" id="importStatus"></p>
         </div>
       </div>
 
@@ -384,16 +494,16 @@
       <button class="nav-item active" onclick="goToPage('home')" id="navHome"><div class="icon">🏠</div><div class="label">HOME</div></button>
       <button class="nav-item" onclick="goToPage('add')" id="navAdd"><div class="icon">➕</div><div class="label">ADD</div></button>
       <button class="nav-item" onclick="goToPage('release')" id="navRelease"><div class="icon">📅</div><div class="label">RELEASE</div></button>
+      <button class="nav-item" onclick="goToPage('import')" id="navImport"><div class="icon">📥</div><div class="label">IMPORT</div></button>
       <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon">📺</div><div class="label">CHANNEL</div></button>
     </div>
-  </div>
-
-  <script>
+  </div>  <script>
     const SECRET_PASSWORD = "samarid2026";
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
     const SONGS_TABLE = "songs";
     const VIDEOS_TABLE = "videos";
+    const ARTISTS_TABLE = "artists";
 
     const GHANA_TZ = 0;
     const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -522,6 +632,26 @@
       window.scrollTo(0, 0);
     }
 
+    // ===== ENSURE ARTIST EXISTS (used by Import) =====
+    async function ensureArtistExists(name) {
+      if (!name || !name.trim()) return;
+      const cleanName = name.trim();
+      try {
+        const check = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(cleanName) + '&select=id&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const existing = await check.json();
+        if (Array.isArray(existing) && existing.length > 0) return { created: false, name: cleanName };
+        await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ name: cleanName, verified: false })
+        });
+        return { created: true, name: cleanName };
+      } catch (e) {
+        console.warn('ensureArtistExists failed:', e);
+        return { created: false, name: cleanName, error: true };
+      }
+    }
+
     // ===== HOME SONGS =====
     async function loadAdminSongs() {
       const list = document.getElementById('homeSongList');
@@ -576,7 +706,6 @@
       document.getElementById('songSpotify').value = song.spotify || '';
       document.getElementById('submitBtn').innerText = 'Update Song';
       document.getElementById('cancelBtn').style.display = 'block';
-      // Switch to Single sub-tab
       switchAddTab('single', document.getElementById('addTabSingle'));
       goToPage('add');
     }
@@ -610,6 +739,7 @@
           res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         }
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
+        if (!editingId) await ensureArtistExists(artist);
         status.className = 'status success';
         status.innerText = editingId ? 'Song updated!' : 'Song published!';
         setTimeout(() => { cancelEdit(); loadAdminSongs(); }, 1200);
@@ -679,6 +809,7 @@
         const payload = songs.map(s => ({ title: s.title, cover, artist_name: artist, category, date, description: s.description, downloadurl: s.downloadurl, album_name: albumName, status: 'live', release_at: null }));
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
+        await ensureArtistExists(artist);
         status.className = 'status success'; status.innerText = 'Album "' + albumName + '" published with ' + songs.length + ' songs!';
         setTimeout(() => {
           ['albumName','albumArtist','albumCover','albumCategory','albumDate'].forEach(id => { document.getElementById(id).value = ''; });
@@ -716,6 +847,7 @@
         const payload = { title, cover, artist_name: artist, category, description, downloadurl, spotify: spotify || null, date: displayDate, status: 'scheduled', release_at: iso };
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
+        await ensureArtistExists(artist);
         status.className = 'status success';
         status.innerText = '✅ Scheduled! Goes live ' + formatPreviewText(date);
         ['schTitle','schCover','schArtist','schCategory','schDescription','schDownload','schSpotify'].forEach(id => { document.getElementById(id).value = ''; });
@@ -782,6 +914,7 @@
         const payload = songs.map(s => ({ title: s.title, cover, artist_name: artist, category, description: s.description, downloadurl: s.downloadurl, album_name: albumName, date: displayDate, status: 'scheduled', release_at: iso }));
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
+        await ensureArtistExists(artist);
         status.className = 'status success';
         status.innerText = '✅ Album "' + albumName + '" scheduled for ' + formatPreviewText(date);
         ['schAlbumName','schAlbumArtist','schAlbumCover','schAlbumCategory'].forEach(id => { document.getElementById(id).value = ''; });
@@ -792,7 +925,7 @@
       } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 100); }
     }
 
-    // ===== SCHEDULED LIST (only future) =====
+    // ===== SCHEDULED LIST =====
     async function loadScheduled() {
       const list = document.getElementById('scheduledList');
       if (!list) return;
@@ -873,6 +1006,343 @@
         }
       } catch (err) { status.className = 'status error'; status.innerText = 'Network error: ' + err.message; }
     };
+
+    // ============================================================
+    // ===== IMPORT TAB LOGIC =====
+    // ============================================================
+    let parsedImport = null;
+    let importMethod = 'upload';
+
+    window.switchImportMethod = function(method, btn) {
+      importMethod = method;
+      document.querySelectorAll('#pageImport .import-method').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('#pageImport .import-method-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('importPanel' + (method === 'upload' ? 'Upload' : 'Paste')).classList.add('active');
+    }
+
+    window.handleImportFile = function(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const fnEl = document.getElementById('importFilename');
+      fnEl.innerText = '📄 ' + file.name;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const text = e.target.result || '';
+        parseImportText(text);
+      };
+      reader.onerror = function() { alert('Could not read file.'); };
+      reader.readAsText(file);
+    }
+
+    window.copyImportTemplate = async function() {
+      const txt = document.getElementById('importTemplate').innerText;
+      try {
+        if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(txt); }
+        else {
+          const ta = document.createElement('textarea');
+          ta.value = txt; ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+        alert('Template copied! Send it to your artists.');
+      } catch (e) { alert('Could not copy.'); }
+    }
+
+    window.parseImport = function() {
+      let text = '';
+      if (importMethod === 'paste') {
+        text = document.getElementById('importPasteArea').value || '';
+      } else {
+        alert('Please choose a .txt file first, or switch to Paste Text.');
+        return;
+      }
+      if (!text.trim()) { alert('Nothing to read. Paste some text first.'); return; }
+      parseImportText(text);
+    }
+
+    function extractLabel(text, labels) {
+      for (const label of labels) {
+        const re = new RegExp('^\\s*' + label + '\\s*[:\\-]\\s*(.+)$', 'im');
+        const m = text.match(re);
+        if (m && m[1]) return m[1].trim();
+      }
+      return '';
+    }
+
+    function parseImportText(rawText) {
+      const text = rawText.replace(/\r\n/g, '\n').trim();
+
+      // Detect type
+      const typeRaw = extractLabel(text, ['Type', 'Category Type']).toLowerCase();
+      const albumLabelRaw = extractLabel(text, ['Album']);
+      const hasTrackLines = /^\s*Track\s*\d+\s*[:\-]/im.test(text);
+      const isAlbum = typeRaw === 'album' || !!albumLabelRaw || hasTrackLines;
+
+      // Detect release mode
+      const releaseRaw = extractLabel(text, ['Release']).toLowerCase();
+      const scheduleDate = extractLabel(text, ['Date', 'Release Date']);
+      const scheduleTime = extractLabel(text, ['Time', 'Release Time']);
+      const isScheduled = releaseRaw.includes('schedule') || releaseRaw.includes('later') || (!!scheduleDate && !releaseRaw.includes('now'));
+
+      // Common fields
+      const title = extractLabel(text, ['Title', 'Song', 'Track']) || albumLabelRaw || '';
+      const albumName = albumLabelRaw || (isAlbum ? title : '');
+      const artist = extractLabel(text, ['Artist', 'Artist Name', 'By']) || 'Samarid';
+      const category = extractLabel(text, ['Category', 'Genre']) || 'Music';
+      const description = extractLabel(text, ['Description', 'About', 'Bio']) || '';
+      const cover = extractLabel(text, ['Cover', 'Cover Art', 'Art', 'Image']) || '';
+      const download = extractLabel(text, ['Download', 'Download MP3', 'Download Link', 'MP3', 'Audio']) || '';
+      const spotify = extractLabel(text, ['Spotify', 'Spotify Link']) || '';
+
+      // Try URL sniffing if labels missed
+      let finalCover = cover;
+      let finalDownload = download;
+      let finalSpotify = spotify;
+      const urls = text.match(/https?:\/\/[^\s]+/g) || [];
+      if (!finalSpotify) { const u = urls.find(x => x.includes('spotify.com')); if (u) finalSpotify = u; }
+      if (!finalCover) { const u = urls.find(x => /\.(png|jpg|jpeg|webp|gif)(\?|$)/i.test(x) && !x.includes('spotify')); if (u) finalCover = u; }
+      if (!finalDownload) { const u = urls.find(x => /\.mp3(\?|$)/i.test(x)); if (u) finalDownload = u; }
+
+      // Album tracks
+      let tracks = [];
+      if (isAlbum) {
+        const trackRe = /^\s*Track\s*\d+\s*[:\-]\s*(.+)$/gim;
+        let m;
+        while ((m = trackRe.exec(text)) !== null) {
+          const trackTitle = m[1].trim();
+          // Look for a "Download:" line right after this track (within next 300 chars)
+          const afterIdx = m.index + m[0].length;
+          const slice = text.substring(afterIdx, afterIdx + 300);
+          const dlMatch = slice.match(/^\s*Download\s*[:\-]\s*(https?:\/\/[^\s]+)/im);
+          tracks.push({ title: trackTitle, downloadurl: dlMatch ? dlMatch[1].trim() : '#' });
+        }
+      }
+
+      // Build preview data
+      parsedImport = {
+        isAlbum,
+        isScheduled,
+        title: title || (isAlbum ? albumName : ''),
+        albumName: isAlbum ? (albumName || title) : '',
+        artist,
+        category,
+        description,
+        cover: finalCover,
+        download: finalDownload,
+        spotify: finalSpotify,
+        scheduleDate,
+        scheduleTime,
+        tracks,
+        rawText: text
+      };
+
+      renderImportPreview();
+    }
+
+    async function renderImportPreview() {
+      const preview = document.getElementById('importPreview');
+      const rows = document.getElementById('importPreviewRows');
+      const data = parsedImport;
+      if (!data) return;
+
+      // Check if artist exists
+      let artistExists = false;
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(data.artist) + '&select=id&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const existing = await res.json();
+        artistExists = Array.isArray(existing) && existing.length > 0;
+      } catch (e) { artistExists = false; }
+      data.artistExists = artistExists;
+
+      const typeBadge = data.isAlbum
+        ? '<span class="preview-badge badge-album">📀 Album</span>'
+        : '<span class="preview-badge badge-single">🎵 Single</span>';
+      const releaseBadge = data.isScheduled
+        ? '<span class="preview-badge badge-scheduled">⏰ Scheduled</span>'
+        : '<span class="preview-badge badge-instant">✅ Instant (Now)</span>';
+      const artistBadge = artistExists
+        ? '<span class="preview-badge badge-existing">✓ Existing artist</span>'
+        : '<span class="preview-badge badge-new">✨ New — will create</span>';
+
+      const v = (val) => val && val.trim() ? escapeHtml(val) : '<span class="value empty">— not detected —</span>';
+
+      let rowsHtml = '';
+      rowsHtml += `<div class="preview-row"><div class="label">Type</div><div class="value">${typeBadge}</div></div>`;
+      rowsHtml += `<div class="preview-row"><div class="label">Release</div><div class="value">${releaseBadge}</div></div>`;
+      rowsHtml += `<div class="preview-row"><div class="label">Artist</div><div class="value">${escapeHtml(data.artist)} ${artistBadge}</div></div>`;
+
+      if (data.isAlbum) {
+        rowsHtml += `<div class="preview-row"><div class="label">Album</div><div class="value">${v(data.albumName)}</div></div>`;
+        rowsHtml += `<div class="preview-row"><div class="label">Tracks</div><div class="value">${data.tracks.length} song${data.tracks.length !== 1 ? 's' : ''} detected</div></div>`;
+      } else {
+        rowsHtml += `<div class="preview-row"><div class="label">Title</div><div class="value">${v(data.title)}</div></div>`;
+      }
+
+      rowsHtml += `<div class="preview-row"><div class="label">Category</div><div class="value">${v(data.category)}</div></div>`;
+      rowsHtml += `<div class="preview-row"><div class="label">Cover</div><div class="value">${v(data.cover)}</div></div>`;
+
+      if (data.isScheduled) {
+        rowsHtml += `<div class="preview-row"><div class="label">Date</div><div class="value">${v(data.scheduleDate)}</div></div>`;
+        rowsHtml += `<div class="preview-row"><div class="label">Time</div><div class="value">${v(data.scheduleTime)}</div></div>`;
+      } else {
+        rowsHtml += `<div class="preview-row"><div class="label">Download</div><div class="value">${v(data.download)}</div></div>`;
+        rowsHtml += `<div class="preview-row"><div class="label">Spotify</div><div class="value">${v(data.spotify)}</div></div>`;
+      }
+
+      rowsHtml += `<div class="preview-row"><div class="label">Description</div><div class="value">${v(data.description)}</div></div>`;
+
+      rows.innerHTML = rowsHtml;
+      preview.classList.add('active');
+      preview.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    window.cancelImport = function() {
+      parsedImport = null;
+      document.getElementById('importPreview').classList.remove('active');
+      document.getElementById('importStatus').innerText = '';
+    }
+
+    // Parse date like "April 13, 2026" and time like "3:30 PM"
+    function parseScheduleDateTime(dateStr, timeStr) {
+      if (!dateStr) return null;
+      const dateMatch = dateStr.match(/([A-Za-z]+)\s+(\d{1,2}),?\s+(\d{4})/);
+      if (!dateMatch) return null;
+      const monthName = dateMatch[1];
+      const day = parseInt(dateMatch[2]);
+      const year = parseInt(dateMatch[3]);
+      const monthIdx = MONTHS.findIndex(m => m.toLowerCase() === monthName.toLowerCase());
+      if (monthIdx < 0) return null;
+      let hour = 0, minute = 0;
+      if (timeStr) {
+        const tMatch = timeStr.match(/(\d{1,2})(?::(\d{2}))?\s*(AM|PM|am|pm)?/);
+        if (tMatch) {
+          hour = parseInt(tMatch[1]);
+          minute = tMatch[2] ? parseInt(tMatch[2]) : 0;
+          const ampm = (tMatch[3] || '').toUpperCase();
+          if (ampm === 'PM' && hour !== 12) hour += 12;
+          if (ampm === 'AM' && hour === 12) hour = 0;
+        }
+      }
+      const dt = new Date(Date.UTC(year, monthIdx, day, hour - GHANA_TZ, minute, 0));
+      if (isNaN(dt.getTime())) return null;
+      return { date: dt, iso: dt.toISOString(), displayDate: dt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' }) };
+    }
+
+    window.confirmImport = async function() {
+      const data = parsedImport;
+      const status = document.getElementById('importStatus');
+      const btn = document.getElementById('importConfirmBtn');
+      if (!data) return;
+
+      // Validation
+      if (data.isAlbum) {
+        if (!data.albumName) { status.className = 'import-status error'; status.innerText = '❌ Album name missing.'; return; }
+        if (!data.cover) { status.className = 'import-status error'; status.innerText = '❌ Cover URL missing.'; return; }
+        if (data.tracks.length === 0) { status.className = 'import-status error'; status.innerText = '❌ No tracks detected. Add "Track 1: ..." lines.'; return; }
+      } else {
+        if (!data.title) { status.className = 'import-status error'; status.innerText = '❌ Title missing.'; return; }
+        if (!data.cover) { status.className = 'import-status error'; status.innerText = '❌ Cover URL missing.'; return; }
+        if (!data.download || data.download === '#') { status.className = 'import-status error'; status.innerText = '❌ Download MP3 link missing.'; return; }
+      }
+
+      let scheduleInfo = null;
+      if (data.isScheduled) {
+        scheduleInfo = parseScheduleDateTime(data.scheduleDate, data.scheduleTime);
+        if (!scheduleInfo) { status.className = 'import-status error'; status.innerText = '❌ Could not read date/time. Format: April 13, 2026 / 3:30 PM'; return; }
+        if (scheduleInfo.date.getTime() <= Date.now()) { status.className = 'import-status error'; status.innerText = '❌ Date must be in the future.'; return; }
+      }
+
+      btn.disabled = true;
+      const originalLabel = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publishing...';
+      status.className = 'import-status info';
+      status.innerText = 'Publishing...';
+
+      try {
+        // 1. Ensure artist exists
+        const artistResult = await ensureArtistExists(data.artist);
+
+        // 2. Build payload
+        const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        let payload;
+
+        if (data.isAlbum) {
+          const dateText = data.isScheduled ? scheduleInfo.displayDate : today;
+          payload = data.tracks.map(t => ({
+            title: t.title,
+            cover: data.cover,
+            artist_name: data.artist,
+            category: data.category,
+            description: data.description || 'No description yet.',
+            downloadurl: t.downloadurl || '#',
+            album_name: data.albumName,
+            date: dateText,
+            spotify: data.spotify || null,
+            status: data.isScheduled ? 'scheduled' : 'live',
+            release_at: data.isScheduled ? scheduleInfo.iso : null
+          }));
+        } else {
+          const dateText = data.isScheduled ? scheduleInfo.displayDate : today;
+          payload = {
+            title: data.title,
+            cover: data.cover,
+            artist_name: data.artist,
+            category: data.category,
+            description: data.description || 'No description yet.',
+            downloadurl: data.download,
+            spotify: data.spotify || null,
+            date: dateText,
+            status: data.isScheduled ? 'scheduled' : 'live',
+            release_at: data.isScheduled ? scheduleInfo.iso : null
+          };
+        }
+
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, {
+          method: 'POST',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) { const err = await res.text(); throw new Error(err); }
+
+        // Success message
+        let msg = '';
+        if (data.isAlbum) {
+          msg = `✅ Album "${data.albumName}" imported with ${data.tracks.length} track${data.tracks.length !== 1 ? 's' : ''}!`;
+        } else {
+          msg = `✅ "${data.title}" imported!`;
+        }
+        if (artistResult.created) msg += ` Artist "${data.artist}" was created.`;
+        if (data.isScheduled) msg += ` Goes live ${formatPreviewText(scheduleInfo.date)}.`;
+
+        status.className = 'import-status success';
+        status.innerText = msg;
+
+        // Reset paste area
+        document.getElementById('importPasteArea').value = '';
+        document.getElementById('importFilename').innerText = '';
+
+        setTimeout(() => {
+          cancelImport();
+          loadAdminSongs();
+          if (data.isScheduled) loadScheduled();
+          goToPage('home');
+        }, 2200);
+      } catch (e) {
+        status.className = 'import-status error';
+        status.innerText = '❌ ' + (e.message || 'Unknown error').substring(0, 140);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalLabel;
+      }
+    }
+
+    // ===== Utility =====
+    function escapeHtml(s) {
+      if (s === null || s === undefined) return '';
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
   </script>
 </body>
 </html>
