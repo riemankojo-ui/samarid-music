@@ -36,9 +36,9 @@
 
   .form-group { margin-bottom: 15px; }
   .form-group label { display: block; font-size: 11px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
-  .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 13px; background: var(--card); border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; resize: vertical; }
+  .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 13px; background: var(--card); border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; resize: vertical; -webkit-appearance: none; appearance: none; }
   .form-group textarea { min-height: 100px; }
-  .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--accent); }
 
   button.main-btn { width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; }
   button.main-btn:active { transform: scale(0.97); }
@@ -69,6 +69,39 @@
   .nav-item .label { font-size: 9px; font-weight: 700; }
   .nav-item.active { color: var(--accent); }
 
+  /* SUBTABS (Single/Album switcher) */
+  .subtabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 6px;
+  }
+  .subtab {
+    flex: 1;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    color: var(--text2);
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    border-radius: 10px;
+    transition: 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .subtab.active { background: var(--accent); color: #fff; }
+  .subtab i { font-size: 14px; }
+
+  .subcontent { display: none; }
+  .subcontent.active { display: block; }
+
   /* ALBUM UI */
   .album-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
   .album-box-title { font-size: 13px; font-weight: 900; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
@@ -88,6 +121,34 @@
   .video-section-box { background: #111; border: 1px solid #222; border-radius: 12px; padding: 16px; margin-top: 15px; margin-bottom: 15px; }
   .video-section-title { font-size: 12px; font-weight: 800; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
   .video-section-note { font-size: 11px; color: #666; margin-bottom: 14px; line-height: 1.5; }
+
+  /* DATE/TIME PICKER */
+  .datetime-section { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-bottom: 15px; }
+  .datetime-section-title { font-size: 12px; font-weight: 800; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .datetime-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .datetime-row:last-child { margin-bottom: 0; }
+  .datetime-col { flex: 1; min-width: 0; }
+  .datetime-col label { display: block; font-size: 10px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
+  .datetime-col select { width: 100%; padding: 11px 8px; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 13px; font-family: inherit; font-weight: 700; -webkit-appearance: none; appearance: none; text-align: center; }
+  .datetime-col select:focus { outline: none; border-color: var(--accent); }
+
+  .ampm-toggle { display: flex; gap: 4px; width: 100%; }
+  .ampm-btn { flex: 1; padding: 11px 8px; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; color: #666; font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; transition: 0.15s; }
+  .ampm-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  .release-preview { background: #0a0a0a; border: 1px dashed #333; border-radius: 12px; padding: 14px 16px; text-align: center; margin-bottom: 15px; }
+  .release-preview-label { font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
+  .release-preview-text { font-size: 16px; font-weight: 900; color: var(--accent); letter-spacing: -0.3px; }
+  .release-preview-text i { margin-right: 6px; font-size: 14px; }
+
+  .scheduled-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
+  .scheduled-card img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+  .scheduled-card .info { flex: 1; min-width: 0; }
+  .scheduled-card h4 { font-size: 13px; font-weight: 800; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .scheduled-card p { font-size: 11px; color: var(--text2); }
+  .scheduled-card .when { font-size: 11px; font-weight: 800; color: var(--accent); white-space: nowrap; padding: 4px 10px; background: rgba(255,136,0,0.12); border-radius: 10px; }
+  .scheduled-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .scheduled-header h4 { font-size: 12px; font-weight: 800; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; }
 </style>
 </head>
 <body>
@@ -117,6 +178,7 @@
     </div>
 
     <div class="content">
+      <!-- HOME -->
       <div class="page active" id="pageHome">
         <h1 class="page-title">Dashboard</h1>
         <p class="page-subtitle">Manage your website and songs</p>
@@ -127,54 +189,176 @@
         <div id="homeSongList"></div>
       </div>
 
-      <!-- SINGLE SONG -->
-      <div class="page" id="pageUpload">
-        <h1 class="page-title" id="uploadTitle">Add New Song</h1>
-        <p class="page-subtitle">Upload a single track</p>
-        <input type="hidden" id="editingId" value="">
-        <div class="form-group"><label>Song Title</label><input type="text" id="songTitle" placeholder="e.g. Back To Sender"></div>
-        <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="https://...png"></div>
-        <div class="form-group"><label>Artist Name</label><input type="text" id="songArtist" placeholder="e.g. Samarid"></div>
-        <div class="form-group"><label>Category</label><input type="text" id="songCategory" placeholder="e.g. Afrobeats"></div>
-        <div class="form-group"><label>Release Date</label><input type="text" id="songDate" placeholder="e.g. April 13, 2026"></div>
-        <div class="form-group"><label>Description</label><textarea id="songDescription" placeholder="About this song..."></textarea></div>
-        <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="https://...mp3"></div>
-        <div class="form-group"><label>Spotify Link 🎧</label><input type="text" id="songSpotify" placeholder="https://open.spotify.com/track/..."></div>
-        <button class="main-btn" id="submitBtn" onclick="saveSong()">Publish Song</button>
-        <button class="secondary-btn" id="cancelBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
-        <p id="songStatus" class="status"></p>
+      <!-- ➕ ADD (Single + Album sub-tabs) -->
+      <div class="page" id="pageAdd">
+        <h1 class="page-title">Add New</h1>
+        <p class="page-subtitle">Publish instantly — no scheduling</p>
+
+        <div class="subtabs">
+          <button class="subtab active" id="addTabSingle" onclick="switchAddTab('single', this)">
+            <i class="fas fa-music"></i> Single
+          </button>
+          <button class="subtab" id="addTabAlbum" onclick="switchAddTab('album', this)">
+            <i class="fas fa-compact-disc"></i> Album
+          </button>
+        </div>
+
+        <!-- SINGLE SUB-CONTENT -->
+        <div class="subcontent active" id="addContentSingle">
+          <input type="hidden" id="editingId" value="">
+          <div class="form-group"><label>Song Title</label><input type="text" id="songTitle" placeholder="e.g. Back To Sender"></div>
+          <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="https://...png"></div>
+          <div class="form-group"><label>Artist Name</label><input type="text" id="songArtist" placeholder="e.g. Samarid"></div>
+          <div class="form-group"><label>Category</label><input type="text" id="songCategory" placeholder="e.g. Afrobeats"></div>
+          <div class="form-group"><label>Release Date (Text)</label><input type="text" id="songDate" placeholder="e.g. April 13, 2026"></div>
+          <div class="form-group"><label>Description</label><textarea id="songDescription" placeholder="About this song..."></textarea></div>
+          <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="https://...mp3"></div>
+          <div class="form-group"><label>Spotify Link 🎧</label><input type="text" id="songSpotify" placeholder="https://open.spotify.com/track/..."></div>
+          <button class="main-btn" id="submitBtn" onclick="saveSong()">Publish Song</button>
+          <button class="secondary-btn" id="cancelBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
+          <p id="songStatus" class="status"></p>
+        </div>
+
+        <!-- ALBUM SUB-CONTENT -->
+        <div class="subcontent" id="addContentAlbum">
+          <div class="album-box">
+            <div class="album-box-title"><i class="fas fa-compact-disc"></i> Album Details</div>
+            <div class="form-group"><label>Album Name *</label><input type="text" id="albumName" placeholder="e.g. My First Album"></div>
+            <div class="form-group"><label>Artist Name *</label><input type="text" id="albumArtist" placeholder="e.g. Samarid"></div>
+            <div class="form-group"><label>Album Cover URL *</label><input type="text" id="albumCover" placeholder="https://...png"></div>
+            <div class="form-group"><label>Category</label><input type="text" id="albumCategory" placeholder="e.g. Hip Hop"></div>
+            <div class="form-group"><label>Release Date (Text)</label><input type="text" id="albumDate" placeholder="e.g. April 13, 2026"></div>
+          </div>
+
+          <div class="album-box">
+            <div class="album-box-title"><i class="fas fa-music"></i> Songs In This Album</div>
+            <div id="albumSongsContainer"></div>
+            <button class="add-song-btn" onclick="addAlbumSong()"><i class="fas fa-plus"></i> Add Another Song</button>
+          </div>
+
+          <div class="album-summary">
+            <i class="fas fa-info-circle"></i>
+            <div>Total songs in album: <strong id="albumSongCount">0</strong></div>
+          </div>
+
+          <button class="main-btn" id="publishAlbumBtn" onclick="publishAlbum()">Publish Album</button>
+          <p id="albumStatus" class="status"></p>
+        </div>
       </div>
 
-      <!-- ALBUM -->
-      <div class="page" id="pageAlbum">
-        <h1 class="page-title">Upload Album</h1>
-        <p class="page-subtitle">Add multiple songs under one album</p>
+      <!-- 📅 RELEASE (Single + Album sub-tabs, scheduled) -->
+      <div class="page" id="pageRelease">
+        <h1 class="page-title">Schedule Release</h1>
+        <p class="page-subtitle">Silent drop — appears automatically at the set time</p>
 
-        <div class="album-box">
-          <div class="album-box-title"><i class="fas fa-compact-disc"></i> Album Details</div>
-          <div class="form-group"><label>Album Name *</label><input type="text" id="albumName" placeholder="e.g. My First Album"></div>
-          <div class="form-group"><label>Artist Name *</label><input type="text" id="albumArtist" placeholder="e.g. Samarid"></div>
-          <div class="form-group"><label>Album Cover URL *</label><input type="text" id="albumCover" placeholder="https://...png"></div>
-          <div class="form-group"><label>Category</label><input type="text" id="albumCategory" placeholder="e.g. Hip Hop"></div>
-          <div class="form-group"><label>Release Date</label><input type="text" id="albumDate" placeholder="e.g. April 13, 2026"></div>
+        <div class="subtabs">
+          <button class="subtab active" id="releaseTabSingle" onclick="switchReleaseTab('single', this)">
+            <i class="fas fa-music"></i> Single
+          </button>
+          <button class="subtab" id="releaseTabAlbum" onclick="switchReleaseTab('album', this)">
+            <i class="fas fa-compact-disc"></i> Album
+          </button>
         </div>
 
-        <div class="album-box">
-          <div class="album-box-title"><i class="fas fa-music"></i> Songs In This Album</div>
-          <div id="albumSongsContainer"></div>
-          <button class="add-song-btn" onclick="addAlbumSong()"><i class="fas fa-plus"></i> Add Another Song</button>
+        <!-- SINGLE SCHEDULE -->
+        <div class="subcontent active" id="releaseContentSingle">
+          <div class="form-group"><label>Song Title *</label><input type="text" id="schTitle" placeholder="e.g. Back To Sender"></div>
+          <div class="form-group"><label>Cover Art Image URL *</label><input type="text" id="schCover" placeholder="https://...png"></div>
+          <div class="form-group"><label>Artist Name *</label><input type="text" id="schArtist" placeholder="e.g. Samarid"></div>
+          <div class="form-group"><label>Category</label><input type="text" id="schCategory" placeholder="e.g. Afrobeats"></div>
+          <div class="form-group"><label>Description</label><textarea id="schDescription" placeholder="About this song..."></textarea></div>
+          <div class="form-group"><label>Download MP3 Link *</label><input type="text" id="schDownload" placeholder="https://...mp3"></div>
+          <div class="form-group"><label>Spotify Link 🎧</label><input type="text" id="schSpotify" placeholder="https://open.spotify.com/track/..."></div>
+
+          <div class="datetime-section">
+            <div class="datetime-section-title"><i class="fas fa-calendar-alt"></i> Release Date & Time (Ghana Time)</div>
+            <div class="datetime-row">
+              <div class="datetime-col"><label>Month</label><select id="schMonth"></select></div>
+              <div class="datetime-col"><label>Day</label><select id="schDay"></select></div>
+              <div class="datetime-col"><label>Year</label><select id="schYear"></select></div>
+            </div>
+            <div class="datetime-row">
+              <div class="datetime-col"><label>Hour</label><select id="schHour"></select></div>
+              <div class="datetime-col"><label>Minute</label><select id="schMinute"></select></div>
+              <div class="datetime-col">
+                <label>AM/PM</label>
+                <div class="ampm-toggle">
+                  <button type="button" class="ampm-btn active" id="schAM" onclick="setAmPm('AM')">AM</button>
+                  <button type="button" class="ampm-btn" id="schPM" onclick="setAmPm('PM')">PM</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="release-preview">
+            <div class="release-preview-label">Goes live on</div>
+            <div class="release-preview-text" id="releasePreview"><i class="fas fa-clock"></i> Pick a date...</div>
+          </div>
+
+          <button class="main-btn" id="scheduleSingleBtn" onclick="scheduleSingle()">Schedule Release</button>
+          <p id="scheduleSingleStatus" class="status"></p>
         </div>
 
-        <div class="album-summary">
-          <i class="fas fa-info-circle"></i>
-          <div>Total songs in album: <strong id="albumSongCount">0</strong></div>
+        <!-- ALBUM SCHEDULE -->
+        <div class="subcontent" id="releaseContentAlbum">
+          <div class="album-box">
+            <div class="album-box-title"><i class="fas fa-compact-disc"></i> Album Details</div>
+            <div class="form-group"><label>Album Name *</label><input type="text" id="schAlbumName" placeholder="e.g. My First Album"></div>
+            <div class="form-group"><label>Artist Name *</label><input type="text" id="schAlbumArtist" placeholder="e.g. Samarid"></div>
+            <div class="form-group"><label>Album Cover URL *</label><input type="text" id="schAlbumCover" placeholder="https://...png"></div>
+            <div class="form-group"><label>Category</label><input type="text" id="schAlbumCategory" placeholder="e.g. Hip Hop"></div>
+          </div>
+
+          <div class="album-box">
+            <div class="album-box-title"><i class="fas fa-music"></i> Songs In This Album</div>
+            <div id="schAlbumSongsContainer"></div>
+            <button class="add-song-btn" onclick="addSchAlbumSong()"><i class="fas fa-plus"></i> Add Another Song</button>
+          </div>
+
+          <div class="album-summary">
+            <i class="fas fa-info-circle"></i>
+            <div>Total songs in album: <strong id="schAlbumSongCount">0</strong></div>
+          </div>
+
+          <div class="datetime-section">
+            <div class="datetime-section-title"><i class="fas fa-calendar-alt"></i> Release Date & Time (Ghana Time)</div>
+            <div class="datetime-row">
+              <div class="datetime-col"><label>Month</label><select id="schAMonth"></select></div>
+              <div class="datetime-col"><label>Day</label><select id="schADay"></select></div>
+              <div class="datetime-col"><label>Year</label><select id="schAYear"></select></div>
+            </div>
+            <div class="datetime-row">
+              <div class="datetime-col"><label>Hour</label><select id="schAHour"></select></div>
+              <div class="datetime-col"><label>Minute</label><select id="schAMinute"></select></div>
+              <div class="datetime-col">
+                <label>AM/PM</label>
+                <div class="ampm-toggle">
+                  <button type="button" class="ampm-btn active" id="schAAM" onclick="setAAmPm('AM')">AM</button>
+                  <button type="button" class="ampm-btn" id="schAPM" onclick="setAAmPm('PM')">PM</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="release-preview">
+            <div class="release-preview-label">Album goes live on</div>
+            <div class="release-preview-text" id="releaseAlbumPreview"><i class="fas fa-clock"></i> Pick a date...</div>
+          </div>
+
+          <button class="main-btn" onclick="scheduleAlbum()">Schedule Album</button>
+          <p id="scheduleAlbumStatus" class="status"></p>
         </div>
 
-        <button class="main-btn" id="publishAlbumBtn" onclick="publishAlbum()">Publish Album</button>
-        <p id="albumStatus" class="status"></p>
+        <!-- SCHEDULED LIST -->
+        <div class="album-box" style="margin-top: 25px;">
+          <div class="scheduled-header">
+            <h4><i class="fas fa-clock"></i> Scheduled Releases</h4>
+          </div>
+          <div id="scheduledList"><p class="empty-songs">Loading...</p></div>
+        </div>
       </div>
 
-      <!-- CHANNEL + VIDEO -->
+      <!-- CHANNEL -->
       <div class="page" id="pageChannel">
         <h1 class="page-title">YouTube Channel</h1>
         <p class="page-subtitle">Connect your channel to auto-sync videos</p>
@@ -198,8 +382,8 @@
 
     <div class="bottom-nav">
       <button class="nav-item active" onclick="goToPage('home')" id="navHome"><div class="icon">🏠</div><div class="label">HOME</div></button>
-      <button class="nav-item" onclick="goToPage('upload')" id="navUpload"><div class="icon">➕</div><div class="label">SONG</div></button>
-      <button class="nav-item" onclick="goToPage('album')" id="navAlbum"><div class="icon">📀</div><div class="label">ALBUM</div></button>
+      <button class="nav-item" onclick="goToPage('add')" id="navAdd"><div class="icon">➕</div><div class="label">ADD</div></button>
+      <button class="nav-item" onclick="goToPage('release')" id="navRelease"><div class="icon">📅</div><div class="label">RELEASE</div></button>
       <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon">📺</div><div class="label">CHANNEL</div></button>
     </div>
   </div>
@@ -211,25 +395,115 @@
     const SONGS_TABLE = "songs";
     const VIDEOS_TABLE = "videos";
 
+    const GHANA_TZ = 0;
+    const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
     let allAdminSongs = [];
     let albumSongIndex = 0;
+    let schAlbumSongIndex = 0;
+    let currentAmPm = 'AM';
+    let currentAAmPm = 'AM';
 
+    // ===== SUBTAB SWITCHERS =====
+    window.switchAddTab = function(which, btn) {
+      document.querySelectorAll('#pageAdd .subtab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#pageAdd .subcontent').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('addContent' + (which === 'single' ? 'Single' : 'Album')).classList.add('active');
+    }
+    window.switchReleaseTab = function(which, btn) {
+      document.querySelectorAll('#pageRelease .subtab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#pageRelease .subcontent').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('releaseContent' + (which === 'single' ? 'Single' : 'Album')).classList.add('active');
+    }
+
+    // ===== DATE/TIME PICKERS =====
+    function fillMonthSelect(id) { document.getElementById(id).innerHTML = MONTHS.map((m, i) => `<option value="${i}">${m}</option>`).join(''); }
+    function fillDaySelect(id) { let o = ''; for (let i = 1; i <= 31; i++) o += `<option value="${i}">${i}</option>`; document.getElementById(id).innerHTML = o; }
+    function fillYearSelect(id) { const y = new Date().getFullYear(); let o = ''; for (let i = y; i <= y + 3; i++) o += `<option value="${i}">${i}</option>`; document.getElementById(id).innerHTML = o; }
+    function fillHourSelect(id) { let o = ''; for (let i = 1; i <= 12; i++) o += `<option value="${i}">${i}</option>`; document.getElementById(id).innerHTML = o; }
+    function fillMinuteSelect(id) { let o = ''; for (let i = 0; i < 60; i += 5) { const v = i.toString().padStart(2, '0'); o += `<option value="${i}">${v}</option>`; } document.getElementById(id).innerHTML = o; }
+
+    function initDatePickers() {
+      fillMonthSelect('schMonth'); fillDaySelect('schDay'); fillYearSelect('schYear'); fillHourSelect('schHour'); fillMinuteSelect('schMinute');
+      fillMonthSelect('schAMonth'); fillDaySelect('schADay'); fillYearSelect('schAYear'); fillHourSelect('schAHour'); fillMinuteSelect('schAMinute');
+
+      setDefaultDateTime('schMonth', 'schDay', 'schYear', 'schHour', 'schMinute');
+      setDefaultDateTime('schAMonth', 'schADay', 'schAYear', 'schAHour', 'schAMinute');
+
+      ['schMonth','schDay','schYear','schHour','schMinute'].forEach(id => { document.getElementById(id).addEventListener('change', updateReleasePreview); });
+      ['schAMonth','schADay','schAYear','schAHour','schAMinute'].forEach(id => { document.getElementById(id).addEventListener('change', updateReleaseAlbumPreview); });
+
+      updateReleasePreview();
+      updateReleaseAlbumPreview();
+    }
+    function setDefaultDateTime(mId, dId, yId, hId, minId) {
+      const now = new Date();
+      document.getElementById(mId).value = now.getMonth();
+      document.getElementById(dId).value = now.getDate();
+      document.getElementById(yId).value = now.getFullYear();
+      let h = now.getHours();
+      if (h === 0) h = 12; else if (h > 12) h -= 12;
+      document.getElementById(hId).value = h;
+      const m = Math.floor(now.getMinutes() / 5) * 5;
+      document.getElementById(minId).value = m;
+    }
+    function getSelectedDateTime(mId, dId, yId, hId, minId, ampm) {
+      const month = parseInt(document.getElementById(mId).value);
+      const day = parseInt(document.getElementById(dId).value);
+      const year = parseInt(document.getElementById(yId).value);
+      let hour = parseInt(document.getElementById(hId).value);
+      const minute = parseInt(document.getElementById(minId).value);
+      if (ampm === 'PM' && hour !== 12) hour += 12;
+      if (ampm === 'AM' && hour === 12) hour = 0;
+      const isoString = new Date(Date.UTC(year, month, day, hour - GHANA_TZ, minute, 0)).toISOString();
+      return { date: new Date(Date.UTC(year, month, day, hour - GHANA_TZ, minute, 0)), iso: isoString };
+    }
+    function formatPreviewText(dateObj) {
+      const options = { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' };
+      return dateObj.toLocaleString('en-US', options).replace(',', ' ·') + ' GMT';
+    }
+    function updateReleasePreview() {
+      const { date } = getSelectedDateTime('schMonth','schDay','schYear','schHour','schMinute', currentAmPm);
+      document.getElementById('releasePreview').innerHTML = '<i class="fas fa-clock"></i> ' + formatPreviewText(date);
+    }
+    function updateReleaseAlbumPreview() {
+      const { date } = getSelectedDateTime('schAMonth','schADay','schAYear','schAHour','schAMinute', currentAAmPm);
+      document.getElementById('releaseAlbumPreview').innerHTML = '<i class="fas fa-clock"></i> ' + formatPreviewText(date);
+    }
+    window.setAmPm = function(v) {
+      currentAmPm = v;
+      document.getElementById('schAM').classList.toggle('active', v === 'AM');
+      document.getElementById('schPM').classList.toggle('active', v === 'PM');
+      updateReleasePreview();
+    }
+    window.setAAmPm = function(v) {
+      currentAAmPm = v;
+      document.getElementById('schAAM').classList.toggle('active', v === 'AM');
+      document.getElementById('schAPM').classList.toggle('active', v === 'PM');
+      updateReleaseAlbumPreview();
+    }
+
+    // ===== AUTH =====
     window.togglePassword = function() {
       const input = document.getElementById('passwordInput');
       const icon = document.getElementById('eyeIcon');
       if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; }
       else { input.type = 'password'; icon.innerText = '👁️'; }
     }
-
     window.checkPassword = async function() {
       const input = document.getElementById('passwordInput').value;
       const status = document.getElementById('loginStatus');
       if (input === SECRET_PASSWORD) {
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
+        initDatePickers();
         loadAdminSongs();
         loadChannelLink();
         addAlbumSong();
+        addSchAlbumSong();
+        loadScheduled();
       } else {
         status.innerText = 'Wrong password. Try again.';
       }
@@ -240,24 +514,25 @@
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
       const pageId = 'page' + page.charAt(0).toUpperCase() + page.slice(1);
       const navId = 'nav' + page.charAt(0).toUpperCase() + page.slice(1);
-      document.getElementById(pageId).classList.add('active');
-      document.getElementById(navId).classList.add('active');
+      const pageEl = document.getElementById(pageId);
+      const navEl = document.getElementById(navId);
+      if (pageEl) pageEl.classList.add('active');
+      if (navEl) navEl.classList.add('active');
+      if (page === 'release') loadScheduled();
       window.scrollTo(0, 0);
     }
 
+    // ===== HOME SONGS =====
     async function loadAdminSongs() {
       const list = document.getElementById('homeSongList');
       list.innerHTML = '<p class="empty-songs">Loading songs...</p>';
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=*&order=id.desc', {
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-        });
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
         allAdminSongs = Array.isArray(songs) ? songs : [];
         renderAdminSongs('');
       } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; }
     }
-
     function renderAdminSongs(query) {
       const list = document.getElementById('homeSongList');
       let filtered = allAdminSongs;
@@ -268,19 +543,17 @@
           (s.album_name || '').toLowerCase().includes(query)
         );
       }
-      if (filtered.length === 0) {
-        list.innerHTML = '<p class="empty-songs">' + (query ? 'No songs match.' : 'No songs yet.') + '</p>';
-        return;
-      }
+      if (filtered.length === 0) { list.innerHTML = '<p class="empty-songs">' + (query ? 'No songs match.' : 'No songs yet.') + '</p>'; return; }
       list.innerHTML = filtered.map(s => {
         const albumTag = s.album_name ? ' • <span style="color:#ff8800;">📀 ' + s.album_name + '</span>' : '';
         const spotifyTag = s.spotify ? ' • <span style="color:#1DB954;">🎧</span>' : '';
+        const scheduledTag = s.status === 'scheduled' ? ' • <span style="color:#ffcc00;">⏰ SCHEDULED</span>' : '';
         return `
           <div class="admin-song">
             <img src="${s.cover}" alt="${s.title}">
             <div class="info">
               <h4>${s.title}</h4>
-              <p>${s.artist_name || 'Samarid'} • ${s.category} • ${s.date}${albumTag}${spotifyTag}</p>
+              <p>${s.artist_name || 'Samarid'} • ${s.category} • ${s.date}${albumTag}${spotifyTag}${scheduledTag}</p>
             </div>
             <div class="actions">
               <button class="action-btn edit-btn" onclick='editSong(${JSON.stringify(s).replace(/'/g, "&#39;")})'><i class="fas fa-edit"></i></button>
@@ -290,12 +563,7 @@
         `;
       }).join('');
     }
-
-    window.handleSongSearch = function() {
-      const query = document.getElementById('songSearchInput').value.toLowerCase().trim();
-      renderAdminSongs(query);
-    }
-
+    window.handleSongSearch = function() { renderAdminSongs(document.getElementById('songSearchInput').value.toLowerCase().trim()); }
     window.editSong = function(song) {
       document.getElementById('editingId').value = song.id;
       document.getElementById('songTitle').value = song.title;
@@ -306,23 +574,19 @@
       document.getElementById('songDescription').value = song.description || '';
       document.getElementById('songDownload').value = song.downloadurl || '';
       document.getElementById('songSpotify').value = song.spotify || '';
-      document.getElementById('uploadTitle').innerText = 'Edit Song';
       document.getElementById('submitBtn').innerText = 'Update Song';
       document.getElementById('cancelBtn').style.display = 'block';
-      goToPage('upload');
+      // Switch to Single sub-tab
+      switchAddTab('single', document.getElementById('addTabSingle'));
+      goToPage('add');
     }
-
     window.cancelEdit = function() {
       document.getElementById('editingId').value = '';
-      ['songTitle','songCover','songArtist','songCategory','songDate','songDescription','songDownload','songSpotify'].forEach(id => {
-        document.getElementById(id).value = '';
-      });
-      document.getElementById('uploadTitle').innerText = 'Add New Song';
+      ['songTitle','songCover','songArtist','songCategory','songDate','songDescription','songDownload','songSpotify'].forEach(id => { document.getElementById(id).value = ''; });
       document.getElementById('submitBtn').innerText = 'Publish Song';
       document.getElementById('cancelBtn').style.display = 'none';
       goToPage('home');
     }
-
     window.saveSong = async function() {
       const status = document.getElementById('songStatus');
       const editingId = document.getElementById('editingId').value;
@@ -337,22 +601,13 @@
 
       if (!title || !cover) { status.className = 'status error'; status.innerText = 'Title and Cover required!'; return; }
       status.className = 'status info'; status.innerText = 'Saving...';
-
       try {
-        const payload = { title, cover, category, date, description, downloadurl, artist_name: artist, spotify: spotify };
+        const payload = { title, cover, category, date, description, downloadurl, artist_name: artist, spotify: spotify, status: 'live', release_at: null };
         let res;
         if (editingId) {
-          res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + editingId, {
-            method: 'PATCH',
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
+          res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + editingId, { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         } else {
-          res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, {
-            method: 'POST',
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
+          res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         }
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
         status.className = 'status success';
@@ -360,19 +615,15 @@
         setTimeout(() => { cancelEdit(); loadAdminSongs(); }, 1200);
       } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 80); }
     }
-
     window.deleteSong = async function(id) {
       if (!confirm('Delete this song permanently?')) return;
       try {
-        await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + id, {
-          method: 'DELETE',
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-        });
+        await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + id, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         loadAdminSongs();
       } catch (e) { alert('Could not delete.'); }
     }
 
-    // ALBUM
+    // ===== INSTANT ALBUM =====
     window.addAlbumSong = function() {
       albumSongIndex++;
       const container = document.getElementById('albumSongsContainer');
@@ -389,19 +640,16 @@
       container.appendChild(div);
       updateAlbumCount();
     }
-
     window.removeAlbumSong = function(num) {
       const el = document.getElementById('album-song-' + num);
       if (el) el.remove();
       updateAlbumCount();
     }
-
     function updateAlbumCount() {
-      const count = document.querySelectorAll('.album-song-item').length;
+      const count = document.querySelectorAll('#albumSongsContainer .album-song-item').length;
       document.getElementById('albumSongCount').innerText = count;
       document.getElementById('publishAlbumBtn').disabled = count === 0;
     }
-
     window.publishAlbum = async function() {
       const status = document.getElementById('albumStatus');
       const albumName = document.getElementById('albumName').value.trim();
@@ -413,7 +661,7 @@
       if (!albumName) { status.className = 'status error'; status.innerText = 'Album name required!'; return; }
       if (!cover) { status.className = 'status error'; status.innerText = 'Album cover URL required!'; return; }
 
-      const songItems = document.querySelectorAll('.album-song-item');
+      const songItems = document.querySelectorAll('#albumSongsContainer .album-song-item');
       if (songItems.length === 0) { status.className = 'status error'; status.innerText = 'Add at least one song!'; return; }
 
       const songs = [];
@@ -425,38 +673,15 @@
         if (!title) valid = false;
         songs.push({ title, downloadurl: download, description: desc });
       });
-
       if (!valid) { status.className = 'status error'; status.innerText = 'All songs need a title!'; return; }
-
       status.className = 'status info'; status.innerText = 'Publishing album...';
-
       try {
-        const payload = songs.map(s => ({
-          title: s.title,
-          cover: cover,
-          artist_name: artist,
-          category: category,
-          date: date,
-          description: s.description,
-          downloadurl: s.downloadurl,
-          album_name: albumName
-        }));
-
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, {
-          method: 'POST',
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
+        const payload = songs.map(s => ({ title: s.title, cover, artist_name: artist, category, date, description: s.description, downloadurl: s.downloadurl, album_name: albumName, status: 'live', release_at: null }));
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
-        status.className = 'status success';
-        status.innerText = 'Album "' + albumName + '" published with ' + songs.length + ' songs!';
+        status.className = 'status success'; status.innerText = 'Album "' + albumName + '" published with ' + songs.length + ' songs!';
         setTimeout(() => {
-          document.getElementById('albumName').value = '';
-          document.getElementById('albumArtist').value = '';
-          document.getElementById('albumCover').value = '';
-          document.getElementById('albumCategory').value = '';
-          document.getElementById('albumDate').value = '';
+          ['albumName','albumArtist','albumCover','albumCategory','albumDate'].forEach(id => { document.getElementById(id).value = ''; });
           document.getElementById('albumSongsContainer').innerHTML = '';
           albumSongIndex = 0;
           addAlbumSong();
@@ -467,12 +692,149 @@
       } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 100); }
     }
 
-    // CHANNEL
+    // ===== SCHEDULE SINGLE =====
+    window.scheduleSingle = async function() {
+      const status = document.getElementById('scheduleSingleStatus');
+      const title = document.getElementById('schTitle').value.trim();
+      const cover = document.getElementById('schCover').value.trim();
+      const artist = document.getElementById('schArtist').value.trim() || 'Samarid';
+      const category = document.getElementById('schCategory').value.trim() || 'Music';
+      const description = document.getElementById('schDescription').value.trim() || 'No description yet.';
+      const downloadurl = document.getElementById('schDownload').value.trim() || '#';
+      const spotify = document.getElementById('schSpotify').value.trim();
+
+      if (!title) { status.className = 'status error'; status.innerText = 'Title required!'; return; }
+      if (!cover) { status.className = 'status error'; status.innerText = 'Cover URL required!'; return; }
+      if (!downloadurl || downloadurl === '#') { status.className = 'status error'; status.innerText = 'Download MP3 required!'; return; }
+
+      const { date, iso } = getSelectedDateTime('schMonth','schDay','schYear','schHour','schMinute', currentAmPm);
+      if (date.getTime() <= Date.now()) { status.className = 'status error'; status.innerText = 'Pick a future date & time!'; return; }
+
+      status.className = 'status info'; status.innerText = 'Scheduling...';
+      try {
+        const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+        const payload = { title, cover, artist_name: artist, category, description, downloadurl, spotify: spotify || null, date: displayDate, status: 'scheduled', release_at: iso };
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        if (!res.ok) { const err = await res.text(); throw new Error(err); }
+        status.className = 'status success';
+        status.innerText = '✅ Scheduled! Goes live ' + formatPreviewText(date);
+        ['schTitle','schCover','schArtist','schCategory','schDescription','schDownload','schSpotify'].forEach(id => { document.getElementById(id).value = ''; });
+        setTimeout(() => { status.innerText = ''; loadScheduled(); }, 2500);
+      } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 100); }
+    }
+
+    // ===== SCHEDULE ALBUM =====
+    window.addSchAlbumSong = function() {
+      schAlbumSongIndex++;
+      const container = document.getElementById('schAlbumSongsContainer');
+      const div = document.createElement('div');
+      div.className = 'album-song-item';
+      div.id = 'sch-album-song-' + schAlbumSongIndex;
+      div.innerHTML = `
+        <div class="album-song-num">SONG ${schAlbumSongIndex}</div>
+        <button class="album-song-remove" onclick="removeSchAlbumSong(${schAlbumSongIndex})"><i class="fas fa-times"></i></button>
+        <div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div>
+        <div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="https://...mp3"></div>
+        <div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div>
+      `;
+      container.appendChild(div);
+      updateSchAlbumCount();
+    }
+    window.removeSchAlbumSong = function(num) {
+      const el = document.getElementById('sch-album-song-' + num);
+      if (el) el.remove();
+      updateSchAlbumCount();
+    }
+    function updateSchAlbumCount() {
+      const count = document.querySelectorAll('#schAlbumSongsContainer .album-song-item').length;
+      document.getElementById('schAlbumSongCount').innerText = count;
+    }
+    window.scheduleAlbum = async function() {
+      const status = document.getElementById('scheduleAlbumStatus');
+      const albumName = document.getElementById('schAlbumName').value.trim();
+      const artist = document.getElementById('schAlbumArtist').value.trim() || 'Samarid';
+      const cover = document.getElementById('schAlbumCover').value.trim();
+      const category = document.getElementById('schAlbumCategory').value.trim() || 'Music';
+
+      if (!albumName) { status.className = 'status error'; status.innerText = 'Album name required!'; return; }
+      if (!cover) { status.className = 'status error'; status.innerText = 'Album cover required!'; return; }
+
+      const songItems = document.querySelectorAll('#schAlbumSongsContainer .album-song-item');
+      if (songItems.length === 0) { status.className = 'status error'; status.innerText = 'Add at least one song!'; return; }
+
+      const songs = [];
+      let valid = true;
+      songItems.forEach(item => {
+        const title = item.querySelector('.sch-album-song-title').value.trim();
+        const download = item.querySelector('.sch-album-song-download').value.trim() || '#';
+        const desc = item.querySelector('.sch-album-song-desc').value.trim() || 'No description yet.';
+        if (!title) valid = false;
+        songs.push({ title, downloadurl: download, description: desc });
+      });
+      if (!valid) { status.className = 'status error'; status.innerText = 'All songs need a title!'; return; }
+
+      const { date, iso } = getSelectedDateTime('schAMonth','schADay','schAYear','schAHour','schAMinute', currentAAmPm);
+      if (date.getTime() <= Date.now()) { status.className = 'status error'; status.innerText = 'Pick a future date & time!'; return; }
+
+      status.className = 'status info'; status.innerText = 'Scheduling album...';
+      try {
+        const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+        const payload = songs.map(s => ({ title: s.title, cover, artist_name: artist, category, description: s.description, downloadurl: s.downloadurl, album_name: albumName, date: displayDate, status: 'scheduled', release_at: iso }));
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+        if (!res.ok) { const err = await res.text(); throw new Error(err); }
+        status.className = 'status success';
+        status.innerText = '✅ Album "' + albumName + '" scheduled for ' + formatPreviewText(date);
+        ['schAlbumName','schAlbumArtist','schAlbumCover','schAlbumCategory'].forEach(id => { document.getElementById(id).value = ''; });
+        document.getElementById('schAlbumSongsContainer').innerHTML = '';
+        schAlbumSongIndex = 0;
+        addSchAlbumSong();
+        setTimeout(() => { status.innerText = ''; loadScheduled(); }, 2500);
+      } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 100); }
+    }
+
+    // ===== SCHEDULED LIST (only future) =====
+    async function loadScheduled() {
+      const list = document.getElementById('scheduledList');
+      if (!list) return;
+      list.innerHTML = '<p class="empty-songs">Loading...</p>';
+      try {
+        const nowIso = new Date().toISOString();
+        const res = await fetch(
+          SUPABASE_URL + '/rest/v1/' + SONGS_TABLE +
+          '?status=eq.scheduled&release_at=gt.' + encodeURIComponent(nowIso) +
+          '&select=*&order=release_at.asc',
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
+        );
+        const songs = await res.json();
+        if (!Array.isArray(songs) || songs.length === 0) {
+          list.innerHTML = '<p class="empty-songs">No scheduled releases yet.</p>';
+          return;
+        }
+        list.innerHTML = songs.map(s => {
+          const releaseDate = s.release_at ? new Date(s.release_at) : null;
+          const when = releaseDate ? formatPreviewText(releaseDate) : 'Unknown time';
+          const albumTag = s.album_name ? ' • 📀 ' + s.album_name : '';
+          return `
+            <div class="scheduled-card">
+              <img src="${s.cover}" alt="${s.title}">
+              <div class="info">
+                <h4>${s.title}</h4>
+                <p>${s.artist_name || 'Samarid'}${albumTag}</p>
+              </div>
+              <div class="when">⏰ ${when.split(' · ')[0]}</div>
+            </div>
+          `;
+        }).join('');
+      } catch (e) {
+        list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load.</p>';
+      }
+    }
+
+    // ===== CHANNEL =====
     window.loadChannelLink = function() {
       const saved = localStorage.getItem('samarid_channel_link');
       if (saved) document.getElementById('channelLinkInput').value = saved;
     }
-
     window.saveChannelLink = function() {
       const status = document.getElementById('channelStatus');
       const link = document.getElementById('channelLinkInput').value.trim();
@@ -481,7 +843,6 @@
       status.className = 'status success';
       status.innerText = 'Channel link saved!';
     }
-
     window.resetChannelLink = function() {
       localStorage.removeItem('samarid_channel_link');
       document.getElementById('channelLinkInput').value = '';
@@ -489,7 +850,6 @@
       status.className = 'status info';
       status.innerText = 'Reset to default channel.';
     }
-
     window.saveVideo = async function() {
       const status = document.getElementById('videoStatus');
       const title = document.getElementById('videoTitle').value.trim();
@@ -498,13 +858,8 @@
 
       if (!title || !videoUrl) { status.className = 'status error'; status.innerText = 'Title and Link required.'; return; }
       status.className = 'status info'; status.innerText = 'Publishing...';
-
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + VIDEOS_TABLE, {
-          method: 'POST',
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title: title, video_url: videoUrl, video_date: date })
-        });
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + VIDEOS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ title, video_url: videoUrl, video_date: date }) });
         if (res.ok) {
           status.className = 'status success';
           status.innerText = 'Video link published!';
@@ -516,10 +871,7 @@
           status.className = 'status error';
           status.innerText = 'Error: ' + errText;
         }
-      } catch (err) {
-        status.className = 'status error';
-        status.innerText = 'Network error: ' + err.message;
-      }
+      } catch (err) { status.className = 'status error'; status.innerText = 'Network error: ' + err.message; }
     };
   </script>
 </body>

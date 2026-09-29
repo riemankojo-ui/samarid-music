@@ -84,93 +84,21 @@
   .song-card-info h3 .dash { font-weight: 600; color: var(--text); margin: 0 2px; }
   .song-card-info .date { font-size: 12.5px; color: var(--text2); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* BOTTOM CONTROLS */
-  .bottom-controls {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 22px 0 8px;
-    margin-top: 8px;
-    border-top: 1px solid var(--border);
-  }
-
-  .bottom-search-wrap {
-    position: relative;
-    flex: 1;
-    min-width: 0;
-  }
-  .bottom-search-wrap input {
-    width: 100%;
-    padding: 12px 38px 12px 38px;
-    background: transparent;
-    border: 1.5px solid var(--border);
-    border-radius: 30px;
-    color: var(--text);
-    font-size: 14px;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.2s;
-  }
+  .bottom-controls { display: flex; align-items: center; gap: 12px; padding: 22px 0 8px; margin-top: 8px; border-top: 1px solid var(--border); }
+  .bottom-search-wrap { position: relative; flex: 1; min-width: 0; }
+  .bottom-search-wrap input { width: 100%; padding: 12px 38px 12px 38px; background: transparent; border: 1.5px solid var(--border); border-radius: 30px; color: var(--text); font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s; }
   .bottom-search-wrap input::placeholder { color: #999; }
   .bottom-search-wrap input:focus { border-color: var(--accent); }
-  .bottom-search-wrap .search-icon {
-    position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--accent);
-    font-size: 14px;
-    pointer-events: none;
-  }
-  .bottom-search-wrap .clear-x {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    color: #999;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-  }
+  .bottom-search-wrap .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 14px; pointer-events: none; }
+  .bottom-search-wrap .clear-x { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: #999; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 12px; }
   .bottom-search-wrap .clear-x.show { display: flex; }
   .bottom-search-wrap .clear-x:active { background: var(--accent); color: #fff; }
 
-  .next-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 12px 20px;
-    background: transparent;
-    color: var(--accent);
-    border: 1.5px solid var(--accent);
-    border-radius: 30px;
-    font-size: 14px;
-    font-weight: 900;
-    cursor: pointer;
-    font-family: inherit;
-    transition: 0.15s;
-    flex-shrink: 0;
-    white-space: nowrap;
-  }
+  .next-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 12px 20px; background: transparent; color: var(--accent); border: 1.5px solid var(--accent); border-radius: 30px; font-size: 14px; font-weight: 900; cursor: pointer; font-family: inherit; transition: 0.15s; flex-shrink: 0; white-space: nowrap; }
   .next-btn:active { background: var(--accent); color: #fff; transform: scale(0.96); }
   .next-btn i { font-size: 14px; }
 
-  .page-indicator {
-    font-size: 12px;
-    font-weight: 800;
-    color: var(--text2);
-    padding: 0 4px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
+  .page-indicator { font-size: 12px; font-weight: 800; color: var(--text2); padding: 0 4px; white-space: nowrap; flex-shrink: 0; }
 
   .loading { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 13px; }
   .empty-state { text-align: center; padding: 60px 20px; background: #fff; border-radius: 8px; color: var(--text2); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
@@ -266,6 +194,9 @@
     const params = new URLSearchParams(window.location.search);
     const artistName = params.get('name') || 'Samarid';
 
+    // Live filter — only shows published songs
+    const LIVE_FILTER = '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')';
+
     const seoTitle = 'Download Mp3 ' + artistName + ' 2026 Songs | Albums for Free - Samarid Music';
     const seoDesc = 'Download all ' + artistName + ' songs in MP3. 2026 releases from Samarid Music. Free HD audio downloads on Samarid Music Ghana.';
     document.title = seoTitle;
@@ -355,7 +286,6 @@
       finally { btn.disabled = false; }
     }
 
-    // ===== RENDER SONGS =====
     function renderSongList() {
       const list = document.getElementById('songList');
       const bottomControls = document.getElementById('bottomControls');
@@ -388,71 +318,42 @@
         </a>
       `).join('');
 
-      // ===== RULES =====
-      // Show bottom controls if: more than 1 page, OR user is searching
       const shouldShow = totalPages > 1 || isSearching;
+      if (shouldShow) bottomControls.style.display = 'flex';
+      else { bottomControls.style.display = 'none'; return; }
 
-      if (shouldShow) {
-        bottomControls.style.display = 'flex';
-      } else {
-        bottomControls.style.display = 'none';
-        return;
-      }
-
-      // ===== NEXT BUTTON: only show when there's a next page =====
       const hasNextPage = currentPage < totalPages;
-      if (hasNextPage) {
-        nextBtn.style.display = 'inline-flex';
-      } else {
-        nextBtn.style.display = 'none';
-      }
+      if (hasNextPage) nextBtn.style.display = 'inline-flex';
+      else nextBtn.style.display = 'none';
 
-      // ===== PAGE INDICATOR: show if more than 1 page =====
       if (totalPages > 1) {
         pageIndicator.style.display = 'inline';
         pageIndicator.innerText = currentPage + '/' + totalPages;
-      } else {
-        pageIndicator.style.display = 'none';
-      }
+      } else pageIndicator.style.display = 'none';
     }
 
     window.nextPage = function() {
       const totalPages = Math.ceil(filteredSongs.length / PAGE_SIZE);
-      if (currentPage < totalPages) {
-        currentPage++;
-        renderSongList();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+      if (currentPage < totalPages) { currentPage++; renderSongList(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
     }
 
-    // ===== SEARCH =====
     let searchDebounce = null;
     document.getElementById('artistSearchInput').addEventListener('input', function(e) {
       const q = e.target.value;
       const clearBtn = document.getElementById('artistClearBtn');
       if (q.trim()) clearBtn.classList.add('show');
       else clearBtn.classList.remove('show');
-
       clearTimeout(searchDebounce);
-      searchDebounce = setTimeout(() => {
-        applySearch(q);
-      }, 150);
+      searchDebounce = setTimeout(() => applySearch(q), 150);
     });
 
     function applySearch(q) {
       const query = q.toLowerCase().trim();
-      if (!query) {
-        filteredSongs = allArtistSongs.slice();
-      } else {
-        filteredSongs = allArtistSongs.filter(s =>
-          (s.title || '').toLowerCase().includes(query) ||
-          (s.category || '').toLowerCase().includes(query)
-        );
-      }
+      if (!query) filteredSongs = allArtistSongs.slice();
+      else filteredSongs = allArtistSongs.filter(s => (s.title || '').toLowerCase().includes(query) || (s.category || '').toLowerCase().includes(query));
       currentPage = 1;
       renderSongList();
     }
-
     window.clearArtistSearch = function() {
       document.getElementById('artistSearchInput').value = '';
       document.getElementById('artistClearBtn').classList.remove('show');
@@ -462,7 +363,6 @@
       document.getElementById('artistSearchInput').focus();
     }
 
-    // ===== LOAD ARTIST PAGE =====
     async function loadArtistPage() {
       let artistProfile = null;
       try {
@@ -472,7 +372,8 @@
       } catch (e) { console.error(e); }
 
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=ilike.' + encodeURIComponent(artistName) + '&select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        // Live filter added here so scheduled songs stay hidden
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=ilike.' + encodeURIComponent(artistName) + '&select=*' + LIVE_FILTER + '&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         allArtistSongs = await res.json();
         if (!Array.isArray(allArtistSongs)) allArtistSongs = [];
       } catch (e) { console.error(e); allArtistSongs = []; }

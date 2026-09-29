@@ -53,7 +53,6 @@
   }
   img { max-width: 100%; }
 
-  /* HEADER */
   .header { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 8px; z-index: 100; }
   .menu-btn { background: transparent; color: var(--text); border: none; width: 40px; height: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; }
   .menu-btn span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; }
@@ -62,7 +61,6 @@
   .logo span { color: var(--accent); }
   .header-spacer { width: 40px; flex-shrink: 0; }
 
-  /* MENU DROPDOWN */
   .menu-dropdown { position: fixed; top: 66px; left: 12px; background: #141414; border: 1px solid #2a2a2a; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); width: 260px; max-width: calc(100vw - 24px); max-height: 75vh; overflow-y: auto; display: none; z-index: 9999; }
   .menu-dropdown.open { display: block; animation: menuPop 0.2s ease; }
   @keyframes menuPop { from { opacity: 0; transform: translateY(-8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
@@ -82,7 +80,6 @@
   .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; display: none; }
   .menu-overlay.open { display: block; }
 
-  /* HERO */
   .trend-hero {
     text-align: center;
     padding: 40px 20px 28px;
@@ -107,7 +104,6 @@
   }
   .trend-title span { color: var(--accent); }
 
-  /* SMALL CLEAN INFO LINE */
   .trend-info-line {
     display: flex;
     align-items: center;
@@ -123,13 +119,8 @@
   }
   .trend-info-line .orange { color: var(--trend-orange); font-weight: 800; }
   .trend-info-line .black { color: var(--text); font-weight: 800; }
-  .trend-info-line .dot-sep {
-    color: var(--text2);
-    font-weight: 900;
-    font-size: 9px;
-  }
+  .trend-info-line .dot-sep { color: var(--text2); font-weight: 900; font-size: 9px; }
 
-  /* FULL-SCREEN TREND CARDS */
   .trend-list { display: flex; flex-direction: column; }
 
   .trend-item {
@@ -151,7 +142,6 @@
   .trend-item:active { background: rgba(0,0,0,0.03); }
   html[data-theme="dark"] .trend-item:active { background: rgba(255,255,255,0.03); }
 
-  /* BIG COVER */
   .trend-cover {
     width: 100%;
     max-width: 480px;
@@ -163,142 +153,75 @@
     position: relative;
     border: 1px solid var(--border);
   }
-  .trend-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
+  .trend-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .trend-cover-fallback {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
     background: linear-gradient(135deg, #e8e8e8 0%, #d0d0d0 100%);
-    color: #999;
-    font-size: 90px;
+    color: #999; font-size: 90px;
   }
   html[data-theme="dark"] .trend-cover-fallback {
     background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
     color: #555;
   }
 
-  /* RANK BADGE */
   .trend-rank {
-    position: absolute;
-    top: 18px;
-    left: 18px;
+    position: absolute; top: 18px; left: 18px;
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: #000;
-    font-size: 16px;
-    font-weight: 900;
-    padding: 10px 18px;
-    border-radius: 16px;
-    letter-spacing: 0.5px;
-    box-shadow: 0 10px 30px rgba(255, 200, 0, 0.55);
-    z-index: 3;
+    color: #000; font-size: 16px; font-weight: 900;
+    padding: 10px 18px; border-radius: 16px; letter-spacing: 0.5px;
+    box-shadow: 0 10px 30px rgba(255, 200, 0, 0.55); z-index: 3;
   }
   .trend-rank.rank-2 { background: linear-gradient(135deg, #E8E8E8 0%, #A0A0A0 100%); }
   .trend-rank.rank-3 { background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%); color: #fff; }
   .trend-rank.rank-other { background: rgba(0,0,0,0.85); color: #fff; backdrop-filter: blur(8px); }
 
-  /* NEW BADGE */
   .trend-new-badge {
-    position: absolute;
-    top: 18px;
-    right: 18px;
+    position: absolute; top: 18px; right: 18px;
     background: linear-gradient(135deg, #ff8800, #cc6600);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 900;
-    padding: 8px 14px;
-    border-radius: 14px;
-    letter-spacing: 1.5px;
-    box-shadow: 0 6px 20px rgba(255, 136, 0, 0.5);
-    z-index: 3;
+    color: #fff; font-size: 11px; font-weight: 900;
+    padding: 8px 14px; border-radius: 14px; letter-spacing: 1.5px;
+    box-shadow: 0 6px 20px rgba(255, 136, 0, 0.5); z-index: 3;
   }
 
-  /* INFO */
   .trend-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    max-width: 480px;
-    padding: 0 12px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 12px; max-width: 480px; padding: 0 12px;
   }
   .trend-artist {
-    font-size: 12px;
-    font-weight: 800;
-    color: var(--trend-orange);
-    letter-spacing: 1.2px;
-    text-transform: uppercase;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-    justify-content: center;
+    font-size: 12px; font-weight: 800; color: var(--trend-orange);
+    letter-spacing: 1.2px; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 6px;
+    flex-wrap: wrap; justify-content: center;
   }
   .trend-artist .dot { color: var(--text2); }
   .trend-song-title {
-    font-size: 26px;
-    font-weight: 900;
-    color: var(--text);
-    letter-spacing: -0.8px;
-    line-height: 1.15;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-    max-width: 100%;
+    font-size: 26px; font-weight: 900; color: var(--text);
+    letter-spacing: -0.8px; line-height: 1.15;
+    overflow-wrap: anywhere; word-break: break-word; max-width: 100%;
   }
-  .trend-date {
-    font-size: 12px;
-    color: var(--text2);
-    font-weight: 600;
-  }
+  .trend-date { font-size: 12px; color: var(--text2); font-weight: 600; }
 
-  /* DESCRIPTION — big orange text */
   .trend-description {
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.65;
-    color: var(--trend-orange);
-    letter-spacing: -0.1px;
-    max-width: 100%;
-    overflow-wrap: anywhere;
-    word-break: break-word;
-    margin-top: 6px;
-    padding: 0 4px;
+    font-size: 15px; font-weight: 600; line-height: 1.65;
+    color: var(--trend-orange); letter-spacing: -0.1px;
+    max-width: 100%; overflow-wrap: anywhere; word-break: break-word;
+    margin-top: 6px; padding: 0 4px;
   }
 
-  /* FOOTER */
   .trend-footer {
-    text-align: center;
-    padding: 50px 20px 30px;
-    max-width: 700px;
-    margin: 0 auto;
+    text-align: center; padding: 50px 20px 30px;
+    max-width: 700px; margin: 0 auto;
   }
   .trend-footer-text {
-    font-size: 13px;
-    color: var(--text2);
-    line-height: 1.6;
-    margin-bottom: 18px;
-    font-weight: 600;
+    font-size: 13px; color: var(--text2); line-height: 1.6;
+    margin-bottom: 18px; font-weight: 600;
   }
   .view-all-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 28px;
-    background: transparent;
-    color: var(--accent);
-    border: 2px solid var(--accent);
-    border-radius: 30px;
-    font-size: 13px;
-    font-weight: 900;
-    text-decoration: none;
-    letter-spacing: 0.5px;
-    transition: 0.15s;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px; background: transparent; color: var(--accent);
+    border: 2px solid var(--accent); border-radius: 30px;
+    font-size: 13px; font-weight: 900; text-decoration: none;
+    letter-spacing: 0.5px; transition: 0.15s;
   }
   .view-all-btn:active { background: var(--accent); color: #fff; transform: scale(0.96); }
 
@@ -386,6 +309,9 @@
     const TREND_LIMIT = 10;
     const NEW_DAYS = 14;
 
+    // Live filter — only shows published songs
+    const LIVE_FILTER = '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')';
+
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
     function escapeHtml(s) {
@@ -428,8 +354,9 @@
       const list = document.getElementById('trendList');
 
       try {
+        // Live filter — scheduled future songs excluded
         const res = await fetch(
-          SUPABASE_URL + '/rest/v1/songs?select=*&order=plays.desc.nullslast,id.desc&limit=' + TREND_LIMIT,
+          SUPABASE_URL + '/rest/v1/songs?select=*' + LIVE_FILTER + '&order=plays.desc.nullslast,id.desc&limit=' + TREND_LIMIT,
           { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
         );
         const songs = await res.json();
@@ -440,11 +367,6 @@
         }
 
         let html = '';
-
-        songs.forEach((s) => {
-          const rank = s.plays ? 0 : 0;
-          // Use actual index position for rank
-        });
 
         songs.forEach((s, index) => {
           const rank = index + 1;

@@ -3,23 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Download Mp3 Song | Samarid Music</title>
-<meta name="description" content="Download Mp3 songs from Samarid Music — Ghana's newest music label.">
-
-<!-- Open Graph -->
-<meta property="og:type" content="music.song">
-<meta property="og:site_name" content="Samarid Music">
-<meta property="og:title" id="ogTitle" content="Download Mp3 | Samarid Music">
-<meta property="og:description" id="ogDescription" content="Download Mp3 songs from Samarid Music.">
-<meta property="og:image" id="ogImage" content="https://samarid-music.vercel.app/logo.png">
-<meta property="og:url" id="ogUrl" content="https://samarid-music.vercel.app/song.html">
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" id="twTitle" content="Download Mp3 | Samarid Music">
-<meta name="twitter:description" id="twDescription" content="Download Mp3 songs from Samarid Music.">
-<meta name="twitter:image" id="twImage" content="https://samarid-music.vercel.app/logo.png">
-
+<title>Song - Samarid Music</title>
+<meta name="description" content="Listen and download music from Samarid Music — Ghana's newest music label.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -166,6 +151,8 @@
   <div class="menu-dropdown" id="menuDropdown" onclick="event.stopPropagation()">
     <div class="menu-title">Navigation</div>
     <a href="index.html" class="menu-item"><i class="fas fa-music"></i><span class="label">Music</span></a>
+    <a href="search.html" class="menu-item"><i class="fas fa-search"></i><span class="label">Search</span></a>
+    <a href="weekend.html" class="menu-item"><i class="fas fa-fire"></i><span class="label">Weekend Trend</span></a>
     <a href="albums.html" class="menu-item"><i class="fas fa-compact-disc"></i><span class="label">Albums</span></a>
     <a href="artists.html" class="menu-item"><i class="fas fa-user-group"></i><span class="label">Artists</span></a>
     <a href="videos.html" class="menu-item"><i class="fas fa-video"></i><span class="label">Videos</span></a>
@@ -192,8 +179,6 @@
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
     const CONTACT_EMAIL = "wunatehk@gmail.com";
-    const SITE_URL = "https://samarid-music.vercel.app";
-    const DEFAULT_OG_IMAGE = SITE_URL + "/logo.png";
 
     const PLAY_SECONDS_REQUIRED = 30;
     const PLAY_COOLDOWN_HOURS = 6;
@@ -235,7 +220,6 @@
       const hoursSince = (Date.now() - parseInt(lastPlay)) / (1000 * 60 * 60);
       return hoursSince < PLAY_COOLDOWN_HOURS;
     }
-
     function markPlayed(songId) {
       const key = 'lastplay_' + visitorId + '_' + songId;
       localStorage.setItem(key, Date.now().toString());
@@ -291,10 +275,11 @@
       const urlParams = new URLSearchParams(window.location.search);
       let songId = urlParams.get('id');
       const container = document.getElementById('songDetail');
+      const nowIso = new Date().toISOString();
 
       if (!songId) {
         try {
-          const fallbackRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id&order=id.desc&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+          const fallbackRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(nowIso) + ')&order=id.desc&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
           const fallbackData = await fallbackRes.json();
           if (Array.isArray(fallbackData) && fallbackData.length > 0) { songId = fallbackData[0].id; window.history.replaceState({}, '', '?id=' + songId); }
           else { container.innerHTML = '<div class="error-box"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>No songs have been added.</p><a href="index.html">Go Home</a></div>'; return; }
@@ -302,50 +287,27 @@
       }
 
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + songId, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        // Fetch the song + only if it's live OR its release time has passed
+        const res = await fetch(
+          SUPABASE_URL + '/rest/v1/songs?id=eq.' + songId + '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(nowIso) + ')',
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
+        );
         const data = await res.json();
 
-        if (!data || data.length === 0) { container.innerHTML = '<div class="error-box"><div class="icon">🔍</div><h3>Song Not Found</h3><p>No song with ID <strong>' + escapeHtml(songId) + '</strong> exists.</p><a href="index.html">Browse Songs</a></div>'; return; }
+        if (!data || data.length === 0) {
+          // Could be nonexistent OR scheduled for the future
+          container.innerHTML = '<div class="error-box"><div class="icon">🔍</div><h3>Song Not Found</h3><p>This song doesn\'t exist or hasn\'t been released yet.</p><a href="index.html">Browse Songs</a></div>';
+          return;
+        }
 
         const s = data[0];
         currentSongData = s;
         const artist = s.artist_name || 'Samarid';
         currentArtistName = artist;
         const badge = s.verified ? VERIFY_BADGE : '';
-
-        // ===== DYNAMIC SEO — TITLE + DESCRIPTION + OG TAGS =====
-        const seoTitle = 'Download Mp3 ' + artist + ' ' + s.title + ' | Samarid Music';
-        const seoDesc = 'Download "' + s.title + '" by ' + artist + ' in MP3. 2026 ' + (s.category || 'music') + ' from Samarid Music. Free HD audio downloads on Samarid Music Ghana.';
-        const seoImage = s.cover || DEFAULT_OG_IMAGE;
-        const seoUrl = window.location.href;
-
-        document.title = seoTitle;
-        document.querySelector('meta[name="description"]').setAttribute('content', seoDesc);
-        document.getElementById('ogTitle').setAttribute('content', seoTitle);
-        document.getElementById('ogDescription').setAttribute('content', seoDesc);
-        document.getElementById('ogImage').setAttribute('content', seoImage);
-        document.getElementById('ogUrl').setAttribute('content', seoUrl);
-        document.getElementById('twTitle').setAttribute('content', seoTitle);
-        document.getElementById('twDescription').setAttribute('content', seoDesc);
-        document.getElementById('twImage').setAttribute('content', seoImage);
-
-        // JSON-LD structured data
-        const jsonLd = {
-          "@context": "https://schema.org",
-          "@type": "MusicRecording",
-          "name": s.title,
-          "byArtist": { "@type": "MusicGroup", "name": artist },
-          "image": seoImage,
-          "datePublished": s.date || '',
-          "genre": s.category || 'Music',
-          "url": seoUrl
-        };
-        let scriptLd = document.getElementById('jsonLdScript');
-        if (!scriptLd) { scriptLd = document.createElement('script'); scriptLd.id = 'jsonLdScript'; scriptLd.type = 'application/ld+json'; document.head.appendChild(scriptLd); }
-        scriptLd.textContent = JSON.stringify(jsonLd);
-
-        // ===== Continue normal page load =====
         const downloadTitle = artist + ' - ' + s.title;
+        document.title = downloadTitle + ' - Samarid Music';
+
         const audioSrc = s.audio_url || s.downloadurl || '';
 
         let artistProfile = null;
@@ -375,7 +337,7 @@
 
         let artistsList = [];
         try {
-          const artistsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+          const artistsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,verified&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(nowIso) + ')', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
           const artistsData = await artistsRes.json();
           const map = {};
           artistsData.forEach(a => {
@@ -390,7 +352,7 @@
           <a href="artist-template.html?name=${encodeURIComponent(a.name)}" class="artist-link">${escapeHtml(a.name)}${a.verified ? VERIFY_BADGE : ''}</a>
         `).join('') || '<p style="text-align:center; color:#444; font-size:12px; grid-column:1/-1;">More artists coming soon.</p>';
 
-        const shareText = encodeURIComponent('Download "' + s.title + '" by ' + artist + ' on Samarid Music!');
+        const shareText = encodeURIComponent('Listen to "' + s.title + '" by ' + artist + ' on Samarid Music!');
         const shareUrl = encodeURIComponent(window.location.href);
 
         container.innerHTML = `

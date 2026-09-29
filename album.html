@@ -3,24 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Download Mp3 Album | Samarid Music</title>
-<meta name="description" content="Download Mp3 albums from Samarid Music — Ghana's newest music label.">
+<title>Album - Samarid Music</title>
+<meta name="description" content="Listen to full albums from Samarid Music — Ghana's newest music label.">
 <meta name="google-site-verification" content="ERHvKE-6CNknsGMv75ePLrVpOGaURdtsnmuMh1VxG-4" />
-
-<!-- Open Graph -->
-<meta property="og:type" content="music.album">
-<meta property="og:site_name" content="Samarid Music">
-<meta property="og:title" id="ogTitle" content="Download Mp3 Album | Samarid Music">
-<meta property="og:description" id="ogDescription" content="Download Mp3 albums from Samarid Music.">
-<meta property="og:image" id="ogImage" content="https://samarid-music.vercel.app/logo.png">
-<meta property="og:url" id="ogUrl" content="https://samarid-music.vercel.app/album.html">
-
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" id="twTitle" content="Download Mp3 Album | Samarid Music">
-<meta name="twitter:description" id="twDescription" content="Download Mp3 albums from Samarid Music.">
-<meta name="twitter:image" id="twImage" content="https://samarid-music.vercel.app/logo.png">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -104,6 +89,8 @@
   <div class="menu-dropdown" id="menuDropdown" onclick="event.stopPropagation()">
     <div class="menu-title">Navigation</div>
     <a href="index.html" class="menu-item"><i class="fas fa-music"></i><span class="label">Music</span></a>
+    <a href="search.html" class="menu-item"><i class="fas fa-search"></i><span class="label">Search</span></a>
+    <a href="weekend.html" class="menu-item"><i class="fas fa-fire"></i><span class="label">Weekend Trend</span></a>
     <a href="albums.html" class="menu-item"><i class="fas fa-compact-disc"></i><span class="label">Albums</span></a>
     <a href="artists.html" class="menu-item"><i class="fas fa-user-group"></i><span class="label">Artists</span></a>
     <a href="videos.html" class="menu-item"><i class="fas fa-video"></i><span class="label">Videos</span></a>
@@ -123,8 +110,6 @@
   <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
-    const SITE_URL = "https://samarid-music.vercel.app";
-    const DEFAULT_OG_IMAGE = SITE_URL + "/logo.png";
 
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
@@ -142,6 +127,9 @@
     }
     window.closeMenu = function() { document.getElementById('menuDropdown').classList.remove('open'); document.getElementById('menuOverlay').classList.remove('open'); }
 
+    // Live filter — only shows published songs
+    const LIVE_FILTER = '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')';
+
     async function loadAlbum() {
       const params = new URLSearchParams(window.location.search);
       const albumName = params.get('name');
@@ -153,7 +141,8 @@
       }
 
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?album_name=eq.' + encodeURIComponent(albumName) + '&select=*&order=id.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        // Live filter added — hidden songs won't appear
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?album_name=eq.' + encodeURIComponent(albumName) + '&select=*' + LIVE_FILTER + '&order=id.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
 
         if (!Array.isArray(songs) || songs.length === 0) {
@@ -170,38 +159,7 @@
         const songCount = songs.length;
         const songLabel = songCount === 1 ? '1 track' : songCount + ' tracks';
 
-        // ===== DYNAMIC SEO — TITLE + DESCRIPTION + OG TAGS =====
-        const seoTitle = 'Download Mp3 ' + artist + ' Album ' + albumName + ' | Samarid Music';
-        const seoDesc = 'Download the ' + albumName + ' album by ' + artist + ' in MP3. ' + songCount + ' tracks. 2026 ' + category + ' from Samarid Music. Free HD audio downloads on Samarid Music Ghana.';
-        const seoImage = cover || DEFAULT_OG_IMAGE;
-        const seoUrl = window.location.href;
-
-        document.title = seoTitle;
-        document.querySelector('meta[name="description"]').setAttribute('content', seoDesc);
-        document.getElementById('ogTitle').setAttribute('content', seoTitle);
-        document.getElementById('ogDescription').setAttribute('content', seoDesc);
-        document.getElementById('ogImage').setAttribute('content', seoImage);
-        document.getElementById('ogUrl').setAttribute('content', seoUrl);
-        document.getElementById('twTitle').setAttribute('content', seoTitle);
-        document.getElementById('twDescription').setAttribute('content', seoDesc);
-        document.getElementById('twImage').setAttribute('content', seoImage);
-
-        // JSON-LD structured data
-        const jsonLd = {
-          "@context": "https://schema.org",
-          "@type": "MusicAlbum",
-          "name": albumName,
-          "byArtist": { "@type": "MusicGroup", "name": artist },
-          "image": seoImage,
-          "datePublished": date,
-          "genre": category,
-          "numTracks": songCount,
-          "url": seoUrl
-        };
-        const scriptLd = document.createElement('script');
-        scriptLd.type = 'application/ld+json';
-        scriptLd.textContent = JSON.stringify(jsonLd);
-        document.head.appendChild(scriptLd);
+        document.title = albumName + ' by ' + artist + ' - Samarid Music';
 
         container.innerHTML = `
           <div class="album-hero">

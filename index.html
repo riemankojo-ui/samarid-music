@@ -65,6 +65,15 @@
   .section-head .icon-social { color: #0084ff; font-size: 18px; }
   .section-head .icon-mail { color: #ff8800; font-size: 18px; }
 
+  .latest-search-wrap { position: relative; margin-bottom: 14px; }
+  .latest-search-wrap input { width: 100%; padding: 12px 40px 12px 40px; background: var(--card); border: 1px solid var(--border); border-radius: 30px; color: var(--text); font-size: 13px; font-family: inherit; outline: none; transition: border-color 0.2s; }
+  .latest-search-wrap input::placeholder { color: var(--text2); opacity: 0.6; }
+  .latest-search-wrap input:focus { border-color: var(--accent); }
+  .latest-search-wrap .search-icon-left { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text2); font-size: 14px; pointer-events: none; opacity: 0.7; }
+  .latest-search-wrap .clear-x { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: transparent; border: none; color: var(--text2); width: 24px; height: 24px; border-radius: 50%; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 12px; }
+  .latest-search-wrap .clear-x.show { display: flex; }
+  .latest-search-wrap .clear-x:active { background: var(--accent); color: #fff; }
+
   .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .social-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; color: var(--text); font-size: 13px; font-weight: 700; transition: 0.2s; overflow: hidden; }
   .social-btn:active { transform: scale(0.96); }
@@ -185,6 +194,11 @@
     <div class="section-head">
       <h3 id="latestTitle">Latest Releases</h3>
     </div>
+    <div class="latest-search-wrap">
+      <i class="fas fa-search search-icon-left"></i>
+      <input type="text" id="latestSearchInput" placeholder="Search songs..." autocomplete="off">
+      <button class="clear-x" id="latestClearBtn" onclick="clearLatestSearch()">✕</button>
+    </div>
     <div class="song-list" id="songList"><div class="loading">Loading songs...</div></div>
 
     <div class="section-head"><i class="fas fa-envelope-open-text icon-mail"></i><h3>Never Miss A Drop</h3></div>
@@ -281,9 +295,12 @@
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
 
     const TOP_SONGS_LIMIT = 4;
-    const LATEST_SONGS_LIMIT = 7;
+    const LATEST_SONGS_LIMIT = 10;
     const TOP_ALBUMS_LIMIT = 4;
     const TOP_ARTISTS_LIMIT = 15;
+
+    // Filter to only show LIVE songs (hide scheduled)
+    const LIVE_FILTER = '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')';
 
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22" style="width:14px;height:14px;vertical-align:middle;display:inline-block;flex-shrink:0;"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
@@ -291,6 +308,8 @@
       if (s === null || s === undefined) return '';
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
+
+    let allLatestSongs = [];
 
     window.toggleMenu = function(e) { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('open'); }
     document.addEventListener('click', () => document.getElementById('menuDropdown').classList.remove('open'));
@@ -349,7 +368,7 @@
     async function loadTopSongs() {
       const container = document.getElementById('topSongsList');
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=*&order=plays.desc.nullslast,id.desc&limit=' + TOP_SONGS_LIMIT, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=*' + LIVE_FILTER + '&order=plays.desc.nullslast,id.desc&limit=' + TOP_SONGS_LIMIT, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
         if (!Array.isArray(songs) || songs.length === 0) { container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>No Top Songs Yet</h3></div>'; return; }
         container.innerHTML = songs.map(renderSongCard).join('');
@@ -359,11 +378,55 @@
     async function renderSongs() {
       const list = document.getElementById('songList');
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=*&order=id.desc&limit=' + LATEST_SONGS_LIMIT, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=*' + LIVE_FILTER + '&order=id.desc&limit=' + LATEST_SONGS_LIMIT, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
-        if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3></div>'; return; }
+        if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3></div>'; allLatestSongs = []; return; }
+        allLatestSongs = songs;
         list.innerHTML = songs.map(renderSongCard).join('');
       } catch (e) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Error</h3></div>'; }
+    }
+
+    // Latest Releases search
+    let latestSearchDebounce = null;
+    function setupLatestSearch() {
+      const input = document.getElementById('latestSearchInput');
+      const clearBtn = document.getElementById('latestClearBtn');
+      if (!input) return;
+
+      input.addEventListener('input', function(e) {
+        const q = e.target.value;
+        if (q.trim()) clearBtn.classList.add('show');
+        else clearBtn.classList.remove('show');
+
+        clearTimeout(latestSearchDebounce);
+        latestSearchDebounce = setTimeout(() => filterLatest(q), 150);
+      });
+    }
+
+    function filterLatest(query) {
+      const list = document.getElementById('songList');
+      const q = query.toLowerCase().trim();
+      if (!q) {
+        list.innerHTML = allLatestSongs.map(renderSongCard).join('');
+        return;
+      }
+      const filtered = allLatestSongs.filter(s =>
+        (s.title || '').toLowerCase().includes(q) ||
+        (s.artist_name || '').toLowerCase().includes(q) ||
+        (s.album_name || '').toLowerCase().includes(q)
+      );
+      if (filtered.length === 0) {
+        list.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><h3>No songs match</h3></div>';
+        return;
+      }
+      list.innerHTML = filtered.map(renderSongCard).join('');
+    }
+
+    window.clearLatestSearch = function() {
+      document.getElementById('latestSearchInput').value = '';
+      document.getElementById('latestClearBtn').classList.remove('show');
+      filterLatest('');
+      document.getElementById('latestSearchInput').focus();
     }
 
     async function loadTopArtists() {
@@ -371,7 +434,7 @@
       try {
         const [artistsRes, songsRes] = await Promise.all([
           fetch(SUPABASE_URL + '/rest/v1/artists?select=name,profile_pic,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }).catch(() => null),
-          fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
+          fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,verified' + LIVE_FILTER, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
         ]);
         let profiles = [];
         if (artistsRes) { const pj = await artistsRes.json(); if (Array.isArray(pj)) profiles = pj; }
@@ -449,7 +512,7 @@
     async function loadTopAlbums() {
       const container = document.getElementById('topAlbumsList');
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?album_name=not.is.null&album_name=neq.&select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?album_name=not.is.null&album_name=neq.&select=*' + LIVE_FILTER + '&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
         if (!Array.isArray(songs) || songs.length === 0) { container.innerHTML = '<div class="empty-state"><div class="icon">📀</div><h3>No albums yet.</h3></div>'; return; }
         let verifiedArtists = {};
@@ -526,6 +589,7 @@
     renderSongs();
     loadTopAlbums();
     loadTopArtists();
+    setupLatestSearch();
   </script>
 </body>
 </html>
