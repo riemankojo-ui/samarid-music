@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Search - Samarid Music</title>
-<meta name="description" content="Search for songs, artists, and albums on Samarid Music. Find and download any track instantly.">
-
+<meta name="description" content="Search for songs, artists, videos, and albums on Samarid Music. Find and download any track instantly.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -39,126 +38,38 @@
 
   .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
 
-  /* SEARCH BAR */
-  .search-box {
-    position: relative;
-    margin-bottom: 20px;
-  }
-  .search-box input {
-    width: 100%;
-    padding: 16px 50px 16px 50px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    color: var(--text);
-    font-size: 15px;
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.2s;
-  }
+  .search-box { position: relative; margin-bottom: 20px; }
+  .search-box input { width: 100%; padding: 16px 50px 16px 50px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; color: var(--text); font-size: 15px; font-family: inherit; outline: none; transition: border-color 0.2s; }
   .search-box input:focus { border-color: var(--accent); }
   .search-box input::placeholder { color: #666; }
-  .search-box .search-icon-left {
-    position: absolute;
-    left: 18px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #666;
-    font-size: 16px;
-    pointer-events: none;
-  }
-  .search-box .clear-btn {
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: #222;
-    border: none;
-    color: #888;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-  }
+  .search-box .search-icon-left { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: #666; font-size: 16px; pointer-events: none; }
+  .search-box .clear-btn { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: #222; border: none; color: #888; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 14px; }
   .search-box .clear-btn.show { display: flex; }
   .search-box .clear-btn:active { background: var(--accent); color: #fff; }
 
-  /* TABS */
-  .result-tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-bottom: 4px;
-  }
+  .result-tabs { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
   .result-tabs::-webkit-scrollbar { display: none; }
-  .result-tab {
-    flex-shrink: 0;
-    padding: 8px 16px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--text2);
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    border-radius: 20px;
-    font-family: inherit;
-    transition: 0.15s;
-  }
-  .result-tab.active {
-    background: var(--accent);
-    color: #fff;
-    border-color: var(--accent);
-  }
+  .result-tab { flex-shrink: 0; padding: 8px 16px; background: var(--card); border: 1px solid var(--border); color: var(--text2); font-size: 13px; font-weight: 700; cursor: pointer; border-radius: 20px; font-family: inherit; transition: 0.15s; }
+  .result-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-  .section-title {
-    font-size: 12px;
-    font-weight: 800;
-    color: #666;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 20px 0 12px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 4px;
-  }
+  .section-title { font-size: 12px; font-weight: 800; color: #666; letter-spacing: 1.5px; text-transform: uppercase; padding: 20px 0 12px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
   .section-title:first-child { padding-top: 0; }
-  .section-title .count {
-    color: var(--accent);
-    margin-left: 6px;
-  }
+  .section-title .count { color: var(--accent); margin-left: 6px; }
 
-  /* RESULT CARDS */
   .result-list { display: flex; flex-direction: column; }
-  .result-card {
-    display: flex;
-    gap: 14px;
-    padding: 14px 0;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
-    align-items: center;
-    transition: opacity 0.15s;
-  }
+  .result-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; transition: opacity 0.15s; }
   .result-card:last-child { border-bottom: none; }
   .result-card:active { opacity: 0.7; }
-  .result-img {
-    width: 70px;
-    height: 70px;
-    flex-shrink: 0;
-    overflow: hidden;
-    background: #000;
-    border-radius: 10px;
-  }
+  .result-img { width: 70px; height: 70px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 10px; }
   .result-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .result-img.artist { border-radius: 50%; }
+
+  .result-video-img { width: 100px; height: 56px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 10px; position: relative; }
+  .result-video-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .result-video-img::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.25); }
+  .result-video-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 28px; height: 20px; background: rgba(0,0,0,0.8); border-radius: 4px; z-index: 2; display: flex; align-items: center; justify-content: center; }
+  .result-video-play::before { content: ''; width: 0; height: 0; border-left: 8px solid #fff; border-top: 5px solid transparent; border-bottom: 5px solid transparent; margin-left: 2px; }
+
   .result-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; gap: 4px; }
   .result-cat { font-size: 10px; color: var(--accent); font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
   .result-name { font-size: 14px; font-weight: 800; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -166,33 +77,14 @@
 
   .verify-badge { display: inline-block; width: 13px; height: 13px; vertical-align: middle; flex-shrink: 0; margin-left: 2px; }
 
-  /* STATES */
-  .state-box {
-    text-align: center;
-    padding: 60px 20px;
-    color: #666;
-  }
+  .state-box { text-align: center; padding: 60px 20px; color: #666; }
   .state-box .icon { font-size: 48px; margin-bottom: 14px; opacity: 0.6; }
   .state-box h3 { font-size: 16px; font-weight: 800; color: #888; margin-bottom: 6px; }
   .state-box p { font-size: 13px; line-height: 1.5; }
   .state-box .accent { color: var(--accent); font-weight: 700; }
 
-  .loading-state { text-align: center; padding: 40px 20px; color: #888; font-size: 13px; }
-
-  /* Trending / suggestions */
   .suggestion-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; justify-content: center; }
-  .chip {
-    padding: 8px 14px;
-    background: var(--card);
-    border: 1px solid var(--border);
-    color: var(--text2);
-    font-size: 12px;
-    font-weight: 700;
-    border-radius: 16px;
-    cursor: pointer;
-    font-family: inherit;
-    transition: 0.15s;
-  }
+  .chip { padding: 8px 14px; background: var(--card); border: 1px solid var(--border); color: var(--text2); font-size: 12px; font-weight: 700; border-radius: 16px; cursor: pointer; font-family: inherit; transition: 0.15s; }
   .chip:active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
   .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: #666; border-top: 1px solid var(--border); margin-top: 40px; letter-spacing: 1px; }
@@ -228,7 +120,7 @@
   <div class="container">
     <div class="search-box">
       <i class="fas fa-search search-icon-left"></i>
-      <input type="text" id="searchInput" placeholder="Search songs, artists, albums..." autocomplete="off" autofocus>
+      <input type="text" id="searchInput" placeholder="Search songs, artists, videos, albums..." autocomplete="off" autofocus>
       <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
     </div>
 
@@ -236,7 +128,7 @@
       <div class="state-box" id="initialState">
         <div class="icon">🔍</div>
         <h3>Search Samarid Music</h3>
-        <p>Type to find any song, artist or album</p>
+        <p>Type to find any song, artist, video or album</p>
         <div class="suggestion-chips" id="suggestions"></div>
       </div>
     </div>
@@ -247,6 +139,8 @@
   <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+    const CHANNEL_ID = localStorage.getItem('samarid_channel_id') || 'UC11ElndF459dLRfV-OzwmpA';
+    const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
 
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
@@ -258,6 +152,7 @@
     let allSongs = [];
     let allArtists = [];
     let allAlbums = [];
+    let allVideos = [];
     let currentTab = 'all';
     let searchDebounce = null;
 
@@ -282,7 +177,7 @@
         <div class="state-box" id="initialState">
           <div class="icon">🔍</div>
           <h3>Search Samarid Music</h3>
-          <p>Type to find any song, artist or album</p>
+          <p>Type to find any song, artist, video or album</p>
           <div class="suggestion-chips" id="suggestions">
             ${allArtists.slice(0, 6).map(a => '<button class="chip" onclick="quickSearch(\'' + a.name.replace(/'/g, "\\'") + '\')">' + escapeHtml(a.name) + '</button>').join('')}
           </div>
@@ -296,24 +191,49 @@
       performSearch(term);
     }
 
-    // Load all data at page load (fast + enables instant client-side search)
+    function getYouTubeId(url) {
+      if (!url) return '';
+      if (url.includes('youtu.be/')) return url.split('youtu.be/')[1].split('?')[0];
+      if (url.includes('youtube.com/watch')) { try { return new URL(url).searchParams.get('v') || ''; } catch(e) {} }
+      if (url.includes('youtube.com/embed/')) return url.split('embed/')[1].split('?')[0];
+      return '';
+    }
+
     async function loadAllData() {
       try {
-        const [songsRes, artistsRes] = await Promise.all([
-          fetch(SUPABASE_URL + '/rest/v1/songs?select=id,title,artist_name,cover,category,date,verified,album_name&order=id.desc', {
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-          }),
-          fetch(SUPABASE_URL + '/rest/v1/artists?select=name,profile_pic,verified&order=name.asc', {
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-          })
+        const [songsRes, artistsRes, videosRes] = await Promise.all([
+          fetch(SUPABASE_URL + '/rest/v1/songs?select=id,title,artist_name,cover,category,date,verified,album_name&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/artists?select=name,profile_pic,verified&order=name.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/videos?select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
         ]);
 
         const songs = await songsRes.json();
         const artistsRaw = await artistsRes.json();
+        const manualVideos = await videosRes.json();
 
         allSongs = Array.isArray(songs) ? songs : [];
 
-        // Build unique artists from artists table + songs
+        // ===== Load YouTube channel videos =====
+        let ytVideos = [];
+        try {
+          const chRes = await fetch('https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' + CHANNEL_ID + '&key=' + API_KEY);
+          const chData = await chRes.json();
+          if (chData.items && chData.items.length > 0) {
+            const uploadsId = chData.items[0].contentDetails.relatedPlaylists.uploads;
+            const vRes = await fetch('https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=' + uploadsId + '&key=' + API_KEY);
+            const vData = await vRes.json();
+            ytVideos = (vData.items || []).map(item => ({
+              id: 'yt_' + item.snippet.resourceId.videoId,
+              title: item.snippet.title,
+              video_url: 'https://www.youtube.com/watch?v=' + item.snippet.resourceId.videoId,
+              video_date: new Date(item.snippet.publishedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            }));
+          }
+        } catch (e) { console.warn('YouTube fetch failed:', e); }
+
+        allVideos = [...(Array.isArray(manualVideos) ? manualVideos : []), ...ytVideos];
+
+        // Build unique artists
         const artistMap = {};
         if (Array.isArray(artistsRaw)) {
           artistsRaw.forEach(a => {
@@ -328,7 +248,7 @@
         });
         allArtists = Object.values(artistMap);
 
-        // Build unique albums from songs
+        // Build unique albums
         const albumMap = {};
         allSongs.forEach(s => {
           if (s.album_name && s.album_name.trim()) {
@@ -353,7 +273,6 @@
       }
     }
 
-    // Perform search
     function performSearch(query) {
       const q = query.toLowerCase().trim();
       if (!q) { showInitialState(); return; }
@@ -363,19 +282,15 @@
         (s.artist_name || '').toLowerCase().includes(q) ||
         (s.album_name || '').toLowerCase().includes(q)
       );
-      const artists = allArtists.filter(a =>
-        (a.name || '').toLowerCase().includes(q)
-      );
-      const albums = allAlbums.filter(al =>
-        (al.name || '').toLowerCase().includes(q) ||
-        (al.artist || '').toLowerCase().includes(q)
-      );
+      const artists = allArtists.filter(a => (a.name || '').toLowerCase().includes(q));
+      const albums = allAlbums.filter(al => (al.name || '').toLowerCase().includes(q) || (al.artist || '').toLowerCase().includes(q));
+      const videos = allVideos.filter(v => (v.title || '').toLowerCase().includes(q));
 
-      renderResults(songs, artists, albums, q);
+      renderResults(songs, artists, albums, videos, q);
     }
 
-    function renderResults(songs, artists, albums, query) {
-      const total = songs.length + artists.length + albums.length;
+    function renderResults(songs, artists, albums, videos, query) {
+      const total = songs.length + artists.length + albums.length + videos.length;
 
       if (total === 0) {
         document.getElementById('content').innerHTML = `
@@ -389,16 +304,14 @@
       }
 
       let html = '';
-
-      // Tabs
       html += '<div class="result-tabs">';
       html += `<button class="result-tab ${currentTab === 'all' ? 'active' : ''}" onclick="switchTab('all', '${query.replace(/'/g, "\\'")}')">All (${total})</button>`;
       if (songs.length) html += `<button class="result-tab ${currentTab === 'songs' ? 'active' : ''}" onclick="switchTab('songs', '${query.replace(/'/g, "\\'")}')">Songs (${songs.length})</button>`;
       if (artists.length) html += `<button class="result-tab ${currentTab === 'artists' ? 'active' : ''}" onclick="switchTab('artists', '${query.replace(/'/g, "\\'")}')">Artists (${artists.length})</button>`;
+      if (videos.length) html += `<button class="result-tab ${currentTab === 'videos' ? 'active' : ''}" onclick="switchTab('videos', '${query.replace(/'/g, "\\'")}')">Videos (${videos.length})</button>`;
       if (albums.length) html += `<button class="result-tab ${currentTab === 'albums' ? 'active' : ''}" onclick="switchTab('albums', '${query.replace(/'/g, "\\'")}')">Albums (${albums.length})</button>`;
       html += '</div>';
 
-      // Artists
       if ((currentTab === 'all' || currentTab === 'artists') && artists.length > 0) {
         html += `<div class="section-title">Artists <span class="count">${artists.length}</span></div>`;
         html += '<div class="result-list">';
@@ -415,7 +328,29 @@
         html += '</div>';
       }
 
-      // Albums
+      if ((currentTab === 'all' || currentTab === 'videos') && videos.length > 0) {
+        html += `<div class="section-title">Videos <span class="count">${videos.length}</span></div>`;
+        html += '<div class="result-list">';
+        html += videos.map(v => {
+          const vid = getYouTubeId(v.video_url);
+          const thumb = vid ? 'https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg' : '';
+          return `
+            <a href="${escapeHtml(v.video_url || '#')}" target="_blank" rel="noopener" class="result-card">
+              <div class="result-video-img">
+                ${thumb ? '<img src="' + thumb + '" alt="' + escapeHtml(v.title) + '" loading="lazy">' : ''}
+                <div class="result-video-play"></div>
+              </div>
+              <div class="result-info">
+                <div class="result-cat">Video</div>
+                <div class="result-name">${escapeHtml(v.title)}</div>
+                <div class="result-meta">${escapeHtml(v.video_date || '')}</div>
+              </div>
+            </a>
+          `;
+        }).join('');
+        html += '</div>';
+      }
+
       if ((currentTab === 'all' || currentTab === 'albums') && albums.length > 0) {
         html += `<div class="section-title">Albums <span class="count">${albums.length}</span></div>`;
         html += '<div class="result-list">';
@@ -432,7 +367,6 @@
         html += '</div>';
       }
 
-      // Songs
       if ((currentTab === 'all' || currentTab === 'songs') && songs.length > 0) {
         html += `<div class="section-title">Songs <span class="count">${songs.length}</span></div>`;
         html += '<div class="result-list">';
@@ -457,7 +391,6 @@
       performSearch(query);
     }
 
-    // Live search as user types
     document.getElementById('searchInput').addEventListener('input', function(e) {
       const query = e.target.value;
       const clearBtn = document.getElementById('clearBtn');
@@ -471,7 +404,6 @@
       }, 150);
     });
 
-    // Handle ?q= param in URL (for shareable search links)
     const urlParams = new URLSearchParams(window.location.search);
     const initialQuery = urlParams.get('q');
     if (initialQuery) {
@@ -479,7 +411,6 @@
       document.getElementById('clearBtn').classList.add('show');
     }
 
-    // Boot
     loadAllData().then(() => {
       if (initialQuery) performSearch(initialQuery);
     });
