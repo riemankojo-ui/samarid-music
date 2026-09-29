@@ -5,21 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Artist - Samarid Music</title>
 <meta name="description" content="Download Mp3 songs from Samarid Music — Ghana's newest music label.">
-
-<!-- Open Graph (WhatsApp, Facebook, Twitter previews) -->
 <meta property="og:type" content="music.musician">
 <meta property="og:site_name" content="Samarid Music">
 <meta property="og:title" id="ogTitle" content="Artist - Samarid Music">
 <meta property="og:description" id="ogDescription" content="Download Mp3 songs from Samarid Music.">
 <meta property="og:image" id="ogImage" content="https://samarid-music.vercel.app/logo.png">
 <meta property="og:url" id="ogUrl" content="https://samarid-music.vercel.app/artist-template.html">
-
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" id="twTitle" content="Artist - Samarid Music">
 <meta name="twitter:description" id="twDescription" content="Download Mp3 songs from Samarid Music.">
 <meta name="twitter:image" id="twImage" content="https://samarid-music.vercel.app/logo.png">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -89,12 +84,101 @@
   .song-card-info h3 .dash { font-weight: 600; color: var(--text); margin: 0 2px; }
   .song-card-info .date { font-size: 12.5px; color: var(--text2); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+  /* BOTTOM CONTROLS */
+  .bottom-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 22px 0 8px;
+    margin-top: 8px;
+    border-top: 1px solid var(--border);
+  }
+
+  .bottom-search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 0;
+  }
+  .bottom-search-wrap input {
+    width: 100%;
+    padding: 12px 38px 12px 38px;
+    background: transparent;
+    border: 1.5px solid var(--border);
+    border-radius: 30px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .bottom-search-wrap input::placeholder { color: #999; }
+  .bottom-search-wrap input:focus { border-color: var(--accent); }
+  .bottom-search-wrap .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    font-size: 14px;
+    pointer-events: none;
+  }
+  .bottom-search-wrap .clear-x {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #999;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+  .bottom-search-wrap .clear-x.show { display: flex; }
+  .bottom-search-wrap .clear-x:active { background: var(--accent); color: #fff; }
+
+  .next-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 20px;
+    background: transparent;
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 900;
+    cursor: pointer;
+    font-family: inherit;
+    transition: 0.15s;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  .next-btn:active { background: var(--accent); color: #fff; transform: scale(0.96); }
+  .next-btn i { font-size: 14px; }
+
+  .page-indicator {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text2);
+    padding: 0 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .loading { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 13px; }
+  .empty-state { text-align: center; padding: 60px 20px; background: #fff; border-radius: 8px; color: var(--text2); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+  .empty-state .icon { font-size: 50px; margin-bottom: 15px; opacity: 0.5; }
+  .empty-state h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
+
   .verify-badge { display: inline-block; width: 14px; height: 14px; vertical-align: middle; flex-shrink: 0; margin: 0 2px; }
 
-  .empty-state { text-align: center; padding: 60px 20px; background: #fff; border-radius: 8px; color: var(--text2); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-  .empty-state .icon { font-size: 50px; margin-bottom: 15px; }
-  .empty-state h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
-  .loading { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 13px; }
   .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 40px; }
   .footer .brand { color: var(--red); font-weight: 700; }
   .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 99999; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: opacity 0.3s; max-width: calc(100vw - 40px); text-align: center; }
@@ -148,8 +232,19 @@
 
   <div class="container">
     <div class="page-title">Browse <span class="accent" id="pageTitle">Artist</span></div>
+
     <div class="song-list" id="songList">
       <div class="loading">Loading songs...</div>
+    </div>
+
+    <div class="bottom-controls" id="bottomControls" style="display:none;">
+      <div class="bottom-search-wrap">
+        <i class="fas fa-search search-icon"></i>
+        <input type="text" id="artistSearchInput" placeholder="Search songs..." autocomplete="off">
+        <button class="clear-x" id="artistClearBtn" onclick="clearArtistSearch()">✕</button>
+      </div>
+      <span class="page-indicator" id="pageIndicator"></span>
+      <button class="next-btn" id="nextBtn" onclick="nextPage()">Next <i class="fas fa-arrow-right"></i></button>
     </div>
   </div>
 
@@ -158,8 +253,7 @@
   <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
-    const SITE_URL = "https://samarid-music.vercel.app";
-    const ARTIST_SONG_LIMIT = 15;
+    const PAGE_SIZE = 7;
 
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
@@ -172,26 +266,17 @@
     const params = new URLSearchParams(window.location.search);
     const artistName = params.get('name') || 'Samarid';
 
-    // ===== DYNAMIC SEO — TITLE + DESCRIPTION + OG TAGS =====
     const seoTitle = 'Download Mp3 ' + artistName + ' 2026 Songs | Albums for Free - Samarid Music';
     const seoDesc = 'Download all ' + artistName + ' songs in MP3. 2026 releases from Samarid Music. Free HD audio downloads on Samarid Music Ghana.';
     document.title = seoTitle;
     document.querySelector('meta[name="description"]').setAttribute('content', seoDesc);
-
     document.getElementById('ogTitle').setAttribute('content', seoTitle);
     document.getElementById('ogDescription').setAttribute('content', seoDesc);
     document.getElementById('ogUrl').setAttribute('content', window.location.href);
     document.getElementById('twTitle').setAttribute('content', seoTitle);
     document.getElementById('twDescription').setAttribute('content', seoDesc);
 
-    // JSON-LD structured data
-    const jsonLd = {
-      "@context": "https://schema.org",
-      "@type": "MusicGroup",
-      "name": artistName,
-      "url": window.location.href,
-      "description": seoDesc
-    };
+    const jsonLd = { "@context": "https://schema.org", "@type": "MusicGroup", "name": artistName, "url": window.location.href, "description": seoDesc };
     const scriptLd = document.createElement('script');
     scriptLd.type = 'application/ld+json';
     scriptLd.textContent = JSON.stringify(jsonLd);
@@ -203,6 +288,10 @@
     if (!visitorId) { visitorId = 'v_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); localStorage.setItem('samarid_visitor_id', visitorId); }
 
     let isFollowing = false;
+    let allArtistSongs = [];
+    let filteredSongs = [];
+    let currentPage = 1;
+    let isVerifiedArtist = false;
 
     window.toggleSideMenu = function(e) { e.stopPropagation(); document.getElementById('sideMenu').classList.add('open'); document.getElementById('menuOverlay').classList.add('open'); }
     window.closeSideMenu = function() { document.getElementById('sideMenu').classList.remove('open'); document.getElementById('menuOverlay').classList.remove('open'); }
@@ -266,9 +355,115 @@
       finally { btn.disabled = false; }
     }
 
-    async function loadArtistPage() {
+    // ===== RENDER SONGS =====
+    function renderSongList() {
       const list = document.getElementById('songList');
+      const bottomControls = document.getElementById('bottomControls');
+      const nextBtn = document.getElementById('nextBtn');
+      const pageIndicator = document.getElementById('pageIndicator');
+      const searchInput = document.getElementById('artistSearchInput');
+      const isSearching = searchInput.value.trim().length > 0;
 
+      if (filteredSongs.length === 0) {
+        list.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><h3>No songs match</h3><p>Try a different search.</p></div>';
+        bottomControls.style.display = 'none';
+        return;
+      }
+
+      const totalPages = Math.ceil(filteredSongs.length / PAGE_SIZE);
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const end = start + PAGE_SIZE;
+      const pageSongs = filteredSongs.slice(start, end);
+
+      const badge = isVerifiedArtist ? VERIFY_BADGE : '';
+      list.innerHTML = pageSongs.map(s => `
+        <a href="song.html?id=${s.id}" class="song-card">
+          <div class="song-card-img"><img src="${escapeHtml(s.cover)}" alt="${escapeHtml(s.title)}" loading="lazy"></div>
+          <div class="song-card-info">
+            <h3>${escapeHtml(artistName)}${badge}<span class="dash"> - </span>${escapeHtml(s.title)}</h3>
+            <div class="date">${escapeHtml(s.date || '')}</div>
+          </div>
+        </a>
+      `).join('');
+
+      // ===== RULES =====
+      // Show bottom controls if: more than 1 page, OR user is searching
+      const shouldShow = totalPages > 1 || isSearching;
+
+      if (shouldShow) {
+        bottomControls.style.display = 'flex';
+      } else {
+        bottomControls.style.display = 'none';
+        return;
+      }
+
+      // ===== NEXT BUTTON: only show when there's a next page =====
+      const hasNextPage = currentPage < totalPages;
+      if (hasNextPage) {
+        nextBtn.style.display = 'inline-flex';
+      } else {
+        nextBtn.style.display = 'none';
+      }
+
+      // ===== PAGE INDICATOR: show if more than 1 page =====
+      if (totalPages > 1) {
+        pageIndicator.style.display = 'inline';
+        pageIndicator.innerText = currentPage + '/' + totalPages;
+      } else {
+        pageIndicator.style.display = 'none';
+      }
+    }
+
+    window.nextPage = function() {
+      const totalPages = Math.ceil(filteredSongs.length / PAGE_SIZE);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderSongList();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    // ===== SEARCH =====
+    let searchDebounce = null;
+    document.getElementById('artistSearchInput').addEventListener('input', function(e) {
+      const q = e.target.value;
+      const clearBtn = document.getElementById('artistClearBtn');
+      if (q.trim()) clearBtn.classList.add('show');
+      else clearBtn.classList.remove('show');
+
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(() => {
+        applySearch(q);
+      }, 150);
+    });
+
+    function applySearch(q) {
+      const query = q.toLowerCase().trim();
+      if (!query) {
+        filteredSongs = allArtistSongs.slice();
+      } else {
+        filteredSongs = allArtistSongs.filter(s =>
+          (s.title || '').toLowerCase().includes(query) ||
+          (s.category || '').toLowerCase().includes(query)
+        );
+      }
+      currentPage = 1;
+      renderSongList();
+    }
+
+    window.clearArtistSearch = function() {
+      document.getElementById('artistSearchInput').value = '';
+      document.getElementById('artistClearBtn').classList.remove('show');
+      filteredSongs = allArtistSongs.slice();
+      currentPage = 1;
+      renderSongList();
+      document.getElementById('artistSearchInput').focus();
+    }
+
+    // ===== LOAD ARTIST PAGE =====
+    async function loadArtistPage() {
       let artistProfile = null;
       try {
         const profileRes = await fetch(SUPABASE_URL + '/rest/v1/artists?name=ilike.' + encodeURIComponent(artistName) + '&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
@@ -276,16 +471,18 @@
         if (Array.isArray(profileData) && profileData.length > 0) artistProfile = profileData[0];
       } catch (e) { console.error(e); }
 
-      let songs = [];
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=ilike.' + encodeURIComponent(artistName) + '&select=*&order=id.desc&limit=' + ARTIST_SONG_LIMIT, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        songs = await res.json();
-        if (!Array.isArray(songs)) songs = [];
-      } catch (e) { console.error(e); }
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=ilike.' + encodeURIComponent(artistName) + '&select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        allArtistSongs = await res.json();
+        if (!Array.isArray(allArtistSongs)) allArtistSongs = [];
+      } catch (e) { console.error(e); allArtistSongs = []; }
 
-      const firstSong = songs[0] || {};
-      const songsVerified = songs.some(s => s.verified === true);
+      filteredSongs = allArtistSongs.slice();
+
+      const firstSong = allArtistSongs[0] || {};
+      const songsVerified = allArtistSongs.some(s => s.verified === true);
       const isVerified = (artistProfile && artistProfile.verified) || songsVerified;
+      isVerifiedArtist = isVerified;
       const profilePic = artistProfile && artistProfile.profile_pic ? artistProfile.profile_pic : null;
       const bio = artistProfile && artistProfile.bio ? artistProfile.bio : null;
       const tiktok = safeUrl((artistProfile && artistProfile.tiktok) || firstSong.tiktok);
@@ -298,7 +495,6 @@
       else menuAvatar.innerText = artistName.charAt(0).toUpperCase();
       document.getElementById('menuArtistName').innerHTML = escapeHtml(artistName) + (isVerified ? ' ' + VERIFY_BADGE : '');
 
-      // Update OG image if we have a profile pic
       if (profilePic) {
         document.getElementById('ogImage').setAttribute('content', profilePic);
         document.getElementById('twImage').setAttribute('content', profilePic);
@@ -315,22 +511,12 @@
       if (spotify) socialHTML.push('<a href="' + escapeHtml(spotify) + '" target="_blank" rel="noopener" class="side-menu-item"><i class="fab fa-spotify spotify-icon"></i><span class="item-label">Spotify</span><span style="color:#444;">↗</span></a>');
       document.getElementById('menuSocialLinks').innerHTML = socialHTML.length > 0 ? socialHTML.join('') : '<p style="padding: 20px; text-align: center; color: #666; font-size: 13px;">No social links added yet.</p>';
 
-      if (songs.length === 0) {
-        list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>Check back soon for new music!</p></div>';
-      } else {
-        list.innerHTML = songs.map((s) => {
-          const badge = isVerified ? VERIFY_BADGE : '';
-          return `
-            <a href="song.html?id=${s.id}" class="song-card">
-              <div class="song-card-img"><img src="${escapeHtml(s.cover)}" alt="${escapeHtml(s.title)}" loading="lazy"></div>
-              <div class="song-card-info">
-                <h3>${escapeHtml(artistName)}${badge}<span class="dash"> - </span>${escapeHtml(s.title)}</h3>
-                <div class="date">${escapeHtml(s.date || '')}</div>
-              </div>
-            </a>
-          `;
-        }).join('');
+      if (allArtistSongs.length === 0) {
+        document.getElementById('songList').innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>Check back soon for new music!</p></div>';
+        return;
       }
+
+      renderSongList();
     }
 
     loadArtistPage();
