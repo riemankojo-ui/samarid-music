@@ -3,13 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manager</title>
+<title>Manager - Samarid Music</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
   :root { --accent: #ff0033; --bg: #0a0a0a; --card: #141414; --border: #222; --text2: #888; }
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
+  html, body { overflow-x: hidden; max-width: 100vw; }
   body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; padding-bottom: 90px; }
+  img { max-width: 100%; }
 
   #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
   .login-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 35px 25px; width: 100%; max-width: 400px; }
@@ -24,7 +26,7 @@
   .top-bar .title-block { flex: 1; min-width: 0; }
   .top-bar h1 { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .top-bar .brand { color: var(--accent); font-size: 9px; letter-spacing: 1px; font-weight: 700; }
-  .studio-link { background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; text-decoration: none; padding: 7px 12px; border-radius: 16px; font-size: 11px; font-weight: 900; display: flex; align-items: center; gap: 5px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(255,0,51,0.35); transition: transform 0.15s; }
+  .studio-link { background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; text-decoration: none; padding: 7px 12px; border-radius: 16px; font-size: 11px; font-weight: 900; display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
   .studio-link:active { transform: scale(0.94); }
   .logout-btn { background: transparent; border: none; color: #666; font-size: 16px; cursor: pointer; padding: 6px; flex-shrink: 0; }
 
@@ -46,45 +48,8 @@
   .sub-tabs::-webkit-scrollbar { display: none; }
   .sub-tab { flex-shrink: 0; padding: 8px 14px; background: var(--card); border: 1px solid var(--border); color: var(--text2); font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 18px; font-family: inherit; white-space: nowrap; }
   .sub-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .sub-content { display: none; }
-  .sub-content.active { display: block; }
 
-  .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
-  .stat-card img { width: 52px; height: 52px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
-  .stat-card .stat-info { flex: 1; min-width: 0; }
-  .stat-card .stat-info h4 { font-size: 13px; font-weight: 700; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .stat-card .stat-info p { font-size: 11px; color: var(--text2); display: flex; align-items: center; gap: 4px; }
-  .stat-card .stat-num { font-size: 16px; font-weight: 900; color: var(--accent); }
-
-  .comment-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; gap: 10px; align-items: flex-start; }
-  .comment-item .info { flex: 1; min-width: 0; }
-  .comment-item .meta { font-size: 11px; color: var(--accent); font-weight: 700; margin-bottom: 5px; }
-  .comment-item p { font-size: 13px; color: #ddd; line-height: 1.4; word-break: break-word; }
-  .comment-item .delete-btn { background: transparent; border: none; color: #ff0033; font-size: 16px; cursor: pointer; padding: 8px; border-radius: 8px; flex-shrink: 0; }
-
-  .video-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
-  .video-item img { width: 76px; height: 46px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: #000; }
-  .video-item .info { flex: 1; min-width: 0; }
-  .video-item .info h4 { font-size: 12px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .video-item .info p { font-size: 10px; color: var(--text2); }
-  .video-item .actions { display: flex; gap: 4px; }
-  .video-item .action-btn { background: transparent; border: none; font-size: 15px; cursor: pointer; padding: 8px; border-radius: 8px; text-decoration: none; }
-  .video-item .edit-btn { color: #00cc44; }
-  .video-item .delete-btn { color: #ff0033; }
-  .video-item .open-btn { color: #ffcc00; }
-
-  .poll-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-  .poll-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
-  .poll-row:last-child { border-bottom: none; }
-  .poll-row .label { font-size: 14px; font-weight: 600; }
-  .poll-row .count { font-size: 18px; font-weight: 900; color: var(--accent); }
-
-  .empty { text-align: center; padding: 36px 20px; color: var(--text2); font-size: 13px; }
-  .yt-note { background: #111; border: 1px dashed #333; border-radius: 10px; padding: 12px; font-size: 11px; color: #888; margin-bottom: 12px; line-height: 1.6; }
-  .yt-note strong { color: #ffcc00; }
-  .yt-note a { color: var(--accent); }
-
-  .verify-badge { display: inline-block; width: 14px; height: 14px; vertical-align: middle; flex-shrink: 0; }
+  /* ARTIST CARDS */
   .artist-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; }
   .artist-top { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
   .artist-avatar { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; color: #fff; }
@@ -99,6 +64,23 @@
   .add-artist-btn { width: 100%; padding: 14px; background: #1d9bf0; color: #fff; border: none; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; margin-bottom: 14px; }
   .add-artist-btn:active { background: #0a7ac4; }
 
+  /* VIDEO ITEMS */
+  .video-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
+  .video-item img { width: 76px; height: 46px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: #000; }
+  .video-item .info { flex: 1; min-width: 0; }
+  .video-item .info h4 { font-size: 12px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .video-item .info p { font-size: 10px; color: var(--text2); }
+  .video-item .actions { display: flex; gap: 4px; }
+  .video-item .action-btn { background: transparent; border: none; font-size: 15px; cursor: pointer; padding: 8px; border-radius: 8px; text-decoration: none; }
+  .video-item .edit-btn { color: #00cc44; }
+  .video-item .delete-btn { color: #ff0033; }
+  .video-item .open-btn { color: #ffcc00; }
+
+  .empty { text-align: center; padding: 36px 20px; color: var(--text2); font-size: 13px; }
+  .yt-note { background: #111; border: 1px dashed #333; border-radius: 10px; padding: 12px; font-size: 11px; color: #888; margin-bottom: 12px; line-height: 1.6; }
+  .yt-note strong { color: #ffcc00; }
+
+  .verify-badge { display: inline-block; width: 14px; height: 14px; vertical-align: middle; flex-shrink: 0; }
   .v-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
   .v-avatar { width: 46px; height: 46px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 17px; color: #fff; flex-shrink: 0; overflow: hidden; }
   .v-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -106,14 +88,77 @@
   .v-info h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; display: flex; align-items: center; gap: 5px; }
   .v-info p { font-size: 11px; color: var(--text2); }
   .v-btn { background: #1d9bf0; color: #fff; border: none; padding: 8px 14px; border-radius: 18px; font-weight: 700; font-size: 11px; cursor: pointer; font-family: inherit; flex-shrink: 0; }
-  .v-btn:active { background: #0a7ac4; transform: scale(0.94); }
+  .v-btn:active { transform: scale(0.94); }
   .v-btn.unverify { background: transparent; color: #888; border: 1px solid #333; }
   .v-btn.unverify:active { background: rgba(255,0,51,0.1); color: #ff0033; border-color: #ff0033; }
 
+  /* ===== COLORS TAB ===== */
+  .colors-intro {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+  .colors-intro strong { color: #fff; }
+
+  .page-color-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .page-color-info { flex: 1; min-width: 0; }
+  .page-color-info h4 { font-size: 14px; font-weight: 800; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .page-color-info p { font-size: 11px; color: var(--text2); }
+
+  .color-btns {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .color-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: 0.15s;
+    background: transparent;
+    font-family: inherit;
+    padding: 0;
+  }
+  .color-btn:active { transform: scale(0.9); }
+  .color-btn.black-btn { background: #0a0a0a; color: #fff; border-color: #333; }
+  .color-btn.white-btn { background: #ffffff; color: #0a0a0a; border-color: #e5e5e5; }
+  .color-btn.active { border-color: #ff8800; border-width: 3px; box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.2); }
+
+  .color-save-status {
+    font-size: 11px;
+    color: #00cc44;
+    font-weight: 700;
+    text-align: right;
+    padding: 0 4px;
+    margin-top: -6px;
+    margin-bottom: 8px;
+    min-height: 14px;
+  }
+
   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 6px 0 max(6px, env(safe-area-inset-bottom)); z-index: 1000; }
   .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; color: var(--text2); cursor: pointer; background: transparent; border: none; font-family: inherit; }
-  .nav-item .icon { font-size: 22px; line-height: 1; }
-  .nav-item .label { font-size: 10px; font-weight: 800; letter-spacing: 0.3px; }
+  .nav-item .icon { font-size: 20px; line-height: 1; }
+  .nav-item .label { font-size: 9px; font-weight: 800; letter-spacing: 0.3px; }
   .nav-item.active { color: var(--accent); }
 
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
@@ -169,7 +214,7 @@
     <div class="content">
       <div class="page active" data-page="artists">
         <h1 class="page-title">Artists 🎤</h1>
-        <p class="page-subtitle">Bio, photos, socials</p>
+        <p class="page-subtitle">Bio, photos, socials, Spotify</p>
         <button class="add-artist-btn" onclick="openArtistModal()"><i class="fas fa-plus"></i> Add New Artist</button>
         <div class="search-wrap">
           <i class="fas fa-search search-icon"></i>
@@ -193,31 +238,21 @@
         </div>
       </div>
 
-      <div class="page" data-page="fanbase">
-        <h1 class="page-title">Fanbase</h1>
-        <p class="page-subtitle">Comments, likes, votes</p>
-        <div class="sub-tabs">
-          <button class="sub-tab active" onclick="subTab('fb-comments', this)">💬 Comments</button>
-          <button class="sub-tab" onclick="subTab('fb-likes', this)">❤️ Likes</button>
-          <button class="sub-tab" onclick="subTab('fb-votes', this)">📊 Votes</button>
+      <div class="page" data-page="colors">
+        <h1 class="page-title">Page Colors 🎨</h1>
+        <p class="page-subtitle">Set the default theme for each page</p>
+
+        <div class="colors-intro">
+          <strong>How it works:</strong> Pick ⚫ Black or ⚪ White for each page. All visitors will see your choice by default. If a visitor changes the theme on their own device via the menu, their choice saves for them only.
         </div>
-        <div class="sub-content active" id="fb-comments">
-          <div class="search-wrap">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" id="commentSearch" placeholder="Search comments..." oninput="filterComments()">
-            <button class="clear-search" id="clearCommentSearch" onclick="clearCommentSearch()">✕</button>
-          </div>
-          <div id="commentsList"><p class="empty">Loading...</p></div>
+
+        <div class="search-wrap">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="colorSearch" placeholder="Search pages..." oninput="filterColorPages()">
+          <button class="clear-search" id="clearColorSearch" onclick="clearColorSearch()">✕</button>
         </div>
-        <div class="sub-content" id="fb-likes">
-          <div class="search-wrap">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" id="likeSearch" placeholder="Search songs..." oninput="filterLikes()">
-            <button class="clear-search" id="clearLikeSearch" onclick="clearLikeSearch()">✕</button>
-          </div>
-          <div id="likesList"><p class="empty">Loading...</p></div>
-        </div>
-        <div class="sub-content" id="fb-votes"><div id="votesList"><p class="empty">Loading...</p></div></div>
+
+        <div id="colorPagesList"><p class="empty">Loading...</p></div>
       </div>
 
       <div class="page" data-page="verify">
@@ -235,7 +270,7 @@
     <div class="bottom-nav" id="bottomNav">
       <button class="nav-item active" data-nav="artists" onclick="goTab('artists')"><div class="icon">🎤</div><div class="label">ARTISTS</div></button>
       <button class="nav-item" data-nav="videos" onclick="goTab('videos')"><div class="icon">🎬</div><div class="label">VIDEOS</div></button>
-      <button class="nav-item" data-nav="fanbase" onclick="goTab('fanbase')"><div class="icon">💬</div><div class="label">FANBASE</div></button>
+      <button class="nav-item" data-nav="colors" onclick="goTab('colors')"><div class="icon">🎨</div><div class="label">COLORS</div></button>
       <button class="nav-item" data-nav="verify" onclick="goTab('verify')"><div class="icon">🔵</div><div class="label">VERIFY</div></button>
     </div>
   </div>
@@ -248,9 +283,10 @@
       <div class="form-group"><label>Artist Name *</label><input type="text" id="artistName" placeholder="e.g. Samarid" oninput="updateAvatarPreview()"></div>
       <div class="form-group"><label>Profile Photo URL</label><input type="text" id="artistPic" placeholder="https://...jpg" oninput="updateAvatarPreview()"></div>
       <div class="form-group"><label>Bio / Story</label><textarea id="artistBio"></textarea></div>
-      <div class="form-group"><label>TikTok Link</label><input type="text" id="artistTiktok"></div>
-      <div class="form-group"><label>Instagram Link</label><input type="text" id="artistInstagram"></div>
-      <div class="form-group"><label>YouTube Link</label><input type="text" id="artistYoutube"></div>
+      <div class="form-group"><label>TikTok Link</label><input type="text" id="artistTiktok" placeholder="https://tiktok.com/@..."></div>
+      <div class="form-group"><label>Instagram Link</label><input type="text" id="artistInstagram" placeholder="https://instagram.com/..."></div>
+      <div class="form-group"><label>YouTube Link</label><input type="text" id="artistYoutube" placeholder="https://youtube.com/@..."></div>
+      <div class="form-group"><label>Spotify Link 🎧</label><input type="text" id="artistSpotify" placeholder="https://open.spotify.com/artist/..."></div>
       <div class="modal-btns">
         <button class="cancel" onclick="closeArtistModal()">Cancel</button>
         <button class="confirm-green" onclick="saveArtist()">Save</button>
@@ -294,22 +330,37 @@
 
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
+    // Available pages for the Colors tab
+    const PAGES = [
+      { key: 'index', name: 'Homepage', url: 'index.html' },
+      { key: 'song', name: 'Song Page', url: 'song.html' },
+      { key: 'artist', name: 'Artist Page', url: 'artist-template.html' },
+      { key: 'album', name: 'Album Page', url: 'album.html' },
+      { key: 'albums', name: 'Albums Page', url: 'albums.html' },
+      { key: 'artists', name: 'Artists Page', url: 'artists.html' },
+      { key: 'videos', name: 'Videos Page', url: 'videos.html' },
+      { key: 'search', name: 'Search Page', url: 'search.html' }
+    ];
+
+    function escapeHtml(s) {
+      if (s === null || s === undefined) return '';
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
     let allArtists = [];
     let allVerifyList = [];
-    let allComments = [];
-    let allLikes = [];
     let allManualVideos = [];
     let allYouTubeVideos = [];
-    let songMap = {};
+    let pageSettings = {};
     let pendingConfirm = null;
 
+    // ===== AUTH =====
     window.togglePassword = function() {
       const input = document.getElementById('passwordInput');
       const icon = document.getElementById('eyeIcon');
       if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; }
       else { input.type = 'password'; icon.innerText = '👁️'; }
     }
-
     window.checkPassword = function() {
       const input = document.getElementById('passwordInput').value;
       const status = document.getElementById('loginStatus');
@@ -322,17 +373,14 @@
         document.getElementById('passwordInput').value = '';
       }
     }
-
     window.logout = function() { if (confirm('Log out?')) location.reload(); }
 
     async function bootApp() {
       loadArtists();
       loadVerifyList();
-      loadComments();
-      loadLikes();
-      loadVotes();
       loadManualVideos();
       loadYouTubeVideos();
+      loadPageSettings();
     }
 
     window.goTab = function(tab) {
@@ -343,6 +391,7 @@
         b.classList.toggle('active', b.dataset.nav === tab);
       });
       if (tab === 'verify') loadVerifyList();
+      if (tab === 'colors') loadPageSettings();
       window.scrollTo(0, 0);
     }
 
@@ -399,10 +448,10 @@
       list.innerHTML = filtered.map(a => `
         <div class="artist-card">
           <div class="artist-top">
-            <div class="artist-avatar">${a.profile_pic ? '<img src="' + a.profile_pic + '">' : (a.name || '?').charAt(0).toUpperCase()}</div>
+            <div class="artist-avatar">${a.profile_pic ? '<img src="' + escapeHtml(a.profile_pic) + '">' : escapeHtml((a.name || '?').charAt(0).toUpperCase())}</div>
             <div class="artist-meta">
-              <h4>${a.name}${a.verified ? ' ' + VERIFY_BADGE : ''}${!a.id ? ' <span style="font-size:10px; color:#666;">(no profile)</span>' : ''}</h4>
-              <p>${a.bio ? a.bio.substring(0, 50) + (a.bio.length > 50 ? '…' : '') : 'No bio yet'}</p>
+              <h4>${escapeHtml(a.name)}${a.verified ? ' ' + VERIFY_BADGE : ''}${!a.id ? ' <span style="font-size:10px; color:#666;">(no profile)</span>' : ''}</h4>
+              <p>${a.bio ? escapeHtml(a.bio.substring(0, 50)) + (a.bio.length > 50 ? '…' : '') : 'No bio yet'}</p>
             </div>
           </div>
           <div class="artist-actions">
@@ -432,13 +481,12 @@
       document.getElementById('artistTiktok').value = artist ? (artist.tiktok || '') : '';
       document.getElementById('artistInstagram').value = artist ? (artist.instagram || '') : '';
       document.getElementById('artistYoutube').value = artist ? (artist.youtube || '') : '';
+      document.getElementById('artistSpotify').value = artist ? (artist.spotify || '') : '';
       document.getElementById('artistSaveStatus').innerText = '';
       updateAvatarPreview();
       document.getElementById('artistModal').classList.add('open');
     }
-
     window.closeArtistModal = function() { document.getElementById('artistModal').classList.remove('open'); }
-
     window.updateAvatarPreview = function() {
       const name = document.getElementById('artistName').value.trim();
       const pic = document.getElementById('artistPic').value.trim();
@@ -446,7 +494,6 @@
       if (pic) preview.innerHTML = '<img src="' + pic + '" onerror="this.style.display=\'none\'">';
       else preview.innerText = name ? name.charAt(0).toUpperCase() : '?';
     }
-
     window.saveArtist = async function() {
       const status = document.getElementById('artistSaveStatus');
       const id = document.getElementById('artistId').value;
@@ -456,12 +503,13 @@
       const tiktok = document.getElementById('artistTiktok').value.trim();
       const instagram = document.getElementById('artistInstagram').value.trim();
       const youtube = document.getElementById('artistYoutube').value.trim();
+      const spotify = document.getElementById('artistSpotify').value.trim();
 
       if (!name) { status.style.color = '#ff0033'; status.innerText = '❌ Name required'; return; }
       status.style.color = '#ffcc00'; status.innerText = '⏳ Saving...';
 
       try {
-        const payload = { name, profile_pic, bio, tiktok, instagram, youtube };
+        const payload = { name, profile_pic, bio, tiktok, instagram, youtube, spotify };
         let res;
         if (id) {
           res = await fetch(SUPABASE_URL + '/rest/v1/artists?id=eq.' + id, {
@@ -482,6 +530,88 @@
       } catch (e) {
         status.style.color = '#ff0033';
         status.innerText = '❌ ' + (e.message.includes('duplicate') ? 'Artist already exists' : e.message.substring(0, 80));
+      }
+    }
+
+    // ===== COLORS =====
+    async function loadPageSettings() {
+      const list = document.getElementById('colorPagesList');
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/page_settings?select=*', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const data = await res.json();
+        pageSettings = {};
+        if (Array.isArray(data)) data.forEach(row => { pageSettings[row.page_name] = row.theme; });
+        // Ensure all pages have a value
+        PAGES.forEach(p => { if (!pageSettings[p.key]) pageSettings[p.key] = 'light'; });
+        renderColorPages('');
+      } catch (e) {
+        console.error(e);
+        list.innerHTML = '<p class="empty" style="color:#ff0033;">Could not load settings. Did you run the SQL?</p>';
+      }
+    }
+
+    function renderColorPages(query) {
+      const list = document.getElementById('colorPagesList');
+      let filtered = PAGES;
+      if (query) filtered = PAGES.filter(p => p.name.toLowerCase().includes(query) || p.key.toLowerCase().includes(query));
+      if (filtered.length === 0) {
+        list.innerHTML = '<p class="empty">No pages match.</p>';
+        return;
+      }
+      list.innerHTML = filtered.map(p => {
+        const current = pageSettings[p.key] || 'light';
+        return `
+          <div class="page-color-item">
+            <div class="page-color-info">
+              <h4>${escapeHtml(p.name)}</h4>
+              <p>${escapeHtml(p.url)}</p>
+            </div>
+            <div class="color-btns">
+              <button class="color-btn black-btn ${current === 'dark' ? 'active' : ''}" onclick="setPageColor('${p.key}', 'dark', this)" title="Set Black">⚫</button>
+              <button class="color-btn white-btn ${current === 'light' ? 'active' : ''}" onclick="setPageColor('${p.key}', 'light', this)" title="Set White">⚪</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.filterColorPages = function() {
+      const q = document.getElementById('colorSearch').value.toLowerCase().trim();
+      document.getElementById('clearColorSearch').classList.toggle('show', !!q);
+      renderColorPages(q);
+    }
+    window.clearColorSearch = function() {
+      document.getElementById('colorSearch').value = '';
+      document.getElementById('clearColorSearch').classList.remove('show');
+      renderColorPages('');
+    }
+
+    window.setPageColor = async function(pageKey, theme, btn) {
+      // Update local + button states instantly
+      pageSettings[pageKey] = theme;
+      const item = btn.closest('.page-color-item');
+      item.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      try {
+        // Try update first
+        const res = await fetch(SUPABASE_URL + '/rest/v1/page_settings?page_name=eq.' + encodeURIComponent(pageKey), {
+          method: 'PATCH',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ theme: theme })
+        });
+
+        // If no row was updated (page not in DB), insert it
+        if (!res.ok) throw new Error('Update failed');
+      } catch (e) {
+        // Fallback: try INSERT in case the row doesn't exist
+        try {
+          await fetch(SUPABASE_URL + '/rest/v1/page_settings', {
+            method: 'POST',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+            body: JSON.stringify({ page_name: pageKey, theme: theme })
+          });
+        } catch (e2) { console.error('Save failed:', e2); }
       }
     }
 
@@ -526,9 +656,9 @@
       }
       list.innerHTML = filtered.map(a => `
         <div class="v-card">
-          <div class="v-avatar">${a.profile_pic ? '<img src="' + a.profile_pic + '">' : a.name.charAt(0).toUpperCase()}</div>
+          <div class="v-avatar">${a.profile_pic ? '<img src="' + escapeHtml(a.profile_pic) + '">' : escapeHtml(a.name.charAt(0).toUpperCase())}</div>
           <div class="v-info">
-            <h4>${a.name}${a.verified ? ' ' + VERIFY_BADGE : ''}</h4>
+            <h4>${escapeHtml(a.name)}${a.verified ? ' ' + VERIFY_BADGE : ''}</h4>
             <p>${a.verified ? '✅ Verified' : 'Not verified'}</p>
           </div>
           <button class="v-btn ${a.verified ? 'unverify' : ''}" onclick="askVerify('${a.name.replace(/'/g, "\\'")}', ${a.verified})">
@@ -557,11 +687,11 @@
       const btn = document.getElementById('confirmBtn');
       if (pendingConfirm.value) {
         icon.innerText = '🔵'; title.innerText = 'Verify Artist';
-        text.innerHTML = 'Give the blue checkmark to <strong>' + name + '</strong>?<br><br><small style="color:#999">This will update ALL their songs and profile.</small>';
+        text.innerHTML = 'Give the blue checkmark to <strong>' + escapeHtml(name) + '</strong>?<br><br><small style="color:#999">This will update ALL their songs and profile.</small>';
         btn.innerText = 'Verify'; btn.className = 'confirm-blue';
       } else {
         icon.innerText = '⚠️'; title.innerText = 'Unverify Artist';
-        text.innerHTML = 'Remove the blue checkmark from <strong>' + name + '</strong>?<br><br><small style="color:#999">This will update ALL their songs and profile.</small>';
+        text.innerHTML = 'Remove the blue checkmark from <strong>' + escapeHtml(name) + '</strong>?<br><br><small style="color:#999">This will update ALL their songs and profile.</small>';
         btn.innerText = 'Unverify'; btn.className = 'confirm-red';
       }
       document.getElementById('confirmModal').classList.add('open');
@@ -577,14 +707,12 @@
       const { name, value } = pendingConfirm;
       closeConfirmModal();
       try {
-        // 1. Update ALL songs by this artist (case-insensitive match)
         const res1 = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=ilike.' + encodeURIComponent(name), {
           method: 'PATCH',
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
           body: JSON.stringify({ verified: value })
         });
 
-        // 2. Update the artist profile (case-insensitive)
         try {
           await fetch(SUPABASE_URL + '/rest/v1/artists?name=ilike.' + encodeURIComponent(name), {
             method: 'PATCH',
@@ -596,140 +724,10 @@
         if (res1.ok) {
           loadVerifyList();
           loadArtists();
-          loadLikes();
         } else {
           alert('Could not update songs.');
         }
       } catch (e) { alert('Network error.'); }
-    }
-
-    // ===== COMMENTS =====
-    async function loadComments() {
-      const container = document.getElementById('commentsList');
-      try {
-        const [commentsRes, songsRes] = await Promise.all([
-          fetch(SUPABASE_URL + '/rest/v1/comments?select=*&order=id.desc&limit=200', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
-          fetch(SUPABASE_URL + '/rest/v1/songs?select=id,title', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
-        ]);
-        allComments = await commentsRes.json();
-        if (!Array.isArray(allComments)) allComments = [];
-        const songs = await songsRes.json();
-        songMap = {};
-        songs.forEach(s => songMap[s.id] = s.title);
-        renderComments('');
-      } catch (e) { container.innerHTML = '<p class="empty" style="color:#ff0033;">Error.</p>'; }
-    }
-
-    function renderComments(query) {
-      const container = document.getElementById('commentsList');
-      let filtered = allComments;
-      if (query) {
-        filtered = allComments.filter(c =>
-          (c.name || '').toLowerCase().includes(query) ||
-          (c.message || '').toLowerCase().includes(query) ||
-          (songMap[c.song_id] || '').toLowerCase().includes(query)
-        );
-      }
-      if (filtered.length === 0) { container.innerHTML = '<p class="empty">' + (query ? 'No matches.' : 'No comments yet.') + '</p>'; return; }
-      container.innerHTML = filtered.map(c => `
-        <div class="comment-item">
-          <div class="info">
-            <div class="meta">💬 ${c.name || 'Anonymous'} on "${songMap[c.song_id] || 'Unknown'}"</div>
-            <p>${c.message}</p>
-          </div>
-          <button class="delete-btn" onclick="deleteComment(${c.id})"><i class="fas fa-trash"></i></button>
-        </div>
-      `).join('');
-    }
-
-    window.filterComments = function() {
-      const q = document.getElementById('commentSearch').value.toLowerCase().trim();
-      document.getElementById('clearCommentSearch').classList.toggle('show', !!q);
-      renderComments(q);
-    }
-    window.clearCommentSearch = function() {
-      document.getElementById('commentSearch').value = '';
-      document.getElementById('clearCommentSearch').classList.remove('show');
-      renderComments('');
-    }
-
-    window.deleteComment = async function(id) {
-      if (!confirm('Delete this comment?')) return;
-      try {
-        await fetch(SUPABASE_URL + '/rest/v1/comments?id=eq.' + id, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        loadComments();
-      } catch (e) { alert('Could not delete.'); }
-    }
-
-    // ===== LIKES =====
-    async function loadLikes() {
-      try {
-        const [songsRes, likesRes] = await Promise.all([
-          fetch(SUPABASE_URL + '/rest/v1/songs?select=id,title,cover,artist_name,verified&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
-          fetch(SUPABASE_URL + '/rest/v1/likes?select=song_id', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
-        ]);
-        const songs = await songsRes.json();
-        const likes = await likesRes.json();
-        const likeMap = {};
-        likes.forEach(l => likeMap[l.song_id] = (likeMap[l.song_id] || 0) + 1);
-        allLikes = songs.map(s => ({ id: s.id, title: s.title, cover: s.cover, artist: s.artist_name || 'Samarid', verified: s.verified, count: likeMap[s.id] || 0 }));
-        renderLikes('');
-      } catch (e) { document.getElementById('likesList').innerHTML = '<p class="empty" style="color:#ff0033;">Error.</p>'; }
-    }
-
-    function renderLikes(query) {
-      const container = document.getElementById('likesList');
-      let filtered = allLikes;
-      if (query) filtered = allLikes.filter(s => s.title.toLowerCase().includes(query) || s.artist.toLowerCase().includes(query));
-      if (filtered.length === 0) { container.innerHTML = '<p class="empty">' + (query ? 'No matches.' : 'No songs.') + '</p>'; return; }
-      container.innerHTML = filtered.map(s => `
-        <div class="stat-card">
-          <img src="${s.cover}">
-          <div class="stat-info"><h4>${s.title}</h4><p>${s.artist}${s.verified ? ' ' + VERIFY_BADGE : ''}</p></div>
-          <div class="stat-num">❤️ ${s.count}</div>
-        </div>
-      `).join('');
-    }
-
-    window.filterLikes = function() {
-      const q = document.getElementById('likeSearch').value.toLowerCase().trim();
-      document.getElementById('clearLikeSearch').classList.toggle('show', !!q);
-      renderLikes(q);
-    }
-    window.clearLikeSearch = function() {
-      document.getElementById('likeSearch').value = '';
-      document.getElementById('clearLikeSearch').classList.remove('show');
-      renderLikes('');
-    }
-
-    // ===== VOTES =====
-    async function loadVotes() {
-      const container = document.getElementById('votesList');
-      try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/votes?select=choice', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        const votes = await res.json();
-        const counts = { love: 0, sometimes: 0, one: 0 };
-        votes.forEach(v => { if (counts[v.choice] !== undefined) counts[v.choice]++; });
-        const total = counts.love + counts.sometimes + counts.one;
-        container.innerHTML = `
-          <div class="poll-card">
-            <h3 style="font-size: 15px; font-weight: 800; margin-bottom: 15px; text-align: center;">💬 How Do You Like Samarid?</h3>
-            <div class="poll-row"><span class="label">❤️ Love this artist</span><span class="count">${counts.love}</span></div>
-            <div class="poll-row"><span class="label">⏰ Sometimes</span><span class="count">${counts.sometimes}</span></div>
-            <div class="poll-row"><span class="label">🎵 One song only</span><span class="count">${counts.one}</span></div>
-            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text2); text-align: center;"><strong>Total:</strong> ${total}</div>
-          </div>
-          <button style="width:100%; padding:14px; background:#222; border:1px solid #333; margin-top:12px; border-radius:10px; color:#fff; font-family:inherit; font-weight:700; cursor:pointer;" onclick="resetVotes()">🗑️ Reset All Votes</button>
-        `;
-      } catch (e) { container.innerHTML = '<p class="empty" style="color:#ff0033;">Error.</p>'; }
-    }
-
-    window.resetVotes = async function() {
-      if (!confirm('Delete ALL votes?')) return;
-      try {
-        await fetch(SUPABASE_URL + '/rest/v1/votes?id=gt.0', { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        loadVotes();
-      } catch (e) { alert('Could not reset.'); }
     }
 
     // ===== MANUAL VIDEOS =====
@@ -761,7 +759,7 @@
         return `
           <div class="video-item">
             ${thumb ? '<img src="' + thumb + '">' : ''}
-            <div class="info"><h4>${v.title}</h4><p>${v.video_date || 'No date'}</p></div>
+            <div class="info"><h4>${escapeHtml(v.title)}</h4><p>${escapeHtml(v.video_date || 'No date')}</p></div>
             <div class="actions">
               <button class="action-btn edit-btn" onclick='openEditVideoModal(${JSON.stringify(v).replace(/'/g, "&#39;")})'><i class="fas fa-edit"></i></button>
               <button class="action-btn delete-btn" onclick="deleteManualVideo(${v.id})"><i class="fas fa-trash"></i></button>
@@ -832,7 +830,7 @@
       container.innerHTML = filtered.map(v => `
         <div class="video-item">
           <img src="https://i.ytimg.com/vi/${v.videoId}/mqdefault.jpg">
-          <div class="info"><h4>${v.title}</h4><p>${v.date}</p></div>
+          <div class="info"><h4>${escapeHtml(v.title)}</h4><p>${v.date}</p></div>
           <a href="https://studio.youtube.com/video/${v.videoId}/edit" target="_blank" class="action-btn open-btn"><i class="fas fa-external-link-alt"></i></a>
         </div>
       `).join('');
