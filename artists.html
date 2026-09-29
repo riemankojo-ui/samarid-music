@@ -12,26 +12,22 @@
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 40px; }
 
-  /* HEADER */
   .header { position: sticky; top: 0; background: #111111; padding: 12px 16px; display: flex; align-items: center; gap: 10px; z-index: 100; }
   .back-btn { background: #222; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
   .back-btn:active { background: var(--accent); }
   .logo { font-size: 18px; font-weight: 900; color: #fff; text-decoration: none; flex: 1; text-align: center; }
   .logo span { color: var(--accent); }
 
-  /* PAGE HEADER */
   .page-header { max-width: 700px; margin: 0 auto; padding: 30px 16px 8px; }
   .page-title { font-size: 28px; font-weight: 900; letter-spacing: -0.8px; margin-bottom: 6px; color: var(--text); }
   .page-sub { font-size: 13px; color: var(--text2); line-height: 1.5; }
 
-  /* SEARCH */
   .search-wrap { position: relative; max-width: 700px; margin: 20px auto 20px; padding: 0 16px; }
   .search-wrap i { position: absolute; left: 30px; top: 50%; transform: translateY(-50%); color: var(--text2); font-size: 13px; }
   .search-input { width: 100%; padding: 13px 14px 13px 42px; background: #f5f5f5; border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: inherit; }
   .search-input:focus { outline: none; border-color: var(--orange); background: #fff; }
   .search-input::placeholder { color: var(--text2); }
 
-  /* ARTIST GRID — 4 COLUMNS */
   .artist-grid {
     max-width: 700px;
     margin: 0 auto;
@@ -54,7 +50,6 @@
   }
   .artist-cell:active { transform: scale(0.92); }
 
-  /* Avatar circle */
   .artist-avatar {
     width: 56px;
     height: 56px;
@@ -75,7 +70,6 @@
   }
   .artist-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-  /* Tiny verified badge on avatar */
   .artist-avatar .badge-on-avatar {
     position: absolute;
     bottom: -2px;
@@ -94,7 +88,6 @@
     height: 12px;
   }
 
-  /* Name under avatar */
   .artist-name {
     font-size: 11px;
     font-weight: 700;
@@ -144,14 +137,12 @@
 
   <div class="artist-grid" id="artistGrid">
     <div class="loading">
-      <div class="icon">🎤</div>
+      <div class="icon"> </div>
       <h3>Loading artists...</h3>
     </div>
   </div>
 
-  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
-
-  <script>
+  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>  <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
 
@@ -180,6 +171,7 @@
           if (p.name) profileMap[p.name.trim().toLowerCase()] = p;
         });
 
+        // ✅ Only build artists from songs — orphan artist profiles are ignored
         const artistMap = {};
 
         (Array.isArray(songs) ? songs : []).forEach(s => {
@@ -187,14 +179,13 @@
           const key = name.toLowerCase();
           if (!artistMap[key]) artistMap[key] = { name: name, verified: false, profile_pic: null };
           if (s.verified) artistMap[key].verified = true;
-        });
 
-        profiles.forEach(p => {
-          if (!p.name) return;
-          const key = p.name.trim().toLowerCase();
-          if (!artistMap[key]) artistMap[key] = { name: p.name, verified: false, profile_pic: null };
-          if (p.verified) artistMap[key].verified = true;
-          if (p.profile_pic) artistMap[key].profile_pic = p.profile_pic;
+          const p = profileMap[key];
+          if (p) {
+            if (p.verified) artistMap[key].verified = true;
+            if (p.profile_pic) artistMap[key].profile_pic = p.profile_pic;
+            if (p.name) artistMap[key].name = p.name;
+          }
         });
 
         allArtists = Object.values(artistMap).sort((a, b) =>

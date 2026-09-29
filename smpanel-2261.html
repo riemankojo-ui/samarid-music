@@ -34,7 +34,7 @@
   .page { display: none; }
   .page.active { display: block; animation: fadeIn 0.25s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-  .page-title { font-size: 20px; font-weight: 900; margin-bottom: 4px; }
+  .page-title { font-size: 20px; font-weight: 900; margin-bottom: 4px; letter-spacing: -0.3px; }
   .page-subtitle { font-size: 12px; color: var(--text2); margin-bottom: 16px; }
 
   .search-wrap { position: relative; margin-bottom: 14px; }
@@ -46,10 +46,10 @@
 
   .sub-tabs { display: flex; gap: 6px; margin-bottom: 14px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
   .sub-tabs::-webkit-scrollbar { display: none; }
-  .sub-tab { flex-shrink: 0; padding: 8px 14px; background: var(--card); border: 1px solid var(--border); color: var(--text2); font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 18px; font-family: inherit; white-space: nowrap; }
+  .sub-tab { flex-shrink: 0; padding: 8px 14px; background: var(--card); border: 1px solid var(--border); color: var(--text2); font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 18px; font-family: inherit; white-space: nowrap; display: flex; align-items: center; gap: 6px; letter-spacing: 0.3px; }
   .sub-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .sub-tab i { font-size: 12px; }
 
-  /* ARTIST CARDS */
   .artist-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; }
   .artist-top { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
   .artist-avatar { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 20px; color: #fff; }
@@ -61,10 +61,9 @@
   .artist-actions button { background: transparent; border: 1px solid #2a2a2a; color: #aaa; font-size: 12px; font-weight: 700; cursor: pointer; padding: 8px 12px; border-radius: 10px; font-family: inherit; display: flex; align-items: center; gap: 5px; flex: 1; justify-content: center; }
   .artist-actions .edit-btn { color: #00cc44; border-color: #00cc4433; }
 
-  .add-artist-btn { width: 100%; padding: 14px; background: #1d9bf0; color: #fff; border: none; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; margin-bottom: 14px; }
+  .add-artist-btn { width: 100%; padding: 14px; background: #1d9bf0; color: #fff; border: none; border-radius: 12px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; margin-bottom: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.3px; }
   .add-artist-btn:active { background: #0a7ac4; }
 
-  /* VIDEO ITEMS */
   .video-item { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
   .video-item img { width: 76px; height: 46px; border-radius: 6px; object-fit: cover; flex-shrink: 0; background: #000; }
   .video-item .info { flex: 1; min-width: 0; }
@@ -77,7 +76,8 @@
   .video-item .open-btn { color: #ffcc00; }
 
   .empty { text-align: center; padding: 36px 20px; color: var(--text2); font-size: 13px; }
-  .yt-note { background: #111; border: 1px dashed #333; border-radius: 10px; padding: 12px; font-size: 11px; color: #888; margin-bottom: 12px; line-height: 1.6; }
+  .yt-note { background: #111; border: 1px dashed #333; border-radius: 10px; padding: 12px; font-size: 11px; color: #888; margin-bottom: 12px; line-height: 1.6; display: flex; align-items: flex-start; gap: 8px; }
+  .yt-note i { color: #ffcc00; font-size: 14px; flex-shrink: 0; margin-top: 1px; }
   .yt-note strong { color: #ffcc00; }
 
   .verify-badge { display: inline-block; width: 14px; height: 14px; vertical-align: middle; flex-shrink: 0; }
@@ -92,79 +92,31 @@
   .v-btn.unverify { background: transparent; color: #888; border: 1px solid #333; }
   .v-btn.unverify:active { background: rgba(255,0,51,0.1); color: #ff0033; border-color: #ff0033; }
 
-  /* ===== COLORS TAB ===== */
-  .colors-intro {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 16px;
-    margin-bottom: 16px;
-    font-size: 12px;
-    color: var(--text2);
-    line-height: 1.6;
-  }
+  .colors-intro { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; font-size: 12px; color: var(--text2); line-height: 1.6; }
   .colors-intro strong { color: #fff; }
 
-  .page-color-item {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 16px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+  .page-color-item { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
   .page-color-info { flex: 1; min-width: 0; }
   .page-color-info h4 { font-size: 14px; font-weight: 800; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .page-color-info p { font-size: 11px; color: var(--text2); }
 
-  .color-btns {
-    display: flex;
-    gap: 6px;
-    flex-shrink: 0;
-  }
-  .color-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    border: 2px solid var(--border);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    transition: 0.15s;
-    background: transparent;
-    font-family: inherit;
-    padding: 0;
-  }
+  .color-btns { display: flex; gap: 6px; flex-shrink: 0; }
+  .color-btn { width: 40px; height: 40px; border-radius: 12px; border: 2px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: 0.15s; background: transparent; font-family: inherit; padding: 0; }
   .color-btn:active { transform: scale(0.9); }
   .color-btn.black-btn { background: #0a0a0a; color: #fff; border-color: #333; }
   .color-btn.white-btn { background: #ffffff; color: #0a0a0a; border-color: #e5e5e5; }
   .color-btn.active { border-color: #ff8800; border-width: 3px; box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.2); }
 
-  .color-save-status {
-    font-size: 11px;
-    color: #00cc44;
-    font-weight: 700;
-    text-align: right;
-    padding: 0 4px;
-    margin-top: -6px;
-    margin-bottom: 8px;
-    min-height: 14px;
-  }
-
   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 6px 0 max(6px, env(safe-area-inset-bottom)); z-index: 1000; }
   .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; color: var(--text2); cursor: pointer; background: transparent; border: none; font-family: inherit; }
   .nav-item .icon { font-size: 20px; line-height: 1; }
-  .nav-item .label { font-size: 9px; font-weight: 800; letter-spacing: 0.3px; }
+  .nav-item .label { font-size: 9px; font-weight: 800; letter-spacing: 0.5px; }
   .nav-item.active { color: var(--accent); }
 
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
   .modal.open { display: flex; }
   .modal-inner { background: #141414; border: 1px solid #2a2a2a; border-radius: 20px; padding: 24px 20px; width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; }
-  .modal-inner h3 { font-size: 17px; font-weight: 800; margin-bottom: 15px; text-align: center; }
+  .modal-inner h3 { font-size: 17px; font-weight: 800; margin-bottom: 15px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
   .modal-inner p { font-size: 13px; color: #999; text-align: center; margin-bottom: 18px; line-height: 1.5; }
   .modal-inner p strong { color: #fff; }
   .modal-btns { display: flex; gap: 10px; margin-top: 15px; }
@@ -183,8 +135,7 @@
   .preview-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 28px; color: #fff; overflow: hidden; }
   .preview-avatar img { width: 100%; height: 100%; object-fit: cover; }
 </style>
-</head>
-<body>
+</head><body>
 
   <div id="loginScreen">
     <div class="login-box">
@@ -213,7 +164,7 @@
 
     <div class="content">
       <div class="page active" data-page="artists">
-        <h1 class="page-title">Artists 🎤</h1>
+        <h1 class="page-title">Artists</h1>
         <p class="page-subtitle">Bio, photos, socials, Spotify</p>
         <button class="add-artist-btn" onclick="openArtistModal()"><i class="fas fa-plus"></i> Add New Artist</button>
         <div class="search-wrap">
@@ -228,22 +179,22 @@
         <h1 class="page-title">Videos</h1>
         <p class="page-subtitle">All videos on your site</p>
         <div class="sub-tabs">
-          <button class="sub-tab active" onclick="subTab('vd-mine', this)">🎬 My Videos</button>
-          <button class="sub-tab" onclick="subTab('vd-yt', this)">▶️ YouTube</button>
+          <button class="sub-tab active" onclick="subTab('vd-mine', this)"><i class="fas fa-film"></i> My Videos</button>
+          <button class="sub-tab" onclick="subTab('vd-yt', this)"><i class="fab fa-youtube"></i> YouTube</button>
         </div>
         <div class="sub-content active" id="vd-mine"><div id="manualVideosList"><p class="empty">Loading...</p></div></div>
         <div class="sub-content" id="vd-yt">
-          <div class="yt-note"><strong>⚠️ Manage on YouTube:</strong> Tap the yellow arrow to edit/delete in YouTube Studio.</div>
+          <div class="yt-note"><i class="fas fa-exclamation-triangle"></i><div><strong>Manage on YouTube:</strong> Tap the yellow arrow to edit/delete in YouTube Studio.</div></div>
           <div id="youtubeVideosList"><p class="empty">Loading...</p></div>
         </div>
       </div>
 
       <div class="page" data-page="colors">
-        <h1 class="page-title">Page Colors 🎨</h1>
+        <h1 class="page-title">Page Colors</h1>
         <p class="page-subtitle">Set the default theme for each page</p>
 
         <div class="colors-intro">
-          <strong>How it works:</strong> Pick ⚫ Black or ⚪ White for each page. All visitors will see your choice by default. If a visitor changes the theme on their own device via the menu, their choice saves for them only.
+          <strong>How it works:</strong> Pick Black or White for each page. All visitors will see your choice by default. If a visitor changes the theme on their own device via the menu, their choice saves for them only.
         </div>
 
         <div class="search-wrap">
@@ -256,7 +207,7 @@
       </div>
 
       <div class="page" data-page="verify">
-        <h1 class="page-title">Verify 🔵</h1>
+        <h1 class="page-title">Verify</h1>
         <p class="page-subtitle">Give the blue checkmark to trusted artists</p>
         <div class="search-wrap">
           <i class="fas fa-search search-icon"></i>
@@ -268,10 +219,10 @@
     </div>
 
     <div class="bottom-nav" id="bottomNav">
-      <button class="nav-item active" data-nav="artists" onclick="goTab('artists')"><div class="icon">🎤</div><div class="label">ARTISTS</div></button>
-      <button class="nav-item" data-nav="videos" onclick="goTab('videos')"><div class="icon">🎬</div><div class="label">VIDEOS</div></button>
-      <button class="nav-item" data-nav="colors" onclick="goTab('colors')"><div class="icon">🎨</div><div class="label">COLORS</div></button>
-      <button class="nav-item" data-nav="verify" onclick="goTab('verify')"><div class="icon">🔵</div><div class="label">VERIFY</div></button>
+      <button class="nav-item active" data-nav="artists" onclick="goTab('artists')"><div class="icon"><i class="fas fa-user"></i></div><div class="label">ARTISTS</div></button>
+      <button class="nav-item" data-nav="videos" onclick="goTab('videos')"><div class="icon"><i class="fas fa-video"></i></div><div class="label">VIDEOS</div></button>
+      <button class="nav-item" data-nav="colors" onclick="goTab('colors')"><div class="icon"><i class="fas fa-palette"></i></div><div class="label">COLORS</div></button>
+      <button class="nav-item" data-nav="verify" onclick="goTab('verify')"><div class="icon"><i class="fas fa-check-circle"></i></div><div class="label">VERIFY</div></button>
     </div>
   </div>
 
@@ -286,7 +237,7 @@
       <div class="form-group"><label>TikTok Link</label><input type="text" id="artistTiktok" placeholder="https://tiktok.com/@..."></div>
       <div class="form-group"><label>Instagram Link</label><input type="text" id="artistInstagram" placeholder="https://instagram.com/..."></div>
       <div class="form-group"><label>YouTube Link</label><input type="text" id="artistYoutube" placeholder="https://youtube.com/@..."></div>
-      <div class="form-group"><label>Spotify Link 🎧</label><input type="text" id="artistSpotify" placeholder="https://open.spotify.com/artist/..."></div>
+      <div class="form-group"><label>Spotify Link</label><input type="text" id="artistSpotify" placeholder="https://open.spotify.com/artist/..."></div>
       <div class="modal-btns">
         <button class="cancel" onclick="closeArtistModal()">Cancel</button>
         <button class="confirm-green" onclick="saveArtist()">Save</button>
@@ -297,7 +248,7 @@
 
   <div class="modal" id="confirmModal" onclick="closeConfirmModal()">
     <div class="modal-inner" onclick="event.stopPropagation()">
-      <div style="font-size: 40px; text-align: center; margin-bottom: 10px;" id="confirmIcon">🔵</div>
+      <div style="font-size: 40px; text-align: center; margin-bottom: 10px;" id="confirmIcon"><i class="fas fa-check-circle" style="color:#1d9bf0;"></i></div>
       <h3 id="confirmTitle">Confirm</h3>
       <p id="confirmText">Are you sure?</p>
       <div class="modal-btns">
@@ -309,7 +260,7 @@
 
   <div class="modal" id="editVideoModal" onclick="closeEditVideoModal()">
     <div class="modal-inner" onclick="event.stopPropagation()">
-      <h3>✏️ Edit Video</h3>
+      <h3><i class="fas fa-edit" style="color:#00cc44;"></i> Edit Video</h3>
       <input type="hidden" id="editVideoId">
       <div class="form-group"><label>Title</label><input type="text" id="editVideoTitle"></div>
       <div class="form-group"><label>YouTube Link</label><input type="text" id="editVideoUrl"></div>
@@ -319,9 +270,7 @@
         <button class="confirm-blue" onclick="saveVideoEdit()">Save</button>
       </div>
     </div>
-  </div>
-
-  <script>
+  </div>  <script>
     const SECRET_PASSWORD = "samarid2026";
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
@@ -330,7 +279,6 @@
 
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
-    // Available pages for the Colors tab
     const PAGES = [
       { key: 'index', name: 'Homepage', url: 'index.html' },
       { key: 'song', name: 'Song Page', url: 'song.html' },
@@ -354,7 +302,6 @@
     let pageSettings = {};
     let pendingConfirm = null;
 
-    // ===== AUTH =====
     window.togglePassword = function() {
       const input = document.getElementById('passwordInput');
       const icon = document.getElementById('eyeIcon');
@@ -369,7 +316,7 @@
         document.getElementById('dashboard').style.display = 'block';
         bootApp();
       } else {
-        status.innerText = '❌ Wrong password.';
+        status.innerText = 'Wrong password.';
         document.getElementById('passwordInput').value = '';
       }
     }
@@ -505,8 +452,8 @@
       const youtube = document.getElementById('artistYoutube').value.trim();
       const spotify = document.getElementById('artistSpotify').value.trim();
 
-      if (!name) { status.style.color = '#ff0033'; status.innerText = '❌ Name required'; return; }
-      status.style.color = '#ffcc00'; status.innerText = '⏳ Saving...';
+      if (!name) { status.style.color = '#ff0033'; status.innerText = 'Name required'; return; }
+      status.style.color = '#ffcc00'; status.innerText = 'Saving...';
 
       try {
         const payload = { name, profile_pic, bio, tiktok, instagram, youtube, spotify };
@@ -525,11 +472,11 @@
           });
         }
         if (!res.ok) { const t = await res.text(); throw new Error(t); }
-        status.style.color = '#00cc44'; status.innerText = '✅ Saved!';
+        status.style.color = '#00cc44'; status.innerText = 'Saved!';
         setTimeout(() => { closeArtistModal(); loadArtists(); loadVerifyList(); }, 700);
       } catch (e) {
         status.style.color = '#ff0033';
-        status.innerText = '❌ ' + (e.message.includes('duplicate') ? 'Artist already exists' : e.message.substring(0, 80));
+        status.innerText = (e.message.includes('duplicate') ? 'Artist already exists' : e.message.substring(0, 80));
       }
     }
 
@@ -541,7 +488,6 @@
         const data = await res.json();
         pageSettings = {};
         if (Array.isArray(data)) data.forEach(row => { pageSettings[row.page_name] = row.theme; });
-        // Ensure all pages have a value
         PAGES.forEach(p => { if (!pageSettings[p.key]) pageSettings[p.key] = 'light'; });
         renderColorPages('');
       } catch (e) {
@@ -567,8 +513,8 @@
               <p>${escapeHtml(p.url)}</p>
             </div>
             <div class="color-btns">
-              <button class="color-btn black-btn ${current === 'dark' ? 'active' : ''}" onclick="setPageColor('${p.key}', 'dark', this)" title="Set Black">⚫</button>
-              <button class="color-btn white-btn ${current === 'light' ? 'active' : ''}" onclick="setPageColor('${p.key}', 'light', this)" title="Set White">⚪</button>
+              <button class="color-btn black-btn ${current === 'dark' ? 'active' : ''}" onclick="setPageColor('${p.key}', 'dark', this)" title="Set Black"><i class="fas fa-moon"></i></button>
+              <button class="color-btn white-btn ${current === 'light' ? 'active' : ''}" onclick="setPageColor('${p.key}', 'light', this)" title="Set White"><i class="fas fa-sun"></i></button>
             </div>
           </div>
         `;
@@ -587,24 +533,19 @@
     }
 
     window.setPageColor = async function(pageKey, theme, btn) {
-      // Update local + button states instantly
       pageSettings[pageKey] = theme;
       const item = btn.closest('.page-color-item');
       item.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
       try {
-        // Try update first
         const res = await fetch(SUPABASE_URL + '/rest/v1/page_settings?page_name=eq.' + encodeURIComponent(pageKey), {
           method: 'PATCH',
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
           body: JSON.stringify({ theme: theme })
         });
-
-        // If no row was updated (page not in DB), insert it
         if (!res.ok) throw new Error('Update failed');
       } catch (e) {
-        // Fallback: try INSERT in case the row doesn't exist
         try {
           await fetch(SUPABASE_URL + '/rest/v1/page_settings', {
             method: 'POST',
@@ -615,7 +556,7 @@
       }
     }
 
-    // ===== VERIFY =====
+    // ===== VERIFY (only shows artists WITH songs) =====
     async function loadVerifyList() {
       const list = document.getElementById('verifyList');
       list.innerHTML = '<p class="empty">Loading...</p>';
@@ -627,18 +568,24 @@
         const songs = await songsRes.json();
         const artistProfiles = await artistsRes.json();
 
+        const profileMap = {};
+        artistProfiles.forEach(a => {
+          if (a.name) profileMap[a.name.trim().toLowerCase()] = a;
+        });
+
         const map = {};
         songs.forEach(s => {
           const name = (s.artist_name || 'Samarid').trim();
-          if (!map[name]) map[name] = { name: name, verified: false, profile_pic: null };
-          if (s.verified) map[name].verified = true;
-        });
-        artistProfiles.forEach(a => {
-          const name = (a.name || '').trim();
-          if (!name) return;
-          if (!map[name]) map[name] = { name: name, verified: false, profile_pic: null };
-          if (a.verified) map[name].verified = true;
-          if (a.profile_pic) map[name].profile_pic = a.profile_pic;
+          const key = name.toLowerCase();
+          if (!map[key]) map[key] = { name: name, verified: false, profile_pic: null };
+          if (s.verified) map[key].verified = true;
+
+          const p = profileMap[key];
+          if (p) {
+            if (p.verified) map[key].verified = true;
+            if (p.profile_pic) map[key].profile_pic = p.profile_pic;
+            if (p.name) map[key].name = p.name;
+          }
         });
 
         allVerifyList = Object.values(map).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
@@ -659,7 +606,7 @@
           <div class="v-avatar">${a.profile_pic ? '<img src="' + escapeHtml(a.profile_pic) + '">' : escapeHtml(a.name.charAt(0).toUpperCase())}</div>
           <div class="v-info">
             <h4>${escapeHtml(a.name)}${a.verified ? ' ' + VERIFY_BADGE : ''}</h4>
-            <p>${a.verified ? '✅ Verified' : 'Not verified'}</p>
+            <p>${a.verified ? 'Verified' : 'Not verified'}</p>
           </div>
           <button class="v-btn ${a.verified ? 'unverify' : ''}" onclick="askVerify('${a.name.replace(/'/g, "\\'")}', ${a.verified})">
             ${a.verified ? 'Unverify' : 'Verify'}
@@ -686,11 +633,13 @@
       const text = document.getElementById('confirmText');
       const btn = document.getElementById('confirmBtn');
       if (pendingConfirm.value) {
-        icon.innerText = '🔵'; title.innerText = 'Verify Artist';
+        icon.innerHTML = '<i class="fas fa-check-circle" style="color:#1d9bf0;"></i>';
+        title.innerText = 'Verify Artist';
         text.innerHTML = 'Give the blue checkmark to <strong>' + escapeHtml(name) + '</strong>?<br><br><small style="color:#999">This will update ALL their songs and profile.</small>';
         btn.innerText = 'Verify'; btn.className = 'confirm-blue';
       } else {
-        icon.innerText = '⚠️'; title.innerText = 'Unverify Artist';
+        icon.innerHTML = '<i class="fas fa-exclamation-triangle" style="color:#ffcc00;"></i>';
+        title.innerText = 'Unverify Artist';
         text.innerHTML = 'Remove the blue checkmark from <strong>' + escapeHtml(name) + '</strong>?<br><br><small style="color:#999">This will update ALL their songs and profile.</small>';
         btn.innerText = 'Unverify'; btn.className = 'confirm-red';
       }
