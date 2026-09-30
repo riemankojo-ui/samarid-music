@@ -26,7 +26,6 @@
   .top-bar h1 { font-size: 16px; font-weight: 700; flex: 1; }
   .top-bar .brand { color: var(--accent); font-size: 11px; letter-spacing: 1px; font-weight: 700; }
   .manager-quick-btn { background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; border: none; padding: 9px 14px; border-radius: 20px; font-size: 12px; font-weight: 900; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
-  .manager-quick-btn:active { transform: scale(0.94); }
 
   .content { padding: 20px; max-width: 700px; margin: 0 auto; }
   .page { display: none; }
@@ -45,8 +44,7 @@
   button.main-btn:active { transform: scale(0.97); }
   button.main-btn:disabled { opacity: 0.5; cursor: not-allowed; }
   #loginScreen button.main-btn { background: var(--login-red); }
-  #loginScreen button.main-btn:active { background: #cc0029; }
-  button.secondary-btn { width: 100%; padding: 14px; background: #222; color: #fff; border: 1px solid #333; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; font-family: inherit; }
+  button.secondary-btn { width: 100%; padding: 14px; background: #222; color: #fff; border: 1px solid #333; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; }
   .status { font-size: 12px; margin-top: 12px; font-weight: bold; text-align: center; }
   .success { color: #00cc44; } .error { color: #ff0033; } .info { color: #ffcc00; }
 
@@ -62,26 +60,26 @@
   .admin-song .info { flex: 1; min-width: 0; }
   .admin-song h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .admin-song p { font-size: 11px; color: var(--text2); }
-  .admin-song .actions { display: flex; gap: 6px; }
-  .admin-song .action-btn { background: transparent; border: none; font-size: 16px; cursor: pointer; padding: 8px; border-radius: 8px; }
+  .admin-song .actions { display: flex; gap: 4px; }
+  .admin-song .action-btn { background: transparent; border: none; font-size: 15px; cursor: pointer; padding: 8px; border-radius: 8px; }
   .admin-song .edit-btn { color: #00cc44; }
   .admin-song .delete-btn { color: #ff0033; }
+  .admin-song .link-btn { color: #1d9bf0; }
   .empty-songs { text-align: center; padding: 30px 20px; color: #666; font-size: 13px; }
 
   .show-all-btn { width: 100%; padding: 14px; margin-top: 10px; background: transparent; border: 2px dashed #333; border-radius: 12px; color: var(--accent); font-size: 13px; font-weight: 900; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.5px; }
-  .show-all-btn:active { background: rgba(255,136,0,0.1); }
   .show-all-btn.muted { color: var(--text2); }
 
-  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 8px 0 max(8px, env(safe-area-inset-bottom)); z-index: 1000; }
-  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 8px 2px; color: var(--text2); cursor: pointer; background: transparent; border: none; font-family: inherit; }
-  .nav-item .icon { font-size: 18px; line-height: 1; }
-  .nav-item .label { font-size: 9px; font-weight: 700; letter-spacing: 0.5px; }
+  .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 6px 0 max(6px, env(safe-area-inset-bottom)); z-index: 1000; }
+  .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 1px; color: var(--text2); cursor: pointer; background: transparent; border: none; font-family: inherit; min-width: 0; }
+  .nav-item .icon { font-size: 16px; line-height: 1; }
+  .nav-item .label { font-size: 8px; font-weight: 700; letter-spacing: 0.3px; text-align: center; }
   .nav-item.active { color: var(--accent); }
 
   .subtabs { display: flex; gap: 8px; margin-bottom: 20px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 6px; }
-  .subtab { flex: 1; padding: 12px 16px; background: transparent; border: none; color: var(--text2); font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; border-radius: 10px; transition: 0.15s; display: flex; align-items: center; justify-content: center; gap: 6px; letter-spacing: 0.3px; }
+  .subtab { flex: 1; padding: 12px 10px; background: transparent; border: none; color: var(--text2); font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; border-radius: 10px; transition: 0.15s; display: flex; align-items: center; justify-content: center; gap: 5px; }
   .subtab.active { background: var(--accent); color: #fff; }
-  .subtab i { font-size: 14px; }
+  .subtab i { font-size: 13px; }
 
   .subcontent { display: none; }
   .subcontent.active { display: block; }
@@ -95,7 +93,6 @@
   .album-song-item .form-group:last-child { margin-bottom: 0; }
 
   .add-song-btn { width: 100%; padding: 14px; background: transparent; border: 2px dashed #333; border-radius: 12px; color: var(--accent); font-size: 13px; font-weight: 900; cursor: pointer; font-family: inherit; margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 1px; }
-  .add-song-btn:active { background: rgba(255,136,0,0.1); }
 
   .album-summary { background: #0a1a0f; border: 1px solid #00cc4433; border-radius: 12px; padding: 14px; margin: 16px 0; font-size: 12px; color: #ccc; display: flex; align-items: center; gap: 10px; }
   .album-summary i { color: #00cc44; font-size: 18px; }
@@ -112,16 +109,14 @@
   .datetime-col { flex: 1; min-width: 0; }
   .datetime-col label { display: block; font-size: 10px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
   .datetime-col select { width: 100%; padding: 11px 8px; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 13px; font-family: inherit; font-weight: 700; -webkit-appearance: none; appearance: none; text-align: center; }
-  .datetime-col select:focus { outline: none; border-color: var(--accent); }
 
   .ampm-toggle { display: flex; gap: 4px; width: 100%; }
-  .ampm-btn { flex: 1; padding: 11px 8px; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; color: #666; font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; transition: 0.15s; }
+  .ampm-btn { flex: 1; padding: 11px 8px; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; color: #666; font-size: 13px; font-weight: 800; cursor: pointer; font-family: inherit; }
   .ampm-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
   .release-preview { background: #0a0a0a; border: 1px dashed #333; border-radius: 12px; padding: 14px 16px; text-align: center; margin-bottom: 15px; }
   .release-preview-label { font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
   .release-preview-text { font-size: 16px; font-weight: 900; color: var(--accent); letter-spacing: -0.3px; display: inline-flex; align-items: center; gap: 8px; }
-  .release-preview-text i { font-size: 14px; }
 
   .scheduled-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; margin-bottom: 10px; display: flex; gap: 12px; align-items: center; }
   .scheduled-card img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
@@ -137,25 +132,22 @@
   .import-intro code { background: #0a0a0a; padding: 2px 6px; border-radius: 4px; color: var(--accent); font-size: 11px; }
 
   .import-methods { display: flex; gap: 10px; margin-bottom: 16px; }
-  .import-method { flex: 1; padding: 14px; background: var(--card); border: 2px solid var(--border); border-radius: 12px; color: #ccc; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; text-align: center; transition: 0.15s; display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.3px; }
+  .import-method { flex: 1; padding: 14px; background: var(--card); border: 2px solid var(--border); border-radius: 12px; color: #ccc; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; }
   .import-method.active { border-color: var(--accent); color: var(--accent); background: rgba(255,136,0,0.08); }
-  .import-method i { font-size: 14px; }
 
-  .upload-zone { border: 2px dashed #333; border-radius: 14px; padding: 40px 20px; text-align: center; background: var(--card); cursor: pointer; transition: 0.2s; margin-bottom: 16px; }
-  .upload-zone:active { background: rgba(255,136,0,0.08); border-color: var(--accent); }
+  .upload-zone { border: 2px dashed #333; border-radius: 14px; padding: 40px 20px; text-align: center; background: var(--card); cursor: pointer; margin-bottom: 16px; }
   .upload-zone .icon { font-size: 42px; color: var(--accent); margin-bottom: 10px; }
   .upload-zone h3 { font-size: 15px; font-weight: 900; margin-bottom: 6px; }
   .upload-zone p { font-size: 12px; color: #666; }
   .upload-zone .filename { font-size: 12px; color: #00cc44; margin-top: 10px; font-weight: 800; word-break: break-all; }
 
   .import-textarea { width: 100%; min-height: 250px; padding: 14px; background: var(--card); border: 1px solid #333; border-radius: 12px; color: #fff; font-family: 'SF Mono', Monaco, Consolas, monospace; font-size: 13px; line-height: 1.6; resize: vertical; margin-bottom: 14px; }
-  .import-textarea:focus { outline: none; border-color: var(--accent); }
 
   .import-method-panel { display: none; }
   .import-method-panel.active { display: block; }
 
   .import-preview { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-top: 16px; display: none; }
-  .import-preview.active { display: block; animation: fadeIn 0.3s ease; }
+  .import-preview.active { display: block; }
   .import-preview-title { font-size: 12px; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-weight: 900; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
 
   .preview-row { display: flex; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
@@ -173,16 +165,48 @@
   .preview-badge.badge-instant { background: rgba(0,204,68,0.15); color: #00cc44; }
 
   .preview-actions { display: flex; gap: 10px; margin-top: 18px; }
-  .preview-actions button { flex: 1; padding: 13px; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; border: none; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 6px; letter-spacing: 0.3px; }
+  .preview-actions button { flex: 1; padding: 13px; border-radius: 10px; font-size: 13px; font-weight: 800; cursor: pointer; border: none; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .btn-confirm { background: var(--accent); color: #fff; }
   .btn-cancel { background: #222; color: #fff; }
-  .preview-actions button:active { transform: scale(0.96); }
 
   .import-status { font-size: 12px; margin-top: 14px; font-weight: bold; text-align: center; min-height: 18px; }
+  .import-status.success { color: #00cc44; }
+  .import-status.error { color: #ff0033; }
+  .import-status.info { color: #ffcc00; }
 
   .template-box { background: #0a0a0a; border: 1px solid #222; border-radius: 12px; padding: 14px; margin-bottom: 14px; font-family: monospace; font-size: 12px; line-height: 1.7; color: #ccc; white-space: pre-wrap; word-break: break-word; max-height: 240px; overflow-y: auto; }
-  .copy-template-btn { background: #222; border: 1px solid #333; border-radius: 10px; color: #fff; padding: 10px 14px; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; letter-spacing: 0.3px; }
-  .copy-template-btn:active { background: var(--accent); }
+  .copy-template-btn { background: #222; border: 1px solid #333; border-radius: 10px; color: #fff; padding: 10px 14px; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+
+  /* SEO TAB */
+  .seo-overview { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+  .seo-stat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; text-align: center; }
+  .seo-stat .num { font-size: 26px; font-weight: 900; color: var(--accent); line-height: 1; }
+  .seo-stat .num.good { color: #00cc44; }
+  .seo-stat .num.bad { color: #ff0033; }
+  .seo-stat .lbl { font-size: 10px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-top: 6px; }
+
+  .seo-list-item { display: flex; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; }
+  .seo-list-item:active { border-color: var(--accent); }
+  .seo-list-item img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+  .seo-list-item .info { flex: 1; min-width: 0; }
+  .seo-list-item h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .seo-list-item p { font-size: 11px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .seo-list-item .status-tag { font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px; flex-shrink: 0; }
+  .status-tag.done { background: rgba(0,204,68,0.15); color: #00cc44; }
+  .status-tag.missing { background: rgba(255,0,51,0.15); color: #ff0033; }
+
+  .seo-editor { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-top: 16px; display: none; }
+  .seo-editor.active { display: block; animation: fadeIn 0.3s ease; }
+  .seo-editor-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+  .seo-editor-header img { width: 60px; height: 60px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+  .seo-editor-header .info { flex: 1; min-width: 0; }
+  .seo-editor-header h3 { font-size: 15px; font-weight: 800; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .seo-editor-header p { font-size: 11px; color: var(--text2); }
+  .seo-editor-header .close-x { background: transparent; border: none; color: #666; font-size: 20px; cursor: pointer; padding: 6px 10px; }
+
+  .seo-link-box { background: #0a0a0a; border: 1px solid #222; border-radius: 10px; padding: 12px 14px; font-size: 11px; color: #1d9bf0; word-break: break-all; font-family: monospace; }
+
+  .seo-char-count { font-size: 10px; color: var(--text2); text-align: right; margin-top: -8px; margin-bottom: 12px; font-weight: 700; }
 
   details summary { list-style: none; cursor: pointer; }
   details summary::-webkit-details-marker { display: none; }
@@ -214,7 +238,6 @@
     </div>
 
     <div class="content">
-      <!-- HOME -->
       <div class="page active" id="pageHome">
         <h1 class="page-title">Dashboard</h1>
         <p class="page-subtitle">Latest 5 songs — search to find older ones</p>
@@ -226,7 +249,6 @@
         <div id="homeSongList"></div>
       </div>
 
-      <!-- ADD -->
       <div class="page" id="pageAdd">
         <h1 class="page-title">Add New</h1>
         <p class="page-subtitle">Publish instantly — no scheduling</p>
@@ -281,7 +303,6 @@
         </div>
       </div>
 
-      <!-- RELEASE -->
       <div class="page" id="pageRelease">
         <h1 class="page-title">Schedule Release</h1>
         <p class="page-subtitle">Silent drop — appears automatically at the set time</p>
@@ -388,8 +409,7 @@
           </div>
           <div id="scheduledList"><p class="empty-songs">Loading...</p></div>
         </div>
-      </div>      <!-- IMPORT -->
-      <div class="page" id="pageImport">
+      </div>      <div class="page" id="pageImport">
         <h1 class="page-title">Import</h1>
         <p class="page-subtitle">Upload or paste song details — auto-fills everything</p>
 
@@ -432,7 +452,7 @@ Spotify: https://open.spotify.com/track/xxxxx"></textarea>
         </div>
 
         <details style="margin-bottom: 14px;">
-          <summary style="cursor: pointer; font-size: 12px; color: var(--accent); font-weight: 800; padding: 10px 0; display: flex; align-items: center; gap: 6px;">
+          <summary style="font-size: 12px; color: var(--accent); font-weight: 800; padding: 10px 0; display: flex; align-items: center; gap: 6px;">
             <i class="fas fa-clipboard-list"></i> Show template (copy for artists)
           </summary>
           <div class="template-box" id="importTemplate">Title: Back To Sender
@@ -483,7 +503,117 @@ Download: https://example.com/cry-baby.mp3</div>
         </div>
       </div>
 
-      <!-- CHANNEL -->
+      <div class="page" id="pageSeo">
+        <h1 class="page-title">SEO</h1>
+        <p class="page-subtitle">Edit descriptions, bios & copy links</p>
+
+        <div class="subtabs">
+          <button class="subtab active" id="seoTabSongs" onclick="switchSeoTab('songs', this)">
+            <i class="fas fa-music"></i> Songs
+          </button>
+          <button class="subtab" id="seoTabArtists" onclick="switchSeoTab('artists', this)">
+            <i class="fas fa-user"></i> Artists
+          </button>
+          <button class="subtab" id="seoTabOverview" onclick="switchSeoTab('overview', this)">
+            <i class="fas fa-chart-bar"></i> Overview
+          </button>
+        </div>
+
+        <div class="subcontent active" id="seoContentSongs">
+          <div class="search-wrap">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="seoSongSearch" placeholder="Search songs..." oninput="filterSeoSongs()" autocomplete="off">
+          </div>
+          <div id="seoSongsList"><p class="empty-songs">Loading songs...</p></div>
+
+          <div class="seo-editor" id="seoSongEditor">
+            <div class="seo-editor-header">
+              <img id="seoSongEditorCover" src="" alt="">
+              <div class="info">
+                <h3 id="seoSongEditorTitle">Song Title</h3>
+                <p id="seoSongEditorArtist">Artist</p>
+              </div>
+              <button class="close-x" onclick="closeSeoSongEditor()">✕</button>
+            </div>
+
+            <div class="form-group">
+              <label>Description (for SEO & site)</label>
+              <textarea id="seoSongDescInput" placeholder="Write a real description of this song — helps Google rank it..." oninput="updateSeoSongCharCount()"></textarea>
+            </div>
+            <p class="seo-char-count" id="seoSongCharCount">0 / 500</p>
+
+            <div class="form-group">
+              <label>Song Link</label>
+              <div class="seo-link-box" id="seoSongLinkBox"></div>
+            </div>
+
+            <button class="main-btn" id="seoSongSaveBtn" onclick="saveSeoSong()"><i class="fas fa-save"></i> Save Description</button>
+            <button class="secondary-btn" onclick="copySeoSongLink()"><i class="fas fa-link"></i> Copy Song Link</button>
+            <p id="seoSongSaveStatus" class="status"></p>
+          </div>
+        </div>
+
+        <div class="subcontent" id="seoContentArtists">
+          <div class="search-wrap">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" id="seoArtistSearch" placeholder="Search artists..." oninput="filterSeoArtists()" autocomplete="off">
+          </div>
+          <div id="seoArtistsList"><p class="empty-songs">Loading artists...</p></div>
+
+          <div class="seo-editor" id="seoArtistEditor">
+            <div class="seo-editor-header">
+              <img id="seoArtistEditorCover" src="" alt="">
+              <div class="info">
+                <h3 id="seoArtistEditorName">Artist Name</h3>
+                <p>Artist Profile</p>
+              </div>
+              <button class="close-x" onclick="closeSeoArtistEditor()">✕</button>
+            </div>
+
+            <div class="form-group">
+              <label>Bio (for SEO & site)</label>
+              <textarea id="seoArtistBioInput" placeholder="Write a real bio for this artist — helps Google find them..." oninput="updateSeoArtistCharCount()"></textarea>
+            </div>
+            <p class="seo-char-count" id="seoArtistCharCount">0 / 1000</p>
+
+            <div class="form-group">
+              <label>Artist Link</label>
+              <div class="seo-link-box" id="seoArtistLinkBox"></div>
+            </div>
+
+            <button class="main-btn" id="seoArtistSaveBtn" onclick="saveSeoArtist()"><i class="fas fa-save"></i> Save Bio</button>
+            <button class="secondary-btn" onclick="copySeoArtistLink()"><i class="fas fa-link"></i> Copy Artist Link</button>
+            <p id="seoArtistSaveStatus" class="status"></p>
+          </div>
+        </div>
+
+        <div class="subcontent" id="seoContentOverview">
+          <div class="seo-overview">
+            <div class="seo-stat">
+              <div class="num" id="seoStatTotalSongs">0</div>
+              <div class="lbl">Total Songs</div>
+            </div>
+            <div class="seo-stat">
+              <div class="num good" id="seoStatSongsWithDesc">0</div>
+              <div class="lbl">With Description</div>
+            </div>
+            <div class="seo-stat">
+              <div class="num bad" id="seoStatSongsMissing">0</div>
+              <div class="lbl">Missing Description</div>
+            </div>
+            <div class="seo-stat">
+              <div class="num bad" id="seoStatArtistsMissing">0</div>
+              <div class="lbl">Artists Missing Bio</div>
+            </div>
+          </div>
+
+          <div class="album-box">
+            <div class="album-box-title"><i class="fas fa-exclamation-triangle"></i> Needs Attention</div>
+            <div id="seoNeedsAttention"><p class="empty-songs">Loading...</p></div>
+          </div>
+        </div>
+      </div>
+
       <div class="page" id="pageChannel">
         <h1 class="page-title">YouTube Channel</h1>
         <p class="page-subtitle">Connect your channel to auto-sync videos</p>
@@ -510,568 +640,517 @@ Download: https://example.com/cry-baby.mp3</div>
       <button class="nav-item" onclick="goToPage('add')" id="navAdd"><div class="icon"><i class="fas fa-plus"></i></div><div class="label">ADD</div></button>
       <button class="nav-item" onclick="goToPage('release')" id="navRelease"><div class="icon"><i class="fas fa-calendar-alt"></i></div><div class="label">RELEASE</div></button>
       <button class="nav-item" onclick="goToPage('import')" id="navImport"><div class="icon"><i class="fas fa-file-import"></i></div><div class="label">IMPORT</div></button>
+      <button class="nav-item" onclick="goToPage('seo')" id="navSeo"><div class="icon"><i class="fas fa-search-plus"></i></div><div class="label">SEO</div></button>
       <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon"><i class="fas fa-tv"></i></div><div class="label">CHANNEL</div></button>
     </div>
-  </div>  <script>
-    const SECRET_PASSWORD = "samarid2026";
-    const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
-    const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
-    const SONGS_TABLE = "songs";
-    const VIDEOS_TABLE = "videos";
-    const ARTISTS_TABLE = "artists";
-    const HOME_SONGS_LIMIT = 5;
+  </div><script>
+  const SECRET_PASSWORD = "samarid2026";
+  const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
+  const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+  const SONGS_TABLE = "songs";
+  const VIDEOS_TABLE = "videos";
+  const ARTISTS_TABLE = "artists";
+  const HOME_SONGS_LIMIT = 5;
 
-    const GHANA_TZ = 0;
-    const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const GHANA_TZ = 0;
+  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-    let allAdminSongs = [];
-    let albumSongIndex = 0;
-    let schAlbumSongIndex = 0;
-    let currentAmPm = 'AM';
-    let currentAAmPm = 'AM';
-    let homeShowAll = false;
+  let allAdminSongs = [];
+  let albumSongIndex = 0;
+  let schAlbumSongIndex = 0;
+  let currentAmPm = 'AM';
+  let currentAAmPm = 'AM';
+  let homeShowAll = false;
 
-    window.switchAddTab = function(which, btn) {
-      document.querySelectorAll('#pageAdd .subtab').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('#pageAdd .subcontent').forEach(c => c.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('addContent' + (which === 'single' ? 'Single' : 'Album')).classList.add('active');
+  window.switchAddTab = function(which, btn) {
+    document.querySelectorAll('#pageAdd .subtab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#pageAdd .subcontent').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('addContent' + (which === 'single' ? 'Single' : 'Album')).classList.add('active');
+  }
+  window.switchReleaseTab = function(which, btn) {
+    document.querySelectorAll('#pageRelease .subtab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#pageRelease .subcontent').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('releaseContent' + (which === 'single' ? 'Single' : 'Album')).classList.add('active');
+  }
+
+  function fillMonthSelect(id) { document.getElementById(id).innerHTML = MONTHS.map((m, i) => `<option value="${i}">${m}</option>`).join(''); }
+  function fillDaySelect(id) { let o = ''; for (let i = 1; i <= 31; i++) o += `<option value="${i}">${i}</option>`; document.getElementById(id).innerHTML = o; }
+  function fillYearSelect(id) { const y = new Date().getFullYear(); let o = ''; for (let i = y; i <= y + 3; i++) o += `<option value="${i}">${i}</option>`; document.getElementById(id).innerHTML = o; }
+  function fillHourSelect(id) { let o = ''; for (let i = 1; i <= 12; i++) o += `<option value="${i}">${i}</option>`; document.getElementById(id).innerHTML = o; }
+  function fillMinuteSelect(id) { let o = ''; for (let i = 0; i < 60; i += 5) { const v = i.toString().padStart(2, '0'); o += `<option value="${i}">${v}</option>`; } document.getElementById(id).innerHTML = o; }
+
+  function initDatePickers() {
+    fillMonthSelect('schMonth'); fillDaySelect('schDay'); fillYearSelect('schYear'); fillHourSelect('schHour'); fillMinuteSelect('schMinute');
+    fillMonthSelect('schAMonth'); fillDaySelect('schADay'); fillYearSelect('schAYear'); fillHourSelect('schAHour'); fillMinuteSelect('schAMinute');
+    setDefaultDateTime('schMonth', 'schDay', 'schYear', 'schHour', 'schMinute');
+    setDefaultDateTime('schAMonth', 'schADay', 'schAYear', 'schAHour', 'schAMinute');
+    ['schMonth','schDay','schYear','schHour','schMinute'].forEach(id => { document.getElementById(id).addEventListener('change', updateReleasePreview); });
+    ['schAMonth','schADay','schAYear','schAHour','schAMinute'].forEach(id => { document.getElementById(id).addEventListener('change', updateReleaseAlbumPreview); });
+    updateReleasePreview();
+    updateReleaseAlbumPreview();
+  }
+  function setDefaultDateTime(mId, dId, yId, hId, minId) {
+    const now = new Date();
+    document.getElementById(mId).value = now.getMonth();
+    document.getElementById(dId).value = now.getDate();
+    document.getElementById(yId).value = now.getFullYear();
+    let h = now.getHours();
+    if (h === 0) h = 12; else if (h > 12) h -= 12;
+    document.getElementById(hId).value = h;
+    const m = Math.floor(now.getMinutes() / 5) * 5;
+    document.getElementById(minId).value = m;
+  }
+  function getSelectedDateTime(mId, dId, yId, hId, minId, ampm) {
+    const month = parseInt(document.getElementById(mId).value);
+    const day = parseInt(document.getElementById(dId).value);
+    const year = parseInt(document.getElementById(yId).value);
+    let hour = parseInt(document.getElementById(hId).value);
+    const minute = parseInt(document.getElementById(minId).value);
+    if (ampm === 'PM' && hour !== 12) hour += 12;
+    if (ampm === 'AM' && hour === 12) hour = 0;
+    const isoString = new Date(Date.UTC(year, month, day, hour - GHANA_TZ, minute, 0)).toISOString();
+    return { date: new Date(Date.UTC(year, month, day, hour - GHANA_TZ, minute, 0)), iso: isoString };
+  }
+  function formatPreviewText(dateObj) {
+    const options = { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' };
+    return dateObj.toLocaleString('en-US', options).replace(',', ' ·') + ' GMT';
+  }
+  function updateReleasePreview() {
+    const { date } = getSelectedDateTime('schMonth','schDay','schYear','schHour','schMinute', currentAmPm);
+    document.getElementById('releasePreview').innerHTML = '<i class="fas fa-clock"></i> ' + formatPreviewText(date);
+  }
+  function updateReleaseAlbumPreview() {
+    const { date } = getSelectedDateTime('schAMonth','schADay','schAYear','schAHour','schAMinute', currentAAmPm);
+    document.getElementById('releaseAlbumPreview').innerHTML = '<i class="fas fa-clock"></i> ' + formatPreviewText(date);
+  }
+  window.setAmPm = function(v) {
+    currentAmPm = v;
+    document.getElementById('schAM').classList.toggle('active', v === 'AM');
+    document.getElementById('schPM').classList.toggle('active', v === 'PM');
+    updateReleasePreview();
+  }
+  window.setAAmPm = function(v) {
+    currentAAmPm = v;
+    document.getElementById('schAAM').classList.toggle('active', v === 'AM');
+    document.getElementById('schAPM').classList.toggle('active', v === 'PM');
+    updateReleaseAlbumPreview();
+  }
+
+  window.togglePassword = function() {
+    const input = document.getElementById('passwordInput');
+    const icon = document.getElementById('eyeIcon');
+    if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; }
+    else { input.type = 'password'; icon.innerText = '👁️'; }
+  }
+  window.checkPassword = async function() {
+    const input = document.getElementById('passwordInput').value;
+    const status = document.getElementById('loginStatus');
+    if (input === SECRET_PASSWORD) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      initDatePickers();
+      loadAdminSongs();
+      loadChannelLink();
+      addAlbumSong();
+      addSchAlbumSong();
+      loadScheduled();
+    } else {
+      status.innerText = 'Wrong password. Try again.';
     }
-    window.switchReleaseTab = function(which, btn) {
-      document.querySelectorAll('#pageRelease .subtab').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('#pageRelease .subcontent').forEach(c => c.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('releaseContent' + (which === 'single' ? 'Single' : 'Album')).classList.add('active');
-    }
+  }
 
-    function fillMonthSelect(id) { document.getElementById(id).innerHTML = MONTHS.map((m, i) => `<option value="${i}">${m}</option>`).join(''); }
-    function fillDaySelect(id) { let o = ''; for (let i = 1; i <= 31; i++) o += `<option value="${i}">${i}</option>`; document.getElementById(id).innerHTML = o; }
-    function fillYearSelect(id) { const y = new Date().getFullYear(); let o = ''; for (let i = y; i <= y + 3; i++) o += `<option value="${i}">${i}</option>`; document.getElementById(id).innerHTML = o; }
-    function fillHourSelect(id) { let o = ''; for (let i = 1; i <= 12; i++) o += `<option value="${i}">${i}</option>`; document.getElementById(id).innerHTML = o; }
-    function fillMinuteSelect(id) { let o = ''; for (let i = 0; i < 60; i += 5) { const v = i.toString().padStart(2, '0'); o += `<option value="${i}">${v}</option>`; } document.getElementById(id).innerHTML = o; }
+  window.goToPage = function(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const pageId = 'page' + page.charAt(0).toUpperCase() + page.slice(1);
+    const navId = 'nav' + page.charAt(0).toUpperCase() + page.slice(1);
+    const pageEl = document.getElementById(pageId);
+    const navEl = document.getElementById(navId);
+    if (pageEl) pageEl.classList.add('active');
+    if (navEl) navEl.classList.add('active');
+    if (page === 'release') loadScheduled();
+    if (page === 'seo') { loadSeoSongs(); loadSeoArtists(); loadSeoOverview(); }
+    window.scrollTo(0, 0);
+  }
 
-    function initDatePickers() {
-      fillMonthSelect('schMonth'); fillDaySelect('schDay'); fillYearSelect('schYear'); fillHourSelect('schHour'); fillMinuteSelect('schMinute');
-      fillMonthSelect('schAMonth'); fillDaySelect('schADay'); fillYearSelect('schAYear'); fillHourSelect('schAHour'); fillMinuteSelect('schAMinute');
+  async function ensureArtistExists(name) {
+    if (!name || !name.trim()) return;
+    const cleanName = name.trim();
+    try {
+      const check = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(cleanName) + '&select=id&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+      const existing = await check.json();
+      if (Array.isArray(existing) && existing.length > 0) return { created: false, name: cleanName };
+      await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE, {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ name: cleanName, verified: false })
+      });
+      return { created: true, name: cleanName };
+    } catch (e) { return { created: false, name: cleanName, error: true }; }
+  }
 
-      setDefaultDateTime('schMonth', 'schDay', 'schYear', 'schHour', 'schMinute');
-      setDefaultDateTime('schAMonth', 'schADay', 'schAYear', 'schAHour', 'schAMinute');
-
-      ['schMonth','schDay','schYear','schHour','schMinute'].forEach(id => { document.getElementById(id).addEventListener('change', updateReleasePreview); });
-      ['schAMonth','schADay','schAYear','schAHour','schAMinute'].forEach(id => { document.getElementById(id).addEventListener('change', updateReleaseAlbumPreview); });
-
-      updateReleasePreview();
-      updateReleaseAlbumPreview();
-    }
-    function setDefaultDateTime(mId, dId, yId, hId, minId) {
-      const now = new Date();
-      document.getElementById(mId).value = now.getMonth();
-      document.getElementById(dId).value = now.getDate();
-      document.getElementById(yId).value = now.getFullYear();
-      let h = now.getHours();
-      if (h === 0) h = 12; else if (h > 12) h -= 12;
-      document.getElementById(hId).value = h;
-      const m = Math.floor(now.getMinutes() / 5) * 5;
-      document.getElementById(minId).value = m;
-    }
-    function getSelectedDateTime(mId, dId, yId, hId, minId, ampm) {
-      const month = parseInt(document.getElementById(mId).value);
-      const day = parseInt(document.getElementById(dId).value);
-      const year = parseInt(document.getElementById(yId).value);
-      let hour = parseInt(document.getElementById(hId).value);
-      const minute = parseInt(document.getElementById(minId).value);
-      if (ampm === 'PM' && hour !== 12) hour += 12;
-      if (ampm === 'AM' && hour === 12) hour = 0;
-      const isoString = new Date(Date.UTC(year, month, day, hour - GHANA_TZ, minute, 0)).toISOString();
-      return { date: new Date(Date.UTC(year, month, day, hour - GHANA_TZ, minute, 0)), iso: isoString };
-    }
-    function formatPreviewText(dateObj) {
-      const options = { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'UTC' };
-      return dateObj.toLocaleString('en-US', options).replace(',', ' ·') + ' GMT';
-    }
-    function updateReleasePreview() {
-      const { date } = getSelectedDateTime('schMonth','schDay','schYear','schHour','schMinute', currentAmPm);
-      document.getElementById('releasePreview').innerHTML = '<i class="fas fa-clock"></i> ' + formatPreviewText(date);
-    }
-    function updateReleaseAlbumPreview() {
-      const { date } = getSelectedDateTime('schAMonth','schADay','schAYear','schAHour','schAMinute', currentAAmPm);
-      document.getElementById('releaseAlbumPreview').innerHTML = '<i class="fas fa-clock"></i> ' + formatPreviewText(date);
-    }
-    window.setAmPm = function(v) {
-      currentAmPm = v;
-      document.getElementById('schAM').classList.toggle('active', v === 'AM');
-      document.getElementById('schPM').classList.toggle('active', v === 'PM');
-      updateReleasePreview();
-    }
-    window.setAAmPm = function(v) {
-      currentAAmPm = v;
-      document.getElementById('schAAM').classList.toggle('active', v === 'AM');
-      document.getElementById('schAPM').classList.toggle('active', v === 'PM');
-      updateReleaseAlbumPreview();
-    }
-
-    window.togglePassword = function() {
-      const input = document.getElementById('passwordInput');
-      const icon = document.getElementById('eyeIcon');
-      if (input.type === 'password') { input.type = 'text'; icon.innerText = '🙈'; }
-      else { input.type = 'password'; icon.innerText = '👁️'; }
-    }
-    window.checkPassword = async function() {
-      const input = document.getElementById('passwordInput').value;
-      const status = document.getElementById('loginStatus');
-      if (input === SECRET_PASSWORD) {
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
-        initDatePickers();
-        loadAdminSongs();
-        loadChannelLink();
-        addAlbumSong();
-        addSchAlbumSong();
-        loadScheduled();
-      } else {
-        status.innerText = 'Wrong password. Try again.';
-      }
-    }
-
-    window.goToPage = function(page) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      const pageId = 'page' + page.charAt(0).toUpperCase() + page.slice(1);
-      const navId = 'nav' + page.charAt(0).toUpperCase() + page.slice(1);
-      const pageEl = document.getElementById(pageId);
-      const navEl = document.getElementById(navId);
-      if (pageEl) pageEl.classList.add('active');
-      if (navEl) navEl.classList.add('active');
-      if (page === 'release') loadScheduled();
-      window.scrollTo(0, 0);
-    }
-
-    async function ensureArtistExists(name) {
-      if (!name || !name.trim()) return;
-      const cleanName = name.trim();
-      try {
-        const check = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(cleanName) + '&select=id&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        const existing = await check.json();
-        if (Array.isArray(existing) && existing.length > 0) return { created: false, name: cleanName };
-        await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE, {
-          method: 'POST',
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-          body: JSON.stringify({ name: cleanName, verified: false })
-        });
-        return { created: true, name: cleanName };
-      } catch (e) {
-        console.warn('ensureArtistExists failed:', e);
-        return { created: false, name: cleanName, error: true };
-      }
-    }
-
-    async function loadAdminSongs() {
-      const list = document.getElementById('homeSongList');
-      list.innerHTML = '<p class="empty-songs">Loading songs...</p>';
-      try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        const songs = await res.json();
-        allAdminSongs = Array.isArray(songs) ? songs : [];
-        homeShowAll = false;
-        renderAdminSongs('');
-      } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; }
-    }
-
-    function renderAdminSongs(query) {
-      const list = document.getElementById('homeSongList');
-      const countLabel = document.getElementById('songCountLabel');
-      const isSearching = query && query.length > 0;
-
-      let filtered = allAdminSongs;
-      if (isSearching) {
-        filtered = allAdminSongs.filter(s =>
-          (s.title || '').toLowerCase().includes(query) ||
-          (s.artist_name || '').toLowerCase().includes(query) ||
-          (s.album_name || '').toLowerCase().includes(query)
-        );
-      }
-
-      if (countLabel) {
-        if (isSearching) {
-          countLabel.textContent = filtered.length + ' result' + (filtered.length !== 1 ? 's' : '') + ' for "' + query + '"';
-        } else {
-          const total = allAdminSongs.length;
-          if (total === 0) {
-            countLabel.textContent = '';
-          } else if (total <= HOME_SONGS_LIMIT) {
-            countLabel.textContent = 'Showing all ' + total + ' song' + (total !== 1 ? 's' : '');
-          } else if (homeShowAll) {
-            countLabel.textContent = 'Showing all ' + total + ' songs';
-          } else {
-            countLabel.textContent = 'Showing ' + HOME_SONGS_LIMIT + ' of ' + total + ' songs — search to find older ones';
-          }
-        }
-      }
-
-      if (filtered.length === 0) {
-        list.innerHTML = '<p class="empty-songs">' + (isSearching ? 'No songs match.' : 'No songs yet.') + '</p>';
-        return;
-      }
-
-      let displayList = filtered;
-      let hasMore = false;
-      if (!isSearching && !homeShowAll && filtered.length > HOME_SONGS_LIMIT) {
-        displayList = filtered.slice(0, HOME_SONGS_LIMIT);
-        hasMore = true;
-      }
-
-      let html = displayList.map(s => {
-        const albumTag = s.album_name ? ' • <span style="color:#ff8800;">' + s.album_name + '</span>' : '';
-        const spotifyTag = s.spotify ? ' • <span style="color:#1DB954;">Spotify</span>' : '';
-        const scheduledTag = s.status === 'scheduled' ? ' • <span style="color:#ffcc00;">SCHEDULED</span>' : '';
-        return `
-          <div class="admin-song">
-            <img src="${s.cover}" alt="${s.title}">
-            <div class="info">
-              <h4>${s.title}</h4>
-              <p>${s.artist_name || 'Samarid'} • ${s.category} • ${s.date}${albumTag}${spotifyTag}${scheduledTag}</p>
-            </div>
-            <div class="actions">
-              <button class="action-btn edit-btn" onclick='editSong(${JSON.stringify(s).replace(/'/g, "&#39;")})'><i class="fas fa-edit"></i></button>
-              <button class="action-btn delete-btn" onclick="deleteSong(${s.id})"><i class="fas fa-trash"></i></button>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      if (hasMore) {
-        html += `
-          <button class="show-all-btn" onclick="showAllSongs()">
-            <i class="fas fa-chevron-down"></i> Show All ${allAdminSongs.length} Songs
-          </button>
-        `;
-      }
-      if (!isSearching && homeShowAll && allAdminSongs.length > HOME_SONGS_LIMIT) {
-        html += `
-          <button class="show-all-btn muted" onclick="hideExtraSongs()">
-            <i class="fas fa-chevron-up"></i> Show Only Latest ${HOME_SONGS_LIMIT}
-          </button>
-        `;
-      }
-
-      list.innerHTML = html;
-    }
-
-    window.showAllSongs = function() {
-      homeShowAll = true;
-      renderAdminSongs('');
-    }
-    window.hideExtraSongs = function() {
+  async function loadAdminSongs() {
+    const list = document.getElementById('homeSongList');
+    list.innerHTML = '<p class="empty-songs">Loading songs...</p>';
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+      const songs = await res.json();
+      allAdminSongs = Array.isArray(songs) ? songs : [];
       homeShowAll = false;
       renderAdminSongs('');
-      window.scrollTo(0, 0);
+    } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; }
+  }
+
+  function renderAdminSongs(query) {
+    const list = document.getElementById('homeSongList');
+    const countLabel = document.getElementById('songCountLabel');
+    const isSearching = query && query.length > 0;
+    let filtered = allAdminSongs;
+    if (isSearching) {
+      filtered = allAdminSongs.filter(s =>
+        (s.title || '').toLowerCase().includes(query) ||
+        (s.artist_name || '').toLowerCase().includes(query) ||
+        (s.album_name || '').toLowerCase().includes(query)
+      );
     }
-
-    window.handleSongSearch = function() { renderAdminSongs(document.getElementById('songSearchInput').value.toLowerCase().trim()); }
-
-    window.editSong = function(song) {
-      document.getElementById('editingId').value = song.id;
-      document.getElementById('songTitle').value = song.title;
-      document.getElementById('songCover').value = song.cover;
-      document.getElementById('songArtist').value = song.artist_name || '';
-      document.getElementById('songCategory').value = song.category;
-      document.getElementById('songDate').value = song.date;
-      document.getElementById('songDescription').value = song.description || '';
-      document.getElementById('songDownload').value = song.downloadurl || '';
-      document.getElementById('songSpotify').value = song.spotify || '';
-      document.getElementById('submitBtn').innerText = 'Update Song';
-      document.getElementById('cancelBtn').style.display = 'block';
-      switchAddTab('single', document.getElementById('addTabSingle'));
-      goToPage('add');
-    }
-    window.cancelEdit = function() {
-      document.getElementById('editingId').value = '';
-      ['songTitle','songCover','songArtist','songCategory','songDate','songDescription','songDownload','songSpotify'].forEach(id => { document.getElementById(id).value = ''; });
-      document.getElementById('submitBtn').innerText = 'Publish Song';
-      document.getElementById('cancelBtn').style.display = 'none';
-      goToPage('home');
-    }
-    window.saveSong = async function() {
-      const status = document.getElementById('songStatus');
-      const editingId = document.getElementById('editingId').value;
-      const title = document.getElementById('songTitle').value.trim();
-      const cover = document.getElementById('songCover').value.trim();
-      const artist = document.getElementById('songArtist').value.trim() || 'Samarid';
-      const category = document.getElementById('songCategory').value.trim() || 'Music';
-      const date = document.getElementById('songDate').value.trim() || new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
-      const description = document.getElementById('songDescription').value.trim() || 'No description yet.';
-      const downloadurl = document.getElementById('songDownload').value.trim() || '#';
-      const spotify = document.getElementById('songSpotify').value.trim();
-
-      if (!title || !cover) { status.className = 'status error'; status.innerText = 'Title and Cover required!'; return; }
-      status.className = 'status info'; status.innerText = 'Saving...';
-      try {
-        const payload = { title, cover, category, date, description, downloadurl, artist_name: artist, spotify: spotify, status: 'live', release_at: null };
-        let res;
-        if (editingId) {
-          res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + editingId, { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        } else {
-          res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        }
-        if (!res.ok) { const err = await res.text(); throw new Error(err); }
-        if (!editingId) await ensureArtistExists(artist);
-        status.className = 'status success';
-        status.innerText = editingId ? 'Song updated!' : 'Song published!';
-        setTimeout(() => { cancelEdit(); loadAdminSongs(); }, 1200);
-      } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 80); }
-    }
-    window.deleteSong = async function(id) {
-      if (!confirm('Delete this song permanently?')) return;
-      try {
-        await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + id, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        loadAdminSongs();
-      } catch (e) { alert('Could not delete.'); }
-    }
-
-    window.addAlbumSong = function() {
-      albumSongIndex++;
-      const container = document.getElementById('albumSongsContainer');
-      const div = document.createElement('div');
-      div.className = 'album-song-item';
-      div.id = 'album-song-' + albumSongIndex;
-      div.innerHTML = `
-        <div class="album-song-num">SONG ${albumSongIndex}</div>
-        <button class="album-song-remove" onclick="removeAlbumSong(${albumSongIndex})"><i class="fas fa-times"></i></button>
-        <div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div>
-        <div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="https://...mp3"></div>
-        <div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div>
-      `;
-      container.appendChild(div);
-      updateAlbumCount();
-    }
-    window.removeAlbumSong = function(num) {
-      const el = document.getElementById('album-song-' + num);
-      if (el) el.remove();
-      updateAlbumCount();
-    }
-    function updateAlbumCount() {
-      const count = document.querySelectorAll('#albumSongsContainer .album-song-item').length;
-      document.getElementById('albumSongCount').innerText = count;
-      document.getElementById('publishAlbumBtn').disabled = count === 0;
-    }
-    window.publishAlbum = async function() {
-      const status = document.getElementById('albumStatus');
-      const albumName = document.getElementById('albumName').value.trim();
-      const artist = document.getElementById('albumArtist').value.trim() || 'Samarid';
-      const cover = document.getElementById('albumCover').value.trim();
-      const category = document.getElementById('albumCategory').value.trim() || 'Music';
-      const date = document.getElementById('albumDate').value.trim() || new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
-
-      if (!albumName) { status.className = 'status error'; status.innerText = 'Album name required!'; return; }
-      if (!cover) { status.className = 'status error'; status.innerText = 'Album cover URL required!'; return; }
-
-      const songItems = document.querySelectorAll('#albumSongsContainer .album-song-item');
-      if (songItems.length === 0) { status.className = 'status error'; status.innerText = 'Add at least one song!'; return; }
-
-      const songs = [];
-      let valid = true;
-      songItems.forEach(item => {
-        const title = item.querySelector('.album-song-title').value.trim();
-        const download = item.querySelector('.album-song-download').value.trim() || '#';
-        const desc = item.querySelector('.album-song-desc').value.trim() || 'No description yet.';
-        if (!title) valid = false;
-        songs.push({ title, downloadurl: download, description: desc });
-      });
-      if (!valid) { status.className = 'status error'; status.innerText = 'All songs need a title!'; return; }
-      status.className = 'status info'; status.innerText = 'Publishing album...';
-      try {
-        const payload = songs.map(s => ({ title: s.title, cover, artist_name: artist, category, date, description: s.description, downloadurl: s.downloadurl, album_name: albumName, status: 'live', release_at: null }));
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        if (!res.ok) { const err = await res.text(); throw new Error(err); }
-        await ensureArtistExists(artist);
-        status.className = 'status success'; status.innerText = 'Album "' + albumName + '" published with ' + songs.length + ' songs!';
-        setTimeout(() => {
-          ['albumName','albumArtist','albumCover','albumCategory','albumDate'].forEach(id => { document.getElementById(id).value = ''; });
-          document.getElementById('albumSongsContainer').innerHTML = '';
-          albumSongIndex = 0;
-          addAlbumSong();
-          status.innerText = '';
-          loadAdminSongs();
-          goToPage('home');
-        }, 1800);
-      } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 100); }
-    }
-
-    window.scheduleSingle = async function() {
-      const status = document.getElementById('scheduleSingleStatus');
-      const title = document.getElementById('schTitle').value.trim();
-      const cover = document.getElementById('schCover').value.trim();
-      const artist = document.getElementById('schArtist').value.trim() || 'Samarid';
-      const category = document.getElementById('schCategory').value.trim() || 'Music';
-      const description = document.getElementById('schDescription').value.trim() || 'No description yet.';
-      const downloadurl = document.getElementById('schDownload').value.trim() || '#';
-      const spotify = document.getElementById('schSpotify').value.trim();
-
-      if (!title) { status.className = 'status error'; status.innerText = 'Title required!'; return; }
-      if (!cover) { status.className = 'status error'; status.innerText = 'Cover URL required!'; return; }
-      if (!downloadurl || downloadurl === '#') { status.className = 'status error'; status.innerText = 'Download MP3 required!'; return; }
-
-      const { date, iso } = getSelectedDateTime('schMonth','schDay','schYear','schHour','schMinute', currentAmPm);
-      if (date.getTime() <= Date.now()) { status.className = 'status error'; status.innerText = 'Pick a future date & time!'; return; }
-
-      status.className = 'status info'; status.innerText = 'Scheduling...';
-      try {
-        const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
-        const payload = { title, cover, artist_name: artist, category, description, downloadurl, spotify: spotify || null, date: displayDate, status: 'scheduled', release_at: iso };
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        if (!res.ok) { const err = await res.text(); throw new Error(err); }
-        await ensureArtistExists(artist);
-        status.className = 'status success';
-        status.innerText = 'Scheduled! Goes live ' + formatPreviewText(date);
-        ['schTitle','schCover','schArtist','schCategory','schDescription','schDownload','schSpotify'].forEach(id => { document.getElementById(id).value = ''; });
-        setTimeout(() => { status.innerText = ''; loadScheduled(); }, 2500);
-      } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 100); }
-    }
-
-    window.addSchAlbumSong = function() {
-      schAlbumSongIndex++;
-      const container = document.getElementById('schAlbumSongsContainer');
-      const div = document.createElement('div');
-      div.className = 'album-song-item';
-      div.id = 'sch-album-song-' + schAlbumSongIndex;
-      div.innerHTML = `
-        <div class="album-song-num">SONG ${schAlbumSongIndex}</div>
-        <button class="album-song-remove" onclick="removeSchAlbumSong(${schAlbumSongIndex})"><i class="fas fa-times"></i></button>
-        <div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div>
-        <div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="https://...mp3"></div>
-        <div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div>
-      `;
-      container.appendChild(div);
-      updateSchAlbumCount();
-    }
-    window.removeSchAlbumSong = function(num) {
-      const el = document.getElementById('sch-album-song-' + num);
-      if (el) el.remove();
-      updateSchAlbumCount();
-    }
-    function updateSchAlbumCount() {
-      const count = document.querySelectorAll('#schAlbumSongsContainer .album-song-item').length;
-      document.getElementById('schAlbumSongCount').innerText = count;
-    }
-    window.scheduleAlbum = async function() {
-      const status = document.getElementById('scheduleAlbumStatus');
-      const albumName = document.getElementById('schAlbumName').value.trim();
-      const artist = document.getElementById('schAlbumArtist').value.trim() || 'Samarid';
-      const cover = document.getElementById('schAlbumCover').value.trim();
-      const category = document.getElementById('schAlbumCategory').value.trim() || 'Music';
-
-      if (!albumName) { status.className = 'status error'; status.innerText = 'Album name required!'; return; }
-      if (!cover) { status.className = 'status error'; status.innerText = 'Album cover required!'; return; }
-
-      const songItems = document.querySelectorAll('#schAlbumSongsContainer .album-song-item');
-      if (songItems.length === 0) { status.className = 'status error'; status.innerText = 'Add at least one song!'; return; }
-
-      const songs = [];
-      let valid = true;
-      songItems.forEach(item => {
-        const title = item.querySelector('.sch-album-song-title').value.trim();
-        const download = item.querySelector('.sch-album-song-download').value.trim() || '#';
-        const desc = item.querySelector('.sch-album-song-desc').value.trim() || 'No description yet.';
-        if (!title) valid = false;
-        songs.push({ title, downloadurl: download, description: desc });
-      });
-      if (!valid) { status.className = 'status error'; status.innerText = 'All songs need a title!'; return; }
-
-      const { date, iso } = getSelectedDateTime('schAMonth','schADay','schAYear','schAHour','schAMinute', currentAAmPm);
-      if (date.getTime() <= Date.now()) { status.className = 'status error'; status.innerText = 'Pick a future date & time!'; return; }
-
-      status.className = 'status info'; status.innerText = 'Scheduling album...';
-      try {
-        const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
-        const payload = songs.map(s => ({ title: s.title, cover, artist_name: artist, category, description: s.description, downloadurl: s.downloadurl, album_name: albumName, date: displayDate, status: 'scheduled', release_at: iso }));
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        if (!res.ok) { const err = await res.text(); throw new Error(err); }
-        await ensureArtistExists(artist);
-        status.className = 'status success';
-        status.innerText = 'Album "' + albumName + '" scheduled for ' + formatPreviewText(date);
-        ['schAlbumName','schAlbumArtist','schAlbumCover','schAlbumCategory'].forEach(id => { document.getElementById(id).value = ''; });
-        document.getElementById('schAlbumSongsContainer').innerHTML = '';
-        schAlbumSongIndex = 0;
-        addSchAlbumSong();
-        setTimeout(() => { status.innerText = ''; loadScheduled(); }, 2500);
-      } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 100); }
-    }
-
-    async function loadScheduled() {
-      const list = document.getElementById('scheduledList');
-      if (!list) return;
-      list.innerHTML = '<p class="empty-songs">Loading...</p>';
-      try {
-        const nowIso = new Date().toISOString();
-        const res = await fetch(
-          SUPABASE_URL + '/rest/v1/' + SONGS_TABLE +
-          '?status=eq.scheduled&release_at=gt.' + encodeURIComponent(nowIso) +
-          '&select=*&order=release_at.asc',
-          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
-        );
-        const songs = await res.json();
-        if (!Array.isArray(songs) || songs.length === 0) {
-          list.innerHTML = '<p class="empty-songs">No scheduled releases yet.</p>';
-          return;
-        }
-        list.innerHTML = songs.map(s => {
-          const releaseDate = s.release_at ? new Date(s.release_at) : null;
-          const when = releaseDate ? formatPreviewText(releaseDate) : 'Unknown time';
-          const albumTag = s.album_name ? ' • ' + s.album_name : '';
-          return `
-            <div class="scheduled-card">
-              <img src="${s.cover}" alt="${s.title}">
-              <div class="info">
-                <h4>${s.title}</h4>
-                <p>${s.artist_name || 'Samarid'}${albumTag}</p>
-              </div>
-              <div class="when">${when.split(' · ')[0]}</div>
-            </div>
-          `;
-        }).join('');
-      } catch (e) {
-        list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load.</p>';
+    if (countLabel) {
+      if (isSearching) {
+        countLabel.textContent = filtered.length + ' result' + (filtered.length !== 1 ? 's' : '') + ' for "' + query + '"';
+      } else {
+        const total = allAdminSongs.length;
+        if (total === 0) countLabel.textContent = '';
+        else if (total <= HOME_SONGS_LIMIT) countLabel.textContent = 'Showing all ' + total + ' song' + (total !== 1 ? 's' : '');
+        else if (homeShowAll) countLabel.textContent = 'Showing all ' + total + ' songs';
+        else countLabel.textContent = 'Showing ' + HOME_SONGS_LIMIT + ' of ' + total + ' songs — search to find older ones';
       }
     }
-
-    window.loadChannelLink = function() {
-      const saved = localStorage.getItem('samarid_channel_link');
-      if (saved) document.getElementById('channelLinkInput').value = saved;
+    if (filtered.length === 0) {
+      list.innerHTML = '<p class="empty-songs">' + (isSearching ? 'No songs match.' : 'No songs yet.') + '</p>';
+      return;
     }
-    window.saveChannelLink = function() {
-      const status = document.getElementById('channelStatus');
-      const link = document.getElementById('channelLinkInput').value.trim();
-      if (!link) { status.className = 'status error'; status.innerText = 'Please enter a channel link.'; return; }
-      localStorage.setItem('samarid_channel_link', link);
+    let displayList = filtered;
+    let hasMore = false;
+    if (!isSearching && !homeShowAll && filtered.length > HOME_SONGS_LIMIT) {
+      displayList = filtered.slice(0, HOME_SONGS_LIMIT);
+      hasMore = true;
+    }
+    let html = displayList.map(s => {
+      const albumTag = s.album_name ? ' • <span style="color:#ff8800;">' + s.album_name + '</span>' : '';
+      const spotifyTag = s.spotify ? ' • <span style="color:#1DB954;">Spotify</span>' : '';
+      const scheduledTag = s.status === 'scheduled' ? ' • <span style="color:#ffcc00;">SCHEDULED</span>' : '';
+      return `
+        <div class="admin-song">
+          <img src="${s.cover}" alt="${s.title}">
+          <div class="info">
+            <h4>${s.title}</h4>
+            <p>${s.artist_name || 'Samarid'} • ${s.category} • ${s.date}${albumTag}${spotifyTag}${scheduledTag}</p>
+          </div>
+          <div class="actions">
+            <button class="action-btn link-btn" onclick="copySongLink(${s.id})" title="Copy Link"><i class="fas fa-link"></i></button>
+            <button class="action-btn edit-btn" onclick='editSong(${JSON.stringify(s).replace(/'/g, "&#39;")})' title="Edit"><i class="fas fa-edit"></i></button>
+            <button class="action-btn delete-btn" onclick="deleteSong(${s.id})" title="Delete"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+      `;
+    }).join('');
+    if (hasMore) {
+      html += `<button class="show-all-btn" onclick="showAllSongs()"><i class="fas fa-chevron-down"></i> Show All ${allAdminSongs.length} Songs</button>`;
+    }
+    if (!isSearching && homeShowAll && allAdminSongs.length > HOME_SONGS_LIMIT) {
+      html += `<button class="show-all-btn muted" onclick="hideExtraSongs()"><i class="fas fa-chevron-up"></i> Show Only Latest ${HOME_SONGS_LIMIT}</button>`;
+    }
+    list.innerHTML = html;
+  }
+
+  window.showAllSongs = function() { homeShowAll = true; renderAdminSongs(''); }
+  window.hideExtraSongs = function() { homeShowAll = false; renderAdminSongs(''); window.scrollTo(0, 0); }
+  window.handleSongSearch = function() { renderAdminSongs(document.getElementById('songSearchInput').value.toLowerCase().trim()); }
+
+  window.copySongLink = async function(id) {
+    const url = 'https://samarid-music.vercel.app/song.html?id=' + id;
+    try {
+      if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(url); }
+      else {
+        const ta = document.createElement('textarea');
+        ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+      alert('Song link copied!\n\n' + url);
+    } catch (e) { alert('Could not copy: ' + url); }
+  }
+
+  window.editSong = function(song) {
+    document.getElementById('editingId').value = song.id;
+    document.getElementById('songTitle').value = song.title;
+    document.getElementById('songCover').value = song.cover;
+    document.getElementById('songArtist').value = song.artist_name || '';
+    document.getElementById('songCategory').value = song.category;
+    document.getElementById('songDate').value = song.date;
+    document.getElementById('songDescription').value = song.description || '';
+    document.getElementById('songDownload').value = song.downloadurl || '';
+    document.getElementById('songSpotify').value = song.spotify || '';
+    document.getElementById('submitBtn').innerText = 'Update Song';
+    document.getElementById('cancelBtn').style.display = 'block';
+    switchAddTab('single', document.getElementById('addTabSingle'));
+    goToPage('add');
+  }
+  window.cancelEdit = function() {
+    document.getElementById('editingId').value = '';
+    ['songTitle','songCover','songArtist','songCategory','songDate','songDescription','songDownload','songSpotify'].forEach(id => { document.getElementById(id).value = ''; });
+    document.getElementById('submitBtn').innerText = 'Publish Song';
+    document.getElementById('cancelBtn').style.display = 'none';
+    goToPage('home');
+  }
+  window.saveSong = async function() {
+    const status = document.getElementById('songStatus');
+    const editingId = document.getElementById('editingId').value;
+    const title = document.getElementById('songTitle').value.trim();
+    const cover = document.getElementById('songCover').value.trim();
+    const artist = document.getElementById('songArtist').value.trim() || 'Samarid';
+    const category = document.getElementById('songCategory').value.trim() || 'Music';
+    const date = document.getElementById('songDate').value.trim() || new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+    const description = document.getElementById('songDescription').value.trim() || 'No description yet.';
+    const downloadurl = document.getElementById('songDownload').value.trim() || '#';
+    const spotify = document.getElementById('songSpotify').value.trim();
+    if (!title || !cover) { status.className = 'status error'; status.innerText = 'Title and Cover required!'; return; }
+    status.className = 'status info'; status.innerText = 'Saving...';
+    try {
+      const payload = { title, cover, category, date, description, downloadurl, artist_name: artist, spotify: spotify, status: 'live', release_at: null };
+      let res;
+      if (editingId) {
+        res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + editingId, { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      } else {
+        res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      }
+      if (!res.ok) { const err = await res.text(); throw new Error(err); }
+      if (!editingId) await ensureArtistExists(artist);
       status.className = 'status success';
-      status.innerText = 'Channel link saved!';
-    }
-    window.resetChannelLink = function() {
-      localStorage.removeItem('samarid_channel_link');
-      document.getElementById('channelLinkInput').value = '';
-      const status = document.getElementById('channelStatus');
-      status.className = 'status info';
-      status.innerText = 'Reset to default channel.';
-    }
-    window.saveVideo = async function() {
-      const status = document.getElementById('videoStatus');
-      const title = document.getElementById('videoTitle').value.trim();
-      const videoUrl = document.getElementById('videoUrl').value.trim();
-      const date = document.getElementById('videoDate').value.trim() || new Date().toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'});
+      status.innerText = editingId ? 'Song updated!' : 'Song published!';
+      setTimeout(() => { cancelEdit(); loadAdminSongs(); }, 1200);
+    } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 80); }
+  }
+  window.deleteSong = async function(id) {
+    if (!confirm('Delete this song permanently?')) return;
+    try {
+      await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + id, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+      loadAdminSongs();
+    } catch (e) { alert('Could not delete.'); }
+  }
 
-      if (!title || !videoUrl) { status.className = 'status error'; status.innerText = 'Title and Link required.'; return; }
-      status.className = 'status info'; status.innerText = 'Publishing...';
-      try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + VIDEOS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ title, video_url: videoUrl, video_date: date }) });
-        if (res.ok) {
-          status.className = 'status success';
-          status.innerText = 'Video link published!';
-          document.getElementById('videoTitle').value = '';
-          document.getElementById('videoUrl').value = '';
-          document.getElementById('videoDate').value = '';
-        } else {
-          const errText = await res.text();
-          status.className = 'status error';
+  window.addAlbumSong = function() {
+    albumSongIndex++;
+    const container = document.getElementById('albumSongsContainer');
+    const div = document.createElement('div');
+    div.className = 'album-song-item';
+    div.id = 'album-song-' + albumSongIndex;
+    div.innerHTML = `
+      <div class="album-song-num">SONG ${albumSongIndex}</div>
+      <button class="album-song-remove" onclick="removeAlbumSong(${albumSongIndex})"><i class="fas fa-times"></i></button>
+      <div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div>
+      <div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="https://...mp3"></div>
+      <div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div>
+    `;
+    container.appendChild(div);
+    updateAlbumCount();
+  }
+  window.removeAlbumSong = function(num) {
+    const el = document.getElementById('album-song-' + num);
+    if (el) el.remove();
+    updateAlbumCount();
+  }
+  function updateAlbumCount() {
+    const count = document.querySelectorAll('#albumSongsContainer .album-song-item').length;
+    document.getElementById('albumSongCount').innerText = count;
+    document.getElementById('publishAlbumBtn').disabled = count === 0;
+  }
+  window.publishAlbum = async function() {
+    const status = document.getElementById('albumStatus');
+    const albumName = document.getElementById('albumName').value.trim();
+    const artist = document.getElementById('albumArtist').value.trim() || 'Samarid';
+    const cover = document.getElementById('albumCover').value.trim();
+    const category = document.getElementById('albumCategory').value.trim() || 'Music';
+    const date = document.getElementById('albumDate').value.trim() || new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
+    if (!albumName) { status.className = 'status error'; status.innerText = 'Album name required!'; return; }
+    if (!cover) { status.className = 'status error'; status.innerText = 'Album cover URL required!'; return; }
+    const songItems = document.querySelectorAll('#albumSongsContainer .album-song-item');
+    if (songItems.length === 0) { status.className = 'status error'; status.innerText = 'Add at least one song!'; return; }
+    const songs = [];
+    let valid = true;
+    songItems.forEach(item => {
+      const title = item.querySelector('.album-song-title').value.trim();
+      const download = item.querySelector('.album-song-download').value.trim() || '#';
+      const desc = item.querySelector('.album-song-desc').value.trim() || 'No description yet.';
+      if (!title) valid = false;
+      songs.push({ title, downloadurl: download, description: desc });
+    });
+    if (!valid) { status.className = 'status error'; status.innerText = 'All songs need a title!'; return; }
+    status.className = 'status info'; status.innerText = 'Publishing album...';
+    try {
+      const payload = songs.map(s => ({ title: s.title, cover, artist_name: artist, category, date, description: s.description, downloadurl: s.downloadurl, album_name: albumName, status: 'live', release_at: null }));
+      const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!res.ok) { const err = await res.text(); throw new Error(err); }
+      await ensureArtistExists(artist);
+      status.className = 'status success'; status.innerText = 'Album "' + albumName + '" published with ' + songs.length + ' songs!';
+      setTimeout(() => {
+        ['albumName','albumArtist','albumCover','albumCategory','albumDate'].forEach(id => { document.getElementById(id).value = ''; });
+        document.getElementById('albumSongsContainer').innerHTML = '';
+        albumSongIndex = 0;
+        addAlbumSong();
+        status.innerText = '';
+        loadAdminSongs();
+        goToPage('home');
+      }, 1800);
+    } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 100); }
+  }
+
+  window.scheduleSingle = async function() {
+    const status = document.getElementById('scheduleSingleStatus');
+    const title = document.getElementById('schTitle').value.trim();
+    const cover = document.getElementById('schCover').value.trim();
+    const artist = document.getElementById('schArtist').value.trim() || 'Samarid';
+    const category = document.getElementById('schCategory').value.trim() || 'Music';
+    const description = document.getElementById('schDescription').value.trim() || 'No description yet.';
+    const downloadurl = document.getElementById('schDownload').value.trim() || '#';
+    const spotify = document.getElementById('schSpotify').value.trim();
+    if (!title) { status.className = 'status error'; status.innerText = 'Title required!'; return; }
+    if (!cover) { status.className = 'status error'; status.innerText = 'Cover URL required!'; return; }
+    if (!downloadurl || downloadurl === '#') { status.className = 'status error'; status.innerText = 'Download MP3 required!'; return; }
+    const { date, iso } = getSelectedDateTime('schMonth','schDay','schYear','schHour','schMinute', currentAmPm);
+    if (date.getTime() <= Date.now()) { status.className = 'status error'; status.innerText = 'Pick a future date & time!'; return; }
+    status.className = 'status info'; status.innerText = 'Scheduling...';
+    try {
+      const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+      const payload = { title, cover, artist_name: artist, category, description, downloadurl, spotify: spotify || null, date: displayDate, status: 'scheduled', release_at: iso };
+      const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!res.ok) { const err = await res.text(); throw new Error(err); }
+      await ensureArtistExists(artist);
+      status.className = 'status success';
+      status.innerText = 'Scheduled! Goes live ' + formatPreviewText(date);
+      ['schTitle','schCover','schArtist','schCategory','schDescription','schDownload','schSpotify'].forEach(id => { document.getElementById(id).value = ''; });
+      setTimeout(() => { status.innerText = ''; loadScheduled(); }, 2500);
+    } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 100); }
+  }
+
+  window.addSchAlbumSong = function() {
+    schAlbumSongIndex++;
+    const container = document.getElementById('schAlbumSongsContainer');
+    const div = document.createElement('div');
+    div.className = 'album-song-item';
+    div.id = 'sch-album-song-' + schAlbumSongIndex;
+    div.innerHTML = `
+      <div class="album-song-num">SONG ${schAlbumSongIndex}</div>
+      <button class="album-song-remove" onclick="removeSchAlbumSong(${schAlbumSongIndex})"><i class="fas fa-times"></i></button>
+      <div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div>
+      <div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="https://...mp3"></div>
+      <div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div>
+    `;
+    container.appendChild(div);
+    updateSchAlbumCount();
+  }
+  window.removeSchAlbumSong = function(num) {
+    const el = document.getElementById('sch-album-song-' + num);
+    if (el) el.remove();
+    updateSchAlbumCount();
+  }
+  function updateSchAlbumCount() {
+    const count = document.querySelectorAll('#schAlbumSongsContainer .album-song-item').length;
+    document.getElementById('schAlbumSongCount').innerText = count;
+  }
+  window.scheduleAlbum = async function() {
+    const status = document.getElementById('scheduleAlbumStatus');
+    const albumName = document.getElementById('schAlbumName').value.trim();
+    const artist = document.getElementById('schAlbumArtist').value.trim() || 'Samarid';
+    const cover = document.getElementById('schAlbumCover').value.trim();
+    const category = document.getElementById('schAlbumCategory').value.trim() || 'Music';
+    if (!albumName) { status.className = 'status error'; status.innerText = 'Album name required!'; return; }
+    if (!cover) { status.className = 'status error'; status.innerText = 'Album cover required!'; return; }
+    const songItems = document.querySelectorAll('#schAlbumSongsContainer .album-song-item');
+    if (songItems.length === 0) { status.className = 'status error'; status.innerText = 'Add at least one song!'; return; }
+    const songs = [];
+    let valid = true;
+    songItems.forEach(item => {
+      const title = item.querySelector('.sch-album-song-title').value.trim();
+      const download = item.querySelector('.sch-album-song-download').value.trim() || '#';
+      const desc = item.querySelector('.sch-album-song-desc').value.trim() || 'No description yet.';
+      if (!title) valid = false;
+      songs.push({ title, downloadurl: download, description: desc });
+    });
+    if (!valid) { status.className = 'status error'; status.innerText = 'All songs need a title!'; return; }
+    const { date, iso } = getSelectedDateTime('schAMonth','schADay','schAYear','schAHour','schAMinute', currentAAmPm);
+    if (date.getTime() <= Date.now()) { status.className = 'status error'; status.innerText = 'Pick a future date & time!'; return; }
+    status.className = 'status info'; status.innerText = 'Scheduling album...';
+    try {
+      const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+      const payload = songs.map(s => ({ title: s.title, cover, artist_name: artist, category, description: s.description, downloadurl: s.downloadurl, album_name: albumName, date: displayDate, status: 'scheduled', release_at: iso }));
+      const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      if (!res.ok) { const err = await res.text(); throw new Error(err); }
+      await ensureArtistExists(artist);
+      status.className = 'status success';
+      status.innerText = 'Album "' + albumName + '" scheduled for ' + formatPreviewText(date);
+      ['schAlbumName','schAlbumArtist','schAlbumCover','schAlbumCategory'].forEach(id => { document.getElementById(id).value = ''; });
+      document.getElementById('schAlbumSongsContainer').innerHTML = '';
+      schAlbumSongIndex = 0;
+      addSchAlbumSong();
+      setTimeout(() => { status.innerText = ''; loadScheduled(); }, 2500);
+    } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 100); }
+  }
+
+  async function loadScheduled() {
+    const list = document.getElementById('scheduledList');
+    if (!list) return;
+    list.innerHTML = '<p class="empty-songs">Loading...</p>';
+    try {
+      const nowIso = new Date().toISOString();
+      const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?status=eq.scheduled&release_at=gt.' + encodeURIComponent(nowIso) + '&select=*&order=release_at.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+      const songs = await res.json();
+      if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<p class="empty-songs">No scheduled releases yet.</p>'; return; }
+      list.innerHTML = songs.map(s => {
+        const releaseDate = s.release_at ? new Date(s.release_at) : null;
+        const when = releaseDate ? formatPreviewText(releaseDate) : 'Unknown time';
+        const albumTag = s.album_name ? ' • ' + s.album_name : '';
+        return `<div class="scheduled-card"><img src="${s.cover}" alt="${s.title}"><div class="info"><h4>${s.title}</h4><p>${s.artist_name || 'Samarid'}${albumTag}</p></div><div class="when">${when.split(' · ')[0]}</div></div>`;
+      }).join('');
+    } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load.</p>'; }
+  }
+
+  window.loadChannelLink = function() {
+    const saved = localStorage.getItem('samarid_channel_link');
+    if (saved) document.getElementById('channelLinkInput').value = saved;
+  }
+  window.saveChannelLink = function() {
+    const status = document.getElementById('channelStatus');
+    const link = document.getElementById('channelLinkInput').value.trim();
+    if (!link) { status.className = 'status error'; status.innerText = 'Please enter a channel link.'; return; }
+    localStorage.setItem('samarid_channel_link', link);
+    status.className = 'status success';
+    status.innerText = 'Channel link saved!';
+  }
+  window.resetChannelLink = function() {
+    localStorage.removeItem('samarid_channel_link');
+    document.getElementById('channelLinkInput').value = '';
+    const status = document.getElementById('channelStatus');
+    status.className = 'status info';
+    status.innerText = 'Reset to default channel.';
+  }
+  window.saveVideo = async function() {
+    const status = document.getElementById('videoStatus');
+    const title = document.getElementById('videoTitle').value.trim();
+    const videoUrl = document.getElementById('videoUrl').value.trim();
+    const date = document.getElementById('videoDate').value.trim() || new Date().toLocaleDateString('en-US', {month: 'long', day: 'numeric', year: 'numeric'});
+    if (!title || !videoUrl) { status.className = 'status error'; status.innerText = 'Title and Link required.'; return; }
+    status.className = 'status info'; status.innerText = 'Publishing...';
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/' + VIDEOS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ title, video_url: videoUrl, video_date: date }) });
+      if (res.ok) {
+        status.className = 'status success';
+        status.innerText = 'Video link published!';
+        document.getElementById('videoTitle').value = '';
+        document.getElementById('videoUrl').value = '';
+        document.getElementById('videoDate').value = '';
+      } else { const errText = await res.text(); status.className =          status.className = 'status error';
           status.innerText = 'Error: ' + errText;
         }
       } catch (err) { status.className = 'status error'; status.innerText = 'Network error: ' + err.message; }
@@ -1095,10 +1174,7 @@ Download: https://example.com/cry-baby.mp3</div>
       const fnEl = document.getElementById('importFilename');
       fnEl.innerText = file.name;
       const reader = new FileReader();
-      reader.onload = function(e) {
-        const text = e.target.result || '';
-        parseImportText(text);
-      };
+      reader.onload = function(e) { parseImportText(e.target.result || ''); };
       reader.onerror = function() { alert('Could not read file.'); };
       reader.readAsText(file);
     }
@@ -1119,12 +1195,8 @@ Download: https://example.com/cry-baby.mp3</div>
 
     window.parseImport = function() {
       let text = '';
-      if (importMethod === 'paste') {
-        text = document.getElementById('importPasteArea').value || '';
-      } else {
-        alert('Please choose a .txt file first, or switch to Paste Text.');
-        return;
-      }
+      if (importMethod === 'paste') text = document.getElementById('importPasteArea').value || '';
+      else { alert('Please choose a .txt file first, or switch to Paste Text.'); return; }
       if (!text.trim()) { alert('Nothing to read. Paste some text first.'); return; }
       parseImportText(text);
     }
@@ -1140,17 +1212,14 @@ Download: https://example.com/cry-baby.mp3</div>
 
     function parseImportText(rawText) {
       const text = rawText.replace(/\r\n/g, '\n').trim();
-
       const typeRaw = extractLabel(text, ['Type', 'Category Type']).toLowerCase();
       const albumLabelRaw = extractLabel(text, ['Album']);
       const hasTrackLines = /^\s*Track\s*\d+\s*[:\-]/im.test(text);
       const isAlbum = typeRaw === 'album' || !!albumLabelRaw || hasTrackLines;
-
       const releaseRaw = extractLabel(text, ['Release']).toLowerCase();
       const scheduleDate = extractLabel(text, ['Date', 'Release Date']);
       const scheduleTime = extractLabel(text, ['Time', 'Release Time']);
       const isScheduled = releaseRaw.includes('schedule') || releaseRaw.includes('later') || (!!scheduleDate && !releaseRaw.includes('now'));
-
       const title = extractLabel(text, ['Title', 'Song', 'Track']) || albumLabelRaw || '';
       const albumName = albumLabelRaw || (isAlbum ? title : '');
       const artist = extractLabel(text, ['Artist', 'Artist Name', 'By']) || 'Samarid';
@@ -1159,15 +1228,11 @@ Download: https://example.com/cry-baby.mp3</div>
       const cover = extractLabel(text, ['Cover', 'Cover Art', 'Art', 'Image']) || '';
       const download = extractLabel(text, ['Download', 'Download MP3', 'Download Link', 'MP3', 'Audio']) || '';
       const spotify = extractLabel(text, ['Spotify', 'Spotify Link']) || '';
-
-      let finalCover = cover;
-      let finalDownload = download;
-      let finalSpotify = spotify;
+      let finalCover = cover, finalDownload = download, finalSpotify = spotify;
       const urls = text.match(/https?:\/\/[^\s]+/g) || [];
       if (!finalSpotify) { const u = urls.find(x => x.includes('spotify.com')); if (u) finalSpotify = u; }
       if (!finalCover) { const u = urls.find(x => /\.(png|jpg|jpeg|webp|gif)(\?|$)/i.test(x) && !x.includes('spotify')); if (u) finalCover = u; }
       if (!finalDownload) { const u = urls.find(x => /\.mp3(\?|$)/i.test(x)); if (u) finalDownload = u; }
-
       let tracks = [];
       if (isAlbum) {
         const trackRe = /^\s*Track\s*\d+\s*[:\-]\s*(.+)$/gim;
@@ -1180,19 +1245,14 @@ Download: https://example.com/cry-baby.mp3</div>
           tracks.push({ title: trackTitle, downloadurl: dlMatch ? dlMatch[1].trim() : '#' });
         }
       }
-
       parsedImport = {
         isAlbum, isScheduled,
         title: title || (isAlbum ? albumName : ''),
         albumName: isAlbum ? (albumName || title) : '',
         artist, category, description,
-        cover: finalCover,
-        download: finalDownload,
-        spotify: finalSpotify,
-        scheduleDate, scheduleTime, tracks,
-        rawText: text
+        cover: finalCover, download: finalDownload, spotify: finalSpotify,
+        scheduleDate, scheduleTime, tracks, rawText: text
       };
-
       renderImportPreview();
     }
 
@@ -1201,36 +1261,28 @@ Download: https://example.com/cry-baby.mp3</div>
       const rows = document.getElementById('importPreviewRows');
       const data = parsedImport;
       if (!data) return;
-
       let artistExists = false;
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(data.artist) + '&select=id&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const existing = await res.json();
         artistExists = Array.isArray(existing) && existing.length > 0;
       } catch (e) { artistExists = false; }
-      data.artistExists = artistExists;
-
       const typeBadge = data.isAlbum ? '<span class="preview-badge badge-album">Album</span>' : '<span class="preview-badge badge-single">Single</span>';
       const releaseBadge = data.isScheduled ? '<span class="preview-badge badge-scheduled">Scheduled</span>' : '<span class="preview-badge badge-instant">Instant (Now)</span>';
       const artistBadge = artistExists ? '<span class="preview-badge badge-existing">Existing artist</span>' : '<span class="preview-badge badge-new">New — will create</span>';
-
       const v = (val) => val && val.trim() ? escapeHtml(val) : '<span class="value empty">— not detected —</span>';
-
       let rowsHtml = '';
       rowsHtml += `<div class="preview-row"><div class="label">Type</div><div class="value">${typeBadge}</div></div>`;
       rowsHtml += `<div class="preview-row"><div class="label">Release</div><div class="value">${releaseBadge}</div></div>`;
       rowsHtml += `<div class="preview-row"><div class="label">Artist</div><div class="value">${escapeHtml(data.artist)} ${artistBadge}</div></div>`;
-
       if (data.isAlbum) {
         rowsHtml += `<div class="preview-row"><div class="label">Album</div><div class="value">${v(data.albumName)}</div></div>`;
         rowsHtml += `<div class="preview-row"><div class="label">Tracks</div><div class="value">${data.tracks.length} song${data.tracks.length !== 1 ? 's' : ''} detected</div></div>`;
       } else {
         rowsHtml += `<div class="preview-row"><div class="label">Title</div><div class="value">${v(data.title)}</div></div>`;
       }
-
       rowsHtml += `<div class="preview-row"><div class="label">Category</div><div class="value">${v(data.category)}</div></div>`;
       rowsHtml += `<div class="preview-row"><div class="label">Cover</div><div class="value">${v(data.cover)}</div></div>`;
-
       if (data.isScheduled) {
         rowsHtml += `<div class="preview-row"><div class="label">Date</div><div class="value">${v(data.scheduleDate)}</div></div>`;
         rowsHtml += `<div class="preview-row"><div class="label">Time</div><div class="value">${v(data.scheduleTime)}</div></div>`;
@@ -1238,9 +1290,7 @@ Download: https://example.com/cry-baby.mp3</div>
         rowsHtml += `<div class="preview-row"><div class="label">Download</div><div class="value">${v(data.download)}</div></div>`;
         rowsHtml += `<div class="preview-row"><div class="label">Spotify</div><div class="value">${v(data.spotify)}</div></div>`;
       }
-
       rowsHtml += `<div class="preview-row"><div class="label">Description</div><div class="value">${v(data.description)}</div></div>`;
-
       rows.innerHTML = rowsHtml;
       preview.classList.add('active');
       preview.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1282,7 +1332,6 @@ Download: https://example.com/cry-baby.mp3</div>
       const status = document.getElementById('importStatus');
       const btn = document.getElementById('importConfirmBtn');
       if (!data) return;
-
       if (data.isAlbum) {
         if (!data.albumName) { status.className = 'import-status error'; status.innerText = 'Album name missing.'; return; }
         if (!data.cover) { status.className = 'import-status error'; status.innerText = 'Cover URL missing.'; return; }
@@ -1292,25 +1341,21 @@ Download: https://example.com/cry-baby.mp3</div>
         if (!data.cover) { status.className = 'import-status error'; status.innerText = 'Cover URL missing.'; return; }
         if (!data.download || data.download === '#') { status.className = 'import-status error'; status.innerText = 'Download MP3 link missing.'; return; }
       }
-
       let scheduleInfo = null;
       if (data.isScheduled) {
         scheduleInfo = parseScheduleDateTime(data.scheduleDate, data.scheduleTime);
         if (!scheduleInfo) { status.className = 'import-status error'; status.innerText = 'Could not read date/time. Format: April 13, 2026 / 3:30 PM'; return; }
         if (scheduleInfo.date.getTime() <= Date.now()) { status.className = 'import-status error'; status.innerText = 'Date must be in the future.'; return; }
       }
-
       btn.disabled = true;
       const originalLabel = btn.innerHTML;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publishing...';
       status.className = 'import-status info';
       status.innerText = 'Publishing...';
-
       try {
         const artistResult = await ensureArtistExists(data.artist);
         const today = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
         let payload;
-
         if (data.isAlbum) {
           const dateText = data.isScheduled ? scheduleInfo.displayDate : today;
           payload = data.tracks.map(t => ({
@@ -1332,30 +1377,21 @@ Download: https://example.com/cry-baby.mp3</div>
             release_at: data.isScheduled ? scheduleInfo.iso : null
           };
         }
-
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, {
           method: 'POST',
           headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
-
         let msg = '';
-        if (data.isAlbum) {
-          msg = 'Album "' + data.albumName + '" imported with ' + data.tracks.length + ' track' + (data.tracks.length !== 1 ? 's' : '') + '!';
-        } else {
-          msg = '"' + data.title + '" imported!';
-        }
+        if (data.isAlbum) msg = 'Album "' + data.albumName + '" imported with ' + data.tracks.length + ' track' + (data.tracks.length !== 1 ? 's' : '') + '!';
+        else msg = '"' + data.title + '" imported!';
         if (artistResult.created) msg += ' Artist "' + data.artist + '" was created.';
         if (data.isScheduled) msg += ' Goes live ' + formatPreviewText(scheduleInfo.date) + '.';
-
         status.className = 'import-status success';
         status.innerText = msg;
-
         document.getElementById('importPasteArea').value = '';
         document.getElementById('importFilename').innerText = '';
-
         setTimeout(() => {
           cancelImport();
           loadAdminSongs();
@@ -1368,6 +1404,303 @@ Download: https://example.com/cry-baby.mp3</div>
       } finally {
         btn.disabled = false;
         btn.innerHTML = originalLabel;
+      }
+    }
+
+    // ===== SEO TAB LOGIC =====
+    let seoAllSongs = [];
+    let seoAllArtists = [];
+    let seoEditingSongId = null;
+    let seoEditingArtistName = null;
+
+    window.switchSeoTab = function(which, btn) {
+      document.querySelectorAll('#pageSeo .subtab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#pageSeo .subcontent').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      const contentId = which === 'songs' ? 'seoContentSongs' : which === 'artists' ? 'seoContentArtists' : 'seoContentOverview';
+      document.getElementById(contentId).classList.add('active');
+      if (which === 'overview') loadSeoOverview();
+    }
+
+    async function loadSeoSongs() {
+      const list = document.getElementById('seoSongsList');
+      list.innerHTML = '<p class="empty-songs">Loading songs...</p>';
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=id,title,artist_name,cover,description&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const songs = await res.json();
+        seoAllSongs = Array.isArray(songs) ? songs : [];
+        renderSeoSongs('');
+      } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; }
+    }
+
+    function renderSeoSongs(query) {
+      const list = document.getElementById('seoSongsList');
+      let filtered = seoAllSongs;
+      if (query) filtered = seoAllSongs.filter(s => (s.title || '').toLowerCase().includes(query) || (s.artist_name || '').toLowerCase().includes(query));
+      if (filtered.length === 0) { list.innerHTML = '<p class="empty-songs">' + (query ? 'No matches.' : 'No songs yet.') + '</p>'; return; }
+      list.innerHTML = filtered.map(s => {
+        const hasDesc = s.description && s.description.trim() && s.description.trim() !== 'No description yet.';
+        return `
+          <div class="seo-list-item" onclick='openSeoSongEditor(${JSON.stringify(s).replace(/'/g, "&#39;")})'>
+            <img src="${s.cover}" alt="${s.title}">
+            <div class="info">
+              <h4>${escapeHtml(s.title)}</h4>
+              <p>${escapeHtml(s.artist_name || 'Samarid')}</p>
+            </div>
+            <span class="status-tag ${hasDesc ? 'done' : 'missing'}">${hasDesc ? 'DONE' : 'MISSING'}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.filterSeoSongs = function() { renderSeoSongs(document.getElementById('seoSongSearch').value.toLowerCase().trim()); }
+
+    window.openSeoSongEditor = function(song) {
+      seoEditingSongId = song.id;
+      document.getElementById('seoSongEditorCover').src = song.cover;
+      document.getElementById('seoSongEditorTitle').innerText = song.title;
+      document.getElementById('seoSongEditorArtist').innerText = song.artist_name || 'Samarid';
+      document.getElementById('seoSongDescInput').value = (song.description && song.description !== 'No description yet.') ? song.description : '';
+      document.getElementById('seoSongLinkBox').innerText = 'https://samarid-music.vercel.app/song.html?id=' + song.id;
+      document.getElementById('seoSongSaveStatus').innerText = '';
+      updateSeoSongCharCount();
+      document.getElementById('seoSongEditor').classList.add('active');
+      document.getElementById('seoSongEditor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    window.closeSeoSongEditor = function() {
+      document.getElementById('seoSongEditor').classList.remove('active');
+      seoEditingSongId = null;
+    }
+
+    window.updateSeoSongCharCount = function() {
+      const len = document.getElementById('seoSongDescInput').value.length;
+      const el = document.getElementById('seoSongCharCount');
+      el.innerText = len + ' / 500';
+      el.classList.toggle('over', len > 500);
+    }
+
+    window.saveSeoSong = async function() {
+      if (!seoEditingSongId) return;
+      const status = document.getElementById('seoSongSaveStatus');
+      const btn = document.getElementById('seoSongSaveBtn');
+      const description = document.getElementById('seoSongDescInput').value.trim() || 'No description yet.';
+      btn.disabled = true;
+      status.className = 'status info';
+      status.innerText = 'Saving...';
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + seoEditingSongId, {
+          method: 'PATCH',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+          body: JSON.stringify({ description })
+        });
+        if (!res.ok) throw new Error(await res.text());
+        status.className = 'status success';
+        status.innerText = 'Description saved!';
+        loadSeoSongs();
+      } catch (e) {
+        status.className = 'status error';
+        status.innerText = 'Error: ' + e.message.substring(0, 80);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    window.copySeoSongLink = async function() {
+      const url = document.getElementById('seoSongLinkBox').innerText;
+      try {
+        if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(url); }
+        else {
+          const ta = document.createElement('textarea');
+          ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+        alert('Song link copied!\n\n' + url);
+      } catch (e) { alert('Could not copy: ' + url); }
+    }
+
+    async function loadSeoArtists() {
+      const list = document.getElementById('seoArtistsList');
+      list.innerHTML = '<p class="empty-songs">Loading artists...</p>';
+      try {
+        const [songsRes, profilesRes] = await Promise.all([
+          fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=artist_name,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?select=name,profile_pic,bio,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
+        ]);
+        const songs = await songsRes.json();
+        const profiles = await profilesRes.json();
+        const profileMap = {};
+        (Array.isArray(profiles) ? profiles : []).forEach(p => { if (p.name) profileMap[p.name.trim().toLowerCase()] = p; });
+        const artistMap = {};
+        (Array.isArray(songs) ? songs : []).forEach(s => {
+          const name = (s.artist_name || 'Samarid').trim();
+          const key = name.toLowerCase();
+          if (!artistMap[key]) artistMap[key] = { name: name, verified: false, profile_pic: null, bio: null };
+          if (s.verified) artistMap[key].verified = true;
+          const p = profileMap[key];
+          if (p) {
+            if (p.verified) artistMap[key].verified = true;
+            if (p.profile_pic) artistMap[key].profile_pic = p.profile_pic;
+            if (p.bio) artistMap[key].bio = p.bio;
+            if (p.name) artistMap[key].name = p.name;
+          }
+        });
+        seoAllArtists = Object.values(artistMap).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+        renderSeoArtists('');
+      } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load artists.</p>'; }
+    }
+
+    function renderSeoArtists(query) {
+      const list = document.getElementById('seoArtistsList');
+      let filtered = seoAllArtists;
+      if (query) filtered = seoAllArtists.filter(a => a.name.toLowerCase().includes(query));
+      if (filtered.length === 0) { list.innerHTML = '<p class="empty-songs">' + (query ? 'No matches.' : 'No artists yet.') + '</p>'; return; }
+      list.innerHTML = filtered.map(a => {
+        const hasBio = a.bio && a.bio.trim();
+        const avatar = a.profile_pic ? `<img src="${escapeHtml(a.profile_pic)}">` : `<div style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#ff8800,#cc6600);display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;flex-shrink:0;">${escapeHtml(a.name.charAt(0).toUpperCase())}</div>`;
+        return `
+          <div class="seo-list-item" onclick='openSeoArtistEditor(${JSON.stringify(a).replace(/'/g, "&#39;")})'>
+            ${avatar}
+            <div class="info">
+              <h4>${escapeHtml(a.name)}</h4>
+              <p>${hasBio ? 'Has bio' : 'No bio yet'}</p>
+            </div>
+            <span class="status-tag ${hasBio ? 'done' : 'missing'}">${hasBio ? 'DONE' : 'MISSING'}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.filterSeoArtists = function() { renderSeoArtists(document.getElementById('seoArtistSearch').value.toLowerCase().trim()); }
+
+    window.openSeoArtistEditor = function(artist) {
+      seoEditingArtistName = artist.name;
+      const cover = document.getElementById('seoArtistEditorCover');
+      if (artist.profile_pic) { cover.src = artist.profile_pic; cover.style.display = 'block'; }
+      else { cover.src = ''; cover.style.display = 'none'; }
+      document.getElementById('seoArtistEditorName').innerText = artist.name;
+      document.getElementById('seoArtistBioInput').value = artist.bio || '';
+      document.getElementById('seoArtistLinkBox').innerText = 'https://samarid-music.vercel.app/artist-template.html?name=' + encodeURIComponent(artist.name);
+      document.getElementById('seoArtistSaveStatus').innerText = '';
+      updateSeoArtistCharCount();
+      document.getElementById('seoArtistEditor').classList.add('active');
+      document.getElementById('seoArtistEditor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    window.closeSeoArtistEditor = function() {
+      document.getElementById('seoArtistEditor').classList.remove('active');
+      seoEditingArtistName = null;
+    }
+
+    window.updateSeoArtistCharCount = function() {
+      const len = document.getElementById('seoArtistBioInput').value.length;
+      const el = document.getElementById('seoArtistCharCount');
+      el.innerText = len + ' / 1000';
+      el.classList.toggle('over', len > 1000);
+    }
+
+    window.saveSeoArtist = async function() {
+      if (!seoEditingArtistName) return;
+      const status = document.getElementById('seoArtistSaveStatus');
+      const btn = document.getElementById('seoArtistSaveBtn');
+      const bio = document.getElementById('seoArtistBioInput').value.trim();
+      btn.disabled = true;
+      status.className = 'status info';
+      status.innerText = 'Saving...';
+      try {
+        const patchRes = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(seoEditingArtistName), {
+          method: 'PATCH',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+          body: JSON.stringify({ bio })
+        });
+        const patched = await patchRes.json();
+        if (!Array.isArray(patched) || patched.length === 0) {
+          await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE, {
+            method: 'POST',
+            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+            body: JSON.stringify({ name: seoEditingArtistName, bio, verified: false })
+          });
+        }
+        status.className = 'status success';
+        status.innerText = 'Bio saved!';
+        loadSeoArtists();
+      } catch (e) {
+        status.className = 'status error';
+        status.innerText = 'Error: ' + e.message.substring(0, 80);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    window.copySeoArtistLink = async function() {
+      const url = document.getElementById('seoArtistLinkBox').innerText;
+      try {
+        if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(url); }
+        else {
+          const ta = document.createElement('textarea');
+          ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+          document.body.removeChild(ta);
+        }
+        alert('Artist link copied!\n\n' + url);
+      } catch (e) { alert('Could not copy: ' + url); }
+    }
+
+    async function loadSeoOverview() {
+      try {
+        const [songsRes, profilesRes, songsFullRes] = await Promise.all([
+          fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=id,title,artist_name,cover,description&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?select=name,bio,profile_pic', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=artist_name', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
+        ]);
+        const songs = await songsRes.json();
+        const profiles = await profilesRes.json();
+        const songsFull = await songsFullRes.json();
+        const songsMissing = (Array.isArray(songs) ? songs : []).filter(s => !s.description || !s.description.trim() || s.description.trim() === 'No description yet.');
+        const profileMap = {};
+        (Array.isArray(profiles) ? profiles : []).forEach(p => { if (p.name) profileMap[p.name.trim().toLowerCase()] = p; });
+        const artistSet = new Set();
+        (Array.isArray(songsFull) ? songsFull : []).forEach(s => { if (s.artist_name) artistSet.add(s.artist_name.trim()); });
+        const artistsMissing = [...artistSet].filter(name => {
+          const p = profileMap[name.toLowerCase()];
+          return !p || !p.bio || !p.bio.trim();
+        });
+        document.getElementById('seoStatTotalSongs').innerText = (Array.isArray(songs) ? songs.length : 0);
+        document.getElementById('seoStatSongsWithDesc').innerText = (Array.isArray(songs) ? songs.length : 0) - songsMissing.length;
+        document.getElementById('seoStatSongsMissing').innerText = songsMissing.length;
+        document.getElementById('seoStatArtistsMissing').innerText = artistsMissing.length;
+        const needs = document.getElementById('seoNeedsAttention');
+        let html = '';
+        if (songsMissing.length > 0) {
+          html += '<p style="font-size:11px; color:#ff8800; font-weight:800; letter-spacing:1px; text-transform:uppercase; margin-bottom:8px;">Songs Missing Description</p>';
+          html += songsMissing.slice(0, 10).map(s => `
+            <div class="seo-list-item" onclick='openSeoSongEditor(${JSON.stringify({id:s.id,title:s.title,artist_name:s.artist_name,cover:s.cover,description:s.description}).replace(/'/g, "&#39;")})'>
+              <img src="${s.cover}" alt="${s.title}">
+              <div class="info"><h4>${escapeHtml(s.title)}</h4><p>${escapeHtml(s.artist_name || 'Samarid')}</p></div>
+              <span class="status-tag missing">FIX</span>
+            </div>
+          `).join('');
+          if (songsMissing.length > 10) html += '<p style="text-align:center; font-size:11px; color:#666; margin-top:8px;">+' + (songsMissing.length - 10) + ' more</p>';
+        }
+        if (artistsMissing.length > 0) {
+          html += '<p style="font-size:11px; color:#ff8800; font-weight:800; letter-spacing:1px; text-transform:uppercase; margin:16px 0 8px;">Artists Missing Bio</p>';
+          html += artistsMissing.slice(0, 10).map(name => {
+            const p = profileMap[name.toLowerCase()] || {};
+            const avatar = p.profile_pic ? `<img src="${escapeHtml(p.profile_pic)}">` : `<div style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#ff8800,#cc6600);display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;flex-shrink:0;">${escapeHtml(name.charAt(0).toUpperCase())}</div>`;
+            return `
+              <div class="seo-list-item" onclick='openSeoArtistEditor(${JSON.stringify({name:name, bio:p.bio||null, profile_pic:p.profile_pic||null}).replace(/'/g, "&#39;")})'>
+                ${avatar}
+                <div class="info"><h4>${escapeHtml(name)}</h4><p>No bio yet</p></div>
+                <span class="status-tag missing">FIX</span>
+              </div>
+            `;
+          }).join('');
+        }
+        if (!html) html = '<p class="empty-songs" style="color:#00cc44;"><i class="fas fa-check-circle"></i> All songs and artists are optimized!</p>';
+        needs.innerHTML = html;
+      } catch (e) {
+        document.getElementById('seoNeedsAttention').innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load overview.</p>';
       }
     }
 

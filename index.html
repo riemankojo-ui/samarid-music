@@ -97,8 +97,6 @@
 
   .song-card-info .date, .top-album-date { font-size: 12.5px; color: var(--text2); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  .top-album-rank, .top-album-label, .top-album-artist, .top-album-meta { display: none !important; }
-
   .hot-artists-section { background: #0a0a0a; color: #ffffff; margin: 0 -16px 0; padding: 40px 0 44px; position: relative; overflow: hidden; }
   .dark-tagline + .hot-artists-section { margin-top: 0; }
   .hot-artists-header { display: flex; align-items: center; justify-content: space-between; padding: 0 22px 24px; gap: 12px; overflow: hidden; }
@@ -114,7 +112,7 @@
   .hot-artist-avatar { width: 92px; height: 92px; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg, #1a1a1a 0%, #262626 100%); display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 900; color: #555; box-shadow: 0 6px 20px rgba(0,0,0,0.5); transition: transform 0.25s ease; }
   .hot-artist-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .hot-artist:active .hot-artist-avatar { transform: scale(0.94); }
-  .hot-artist-name { font-size: 14px; font-weight: 800; color: #ffffff; letter-spacing: -0.2px; text-align: center; max-width: 92px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .hot-artist-name { font-size: 14px; font-weight: 800; color: #ffffff; letter-spacing: -0.2px; text-align: center; max-width: 92px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; justify-content: center; gap: 4px; }
   .hot-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 50%; background: #ffffff; border: none; color: #0a0a0a; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(0,0,0,0.5); z-index: 5; transition: transform 0.15s, opacity 0.2s; }
   .hot-arrow:active { transform: translateY(-50%) scale(0.9); }
   .hot-arrow.left { left: 6px; }
@@ -166,8 +164,7 @@
   .footer-wrapper { margin: 0 -16px; }
   .footer-wrapper .footer { margin-top: 0; }
 </style>
-</head>
-<body class="light">
+</head><body class="light">
 
   <header class="header">
     <button class="menu-btn" onclick="toggleMenu(event)">☰</button>
@@ -299,10 +296,10 @@
     const TOP_ALBUMS_LIMIT = 4;
     const TOP_ARTISTS_LIMIT = 15;
 
-    // Filter to only show LIVE songs (hide scheduled)
     const LIVE_FILTER = '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')';
 
-    const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22" style="width:14px;height:14px;vertical-align:middle;display:inline-block;flex-shrink:0;"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
+    // Verify badge — used ONLY on the Top Artists carousel below
+    const VERIFY_BADGE = '<svg viewBox="0 0 22 22" style="width:14px;height:14px;vertical-align:middle;display:inline-block;flex-shrink:0;"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
     function escapeHtml(s) {
       if (s === null || s === undefined) return '';
@@ -334,13 +331,12 @@
 
     function renderSongCard(s) {
       const artist = s.artist_name || 'Samarid';
-      const badge = s.verified ? VERIFY_BADGE : '';
       const date = s.date || '';
       return `
         <a href="song.html?id=${s.id}" class="song-card">
           <div class="song-card-img"><img src="${escapeHtml(s.cover)}" alt="${escapeHtml(s.title)}" loading="lazy"></div>
           <div class="song-card-info">
-            <h3>${escapeHtml(artist)}${badge} - ${escapeHtml(s.title)}</h3>
+            <h3>${escapeHtml(artist)} - ${escapeHtml(s.title)}</h3>
             <div class="date">${escapeHtml(date)}</div>
           </div>
         </a>
@@ -348,7 +344,6 @@
     }
 
     function renderAlbumCard(album) {
-      const badge = album.verified ? VERIFY_BADGE : '';
       const artist = album.artist || 'Samarid';
       const date = album.date || '';
       const linkUrl = 'album.html?name=' + encodeURIComponent(album.name);
@@ -358,7 +353,7 @@
             <img src="${escapeHtml(album.cover)}" alt="${escapeHtml(album.name)}" loading="lazy">
           </div>
           <div class="top-album-info">
-            <div class="top-album-name">${escapeHtml(artist)}${badge} - ${escapeHtml(album.name)}</div>
+            <div class="top-album-name">${escapeHtml(artist)} - ${escapeHtml(album.name)}</div>
             <div class="top-album-date">${escapeHtml(date)}</div>
           </div>
         </a>
@@ -386,18 +381,15 @@
       } catch (e) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Error</h3></div>'; }
     }
 
-    // Latest Releases search
     let latestSearchDebounce = null;
     function setupLatestSearch() {
       const input = document.getElementById('latestSearchInput');
       const clearBtn = document.getElementById('latestClearBtn');
       if (!input) return;
-
       input.addEventListener('input', function(e) {
         const q = e.target.value;
         if (q.trim()) clearBtn.classList.add('show');
         else clearBtn.classList.remove('show');
-
         clearTimeout(latestSearchDebounce);
         latestSearchDebounce = setTimeout(() => filterLatest(q), 150);
       });
@@ -406,19 +398,13 @@
     function filterLatest(query) {
       const list = document.getElementById('songList');
       const q = query.toLowerCase().trim();
-      if (!q) {
-        list.innerHTML = allLatestSongs.map(renderSongCard).join('');
-        return;
-      }
+      if (!q) { list.innerHTML = allLatestSongs.map(renderSongCard).join(''); return; }
       const filtered = allLatestSongs.filter(s =>
         (s.title || '').toLowerCase().includes(q) ||
         (s.artist_name || '').toLowerCase().includes(q) ||
         (s.album_name || '').toLowerCase().includes(q)
       );
-      if (filtered.length === 0) {
-        list.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><h3>No songs match</h3></div>';
-        return;
-      }
+      if (filtered.length === 0) { list.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><h3>No songs match</h3></div>'; return; }
       list.innerHTML = filtered.map(renderSongCard).join('');
     }
 
@@ -439,11 +425,7 @@
         let profiles = [];
         if (artistsRes) { const pj = await artistsRes.json(); if (Array.isArray(pj)) profiles = pj; }
         const songs = await songsRes.json();
-        if (!Array.isArray(songs) || songs.length === 0) {
-          track.innerHTML = '<div class="hot-artists-empty">No artists yet — check back soon.</div>';
-          updateHotArrows();
-          return;
-        }
+        if (!Array.isArray(songs) || songs.length === 0) { track.innerHTML = '<div class="hot-artists-empty">No artists yet — check back soon.</div>'; updateHotArrows(); return; }
         const profileMap = {};
         profiles.forEach(p => { if (p.name) profileMap[p.name.trim().toLowerCase()] = p; });
         const map = {};
@@ -466,10 +448,10 @@
         artists = artists.slice(0, TOP_ARTISTS_LIMIT);
         track.innerHTML = artists.map(a => {
           const avatarInner = a.profile_pic ? '<img src="' + escapeHtml(a.profile_pic) + '" alt="' + escapeHtml(a.name) + '" loading="lazy">' : escapeHtml(a.name.charAt(0).toUpperCase());
-          const badge = a.verified ? ' ' + VERIFY_BADGE : '';
+          const badge = a.verified ? VERIFY_BADGE : '';
           return '<a href="artist-template.html?name=' + encodeURIComponent(a.name) + '" class="hot-artist">' +
             '<div class="hot-artist-avatar">' + avatarInner + '</div>' +
-            '<div class="hot-artist-name">' + escapeHtml(a.name) + badge + '</div>' +
+            '<div class="hot-artist-name"><span>' + escapeHtml(a.name) + '</span>' + badge + '</div>' +
           '</a>';
         }).join('');
         const vp = document.getElementById('hotArtistsViewport');
@@ -515,24 +497,15 @@
         const res = await fetch(SUPABASE_URL + '/rest/v1/songs?album_name=not.is.null&album_name=neq.&select=*' + LIVE_FILTER + '&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
         if (!Array.isArray(songs) || songs.length === 0) { container.innerHTML = '<div class="empty-state"><div class="icon">📀</div><h3>No albums yet.</h3></div>'; return; }
-        let verifiedArtists = {};
-        try {
-          const artistRes = await fetch(SUPABASE_URL + '/rest/v1/artists?select=name,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-          const artistData = await artistRes.json();
-          if (Array.isArray(artistData)) { artistData.forEach(a => { if (a.verified && a.name) verifiedArtists[a.name.trim().toLowerCase()] = true; }); }
-        } catch (e) { console.warn('Artist fetch failed:', e); }
-
         const albumMap = {};
         songs.forEach(s => {
           const albumName = s.album_name.trim();
           if (!albumMap[albumName]) {
-            albumMap[albumName] = { name: albumName, cover: s.cover, artist: (s.artist_name || 'Samarid').trim(), verified: false, category: s.category || 'Music', date: s.date || '', songCount: 0, totalPlays: 0 };
+            albumMap[albumName] = { name: albumName, cover: s.cover, artist: (s.artist_name || 'Samarid').trim(), category: s.category || 'Music', date: s.date || '', songCount: 0, totalPlays: 0 };
           }
           albumMap[albumName].songCount++;
           albumMap[albumName].totalPlays += (s.plays || 0);
-          if (s.verified) albumMap[albumName].verified = true;
         });
-        Object.values(albumMap).forEach(album => { if (verifiedArtists[album.artist.toLowerCase()]) album.verified = true; });
         const albums = Object.values(albumMap).sort((a, b) => b.totalPlays - a.totalPlays).slice(0, TOP_ALBUMS_LIMIT);
         container.innerHTML = albums.map(renderAlbumCard).join('');
       } catch (e) {

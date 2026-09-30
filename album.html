@@ -61,8 +61,6 @@
   .song-card-info h3 .dash { font-weight: 600; color: var(--text); margin: 0 2px; }
   .song-card-info .date { font-size: 12.5px; color: var(--text2); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  .verify-badge { display: inline-block; width: 14px; height: 14px; vertical-align: middle; flex-shrink: 0; margin: 0 2px; }
-
   .loading, .empty { text-align: center; padding: 60px 20px; color: #999; font-size: 13px; }
   .empty-state { text-align: center; padding: 50px 20px; background: #fff; border: 1px solid var(--border); border-radius: 16px; color: #999; }
   .empty-state .icon { font-size: 50px; margin-bottom: 15px; }
@@ -72,8 +70,7 @@
   .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: #888; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; border-top: 1px solid var(--border); margin-top: 30px; }
   .footer .brand { color: var(--red); font-weight: 900; }
 </style>
-</head>
-<body>
+</head><body>
 
   <header class="header">
     <button class="menu-btn" onclick="toggleMenu(event)" aria-label="Menu">
@@ -111,8 +108,6 @@
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
 
-    const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
-
     function escapeHtml(s) {
       if (s === null || s === undefined) return '';
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -127,7 +122,6 @@
     }
     window.closeMenu = function() { document.getElementById('menuDropdown').classList.remove('open'); document.getElementById('menuOverlay').classList.remove('open'); }
 
-    // Live filter — only shows published songs
     const LIVE_FILTER = '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')';
 
     async function loadAlbum() {
@@ -141,7 +135,6 @@
       }
 
       try {
-        // Live filter added — hidden songs won't appear
         const res = await fetch(SUPABASE_URL + '/rest/v1/songs?album_name=eq.' + encodeURIComponent(albumName) + '&select=*' + LIVE_FILTER + '&order=id.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
 
@@ -152,7 +145,6 @@
 
         const first = songs[0];
         const artist = first.artist_name || 'Samarid';
-        const badge = first.verified ? VERIFY_BADGE : '';
         const cover = first.cover;
         const category = first.category || 'Music';
         const date = first.date || '';
@@ -167,7 +159,7 @@
             <div class="album-hero-label">Album</div>
             <h1>${escapeHtml(albumName)}</h1>
             <div class="album-hero-meta">
-              <span class="artist">${escapeHtml(artist)}${badge}</span>
+              <span class="artist">${escapeHtml(artist)}</span>
               <span class="dot">•</span>
               <span>${escapeHtml(category)}</span>
               <span class="dot">•</span>
@@ -183,7 +175,7 @@
               <a href="song.html?id=${s.id}" class="song-card">
                 <div class="song-card-img"><img src="${escapeHtml(s.cover)}" alt="${escapeHtml(s.title)}" loading="lazy"></div>
                 <div class="song-card-info">
-                  <h3>${escapeHtml(artist)}${badge}<span class="dash"> - </span>${escapeHtml(s.title)}</h3>
+                  <h3>${escapeHtml(artist)}<span class="dash"> - </span>${escapeHtml(s.title)}</h3>
                   <div class="date">${escapeHtml(s.date || '')}</div>
                 </div>
               </a>
