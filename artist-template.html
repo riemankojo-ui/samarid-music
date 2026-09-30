@@ -105,14 +105,13 @@
   .empty-state .icon { font-size: 50px; margin-bottom: 15px; opacity: 0.5; }
   .empty-state h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
 
-  .verify-badge { display: inline-block; width: 14px; height: 14px; vertical-align: middle; flex-shrink: 0; margin: 0 2px; }
+  .verify-badge { display: inline-block; width: 14px; height: 14px; vertical-align: middle; flex-shrink: 0; margin-left: 4px; }
 
   .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 40px; }
   .footer .brand { color: var(--red); font-weight: 700; }
   .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 99999; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: opacity 0.3s; max-width: calc(100vw - 40px); text-align: center; }
 </style>
-</head>
-<body>
+</head><body>
 
   <header class="header">
     <button class="menu-btn" onclick="toggleSideMenu(event)" aria-label="Menu">
@@ -176,13 +175,12 @@
     </div>
   </div>
 
-  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
-
-  <script>
+  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>  <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
     const PAGE_SIZE = 7;
 
+    // Verify badge — ONLY used in the side menu header (artist profile), NOT in the song list
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
     function escapeHtml(s) {
@@ -194,7 +192,6 @@
     const params = new URLSearchParams(window.location.search);
     const artistName = params.get('name') || 'Samarid';
 
-    // Live filter — only shows published songs
     const LIVE_FILTER = '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')';
 
     const seoTitle = 'Download Mp3 ' + artistName + ' 2026 Songs | Albums for Free - Samarid Music';
@@ -307,12 +304,12 @@
       const end = start + PAGE_SIZE;
       const pageSongs = filteredSongs.slice(start, end);
 
-      const badge = isVerifiedArtist ? VERIFY_BADGE : '';
+      // ✅ No verify badge in the song list
       list.innerHTML = pageSongs.map(s => `
         <a href="song.html?id=${s.id}" class="song-card">
           <div class="song-card-img"><img src="${escapeHtml(s.cover)}" alt="${escapeHtml(s.title)}" loading="lazy"></div>
           <div class="song-card-info">
-            <h3>${escapeHtml(artistName)}${badge}<span class="dash"> - </span>${escapeHtml(s.title)}</h3>
+            <h3>${escapeHtml(artistName)}<span class="dash"> - </span>${escapeHtml(s.title)}</h3>
             <div class="date">${escapeHtml(s.date || '')}</div>
           </div>
         </a>
@@ -372,7 +369,6 @@
       } catch (e) { console.error(e); }
 
       try {
-        // Live filter added here so scheduled songs stay hidden
         const res = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=ilike.' + encodeURIComponent(artistName) + '&select=*' + LIVE_FILTER + '&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         allArtistSongs = await res.json();
         if (!Array.isArray(allArtistSongs)) allArtistSongs = [];
@@ -394,6 +390,7 @@
       const menuAvatar = document.getElementById('menuAvatar');
       if (profilePic) menuAvatar.innerHTML = '<img src="' + escapeHtml(profilePic) + '" alt="' + escapeHtml(artistName) + '">';
       else menuAvatar.innerText = artistName.charAt(0).toUpperCase();
+      // ✅ Verify badge KEPT in the side menu header (artist profile info)
       document.getElementById('menuArtistName').innerHTML = escapeHtml(artistName) + (isVerified ? ' ' + VERIFY_BADGE : '');
 
       if (profilePic) {
