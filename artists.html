@@ -10,7 +10,7 @@
 <style>
   :root { --bg: #ffffff; --text: #0a0a0a; --text2: #888888; --accent: #ff0033; --orange: #ff8800; --border: #eeeeee; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 40px; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 0px; }
   .header { position: sticky; top: 0; background: #111111; padding: 12px 16px; display: flex; align-items: center; gap: 10px; z-index: 100; }
   .back-btn { background: #222; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
   .back-btn:active { background: var(--accent); }
@@ -24,7 +24,7 @@
   .search-input { width: 100%; padding: 13px 14px 13px 42px; background: #f5f5f5; border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: inherit; }
   .search-input:focus { outline: none; border-color: var(--orange); background: #fff; }
   .search-input::placeholder { color: var(--text2); }
-  .artist-grid { max-width: 700px; margin: 0 auto; padding: 0 16px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 8px; }
+  .artist-grid { max-width: 700px; margin: 0 auto; padding: 0 16px 30px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 8px; }
   .artist-cell { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-decoration: none; color: inherit; text-align: center; padding: 6px 2px; }
   .artist-cell:active { transform: scale(0.92); }
   .artist-avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #ff8800 0%, #cc6600 100%); display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: 900; font-size: 20px; overflow: hidden; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(255, 136, 0, 0.2); border: 2px solid #ffffff; position: relative; }
@@ -35,8 +35,38 @@
   .loading, .empty { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 14px; grid-column: 1 / -1; }
   .loading .icon, .empty .icon { font-size: 42px; margin-bottom: 12px; }
   .loading h3, .empty h3 { font-size: 16px; color: var(--text); margin-bottom: 6px; font-weight: 900; }
-  .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 40px; background: #fafafa; }
+  
+  /* --- EXTENDED EDITORIAL STORY SECTIONS (DEEP BLACK BACKGROUND) --- */
+  .artists-story-section { background: #0a0a0a; color: #ffffff; padding: 60px 20px; border-top: 4px solid var(--orange); margin-top: 20px; display: flex; flex-direction: column; gap: 40px; }
+  .artists-story-container { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px; }
+  
+  .story-block { display: flex; flex-direction: column; gap: 14px; }
+  .artists-story-header { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
+  .artists-story-header i { font-size: 18px; color: var(--orange); }
+  .artists-story-header h3 { font-size: 16px; font-weight: 900; color: #ffffff; letter-spacing: -0.2px; text-transform: uppercase; }
+  .artists-story-header h3 span { color: var(--orange); }
+  
+  .story-block p { font-size: 14px; line-height: 1.8; color: #b5b5b5; }
+  .story-block p strong { color: #ffffff; font-weight: 700; }
+  .story-block .accent-word { color: var(--orange); font-weight: 800; }
+  
+  .artists-story-quote { border-left: 3px solid var(--orange); padding: 14px 18px; font-style: italic; color: #e0e0e0; font-size: 14px; font-weight: 500; background: #141414; border-radius: 0 8px 8px 0; margin: 6px 0; }
+  
+  .story-highlights-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 6px; }
+  .story-highlight-card { background: #141414; border: 1px solid #222; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
+  .story-highlight-card i { font-size: 18px; color: var(--orange); margin-bottom: 2px; }
+  .story-highlight-card h4 { font-size: 13px; font-weight: 800; color: #fff; }
+  .story-highlight-card p { font-size: 12px; color: #999; line-height: 1.5; }
+
+  .artists-story-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; padding-top: 20px; border-top: 1px solid #222; }
+  .story-tag { background: rgba(255, 136, 0, 0.12); border: 1px solid rgba(255, 136, 0, 0.3); color: var(--orange); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
+
+  .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: #888; border-top: 1px solid #222; margin-top: 0; background: #050505; }
   .footer .brand { color: var(--accent); font-weight: 700; }
+
+  @media(max-width: 600px) {
+    .story-highlights-grid { grid-template-columns: 1fr; }
+  }
 </style>
 </head><body>
 
@@ -60,6 +90,68 @@
     <div class="loading">
       <div class="icon"> </div>
       <h3>Loading artists...</h3>
+    </div>
+  </div>
+
+  <!-- EXTENDED EDITORIAL STORY SECTIONS -->
+  <div class="artists-story-section">
+    <div class="artists-story-container">
+      
+      <!-- Block 1: The Movement -->
+      <div class="story-block">
+        <div class="artists-story-header">
+          <i class="fas fa-headphones-simple"></i>
+          <h3>The Creative Force Behind <span style="color:var(--orange);">Samarid Music</span></h3>
+        </div>
+        <p>Welcome to the ultimate directory of talent shaping the future of African sound. Under the flagship banner of <strong class="accent-word">Samarid Music</strong> in Ghana, this growing roster of musical creators brings together raw underground energy, infectious vocal delivery, and world-class audio engineering.</p>
+        
+        <div class="artists-story-quote">
+          "Music is a universal language, and every artist in our catalog represents a distinct voice, a unique story, and an unmistakable vibe."
+        </div>
+
+        <p>Whether you are searching for your favorite hitmaker or exploring fresh breakthrough acts, our network provides direct access to artist profiles, verified releases, and 100% free high-definition MP3 downloads. Tap on any artist avatar above to dive deep into their individual discography, follow their journey, and share their tracks with music lovers worldwide.</p>
+      </div>
+
+      <!-- Block 2: Artist Discovery & Growth -->
+      <div class="story-block">
+        <div class="artists-story-header">
+          <i class="fas fa-fire-flame-curved"></i>
+          <h3>Empowering Underground & Mainstream Talent</h3>
+        </div>
+        <p>At Samarid Music, we believe that true artistry should never be locked behind paywalls or complex subscription models. Our platform is engineered to give every singer, rapper, and producer the digital stage they deserve. From soulful afrobeat rhythms to high-tempo street anthems, our artists push creative boundaries every single day.</p>
+        
+        <div class="story-highlights-grid">
+          <div class="story-highlight-card">
+            <i class="fas fa-bolt"></i>
+            <h4>Direct Fan Connection</h4>
+            <p>Every artist page acts as a direct link between creators and listeners, displaying complete discographies and social updates.</p>
+          </div>
+          <div class="story-highlight-card">
+            <i class="fas fa-globe-africa"></i>
+            <h4>Global Reach from Ghana</h4>
+            <p>Carrying the authentic sound of West Africa straight to international playlists, streaming platforms, and global listeners.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Block 3: Culture & Community -->
+      <div class="story-block">
+        <div class="artists-story-header">
+          <i class="fas fa-compact-disc"></i>
+          <h3>The Sound of 2026 and Beyond</h3>
+        </div>
+        <p>The music landscape is evolving rapidly, and our roster is leading the charge with innovative production styles and unforgettable lyricism. When you explore our directory, you aren't just listening to songs—you are participating in a thriving musical community built on passion, dedication, and cultural excellence.</p>
+        
+        <p>Stay connected, keep streaming the latest <strong>2026 releases</strong>, use our instant search bar above to find specific performers, and support the movement as we continue to elevate Ghanaian music to unprecedented heights.</p>
+
+        <div class="artists-story-tags">
+          <span class="story-tag">🌟 Verified Artists</span>
+          <span class="story-tag">🎧 HD Mp3 Catalog</span>
+          <span class="story-tag">🇬🇭 Made in Ghana</span>
+          <span class="story-tag">🔥 2026 Hits</span>
+        </div>
+      </div>
+
     </div>
   </div>
 
