@@ -76,6 +76,17 @@
   .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .song-card-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; gap: 6px; }
   
+  /* --- NEW: GENRE & COUNTRY TAG (Soft Light Green) --- */
+  .song-card-info .genre-country {
+      font-size: 10px;
+      font-weight: 600;
+      color: #8fdfa8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+  }
+  
+  /* --- SONG CARD TITLES --- */
   .song-card-info h3 { 
       font-size: 13.5px; 
       font-weight: 800; 
@@ -92,6 +103,8 @@
   }
   .song-card-info h3 .dash { font-weight: 600; color: #000000; margin: 0 2px; }
   .song-card-info h3 .feat-tag { font-weight: 800; color: #000000; font-size: 13.5px; }
+  
+  /* --- DATE TEXT --- */
   .song-card-info .date { 
       font-size: 11px; 
       color: #888888; 
@@ -118,7 +131,7 @@
   .empty-state h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
   .verify-badge { display: inline-block; width: 14px; height: 14px; vertical-align: middle; flex-shrink: 0; margin-left: 4px; }
   
-  /* --- FLOWING EDITORIAL STORY SECTION (DEEP BLACK BACKGROUND, NO CARDS) --- */
+  /* --- FLOWING EDITORIAL STORY SECTION --- */
   .artist-story-section { margin-top: 50px; background: #0a0a0a; color: #ffffff; padding: 40px 20px; border-top: 4px solid var(--accent); }
   .artist-story-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 14px; }
   .artist-story-header i { font-size: 18px; color: var(--accent); }
@@ -197,7 +210,6 @@
     </div>
   </div>
 
-  <!-- FLOWING EDITORIAL STORY SECTION (DEEP BLACK BACKGROUND, NO CARDS) -->
   <div class="artist-story-section">
     <div class="artist-story-body">
       <div class="artist-story-header" style="margin-bottom:0; border:none; padding-bottom:0;">
@@ -358,13 +370,15 @@
       list.innerHTML = pageSongs.map(s => {
         const mainArtist = (s.artist_name || 'Samarid').trim();
         const feat = (s.featuring || '').trim();
+        const genre = s.category || 'Music';
+        const country = s.country || 'Ghana';
         let displayHTML = '';
         if (feat) {
           displayHTML = escapeHtml(mainArtist) + ' <span class="feat-tag">Feat ' + escapeHtml(feat) + '</span>' + '<span class="dash"> - </span>' + escapeHtml(s.title);
         } else {
           displayHTML = escapeHtml(mainArtist) + '<span class="dash"> - </span>' + escapeHtml(s.title);
         }
-        return '<a href="song.html?id=' + s.id + '" class="song-card"><div class="song-card-img"><img src="' + escapeHtml(s.cover) + '" alt="' + escapeHtml(s.title) + '" loading="lazy"></div><div class="song-card-info"><h3>' + displayHTML + '</h3><div class="date">' + escapeHtml(s.date || '') + '</div></div></a>';
+        return '<a href="song.html?id=' + s.id + '" class="song-card"><div class="song-card-img"><img src="' + escapeHtml(s.cover) + '" alt="' + escapeHtml(s.title) + '" loading="lazy"></div><div class="song-card-info"><div class="genre-country">' + escapeHtml(genre) + ' • ' + escapeHtml(country) + '</div><h3>' + displayHTML + '</h3><div class="date">' + escapeHtml(s.date || '') + '</div></div></a>';
       }).join('');
 
       const shouldShow = totalPages > 1 || isSearching;

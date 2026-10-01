@@ -109,6 +109,16 @@
   /* Category Tags (Black in Light Mode) */
   html[data-theme="light"] .result-cat { color: #000000; }
   .result-cat { font-size: 10px; color: var(--accent); font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+
+  /* --- NEW: GENRE & COUNTRY TAG --- */
+  .result-info .genre-country {
+      font-size: 10px;
+      font-weight: 600;
+      color: #8fdfa8; /* Soft pastel green */
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+  }
   
   /* Search Result Titles (Solid Black, Smaller) */
   html[data-theme="light"] .result-name { color: #000000; }
@@ -195,7 +205,6 @@
     const CHANNEL_ID = localStorage.getItem('samarid_channel_id') || 'UC11ElndF459dLRfV-OzwmpA';
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
 
-    // Live filter
     const LIVE_FILTER = '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')';
 
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
@@ -212,7 +221,6 @@
     let currentTab = 'all';
     let searchDebounce = null;
 
-    // ===== THEME =====
     function applyTheme() {
       const theme = localStorage.getItem('samarid-theme') || 'light';
       document.documentElement.setAttribute('data-theme', theme);
@@ -273,7 +281,7 @@
     async function loadAllData() {
       try {
         const [songsRes, artistsRes, videosRes] = await Promise.all([
-          fetch(SUPABASE_URL + '/rest/v1/songs?select=id,title,artist_name,cover,category,date,verified,album_name,featuring' + LIVE_FILTER + '&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/songs?select=id,title,artist_name,cover,category,date,verified,album_name,featuring,country' + LIVE_FILTER + '&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
           fetch(SUPABASE_URL + '/rest/v1/artists?select=name,profile_pic,verified&order=name.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
           fetch(SUPABASE_URL + '/rest/v1/videos?select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
         ]);
@@ -284,7 +292,6 @@
 
         allSongs = Array.isArray(songs) ? songs : [];
 
-        // Load YouTube videos
         let ytVideos = [];
         try {
           const chRes = await fetch('https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=' + CHANNEL_ID + '&key=' + API_KEY);
@@ -304,7 +311,6 @@
 
         allVideos = [...(Array.isArray(manualVideos) ? manualVideos : []), ...ytVideos];
 
-        // Build artists (only artists with LIVE songs) - NOW INCLUDING FEATURED ARTISTS
         const artistMap = {};
         allSongs.forEach(s => {
           const name = (s.artist_name || 'Samarid').trim();
@@ -312,7 +318,6 @@
           if (!artistMap[key]) artistMap[key] = { name: name, profile_pic: null, verified: s.verified };
           else if (s.verified) artistMap[key].verified = true;
 
-          // ADD FEATURING ARTISTS TO SEARCH DIRECTORY
           if (s.featuring && s.featuring.trim()) {
             s.featuring.split(',').map(x => x.trim()).filter(x => x).forEach(featName => {
               const fk = featName.toLowerCase();
@@ -320,19 +325,17 @@
             });
           }
         });
-        // Merge with artists table
         if (Array.isArray(artistsRaw)) {
           artistsRaw.forEach(a => {
             if (!a.name) return;
             const key = a.name.trim().toLowerCase();
-            if (!artistMap[key]) return; // Skip artists with no live songs
+            if (!artistMap[key]) return;
             if (a.verified) artistMap[key].verified = true;
             if (a.profile_pic) artistMap[key].profile_pic = a.profile_pic;
           });
         }
         allArtists = Object.values(artistMap);
 
-        // Build albums (from live songs)
         const albumMap = {};
         allSongs.forEach(s => {
           if (s.album_name && s.album_name.trim()) {
@@ -355,7 +358,6 @@
       const q = query.toLowerCase().trim();
       if (!q) { showInitialState(); return; }
       
-      // UPDATED: Now includes featuring artist in the song filter
       const songs = allSongs.filter(s => 
         (s.title || '').toLowerCase().includes(q) || 
         (s.artist_name || '').toLowerCase().includes(q) || 
@@ -442,13 +444,14 @@
       if ((currentTab === 'all' || currentTab === 'songs') && songs.length > 0) {
         html += `<div class="section-title">Songs <span class="count">${songs.length}</span></div><div class="result-list">`;
         html += songs.map(s => {
-          // UPDATED: Show featuring artist clearly
+          const genre = s.category || 'Music';
+          const country = s.country || 'Ghana';
           const artistText = s.featuring ? `${s.artist_name} <span style="color:#888888; font-weight:400;">feat.</span> ${s.featuring}` : s.artist_name;
           return `
             <a href="song.html?id=${s.id}" class="result-card">
               <div class="result-img"><img src="${escapeHtml(s.cover)}" loading="lazy"></div>
               <div class="result-info">
-                <div class="result-cat">${escapeHtml(s.category || 'Music')}</div>
+                <div class="genre-country">${escapeHtml(genre)} • ${escapeHtml(country)}</div>
                 <div class="result-name">${escapeHtml(s.title)}</div>
                 <div class="result-meta">${artistText}${s.verified ? VERIFY_BADGE : ''} • ${escapeHtml(s.date || '')}</div>
               </div>
