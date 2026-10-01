@@ -42,7 +42,7 @@
 
   .albums-list { display: flex; flex-direction: column; }
   .album-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; transition: opacity 0.15s; }
-  .album-card:last-child { border-bottom: none; }
+  .album-card:last-child { border-bottom: 1px solid var(--border); }
   .album-card:active { opacity: 0.7; }
 
   .album-cover { width: 115px; height: 115px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 14px; position: relative; }
@@ -58,17 +58,26 @@
   .album-songs { font-size: 12px; color: var(--accent); font-weight: 800; display: flex; align-items: center; gap: 5px; margin-top: 2px; }
   .album-songs i { font-size: 11px; }
 
+  /* --- CLEAN FLOWING TEXT SECTION (No Card Background) --- */
+  .album-flow-text { margin-top: 35px; padding: 10px 0; }
+  .album-flow-text .flow-label { font-size: 10px; font-weight: 900; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .album-flow-text h2 { font-size: 18px; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.3px; color: var(--text); }
+  .album-flow-text h2 span { color: var(--accent); }
+  .album-flow-text p { font-size: 13.5px; line-height: 1.7; color: var(--text2); margin-bottom: 14px; font-weight: 500; }
+  .album-flow-text p:last-child { margin-bottom: 0; }
+
   .loading, .empty { text-align: center; padding: 60px 20px; color: #999; font-size: 13px; }
   .empty-state { text-align: center; padding: 50px 20px; background: #fff; border: 1px solid var(--border); border-radius: 16px; color: #999; }
   .empty-state .icon { font-size: 50px; margin-bottom: 15px; }
   .empty-state h3 { font-size: 17px; margin-bottom: 8px; color: var(--text); font-weight: 900; }
 
-  .end-marker { text-align: center; padding: 30px 20px 20px; font-size: 11px; color: #bbb; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
+  .end-marker { text-align: center; padding: 30px 20px 10px; font-size: 11px; color: #bbb; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
 
   .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: #888; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; border-top: 1px solid var(--border); margin-top: 30px; }
   .footer .brand { color: var(--red); font-weight: 900; }
 </style>
-</head><body>
+</head>
+<body>
 
   <header class="header">
     <button class="menu-btn" onclick="toggleMenu(event)" aria-label="Menu">
@@ -105,6 +114,14 @@
     </div>
 
     <div class="end-marker" id="endMarker" style="display:none;">— You've Reached The End —</div>
+
+    <!-- CLEAN FLOWING TEXT SECTION (No Background Card) -->
+    <div class="album-flow-text">
+      <div class="flow-label">Music Culture & Stories</div>
+      <h2>Inside The Project: <span>Discovering African Sounds</span></h2>
+      <p>Albums and EP collections capture the raw essence of African music culture. Every project featured on Samarid Music highlights distinct artistic styles, compelling storytelling, and late-night studio creations from Ghana, Nigeria, and across West Africa.</p>
+      <p>Whether you are searching for viral social media sounds to power your TikTok trends or high-definition audio files for your personal offline library, our project catalog delivers seamless access to the underground and mainstream hits shaping the future of global music.</p>
+    </div>
   </div>
 
   <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
