@@ -145,16 +145,16 @@
   .promo-tagline h2 span { color: #ff8800; }
   .promo-tagline p { font-size: 14px; color: #b5b5b5; line-height: 1.7; font-weight: 500; max-width: 500px; margin: 0 auto; }
 
-  /* ===== FULL-SCREEN ADS ===== */
-  .promo-ads-container { display: flex; flex-direction: column; gap: 20px; margin-bottom: 24px; margin-left: -24px; margin-right: -24px; }
+  /* ===== FULL-SCREEN ADS (YouTube style) ===== */
+  .promo-ads-container { display: flex; flex-direction: column; gap: 26px; margin-bottom: 24px; margin-left: -24px; margin-right: -24px; }
 
-  .promo-ad-card { display: block; background: #141414; overflow: hidden; text-decoration: none; transition: transform 0.2s; width: 100%; border-top: 1px solid #2a2a2a; border-bottom: 1px solid #2a2a2a; }
-  .promo-ad-card:active { transform: scale(0.99); }
+  .promo-ad-card { display: block; background: transparent; overflow: hidden; text-decoration: none; transition: opacity 0.2s; width: 100%; }
+  .promo-ad-card:active { opacity: 0.85; }
   .promo-ad-img { width: 100%; height: auto; display: block; background: #111; }
-  .promo-ad-body { padding: 18px 24px 20px; }
-  .promo-ad-title { font-weight: 900; margin-bottom: 8px; letter-spacing: -0.2px; line-height: 1.3; overflow-wrap: anywhere; }
-  .promo-ad-desc { font-weight: 500; line-height: 1.65; overflow-wrap: anywhere; }
-  .promo-ad-cta { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 12px; font-weight: 800; color: #ff8800; letter-spacing: 0.3px; }
+  .promo-ad-body { padding: 14px 24px 0; }
+  .promo-ad-title { font-weight: 900; margin-bottom: 6px; letter-spacing: -0.3px; line-height: 1.3; overflow-wrap: anywhere; }
+  .promo-ad-desc { font-weight: 500; line-height: 1.55; overflow-wrap: anywhere; }
+  .promo-ad-cta { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 13px; font-weight: 800; color: #ff8800; letter-spacing: 0.3px; }
 
   .promo-ad-placeholder { padding: 40px 24px; text-align: center; background: #141414; border-top: 2px dashed #2a2a2a; border-bottom: 2px dashed #2a2a2a; }
   .promo-ad-placeholder i { font-size: 32px; color: #ff8800; margin-bottom: 12px; display: block; opacity: 0.75; }
@@ -304,7 +304,7 @@
       return html;
     }
 
-    // ===== ADS LOADER (Full Screen) =====
+    // ===== ADS LOADER (YouTube-style full width) =====
     async function loadAds() {
       const container = document.getElementById('promoAdsContainer');
       if (!container) return;
@@ -316,13 +316,13 @@
           return;
         }
 
-        const titleSizes = { small: '16px', medium: '22px', large: '28px' };
-        const descSizes = { small: '13px', medium: '15px', large: '18px' };
+        const titleSizes = { small: '18px', medium: '24px', large: '30px' };
+        const descSizes = { small: '13px', medium: '15px', large: '17px' };
 
         container.innerHTML = ads.map(ad => {
           const link = ad.link_url || '#';
           const titleColor = ad.title_color || '#ffffff';
-          const titleSize = titleSizes[ad.title_size] || '22px';
+          const titleSize = titleSizes[ad.title_size] || '24px';
           const descColor = ad.description_color || '#a0a0a0';
           const descSize = descSizes[ad.description_size] || '15px';
           const title = ad.title ? '<div class="promo-ad-title" style="color:' + titleColor + '; font-size:' + titleSize + ';">' + escapeHtml(ad.title) + '</div>' : '';
