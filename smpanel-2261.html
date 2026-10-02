@@ -123,7 +123,6 @@
   .preview-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 28px; color: #fff; overflow: hidden; }
   .preview-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
-  /* ===== ADS PAGE ===== */
   .ad-form-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
   .ad-form-box-title { font-size: 12px; font-weight: 900; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
   .color-row { display: flex; gap: 8px; align-items: center; }
@@ -160,14 +159,12 @@
   .ad-card .edit-btn { color: #00cc44; }
   .ad-card .delete-btn { color: #ff0033; }
 
-  /* ===== CROP TOOL ===== */
   .crop-upload-zone { background: #0a0a0a; border: 2px dashed #333; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; margin-bottom: 10px; transition: 0.15s; }
   .crop-upload-zone:active { border-color: var(--accent); background: #111; }
   .crop-upload-zone i { font-size: 26px; color: var(--accent); margin-bottom: 8px; display: block; }
   .crop-upload-zone h4 { font-size: 13px; font-weight: 800; margin-bottom: 4px; color: #fff; }
   .crop-upload-zone p { font-size: 11px; color: #666; font-weight: 500; }
 
-  /* Crop Modal (full-screen) */
   .crop-modal { position: fixed; inset: 0; background: #000; z-index: 99999; display: none; flex-direction: column; }
   .crop-modal.open { display: flex; }
   .crop-modal-header { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #222; background: #0a0a0a; flex-shrink: 0; }
@@ -187,13 +184,10 @@
   .crop-cancel { background: #222; color: #fff; }
   .crop-save { background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; }
 
-  /* ============================================================ */
-  /* Cropper.js dark theme overrides */
   .cropper-view-box, .cropper-face { border-radius: 2px; }
   .cropper-line, .cropper-point { background-color: var(--accent); }
   .cropper-view-box { outline: 2px solid var(--accent); outline-color: var(--accent); }
   .cropper-point { width: 10px; height: 10px; opacity: 1; }
-  /* ============================================================ */
 </style>
 </head><body>
 
@@ -251,21 +245,20 @@
 
       <div class="page" data-page="ads">
         <h1 class="page-title">Ads Manager</h1>
-        <p class="page-subtitle">Ads, texts, images & artist videos</p>
+        <p class="page-subtitle">Ads, texts, images, videos & page builder</p>
 
         <div class="sub-tabs" style="margin-bottom:18px;">
           <button class="sub-tab active" onclick="adsSubTab('live', this)"><i class="fas fa-image"></i> Live Ads</button>
           <button class="sub-tab" onclick="adsSubTab('texts', this)"><i class="fas fa-file-lines"></i> Raw Texts</button>
           <button class="sub-tab" onclick="adsSubTab('images', this)"><i class="fas fa-images"></i> Images</button>
           <button class="sub-tab" onclick="adsSubTab('videos', this)"><i class="fas fa-film"></i> Artist Videos</button>
+          <button class="sub-tab" onclick="adsSubTab('builder', this)"><i class="fas fa-layer-group"></i> Page Builder</button>
         </div>
 
-        <!-- 1. LIVE ADS -->
         <div class="sub-content active" id="ads-sec-live">
           <div class="ad-form-box">
             <div class="ad-form-box-title"><i class="fas fa-plus-circle"></i> <span id="adFormTitle">Create New Ad</span></div>
             <input type="hidden" id="adEditingId" value="">
-
             <div class="form-group"><label>Image</label>
               <div class="crop-upload-zone" onclick="document.getElementById('adFileInput').click()">
                 <i class="fas fa-crop-simple"></i>
@@ -275,9 +268,7 @@
               <input type="file" id="adFileInput" accept="image/*" style="display:none;" onchange="handleAdFile(event)">
               <input type="text" id="adImage" placeholder="Or paste an image URL here" oninput="updateAdPreview()" style="margin-top:8px;">
             </div>
-
             <div class="form-group"><label>Title</label><input type="text" id="adTitle" placeholder="e.g. Promoted by XYZ Brand" oninput="updateAdPreview()"></div>
-
             <div class="form-group"><label>Title Color & Size</label>
               <div class="color-row">
                 <input type="color" id="adTitleColor" value="#ffffff" oninput="updateAdPreview()">
@@ -285,9 +276,7 @@
                 <span class="hex-label" id="adTitleColorHex">#ffffff</span>
               </div>
             </div>
-
             <div class="form-group"><label>Description</label><textarea id="adDescription" placeholder="Short description..." oninput="updateAdPreview()"></textarea></div>
-
             <div class="form-group"><label>Description Color & Size</label>
               <div class="color-row">
                 <input type="color" id="adDescColor" value="#a0a0a0" oninput="updateAdPreview()">
@@ -295,9 +284,7 @@
                 <span class="hex-label" id="adDescColorHex">#a0a0a0</span>
               </div>
             </div>
-
             <div class="form-group"><label>Link URL</label><input type="text" id="adLink" placeholder="https://wa.me/233..." oninput="updateAdPreview()"></div>
-
             <div class="form-group"><label>Where to show</label>
               <select id="adPosition">
                 <option value="song">Song Page</option><option value="home">Home Page</option><option value="promo">Promo Page</option><option value="all">All Pages</option>
@@ -330,7 +317,6 @@
           </div>
         </div>
 
-        <!-- 2. RAW TEXTS -->
         <div class="sub-content" id="ads-sec-texts">
           <div class="ad-form-box">
             <div class="ad-form-box-title"><i class="fas fa-file-lines"></i> <span id="textFormTitle">Add Text Block</span></div>
@@ -358,7 +344,6 @@
           </div>
         </div>
 
-        <!-- 3. IMAGES -->
         <div class="sub-content" id="ads-sec-images">
           <div class="ad-form-box">
             <div class="ad-form-box-title"><i class="fas fa-images"></i> <span id="imgFormTitle">Add Image</span></div>
@@ -403,7 +388,6 @@
           </div>
         </div>
 
-        <!-- 4. ARTIST VIDEOS -->
         <div class="sub-content" id="ads-sec-videos">
           <div class="ad-form-box">
             <div class="ad-form-box-title"><i class="fas fa-film"></i> <span id="avFormTitle">Add Official Video</span></div>
@@ -432,6 +416,124 @@
             <div id="avList"><p class="empty">Loading...</p></div>
           </div>
         </div>
+
+        <!-- ===== PAGE BUILDER ===== -->
+        <div class="sub-content" id="ads-sec-builder">
+          <div class="ad-form-box">
+            <div class="ad-form-box-title"><i class="fas fa-layer-group"></i> <span id="cbFormTitle">Add Content Block</span></div>
+            <input type="hidden" id="cbEditingId" value="">
+
+            <div class="form-group"><label>Page (where to show)</label>
+              <select id="cbPage">
+                <option value="home">🏠 Home Page</option>
+                <option value="about">ℹ️ About Page</option>
+                <option value="promo">📢 Promo Page</option>
+                <option value="artist">🎤 Artist Page (every artist)</option>
+                <option value="song">🎵 Song Page (every song)</option>
+                <option value="album">💿 Album Page (single album)</option>
+                <option value="albums">📀 Albums Page (list)</option>
+                <option value="artists">👥 Artists Page (list)</option>
+                <option value="videos">🎬 Videos Page</option>
+                <option value="weekend">🔥 Weekend Trend Page</option>
+                <option value="search">🔍 Search Page</option>
+              </select>
+            </div>
+
+            <div class="form-group"><label>Block Type</label>
+              <select id="cbType" onchange="cbTypeChanged()">
+                <option value="text">Text (Paragraph)</option>
+                <option value="heading">Heading (Big Bold)</option>
+                <option value="hero">Hero (Big Bold + Button)</option>
+                <option value="image">Image</option>
+                <option value="button">Button</option>
+                <option value="spacer">Spacer (Blank Space)</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="cbContentGroup">
+              <label id="cbContentLabel">Content</label>
+              <textarea id="cbContent" placeholder="Write your text here..." oninput="cbPreview()" style="min-height:100px;"></textarea>
+            </div>
+
+            <div class="form-group" id="cbImageUploadGroup" style="display:none;">
+              <label>Image</label>
+              <div class="crop-upload-zone" onclick="document.getElementById('cbFileInput').click()">
+                <i class="fas fa-crop-simple"></i>
+                <h4>Upload & Crop Image</h4>
+                <p>Pick a photo from your device, then crop it</p>
+              </div>
+              <input type="file" id="cbFileInput" accept="image/*" style="display:none;" onchange="handleCbFile(event)">
+            </div>
+
+            <div id="cbButtonGroup" style="display:none;">
+              <div class="form-group"><label>Button Text</label><input type="text" id="cbButtonText" placeholder="e.g. Read More" oninput="cbPreview()"></div>
+              <div class="form-group"><label>Button Link</label><input type="text" id="cbButtonLink" placeholder="e.g. about.html" oninput="cbPreview()"></div>
+            </div>
+
+            <div class="form-group"><label>Text Color</label>
+              <div class="color-row">
+                <input type="color" id="cbColor" value="#ffffff" oninput="cbPreview()">
+                <span class="hex-label" id="cbColorHex">#ffffff</span>
+              </div>
+            </div>
+
+            <div class="form-group"><label>Text Size</label>
+              <select id="cbSize" onchange="cbPreview()">
+                <option value="small">Small (12px)</option>
+                <option value="medium" selected>Medium (15px)</option>
+                <option value="large">Large (20px)</option>
+                <option value="xlarge">X-Large (28px)</option>
+                <option value="huge">Huge (38px)</option>
+              </select>
+            </div>
+
+            <div class="form-group"><label>Alignment</label>
+              <select id="cbAlign" onchange="cbPreview()">
+                <option value="left">Left</option>
+                <option value="center" selected>Center</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+
+            <div class="form-group"><label>Font Weight</label>
+              <select id="cbWeight" onchange="cbPreview()">
+                <option value="normal">Normal</option>
+                <option value="bold" selected>Bold</option>
+                <option value="black">Extra Bold</option>
+              </select>
+            </div>
+
+            <div class="form-group"><label>Background Color (optional)</label>
+              <div class="color-row">
+                <input type="color" id="cbBg" value="#0a0a0a" oninput="cbPreview()">
+                <select id="cbBgEnabled" onchange="cbPreview()">
+                  <option value="no">No Background</option>
+                  <option value="yes">Use Background</option>
+                </select>
+                <span class="hex-label" id="cbBgHex">#0a0a0a</span>
+              </div>
+            </div>
+
+            <div class="form-group"><label>Sort Order (small = first)</label><input type="number" id="cbSort" value="0"></div>
+
+            <div class="live-preview-box">
+              <div class="lp-label">Preview</div>
+              <div id="cbPreview" style="padding:16px; border-radius:10px; background:#050505; min-height:60px;">
+                <p style="color:#666; text-align:center; font-size:12px;">Your content preview will appear here</p>
+              </div>
+            </div>
+
+            <button class="add-artist-btn" id="cbSubmitBtn" onclick="saveCb()"><i class="fas fa-save"></i> Save Block</button>
+            <button id="cbCancelBtn" onclick="cancelCbEdit()" style="display:none; width:100%; padding:14px; background:#222; color:#fff; border:none; border-radius:12px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; margin-top:8px;">Cancel Edit</button>
+            <p id="cbStatus" style="font-size:12px; text-align:center; margin-top:10px; font-weight:bold;"></p>
+          </div>
+
+          <div class="ad-form-box">
+            <div class="ad-form-box-title"><i class="fas fa-list"></i> Your Blocks</div>
+            <div id="cbList"><p class="empty">Loading...</p></div>
+          </div>
+        </div>
+
       </div>
 
       <div class="page" data-page="verify">
@@ -500,7 +602,6 @@
     </div>
   </div>
 
-  <!-- ===== FULL-SCREEN CROP MODAL ===== -->
   <div class="crop-modal" id="cropModal">
     <div class="crop-modal-header">
       <div class="crop-modal-title"><i class="fas fa-crop-simple"></i> Crop Image</div>
@@ -554,12 +655,12 @@
     let allTexts = [];
     let allImages = [];
     let allArtistVideos = [];
+    let allCb = [];
     let pendingConfirm = null;
 
-    // ===== CROP TOOL STATE =====
     let cropper = null;
-    let cropTargetInput = null;  // which input will receive the cropped image
-    let cropTargetPreview = null; // callback to update preview
+    let cropTargetInput = null;
+    let cropTargetPreview = null;
 
     window.togglePassword = function() {
       const input = document.getElementById('passwordInput');
@@ -588,6 +689,8 @@
       loadYouTubeVideos();
       loadAds();
       updateAdPreview();
+      loadCb();
+      cbTypeChanged();
     }
 
     window.goTab = function(tab) {
@@ -610,17 +713,22 @@
       document.getElementById(id).classList.add('active');
     }
 
-    // ===== CROP TOOL =====
     window.handleAdFile = function(event) {
       const file = event.target.files && event.target.files[0];
       if (!file) return;
       openCropperForFile(file, document.getElementById('adImage'), function() { updateAdPreview(); });
-      event.target.value = ''; // allow re-selecting same file
+      event.target.value = '';
     };
     window.handleImgFile = function(event) {
       const file = event.target.files && event.target.files[0];
       if (!file) return;
       openCropperForFile(file, document.getElementById('imgUrl'), function() { updateImgPreview(); });
+      event.target.value = '';
+    };
+    window.handleCbFile = function(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      openCropperForFile(file, document.getElementById('cbContent'), function() { cbPreview(); });
       event.target.value = '';
     };
 
@@ -634,24 +742,12 @@
         img.src = e.target.result;
         document.getElementById('cropModal').classList.add('open');
         document.body.style.overflow = 'hidden';
-        // Wait for image to load, then init cropper
         img.onload = function() {
           if (cropper) { cropper.destroy(); cropper = null; }
           cropper = new Cropper(img, {
-            viewMode: 1,
-            dragMode: 'move',
-            aspectRatio: NaN, // free
-            autoCropArea: 0.9,
-            restore: false,
-            guides: true,
-            center: true,
-            highlight: false,
-            cropBoxMovable: true,
-            cropBoxResizable: true,
-            toggleDragModeOnDblclick: false,
-            background: false,
-            responsive: true,
-            checkOrientation: true
+            viewMode: 1, dragMode: 'move', aspectRatio: NaN, autoCropArea: 0.9, restore: false,
+            guides: true, center: true, highlight: false, cropBoxMovable: true, cropBoxResizable: true,
+            toggleDragModeOnDblclick: false, background: false, responsive: true, checkOrientation: true
           });
         };
       };
@@ -664,7 +760,6 @@
       document.body.style.overflow = '';
       document.getElementById('cropImage').src = '';
     };
-
     window.setCropRatio = function(ratio, btn) {
       if (!cropper) return;
       document.querySelectorAll('.crop-tool-btn[data-ratio]').forEach(b => b.classList.remove('active'));
@@ -672,20 +767,11 @@
       if (ratio === 'free') cropper.setAspectRatio(NaN);
       else cropper.setAspectRatio(parseFloat(ratio));
     };
-
-    window.rotateCrop = function(deg) {
-      if (!cropper) return;
-      cropper.rotate(deg);
-    };
+    window.rotateCrop = function(deg) { if (cropper) cropper.rotate(deg); };
     window.flipCrop = function(dir) {
       if (!cropper) return;
-      if (dir === 'h') {
-        const scaleX = cropper.getData().scaleX || 1;
-        cropper.scaleX(-scaleX);
-      } else {
-        const scaleY = cropper.getData().scaleY || 1;
-        cropper.scaleY(-scaleY);
-      }
+      if (dir === 'h') { const sx = cropper.getData().scaleX || 1; cropper.scaleX(-sx); }
+      else { const sy = cropper.getData().scaleY || 1; cropper.scaleY(-sy); }
     };
     window.resetCrop = function() {
       if (!cropper) return;
@@ -693,21 +779,13 @@
       document.querySelectorAll('.crop-tool-btn[data-ratio]').forEach(b => b.classList.remove('active'));
       document.querySelector('.crop-tool-btn[data-ratio="free"]').classList.add('active');
     };
-
     window.saveCrop = function() {
       if (!cropper || !cropTargetInput) return;
-      // Output as base64 data URL
-      const canvas = cropper.getCroppedCanvas({
-        maxWidth: 1600,
-        maxHeight: 1600,
-        imageSmoothingEnabled: true,
-        imageSmoothingQuality: 'high'
-      });
+      const canvas = cropper.getCroppedCanvas({ maxWidth: 1600, maxHeight: 1600, imageSmoothingEnabled: true, imageSmoothingQuality: 'high' });
       if (!canvas) { alert('Could not crop. Try again.'); return; }
       const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
       cropTargetInput.value = dataUrl;
       if (typeof cropTargetPreview === 'function') cropTargetPreview();
-      // Flash the input to show success
       cropTargetInput.style.borderColor = '#00cc44';
       setTimeout(() => { cropTargetInput.style.borderColor = ''; }, 1200);
       closeCropModal();
@@ -741,20 +819,15 @@
           if (p) return p;
           return { name: name, id: null, bio: null, profile_pic: null, verified: false };
         });
-
         allArtists.sort((a, b) => (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase()));
         renderArtists('');
       } catch (e) { list.innerHTML = '<p class="empty" style="color:#ff0033;">Error.</p>'; }
     }
-
     function renderArtists(query) {
       const list = document.getElementById('artistsList');
       let filtered = allArtists;
       if (query) filtered = allArtists.filter(a => (a.name || '').toLowerCase().includes(query));
-      if (filtered.length === 0) {
-        list.innerHTML = '<p class="empty">' + (query ? 'No matches.' : 'No artists yet.') + '</p>';
-        return;
-      }
+      if (filtered.length === 0) { list.innerHTML = '<p class="empty">' + (query ? 'No matches.' : 'No artists yet.') + '</p>'; return; }
       list.innerHTML = filtered.map(a => `
         <div class="artist-card">
           <div class="artist-top">
@@ -770,7 +843,6 @@
         </div>
       `).join('');
     }
-
     window.filterArtists = function() {
       const q = document.getElementById('artistSearch').value.toLowerCase().trim();
       document.getElementById('clearArtistSearch').classList.toggle('show', !!q);
@@ -781,7 +853,6 @@
       document.getElementById('clearArtistSearch').classList.remove('show');
       renderArtists('');
     }
-
     window.openArtistModal = function(artist) {
       document.getElementById('artistModalTitle').innerText = artist ? (artist.id ? 'Edit Artist' : 'Create Artist Profile') : 'Add New Artist';
       document.getElementById('artistId').value = artist ? (artist.id || '') : '';
@@ -822,17 +893,9 @@
         const payload = { name, profile_pic, bio, tiktok, instagram, youtube, spotify };
         let res;
         if (id) {
-          res = await fetch(SUPABASE_URL + '/rest/v1/artists?id=eq.' + id, {
-            method: 'PATCH',
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-            body: JSON.stringify(payload)
-          });
+          res = await fetch(SUPABASE_URL + '/rest/v1/artists?id=eq.' + id, { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
         } else {
-          res = await fetch(SUPABASE_URL + '/rest/v1/artists', {
-            method: 'POST',
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-            body: JSON.stringify(payload)
-          });
+          res = await fetch(SUPABASE_URL + '/rest/v1/artists', { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
         }
         if (!res.ok) { const t = await res.text(); throw new Error(t); }
         status.style.color = '#00cc44'; status.innerText = 'Saved!';
@@ -852,6 +915,7 @@
       if (id === 'texts') loadTexts();
       if (id === 'images') loadImages();
       if (id === 'videos') loadArtistVideos();
+      if (id === 'builder') { loadCb(); cbTypeChanged(); }
     };
 
     // ===== LIVE ADS =====
@@ -896,7 +960,6 @@
         renderAdsList();
       } catch (e) { list.innerHTML = '<p class="empty" style="color:#ff0033;">Could not load ads.</p>'; }
     }
-
     function renderAdsList() {
       const list = document.getElementById('adsList');
       if (allAds.length === 0) { list.innerHTML = '<p class="empty">No ads yet. Create your first one above!</p>'; return; }
@@ -907,7 +970,6 @@
         return '<div class="ad-card"><img src="' + (a.image_url || '') + '" alt="' + (a.title || 'Ad') + '" onerror="this.style.opacity=0.3;"><div class="info"><h4>' + escapeHtml(a.title || 'Untitled Ad') + '</h4><p>' + escapeHtml(desc) + '</p><p style="color:#666; margin-top:4px;">Position: <strong style="color:#ff0033;">' + pos + '</strong> • ' + statusPill + '</p></div><div class="actions"><button class="action-btn edit-btn" onclick=\'editAd(' + JSON.stringify(a).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" onclick="deleteAd(' + a.id + ')"><i class="fas fa-trash"></i></button></div></div>';
       }).join('');
     }
-
     window.saveAd = async function() {
       const status = document.getElementById('adStatus');
       const editingId = document.getElementById('adEditingId').value;
@@ -923,7 +985,6 @@
       const description_size = document.getElementById('adDescSize').value;
 
       if (!image_url) { status.style.color = '#ff0033'; status.innerText = 'Please add or crop an image first!'; return; }
-
       status.style.color = '#ffcc00'; status.innerText = 'Saving...';
 
       try {
@@ -940,7 +1001,6 @@
         setTimeout(() => { cancelAdEdit(); loadAds(); }, 900);
       } catch (e) { status.style.color = '#ff0033'; status.innerText = 'Error: ' + e.message.substring(0, 100); }
     }
-
     window.editAd = function(ad) {
       document.getElementById('adEditingId').value = ad.id;
       document.getElementById('adImage').value = ad.image_url || '';
@@ -960,7 +1020,6 @@
       updateAdPreview();
       window.scrollTo(0, 0);
     }
-
     window.cancelAdEdit = function() {
       document.getElementById('adEditingId').value = '';
       document.getElementById('adImage').value = '';
@@ -979,7 +1038,6 @@
       document.getElementById('adStatus').innerText = '';
       updateAdPreview();
     }
-
     window.deleteAd = async function(id) {
       if (!confirm('Delete this ad permanently?')) return;
       try {
@@ -1268,6 +1326,197 @@
       } catch (e) { alert('Could not delete.'); }
     };
 
+    // ===== PAGE BUILDER =====
+    window.cbTypeChanged = function() {
+      const type = document.getElementById('cbType').value;
+      const contentLabel = document.getElementById('cbContentLabel');
+      const contentGroup = document.getElementById('cbContentGroup');
+      const imgGroup = document.getElementById('cbImageUploadGroup');
+      const btnGroup = document.getElementById('cbButtonGroup');
+
+      imgGroup.style.display = 'none';
+      btnGroup.style.display = 'none';
+      contentGroup.style.display = 'block';
+
+      if (type === 'text') { contentLabel.innerText = 'Text Content'; }
+      else if (type === 'heading') { contentLabel.innerText = 'Heading Text'; }
+      else if (type === 'hero') { contentLabel.innerText = 'Hero Text (big tagline)'; btnGroup.style.display = 'block'; }
+      else if (type === 'image') { contentGroup.style.display = 'none'; imgGroup.style.display = 'block'; }
+      else if (type === 'button') { contentLabel.innerText = 'Button Text'; btnGroup.style.display = 'block'; }
+      else if (type === 'spacer') { contentLabel.innerText = 'Enter height in px (e.g. 40)'; }
+
+      cbPreview();
+    };
+
+    window.cbPreview = function() {
+      const type = document.getElementById('cbType').value;
+      const content = document.getElementById('cbContent').value;
+      const color = document.getElementById('cbColor').value;
+      const size = document.getElementById('cbSize').value;
+      const align = document.getElementById('cbAlign').value;
+      const weight = document.getElementById('cbWeight').value;
+      const bgEnabled = document.getElementById('cbBgEnabled').value;
+      const bg = document.getElementById('cbBg').value;
+      const btnText = document.getElementById('cbButtonText').value;
+      const btnLink = document.getElementById('cbButtonLink').value;
+
+      document.getElementById('cbColorHex').innerText = color;
+      document.getElementById('cbBgHex').innerText = bg;
+
+      const sizes = { small: '12px', medium: '15px', large: '20px', xlarge: '28px', huge: '38px' };
+      const weights = { normal: '500', bold: '800', black: '900' };
+
+      const preview = document.getElementById('cbPreview');
+      preview.style.background = bgEnabled === 'yes' ? bg : '#050505';
+      preview.style.textAlign = align;
+
+      let html = '';
+
+      if (type === 'spacer') {
+        const h = parseInt(content) || 40;
+        html = '<div style="height:' + h + 'px;"></div>';
+      } else if (type === 'image') {
+        if (content && content.startsWith('data:image')) {
+          html = '<img src="' + content + '" style="max-width:100%; border-radius:10px; display:block; margin:0 auto;">';
+        } else {
+          html = '<p style="color:#666; font-size:12px; text-align:center;">(Image — upload via the crop tool above)</p>';
+        }
+      } else {
+        const styleStr = 'color:' + color + '; font-size:' + sizes[size] + '; font-weight:' + weights[weight] + '; line-height:1.4;';
+        if (type === 'heading' || type === 'hero') {
+          html = '<div style="' + styleStr + '">' + (content ? escapeHtml(content) : 'Your heading here...') + '</div>';
+        } else {
+          html = '<div style="' + styleStr + '">' + (content ? escapeHtml(content) : 'Your text here...') + '</div>';
+        }
+        if (btnText) {
+          html += '<div style="margin-top:14px; text-align:' + align + ';"><span style="display:inline-block; padding:12px 24px; background:#ff0033; color:#fff; border-radius:30px; font-size:13px; font-weight:900;">' + escapeHtml(btnText) + '</span></div>';
+        }
+      }
+      preview.innerHTML = html;
+    };
+
+    async function loadCb() {
+      const list = document.getElementById('cbList');
+      if (!list) return;
+      list.innerHTML = '<p class="empty">Loading...</p>';
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/content_blocks?select=*&order=page_key.asc,sort_order.asc,id.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const data = await res.json();
+        allCb = Array.isArray(data) ? data : [];
+        renderCbList();
+      } catch (e) { list.innerHTML = '<p class="empty" style="color:#ff0033;">Could not load. Did you run the SQL?</p>'; }
+    }
+
+    function renderCbList() {
+      const list = document.getElementById('cbList');
+      if (allCb.length === 0) { list.innerHTML = '<p class="empty">No blocks yet. Add your first one above.</p>'; return; }
+      list.innerHTML = allCb.map(b => {
+        let preview = '';
+        if (b.block_type === 'image') preview = '[Image]';
+        else preview = (b.content || '').substring(0, 60);
+        const typeBadge = '<span class="ad-status-pill live" style="margin-left:6px; text-transform:uppercase;">' + b.block_type + '</span>';
+        return `
+          <div class="ad-card">
+            <div class="info">
+              <h4>${escapeHtml(preview)}${(b.content || '').length > 60 ? '…' : ''}${typeBadge}</h4>
+              <p style="color:#666;">Page: <strong style="color:#ff0033;">${escapeHtml(b.page_key)}</strong> • Order: ${b.sort_order || 0}</p>
+            </div>
+            <div class="actions">
+              <button class="action-btn edit-btn" onclick='editCb(${JSON.stringify(b).replace(/'/g, "&#39;")})'><i class="fas fa-edit"></i></button>
+              <button class="action-btn delete-btn" onclick="deleteCb(${b.id})"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.saveCb = async function() {
+      const status = document.getElementById('cbStatus');
+      const editingId = document.getElementById('cbEditingId').value;
+      const page_key = document.getElementById('cbPage').value;
+      const block_type = document.getElementById('cbType').value;
+      const content = document.getElementById('cbContent').value;
+      const button_text = document.getElementById('cbButtonText').value.trim();
+      const button_link = document.getElementById('cbButtonLink').value.trim();
+      const text_color = document.getElementById('cbColor').value;
+      const text_size = document.getElementById('cbSize').value;
+      const text_align = document.getElementById('cbAlign').value;
+      const font_weight = document.getElementById('cbWeight').value;
+      const bgEnabled = document.getElementById('cbBgEnabled').value;
+      const bg_color = bgEnabled === 'yes' ? document.getElementById('cbBg').value : null;
+      const sort_order = parseInt(document.getElementById('cbSort').value) || 0;
+
+      if (block_type !== 'spacer' && block_type !== 'image' && !content.trim()) {
+        status.style.color = '#ff0033'; status.innerText = 'Content is required!'; return;
+      }
+      if (block_type === 'image' && !content.trim()) {
+        status.style.color = '#ff0033'; status.innerText = 'Please upload an image first!'; return;
+      }
+
+      status.style.color = '#ffcc00'; status.innerText = 'Saving...';
+
+      try {
+        const payload = { page_key, block_type, content, button_text, button_link, text_color, text_size, text_align, font_weight, bg_color, sort_order, active: true };
+        const url = editingId ? SUPABASE_URL + '/rest/v1/content_blocks?id=eq.' + editingId : SUPABASE_URL + '/rest/v1/content_blocks';
+        const method = editingId ? 'PATCH' : 'POST';
+        const res = await fetch(url, { method, headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
+        if (!res.ok) throw new Error(await res.text());
+        status.style.color = '#00cc44'; status.innerText = editingId ? 'Block updated!' : 'Block saved!';
+        setTimeout(() => { cancelCbEdit(); loadCb(); }, 700);
+      } catch (e) { status.style.color = '#ff0033'; status.innerText = 'Error: ' + e.message.substring(0, 80); }
+    };
+
+    window.editCb = function(b) {
+      document.getElementById('cbEditingId').value = b.id;
+      document.getElementById('cbPage').value = b.page_key || 'home';
+      document.getElementById('cbType').value = b.block_type || 'text';
+      document.getElementById('cbContent').value = b.content || '';
+      document.getElementById('cbButtonText').value = b.button_text || '';
+      document.getElementById('cbButtonLink').value = b.button_link || '';
+      document.getElementById('cbColor').value = b.text_color || '#ffffff';
+      document.getElementById('cbSize').value = b.text_size || 'medium';
+      document.getElementById('cbAlign').value = b.text_align || 'center';
+      document.getElementById('cbWeight').value = b.font_weight || 'normal';
+      document.getElementById('cbBg').value = b.bg_color || '#0a0a0a';
+      document.getElementById('cbBgEnabled').value = b.bg_color ? 'yes' : 'no';
+      document.getElementById('cbSort').value = b.sort_order || 0;
+      document.getElementById('cbSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Update Block';
+      document.getElementById('cbCancelBtn').style.display = 'block';
+      document.getElementById('cbFormTitle').innerText = 'Edit Content Block';
+      document.getElementById('cbStatus').innerText = '';
+      cbTypeChanged();
+      window.scrollTo(0, 0);
+    };
+
+    window.cancelCbEdit = function() {
+      document.getElementById('cbEditingId').value = '';
+      document.getElementById('cbPage').value = 'home';
+      document.getElementById('cbType').value = 'text';
+      document.getElementById('cbContent').value = '';
+      document.getElementById('cbButtonText').value = '';
+      document.getElementById('cbButtonLink').value = '';
+      document.getElementById('cbColor').value = '#ffffff';
+      document.getElementById('cbSize').value = 'medium';
+      document.getElementById('cbAlign').value = 'center';
+      document.getElementById('cbWeight').value = 'normal';
+      document.getElementById('cbBg').value = '#0a0a0a';
+      document.getElementById('cbBgEnabled').value = 'no';
+      document.getElementById('cbSort').value = 0;
+      document.getElementById('cbSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Save Block';
+      document.getElementById('cbCancelBtn').style.display = 'none';
+      document.getElementById('cbFormTitle').innerText = 'Add Content Block';
+      document.getElementById('cbStatus').innerText = '';
+      cbTypeChanged();
+    };
+
+    window.deleteCb = async function(id) {
+      if (!confirm('Delete this block?')) return;
+      try {
+        await fetch(SUPABASE_URL + '/rest/v1/content_blocks?id=eq.' + id, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        loadCb();
+      } catch (e) { alert('Could not delete.'); }
+    };
+
     // ===== VERIFY =====
     async function loadVerifyList() {
       const list = document.getElementById('verifyList');
@@ -1281,9 +1530,7 @@
         const artistProfiles = await artistsRes.json();
 
         const profileMap = {};
-        artistProfiles.forEach(a => {
-          if (a.name) profileMap[a.name.trim().toLowerCase()] = a;
-        });
+        artistProfiles.forEach(a => { if (a.name) profileMap[a.name.trim().toLowerCase()] = a; });
 
         const map = {};
         songs.forEach(s => {
@@ -1291,7 +1538,6 @@
           const key = name.toLowerCase();
           if (!map[key]) map[key] = { name: name, verified: false, profile_pic: null };
           if (s.verified) map[key].verified = true;
-
           const p = profileMap[key];
           if (p) {
             if (p.verified) map[key].verified = true;
@@ -1304,15 +1550,11 @@
         renderVerifyList('');
       } catch (e) { list.innerHTML = '<p class="empty" style="color:#ff0033;">Error.</p>'; }
     }
-
     function renderVerifyList(query) {
       const list = document.getElementById('verifyList');
       let filtered = allVerifyList;
       if (query) filtered = allVerifyList.filter(a => a.name.toLowerCase().includes(query));
-      if (filtered.length === 0) {
-        list.innerHTML = '<p class="empty">' + (query ? 'No matches.' : 'No artists yet.') + '</p>';
-        return;
-      }
+      if (filtered.length === 0) { list.innerHTML = '<p class="empty">' + (query ? 'No matches.' : 'No artists yet.') + '</p>'; return; }
       list.innerHTML = filtered.map(a => `
         <div class="v-card">
           <div class="v-avatar">${a.profile_pic ? '<img src="' + escapeHtml(a.profile_pic) + '">' : escapeHtml(a.name.charAt(0).toUpperCase())}</div>
@@ -1326,7 +1568,6 @@
         </div>
       `).join('');
     }
-
     window.filterVerify = function() {
       const q = document.getElementById('verifySearch').value.toLowerCase().trim();
       document.getElementById('clearVerifySearch').classList.toggle('show', !!q);
@@ -1337,7 +1578,6 @@
       document.getElementById('clearVerifySearch').classList.remove('show');
       renderVerifyList('');
     }
-
     window.askVerify = function(name, currentlyVerified) {
       pendingConfirm = { type: 'verify', name: name, value: !currentlyVerified };
       const icon = document.getElementById('confirmIcon');
@@ -1357,37 +1597,21 @@
       }
       document.getElementById('confirmModal').classList.add('open');
     }
-
     window.closeConfirmModal = function() {
       document.getElementById('confirmModal').classList.remove('open');
       pendingConfirm = null;
     }
-
     window.confirmAction = async function() {
       if (!pendingConfirm) return;
       const { name, value } = pendingConfirm;
       closeConfirmModal();
       try {
-        const res1 = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=ilike.' + encodeURIComponent(name), {
-          method: 'PATCH',
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-          body: JSON.stringify({ verified: value })
-        });
-
+        const res1 = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=ilike.' + encodeURIComponent(name), { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify({ verified: value }) });
         try {
-          await fetch(SUPABASE_URL + '/rest/v1/artists?name=ilike.' + encodeURIComponent(name), {
-            method: 'PATCH',
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-            body: JSON.stringify({ verified: value })
-          });
+          await fetch(SUPABASE_URL + '/rest/v1/artists?name=ilike.' + encodeURIComponent(name), { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify({ verified: value }) });
         } catch (e) { console.warn('Artist profile update failed:', e); }
-
-        if (res1.ok) {
-          loadVerifyList();
-          loadArtists();
-        } else {
-          alert('Could not update songs.');
-        }
+        if (res1.ok) { loadVerifyList(); loadArtists(); }
+        else { alert('Could not update songs.'); }
       } catch (e) { alert('Network error.'); }
     }
 
@@ -1399,7 +1623,6 @@
       if (url.includes('youtube.com/embed/')) return url.split('embed/')[1].split('?')[0];
       return '';
     }
-
     async function loadManualVideos() {
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/videos?select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
@@ -1408,7 +1631,6 @@
         renderManualVideos('');
       } catch (e) { document.getElementById('manualVideosList').innerHTML = '<p class="empty" style="color:#ff0033;">Error.</p>'; }
     }
-
     function renderManualVideos(query) {
       const container = document.getElementById('manualVideosList');
       let filtered = allManualVideos;
@@ -1429,7 +1651,6 @@
         `;
       }).join('');
     }
-
     window.deleteManualVideo = async function(id) {
       if (!confirm('Delete this video?')) return;
       try {
@@ -1437,7 +1658,6 @@
         loadManualVideos();
       } catch (e) { alert('Could not delete.'); }
     }
-
     window.openEditVideoModal = function(v) {
       document.getElementById('editVideoId').value = v.id;
       document.getElementById('editVideoTitle').value = v.title;
@@ -1446,7 +1666,6 @@
       document.getElementById('editVideoModal').classList.add('open');
     }
     window.closeEditVideoModal = function() { document.getElementById('editVideoModal').classList.remove('open'); }
-
     window.saveVideoEdit = async function() {
       const id = document.getElementById('editVideoId').value;
       const title = document.getElementById('editVideoTitle').value.trim();
@@ -1454,11 +1673,7 @@
       const video_date = document.getElementById('editVideoDate').value.trim();
       if (!title || !video_url) { alert('Title and link required'); return; }
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/videos?id=eq.' + id, {
-          method: 'PATCH',
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title, video_url, video_date })
-        });
+        const res = await fetch(SUPABASE_URL + '/rest/v1/videos?id=eq.' + id, { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ title, video_url, video_date }) });
         if (res.ok) { closeEditVideoModal(); loadManualVideos(); }
         else alert('Could not save.');
       } catch (e) { alert('Network error.'); }
@@ -1482,7 +1697,6 @@
         renderYouTubeVideos('');
       } catch (e) { container.innerHTML = '<p class="empty" style="color:#ff0033;">Could not load YouTube videos.</p>'; }
     }
-
     function renderYouTubeVideos(query) {
       const container = document.getElementById('youtubeVideosList');
       let filtered = allYouTubeVideos;

@@ -34,6 +34,12 @@
   .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; display: none; }
   .menu-overlay.open { display: block; }
   .page-content { padding: 20px 16px 30px; max-width: 700px; margin: 0 auto; }
+
+  /* ===== PAGE BUILDER BLOCKS ===== */
+  .pb-block { margin-bottom: 20px; padding: 18px 20px; border-radius: 14px; }
+  .pb-block.pb-image { padding: 0; overflow: hidden; }
+  .pb-block.pb-image img { width: 100%; display: block; border-radius: 14px; }
+
   .album-hero { text-align: center; margin-bottom: 26px; padding: 20px 0; }
   .album-hero-img { width: 170px; height: 170px; border-radius: 14px; object-fit: cover; box-shadow: 0 15px 40px rgba(0,0,0,0.15); margin-bottom: 16px; border: 1px solid var(--border); }
   .album-hero-label { font-size: 10px; font-weight: 900; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
@@ -42,7 +48,6 @@
   .album-hero-meta .artist { color: var(--accent); font-weight: 800; }
   .album-hero-meta .dot { color: #ccc; }
   
-  /* --- NEW: SOFT GREEN GENRE/COUNTRY FOR HERO META --- */
   .album-hero-meta .meta-green { color: #8fdfa8; font-weight: 700; }
 
   .page-title { font-size: 12px; font-weight: 800; color: var(--text2); letter-spacing: 0.5px; padding: 8px 0 14px; text-align: left; text-transform: uppercase; }
@@ -54,7 +59,6 @@
   .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .song-card-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; gap: 6px; }
   
-  /* --- NEW: GENRE & COUNTRY TAG (Soft Light Green) --- */
   .song-card-info .genre-country {
       font-size: 10px;
       font-weight: 600;
@@ -64,7 +68,6 @@
       margin-bottom: 2px;
   }
   
-  /* --- SONG CARD TITLES (Solid Black, Small) --- */
   .song-card-info h3 { 
       font-size: 13.5px; 
       font-weight: 800; 
@@ -81,7 +84,6 @@
   .song-card-info h3 .dash { font-weight: 600; color: #000000; margin: 0 2px; }
   .song-card-info h3 .feat-tag { font-weight: 800; color: #000000; font-size: 13.5px; }
   
-  /* --- DATE TEXT (Subtle Gray) --- */
   .song-card-info .date { 
       font-size: 11px; 
       color: #888888; 
@@ -126,8 +128,14 @@
     <a href="distributors.html" class="menu-item"><i class="fas fa-headphones"></i><span class="label">Get On Spotify</span></a>
   </div>
 
-  <div class="page-content" id="albumContent">
-    <div class="loading">Loading album...</div>
+  <div class="page-content">
+
+    <!-- ===== PAGE BUILDER BLOCKS (loaded from Supabase) ===== -->
+    <div id="pageBuilderBlocks"></div>
+
+    <div id="albumContent">
+      <div class="loading">Loading album...</div>
+    </div>
   </div>
 
   <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
@@ -151,6 +159,59 @@
     window.closeMenu = function() { document.getElementById('menuDropdown').classList.remove('open'); document.getElementById('menuOverlay').classList.remove('open'); }
 
     const LIVE_FILTER = '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')';
+
+    // ===== PAGE BUILDER BLOCKS LOADER =====
+    async function loadPageBuilderBlocks() {
+      const container = document.getElementById('pageBuilderBlocks');
+      if (!container) return;
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/content_blocks?page_key=eq.album&active=eq.true&select=*&order=sort_order.asc,id.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const blocks = await res.json();
+        if (!Array.isArray(blocks) || blocks.length === 0) {
+          container.innerHTML = '';
+          return;
+        }
+
+        const sizes = { small: '12px', medium: '15px', large: '20px', xlarge: '28px', huge: '38px' };
+        const weights = { normal: '500', bold: '800', black: '900' };
+
+        container.innerHTML = blocks.map(b => {
+          const color = b.text_color || '#ffffff';
+          const size = sizes[b.text_size] || '15px';
+          const weight = weights[b.font_weight] || '500';
+          const align = b.text_align || 'center';
+          const bg = b.bg_color || 'transparent';
+          const styleStr = 'color:' + color + '; font-size:' + size + '; font-weight:' + weight + '; text-align:' + align + '; line-height:1.45;';
+          const wrapStyle = 'background:' + bg + '; border-radius:14px; padding:18px 20px; margin-bottom:20px; overflow-wrap:anywhere; word-break:break-word;';
+
+          if (b.block_type === 'spacer') {
+            const h = parseInt(b.content) || 40;
+            return '<div style="height:' + h + 'px; margin-bottom:20px;"></div>';
+          }
+          if (b.block_type === 'image') {
+            if (!b.content) return '';
+            return '<div style="margin-bottom:20px;"><img src="' + escapeHtml(b.content) + '" alt="' + escapeHtml(b.button_text || 'Image') + '" style="width:100%; display:block; border-radius:14px;"></div>';
+          }
+          if (b.block_type === 'button') {
+            const txt = b.content || b.button_text || 'Click Here';
+            const link = b.button_link || '#';
+            return '<div style="' + wrapStyle + ' text-align:' + align + ';"><a href="' + escapeHtml(link) + '" style="display:inline-block; padding:14px 28px; background:#ff0033; color:#fff; border-radius:30px; font-size:14px; font-weight:900; text-decoration:none; box-shadow:0 8px 24px rgba(255,0,51,0.35);">' + escapeHtml(txt) + '</a></div>';
+          }
+          if (b.block_type === 'hero') {
+            const btnText = b.button_text ? '<a href="' + escapeHtml(b.button_link || '#') + '" style="display:inline-block; margin-top:16px; padding:13px 28px; background:#ff0033; color:#fff; border-radius:30px; font-size:13px; font-weight:900; text-decoration:none; box-shadow:0 8px 24px rgba(255,0,51,0.35);">' + escapeHtml(b.button_text) + '</a>' : '';
+            return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + (btnText ? '<div style="text-align:' + align + '; margin-top:16px;">' + btnText + '</div>' : '') + '</div>';
+          }
+          if (b.block_type === 'heading') {
+            return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + '</div>';
+          }
+          const btnText = b.button_text ? '<div style="margin-top:14px;"><a href="' + escapeHtml(b.button_link || '#') + '" style="display:inline-block; padding:12px 24px; background:#ff0033; color:#fff; border-radius:30px; font-size:13px; font-weight:900; text-decoration:none;">' + escapeHtml(b.button_text) + '</a></div>' : '';
+          return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + btnText + '</div>';
+        }).join('');
+      } catch (e) {
+        console.warn('Page builder blocks failed to load:', e);
+        container.innerHTML = '';
+      }
+    }
 
     async function loadAlbum() {
       const params = new URLSearchParams(window.location.search);
@@ -219,6 +280,7 @@
       }
     }
 
+    loadPageBuilderBlocks();
     loadAlbum();
   </script>
 </body>

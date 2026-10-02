@@ -67,6 +67,13 @@
   .theme-toggle-btn.active { border-color: var(--accent); color: var(--accent); }
   .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; display: none; }
   .menu-overlay.open { display: block; }
+
+  /* ===== PAGE BUILDER BLOCKS ===== */
+  .pb-wrap { max-width: 700px; margin: 0 auto; padding: 20px 16px 0; }
+  .pb-block { margin-bottom: 20px; padding: 18px 20px; border-radius: 14px; }
+  .pb-block.pb-image { padding: 0; overflow: hidden; }
+  .pb-block.pb-image img { width: 100%; display: block; border-radius: 14px; }
+
   .trend-hero { text-align: center; padding: 40px 20px 28px; max-width: 700px; margin: 0 auto; }
   .trend-label { font-size: 10px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: var(--trend-orange); margin-bottom: 12px; }
   .trend-title { font-size: 36px; font-weight: 900; letter-spacing: -1.4px; line-height: 1.05; color: var(--text); margin-bottom: 14px; }
@@ -142,6 +149,9 @@
     <a href="distributors.html" class="menu-item"><i class="fas fa-headphones"></i><span class="label">Get On Spotify</span></a>
   </div>
 
+  <!-- ===== PAGE BUILDER BLOCKS ===== -->
+  <div class="pb-wrap" id="pageBuilderBlocks"></div>
+
   <div class="trend-hero">
     <div class="trend-label">Samarid Music</div>
     <h1 class="trend-title">Weekend <span>Trend</span></h1>
@@ -203,6 +213,59 @@
     }
     window.closeMenu = function() { document.getElementById('menuDropdown').classList.remove('open'); document.getElementById('menuOverlay').classList.remove('open'); }
 
+    // ===== PAGE BUILDER BLOCKS LOADER =====
+    async function loadPageBuilderBlocks() {
+      const container = document.getElementById('pageBuilderBlocks');
+      if (!container) return;
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/content_blocks?page_key=eq.weekend&active=eq.true&select=*&order=sort_order.asc,id.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const blocks = await res.json();
+        if (!Array.isArray(blocks) || blocks.length === 0) {
+          container.innerHTML = '';
+          return;
+        }
+
+        const sizes = { small: '12px', medium: '15px', large: '20px', xlarge: '28px', huge: '38px' };
+        const weights = { normal: '500', bold: '800', black: '900' };
+
+        container.innerHTML = blocks.map(b => {
+          const color = b.text_color || '#ffffff';
+          const size = sizes[b.text_size] || '15px';
+          const weight = weights[b.font_weight] || '500';
+          const align = b.text_align || 'center';
+          const bg = b.bg_color || 'transparent';
+          const styleStr = 'color:' + color + '; font-size:' + size + '; font-weight:' + weight + '; text-align:' + align + '; line-height:1.45;';
+          const wrapStyle = 'background:' + bg + '; border-radius:14px; padding:18px 20px; margin-bottom:20px; overflow-wrap:anywhere; word-break:break-word;';
+
+          if (b.block_type === 'spacer') {
+            const h = parseInt(b.content) || 40;
+            return '<div style="height:' + h + 'px; margin-bottom:20px;"></div>';
+          }
+          if (b.block_type === 'image') {
+            if (!b.content) return '';
+            return '<div style="margin-bottom:20px;"><img src="' + escapeHtml(b.content) + '" alt="' + escapeHtml(b.button_text || 'Image') + '" style="width:100%; display:block; border-radius:14px;"></div>';
+          }
+          if (b.block_type === 'button') {
+            const txt = b.content || b.button_text || 'Click Here';
+            const link = b.button_link || '#';
+            return '<div style="' + wrapStyle + ' text-align:' + align + ';"><a href="' + escapeHtml(link) + '" style="display:inline-block; padding:14px 28px; background:#ff0033; color:#fff; border-radius:30px; font-size:14px; font-weight:900; text-decoration:none; box-shadow:0 8px 24px rgba(255,0,51,0.35);">' + escapeHtml(txt) + '</a></div>';
+          }
+          if (b.block_type === 'hero') {
+            const btnText = b.button_text ? '<a href="' + escapeHtml(b.button_link || '#') + '" style="display:inline-block; margin-top:16px; padding:13px 28px; background:#ff0033; color:#fff; border-radius:30px; font-size:13px; font-weight:900; text-decoration:none; box-shadow:0 8px 24px rgba(255,0,51,0.35);">' + escapeHtml(b.button_text) + '</a>' : '';
+            return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + (btnText ? '<div style="text-align:' + align + '; margin-top:16px;">' + btnText + '</div>' : '') + '</div>';
+          }
+          if (b.block_type === 'heading') {
+            return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + '</div>';
+          }
+          const btnText = b.button_text ? '<div style="margin-top:14px;"><a href="' + escapeHtml(b.button_link || '#') + '" style="display:inline-block; padding:12px 24px; background:#ff0033; color:#fff; border-radius:30px; font-size:13px; font-weight:900; text-decoration:none;">' + escapeHtml(b.button_text) + '</a></div>' : '';
+          return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + btnText + '</div>';
+        }).join('');
+      } catch (e) {
+        console.warn('Page builder blocks failed to load:', e);
+        container.innerHTML = '';
+      }
+    }
+
     function isRecentDate(dateStr) {
       if (!dateStr) return false;
       const d = new Date(dateStr);
@@ -250,6 +313,7 @@
       }
     }
 
+    loadPageBuilderBlocks();
     loadTrend();
   </script>
 </body>
