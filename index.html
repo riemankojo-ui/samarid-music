@@ -76,7 +76,6 @@
   .song-list, .top-albums-list { display: flex; flex-direction: column; }
   .song-card, .top-album-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; transition: opacity 0.15s; }
   .song-card:last-child, .top-album-card:last-child { border-bottom: none; }
-  .song-card:active, .top-album-card:active { opacity: 0.7; }
   .song-card-img { width: 96px; height: 96px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 12px; position: relative; }
   .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .top-album-cover { width: 115px; height: 115px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 14px; position: relative; }
@@ -120,38 +119,36 @@
 
   /* ===== LINK-STYLE HOVER / TAP EFFECT ON SONG CARDS ===== */
   .song-card, .top-album-card {
-    transition: opacity 0.15s ease, background 0.15s ease;
+    transition: background 0.15s ease;
     border-radius: 10px;
   }
 
-  .song-card:hover .song-card-info h3,
+  /* Desktop only — real mouse hover */
+  @media (hover: hover) and (pointer: fine) {
+    .song-card:hover .song-card-info h3,
+    .top-album-card:hover .top-album-info .top-album-name {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+      text-decoration-color: #000000;
+      color: #000000 !important;
+    }
+    .song-card:hover, .top-album-card:hover {
+      background: rgba(0, 0, 0, 0.03);
+    }
+  }
+
+  /* Mobile — only show effect while finger is pressed (not stuck) */
   .song-card:active .song-card-info h3,
-  .top-album-card:hover .top-album-info .top-album-name,
   .top-album-card:active .top-album-info .top-album-name {
     text-decoration: underline;
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
     text-decoration-color: #000000;
     color: #000000 !important;
-    transition: color 0.15s ease;
   }
-
-  .song-card:hover, .top-album-card:hover {
-    background: rgba(0, 0, 0, 0.03);
-  }
-
   .song-card:active, .top-album-card:active {
     background: rgba(0, 0, 0, 0.06);
-  }
-
-  @media (hover: none) {
-    .song-card:active .song-card-info h3,
-    .top-album-card:active .top-album-info .top-album-name {
-      text-decoration: underline;
-      text-decoration-thickness: 2px;
-      text-underline-offset: 3px;
-      color: #000000 !important;
-    }
   }
 
   /* ===== PAGE BUILDER BLOCKS ===== */
@@ -441,7 +438,6 @@
     }
     window.setTheme = (theme) => { localStorage.setItem('samarid-theme', theme); applySettings(); }
 
-    // ===== PAGE BUILDER BLOCKS LOADER =====
     async function loadPageBuilderBlocks() {
       const container = document.getElementById('pageBuilderBlocks');
       if (!container) return;
@@ -520,7 +516,7 @@
           return '<a href="' + escapeHtml(link) + '" target="_blank" rel="noopener" class="home-ad-card"><img class="home-ad-img" src="' + escapeHtml(ad.image_url) + '" alt="' + escapeHtml(ad.title || 'Ad') + '" loading="lazy"><div class="home-ad-body">' + title + desc + cta + '</div></a>';
         }).join('');
       } catch (e) {
-        container.innerHTML = '<div class="home-ad-placeholder"><i class="fas fa-image"></i><h3>Your ad could be here</h3></div>';
+        container.innerHTML = '<div class="home-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
       }
     }
 
