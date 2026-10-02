@@ -111,40 +111,43 @@
       white-space: nowrap; 
   }
 
-  /* ===== LINK-STYLE HOVER / TAP EFFECT (Fixed) ===== */
+  /* ===== TAP/HOVER EFFECT (link-feel, no underline) ===== */
   .song-card {
     transition: background 0.15s ease;
     border-radius: 10px;
   }
+  .song-card-info h3 { transition: color 0.15s ease; }
 
   @media (hover: hover) and (pointer: fine) {
-    .song-card:hover .song-card-info h3 {
-      text-decoration: underline;
-      text-decoration-thickness: 2px;
-      text-underline-offset: 3px;
-      text-decoration-color: #000000;
-      color: #000000 !important;
-    }
-    .song-card:hover {
-      background: rgba(0, 0, 0, 0.03);
-    }
+    .song-card:hover { background: rgba(0, 0, 0, 0.03); }
+    .song-card:hover .song-card-info h3 { color: var(--accent); }
   }
 
-  .song-card:active .song-card-info h3 {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 3px;
-    text-decoration-color: #000000;
-    color: #000000 !important;
-  }
-  .song-card:active {
-    background: rgba(0, 0, 0, 0.06);
-  }
+  .song-card:active { background: rgba(255, 136, 0, 0.06); }
+  .song-card:active .song-card-info h3 { color: var(--accent); }
 
   /* ===== PAGE BUILDER BLOCKS ===== */
   .pb-block { margin-bottom: 20px; padding: 18px 20px; border-radius: 14px; }
   .pb-block.pb-image { padding: 0; overflow: hidden; }
   .pb-block.pb-image img { width: 100%; display: block; border-radius: 14px; }
+
+  /* ===== ARTIST VIDEOS SECTION ===== */
+  .videos-section { margin-top: 34px; padding-top: 24px; border-top: 1px solid var(--border); }
+  .videos-section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .videos-section-head .bar { width: 5px; height: 22px; background: var(--accent); border-radius: 3px; flex-shrink: 0; }
+  .videos-section-head h3 { font-size: 17px; font-weight: 900; letter-spacing: -0.3px; color: #000; }
+  .videos-section-head .count { font-size: 11px; font-weight: 800; color: #999; background: #f0f0f0; padding: 3px 9px; border-radius: 12px; margin-left: auto; }
+  .video-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .video-card { display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: inherit; cursor: pointer; transition: transform 0.15s ease; }
+  .video-card:active { transform: scale(0.97); }
+  .video-card-img { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; }
+  .video-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .video-card-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.35) 100%); pointer-events: none; }
+  .video-card-play i { color: #fff; font-size: 38px; filter: drop-shadow(0 3px 10px rgba(0,0,0,0.6)); transition: transform 0.2s; }
+  .video-card:active .video-card-play i { transform: scale(0.9); }
+  .video-card-badge { position: absolute; top: 8px; left: 8px; background: var(--red); color: #fff; font-size: 9px; font-weight: 900; letter-spacing: 0.8px; padding: 3px 7px; border-radius: 5px; text-transform: uppercase; }
+  .video-card-title { font-size: 12.5px; font-weight: 800; line-height: 1.35; color: #000; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; word-break: break-word; }
+  .video-card-meta { font-size: 10px; font-weight: 700; color: #999; letter-spacing: 0.3px; text-transform: uppercase; }
 
   .bottom-controls { display: flex; align-items: center; gap: 12px; padding: 22px 0 8px; margin-top: 8px; border-top: 1px solid var(--border); }
   .bottom-search-wrap { position: relative; flex: 1; min-width: 0; }
@@ -242,6 +245,18 @@
       <span class="page-indicator" id="pageIndicator"></span>
       <button class="next-btn" id="nextBtn" onclick="nextPage()">Next <i class="fas fa-arrow-right"></i></button>
     </div>
+
+    <!-- ===== ARTIST VIDEOS (middle of page) ===== -->
+    <div class="videos-section" id="artistVideosSection" style="display:none;">
+      <div class="videos-section-head">
+        <div class="bar"></div>
+        <h3>Official Videos</h3>
+        <span class="count" id="artistVideosCount">0</span>
+      </div>
+      <div class="video-grid" id="artistVideosGrid"></div>
+    </div>
+    <!-- ===== END ARTIST VIDEOS ===== -->
+
   </div>
 
   <div class="artist-story-section">
@@ -258,7 +273,7 @@
 
       <p>From underground breakout hits to major chart entries, the dedication to crisp audio production and unforgettable performance remains unmatched. Whether you are looking to download high-definition MP3 audio files for offline listening or discover brand-new exclusive releases, every single project is made accessible right here.</p>
 
-      <p>Make sure to <strong>tap the menu button</strong> at the top left, hit the **Follow** button to join the growing community of supporters, and use the quick share options to spread the vibe across WhatsApp, Facebook, and X with your friends and family.</p>
+      <p>Make sure to <strong>tap the menu button</strong> at the top left, hit the <strong>Follow</strong> button to join the growing community of supporters, and use the quick share options to spread the vibe across WhatsApp, Facebook, and X with your friends and family.</p>
 
       <div class="artist-story-footer-tags">
         <span class="story-tag">🎵 100% Free Mp3 Download</span>
@@ -268,7 +283,9 @@
     </div>
   </div>
 
-  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>  <script>
+  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
+
+  <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
     const PAGE_SIZE = 7;
@@ -337,6 +354,15 @@
     }
     function showToast(msg) { const toast = document.createElement('div'); toast.innerText = msg; toast.className = 'toast'; document.body.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; }, 1800); setTimeout(() => { if (toast.parentNode) document.body.removeChild(toast); }, 2200); }
 
+    // ===== YT ID HELPER =====
+    function ytId(url) {
+      if (!url) return '';
+      if (url.includes('youtu.be/')) return url.split('youtu.be/')[1].split('?')[0];
+      if (url.includes('youtube.com/watch')) { try { return new URL(url).searchParams.get('v') || ''; } catch(e) {} }
+      if (url.includes('youtube.com/embed/')) return url.split('embed/')[1].split('?')[0];
+      return '';
+    }
+
     // ===== PAGE BUILDER BLOCKS LOADER =====
     async function loadPageBuilderBlocks() {
       const container = document.getElementById('pageBuilderBlocks');
@@ -387,6 +413,45 @@
       } catch (e) {
         console.warn('Page builder blocks failed to load:', e);
         container.innerHTML = '';
+      }
+    }
+
+    // ===== ARTIST VIDEOS LOADER (middle of page) =====
+    async function loadArtistVideos() {
+      const section = document.getElementById('artistVideosSection');
+      const grid = document.getElementById('artistVideosGrid');
+      const countEl = document.getElementById('artistVideosCount');
+      if (!section || !grid) return;
+      try {
+        const res = await fetch(
+          SUPABASE_URL + '/rest/v1/artist_videos?artist_name=ilike.' + encodeURIComponent(artistName) + '&select=*&order=sort_order.asc,id.desc',
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
+        );
+        const videos = await res.json();
+        if (!Array.isArray(videos) || videos.length === 0) {
+          section.style.display = 'none';
+          return;
+        }
+        section.style.display = 'block';
+        if (countEl) countEl.innerText = videos.length;
+
+        grid.innerHTML = videos.map(v => {
+          const vid = ytId(v.video_url);
+          const thumb = v.thumbnail_url || (vid ? 'https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg' : '');
+          const badge = v.is_official ? '<span class="video-card-badge">Official</span>' : '';
+          const link = v.video_url || '#';
+          return '<a href="' + escapeHtml(link) + '" target="_blank" rel="noopener" class="video-card">' +
+            '<div class="video-card-img">' +
+              (thumb ? '<img src="' + escapeHtml(thumb) + '" alt="' + escapeHtml(v.video_title || 'Video') + '" loading="lazy">' : '') +
+              badge +
+              '<div class="video-card-play"><i class="fas fa-play-circle"></i></div>' +
+            '</div>' +
+            '<div class="video-card-title">' + escapeHtml(v.video_title || 'Untitled Video') + '</div>' +
+          '</a>';
+        }).join('');
+      } catch (e) {
+        console.warn('Artist videos failed to load:', e);
+        section.style.display = 'none';
       }
     }
 
@@ -586,6 +651,7 @@
     loadArtistPage();
     loadFollowState();
     loadPageBuilderBlocks();
+    loadArtistVideos();
   </script>
 </body>
 </html>
