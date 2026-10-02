@@ -49,6 +49,8 @@
   .sub-tab { flex-shrink: 0; padding: 8px 14px; background: var(--card); border: 1px solid var(--border); color: var(--text2); font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 18px; font-family: inherit; white-space: nowrap; display: flex; align-items: center; gap: 6px; letter-spacing: 0.3px; }
   .sub-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
   .sub-tab i { font-size: 12px; }
+  .sub-content { display: none; }
+  .sub-content.active { display: block; }
 
   .artist-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; }
   .artist-top { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
@@ -92,21 +94,6 @@
   .v-btn.unverify { background: transparent; color: #888; border: 1px solid #333; }
   .v-btn.unverify:active { background: rgba(255,0,51,0.1); color: #ff0033; border-color: #ff0033; }
 
-  .colors-intro { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; font-size: 12px; color: var(--text2); line-height: 1.6; }
-  .colors-intro strong { color: #fff; }
-
-  .page-color-item { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; }
-  .page-color-info { flex: 1; min-width: 0; }
-  .page-color-info h4 { font-size: 14px; font-weight: 800; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .page-color-info p { font-size: 11px; color: var(--text2); }
-
-  .color-btns { display: flex; gap: 6px; flex-shrink: 0; }
-  .color-btn { width: 40px; height: 40px; border-radius: 12px; border: 2px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: 0.15s; background: transparent; font-family: inherit; padding: 0; }
-  .color-btn:active { transform: scale(0.9); }
-  .color-btn.black-btn { background: #0a0a0a; color: #fff; border-color: #333; }
-  .color-btn.white-btn { background: #ffffff; color: #0a0a0a; border-color: #e5e5e5; }
-  .color-btn.active { border-color: #ff8800; border-width: 3px; box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.2); }
-
   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 6px 0 max(6px, env(safe-area-inset-bottom)); z-index: 1000; }
   .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 8px 4px; color: var(--text2); cursor: pointer; background: transparent; border: none; font-family: inherit; }
   .nav-item .icon { font-size: 20px; line-height: 1; }
@@ -128,12 +115,49 @@
 
   .form-group { margin-bottom: 12px; }
   .form-group label { display: block; font-size: 11px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
-  .form-group input, .form-group textarea { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; resize: vertical; }
+  .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #333; border-radius: 10px; color: #fff; font-size: 14px; font-family: inherit; resize: vertical; -webkit-appearance: none; appearance: none; }
   .form-group textarea { min-height: 90px; }
-  .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--accent); }
 
   .preview-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 28px; color: #fff; overflow: hidden; }
   .preview-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* ===== ADS PAGE ===== */
+  .ad-form-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+  .ad-form-box-title { font-size: 12px; font-weight: 900; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .color-row { display: flex; gap: 8px; align-items: center; }
+  .color-row input[type="color"] { width: 50px; height: 46px; padding: 4px; cursor: pointer; border-radius: 10px; border: 1px solid #333; background: #0a0a0a; flex-shrink: 0; }
+  .color-row select { flex: 1; }
+  .color-row .hex-label { font-size: 11px; color: var(--text2); min-width: 60px; text-align: right; font-family: monospace; }
+
+  .live-preview-box { background: #050505; border: 1px solid #222; border-radius: 14px; padding: 16px; margin-bottom: 14px; }
+  .live-preview-box .lp-label { font-size: 10px; font-weight: 900; letter-spacing: 2px; color: #666; text-transform: uppercase; margin-bottom: 12px; text-align: center; }
+  .lp-card { background: #141414; border: 1px solid #2a2a2a; border-radius: 12px; overflow: hidden; }
+  .lp-card img { width: 100%; display: block; background: #111; min-height: 60px; }
+  .lp-card-body { padding: 14px 16px 16px; }
+  .lp-title { font-weight: 900; margin-bottom: 6px; letter-spacing: -0.2px; line-height: 1.3; overflow-wrap: anywhere; }
+  .lp-desc { font-weight: 500; line-height: 1.6; overflow-wrap: anywhere; }
+  .lp-cta { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 12px; font-weight: 800; color: #ff8800; letter-spacing: 0.3px; }
+
+  .sz-small { font-size: 12px; }
+  .sz-medium { font-size: 16px; }
+  .sz-large { font-size: 22px; }
+  .sz-desc-small { font-size: 11px; }
+  .sz-desc-medium { font-size: 13px; }
+  .sz-desc-large { font-size: 16px; }
+
+  .ad-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 12px; margin-bottom: 10px; display: flex; gap: 12px; align-items: flex-start; }
+  .ad-card img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; flex-shrink: 0; background: #0a0a0a; }
+  .ad-card .info { flex: 1; min-width: 0; }
+  .ad-card h4 { font-size: 13px; font-weight: 800; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ad-card p { font-size: 11px; color: var(--text2); margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .ad-card .ad-status-pill { display: inline-block; font-size: 9px; font-weight: 900; padding: 2px 8px; border-radius: 6px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .ad-status-pill.live { background: rgba(0,204,68,0.15); color: #00cc44; }
+  .ad-status-pill.hidden { background: rgba(255,255,255,0.08); color: #888; }
+  .ad-card .actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+  .ad-card .action-btn { background: transparent; border: none; font-size: 15px; cursor: pointer; padding: 6px; border-radius: 8px; }
+  .ad-card .edit-btn { color: #00cc44; }
+  .ad-card .delete-btn { color: #ff0033; }
 </style>
 </head><body>
 
@@ -189,21 +213,167 @@
         </div>
       </div>
 
-      <div class="page" data-page="colors">
-        <h1 class="page-title">Page Colors</h1>
-        <p class="page-subtitle">Set the default theme for each page</p>
+      <!-- ===== FULL ADS TAB (4 SECTIONS) ===== -->
+      <div class="page" data-page="ads">
+        <h1 class="page-title">Ads Manager</h1>
+        <p class="page-subtitle">Ads, texts, images & artist videos</p>
 
-        <div class="colors-intro">
-          <strong>How it works:</strong> Pick Black or White for each page. All visitors will see your choice by default. If a visitor changes the theme on their own device via the menu, their choice saves for them only.
+        <div class="sub-tabs" style="margin-bottom:18px;">
+          <button class="sub-tab active" onclick="adsSubTab('live', this)"><i class="fas fa-image"></i> Live Ads</button>
+          <button class="sub-tab" onclick="adsSubTab('texts', this)"><i class="fas fa-file-lines"></i> Raw Texts</button>
+          <button class="sub-tab" onclick="adsSubTab('images', this)"><i class="fas fa-images"></i> Images</button>
+          <button class="sub-tab" onclick="adsSubTab('videos', this)"><i class="fas fa-film"></i> Artist Videos</button>
         </div>
 
-        <div class="search-wrap">
-          <i class="fas fa-search search-icon"></i>
-          <input type="text" id="colorSearch" placeholder="Search pages..." oninput="filterColorPages()">
-          <button class="clear-search" id="clearColorSearch" onclick="clearColorSearch()">✕</button>
+        <!-- 1. LIVE ADS -->
+        <div class="sub-content active" id="ads-sec-live">
+          <div class="ad-form-box">
+            <div class="ad-form-box-title"><i class="fas fa-plus-circle"></i> <span id="adFormTitle">Create New Ad</span></div>
+            <input type="hidden" id="adEditingId" value="">
+            <div class="form-group"><label>Image URL *</label><input type="text" id="adImage" placeholder="https://...png" oninput="updateAdPreview()"></div>
+            <div class="form-group"><label>Title</label><input type="text" id="adTitle" placeholder="e.g. Promoted by XYZ Brand" oninput="updateAdPreview()"></div>
+            <div class="form-group"><label>Title Color & Size</label>
+              <div class="color-row">
+                <input type="color" id="adTitleColor" value="#ffffff" oninput="updateAdPreview()">
+                <select id="adTitleSize" onchange="updateAdPreview()"><option value="small">Small</option><option value="medium" selected>Medium</option><option value="large">Large</option></select>
+                <span class="hex-label" id="adTitleColorHex">#ffffff</span>
+              </div>
+            </div>
+            <div class="form-group"><label>Description</label><textarea id="adDescription" placeholder="Short description..." oninput="updateAdPreview()"></textarea></div>
+            <div class="form-group"><label>Description Color & Size</label>
+              <div class="color-row">
+                <input type="color" id="adDescColor" value="#a0a0a0" oninput="updateAdPreview()">
+                <select id="adDescSize" onchange="updateAdPreview()"><option value="small">Small</option><option value="medium" selected>Medium</option><option value="large">Large</option></select>
+                <span class="hex-label" id="adDescColorHex">#a0a0a0</span>
+              </div>
+            </div>
+            <div class="form-group"><label>Link URL</label><input type="text" id="adLink" placeholder="https://wa.me/233..." oninput="updateAdPreview()"></div>
+            <div class="form-group"><label>Where to show</label>
+              <select id="adPosition">
+                <option value="song">Song Page</option><option value="home">Home Page</option><option value="promo">Promo Page</option><option value="all">All Pages</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Status</label>
+              <select id="adActive"><option value="true">Active</option><option value="false">Hidden</option></select>
+            </div>
+
+            <div class="live-preview-box">
+              <div class="lp-label">Live Preview</div>
+              <div class="lp-card">
+                <img id="lpImg" src="" alt="" style="display:none;">
+                <div class="lp-card-body">
+                  <div class="lp-title" id="lpTitle" style="color:#ffffff;">Your Title Here</div>
+                  <div class="lp-desc" id="lpDesc" style="color:#a0a0a0;">Your description will appear here...</div>
+                  <div class="lp-cta" id="lpCta" style="display:none;">Learn More <i class="fas fa-arrow-right"></i></div>
+                </div>
+              </div>
+            </div>
+
+            <button class="add-artist-btn" id="adSubmitBtn" onclick="saveAd()"><i class="fas fa-save"></i> Publish Ad</button>
+            <button id="adCancelBtn" onclick="cancelAdEdit()" style="display:none; width:100%; padding:14px; background:#222; color:#fff; border:none; border-radius:12px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; margin-top:8px;">Cancel Edit</button>
+            <p id="adStatus" style="font-size:12px; text-align:center; margin-top:10px; font-weight:bold;"></p>
+          </div>
+
+          <div class="ad-form-box">
+            <div class="ad-form-box-title"><i class="fas fa-list"></i> Your Ads</div>
+            <div id="adsList"><p class="empty">Loading...</p></div>
+          </div>
         </div>
 
-        <div id="colorPagesList"><p class="empty">Loading...</p></div>
+        <!-- 2. RAW TEXTS -->
+        <div class="sub-content" id="ads-sec-texts">
+          <div class="ad-form-box">
+            <div class="ad-form-box-title"><i class="fas fa-file-lines"></i> <span id="textFormTitle">Add Text Block</span></div>
+            <input type="hidden" id="textEditingId" value="">
+            <div class="form-group"><label>Page</label>
+              <select id="textPage">
+                <option value="home">Home Page</option>
+                <option value="about">About Page</option>
+                <option value="promo">Promo Page</option>
+                <option value="song">Song Page</option>
+                <option value="albums">Albums Page</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Section Title</label><input type="text" id="textTitle" placeholder="e.g. About Samarid Music"></div>
+            <div class="form-group"><label>Content</label><textarea id="textContent" placeholder="Write your text here..." style="min-height:140px;"></textarea></div>
+            <div class="form-group"><label>Sort Order (small = first)</label><input type="number" id="textSort" value="0"></div>
+            <button class="add-artist-btn" id="textSubmitBtn" onclick="saveText()"><i class="fas fa-save"></i> Save Text</button>
+            <button id="textCancelBtn" onclick="cancelTextEdit()" style="display:none; width:100%; padding:14px; background:#222; color:#fff; border:none; border-radius:12px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; margin-top:8px;">Cancel Edit</button>
+            <p id="textStatus" style="font-size:12px; text-align:center; margin-top:10px; font-weight:bold;"></p>
+          </div>
+
+          <div class="ad-form-box">
+            <div class="ad-form-box-title"><i class="fas fa-list"></i> Your Text Blocks</div>
+            <div id="textsList"><p class="empty">Loading...</p></div>
+          </div>
+        </div>
+
+        <!-- 3. IMAGES -->
+        <div class="sub-content" id="ads-sec-images">
+          <div class="ad-form-box">
+            <div class="ad-form-box-title"><i class="fas fa-images"></i> <span id="imgFormTitle">Add Image</span></div>
+            <input type="hidden" id="imgEditingId" value="">
+            <div class="form-group"><label>Image URL *</label><input type="text" id="imgUrl" placeholder="https://...jpg" oninput="updateImgPreview()"></div>
+            <div class="form-group"><label>Title</label><input type="text" id="imgTitle" placeholder="e.g. Studio Session"></div>
+            <div class="form-group"><label>Description</label><textarea id="imgDesc" placeholder="Short description..."></textarea></div>
+            <div class="form-group"><label>Section</label>
+              <select id="imgSection">
+                <option value="general">General</option>
+                <option value="gallery">Gallery</option>
+                <option value="covers">Covers</option>
+                <option value="artists">Artist Photos</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Sort Order</label><input type="number" id="imgSort" value="0"></div>
+            <div class="form-group"><label>Status</label>
+              <select id="imgActive"><option value="true">Active</option><option value="false">Hidden</option></select>
+            </div>
+
+            <div class="live-preview-box">
+              <div class="lp-label">Preview</div>
+              <img id="imgPreview" src="" alt="" style="width:100%; max-height:220px; object-fit:cover; border-radius:10px; display:none; background:#111;">
+            </div>
+
+            <button class="add-artist-btn" id="imgSubmitBtn" onclick="saveImg()"><i class="fas fa-save"></i> Save Image</button>
+            <button id="imgCancelBtn" onclick="cancelImgEdit()" style="display:none; width:100%; padding:14px; background:#222; color:#fff; border:none; border-radius:12px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; margin-top:8px;">Cancel Edit</button>
+            <p id="imgStatus" style="font-size:12px; text-align:center; margin-top:10px; font-weight:bold;"></p>
+          </div>
+
+          <div class="ad-form-box">
+            <div class="ad-form-box-title"><i class="fas fa-list"></i> Your Images</div>
+            <div id="imagesList"><p class="empty">Loading...</p></div>
+          </div>
+        </div>
+
+        <!-- 4. ARTIST VIDEOS -->
+        <div class="sub-content" id="ads-sec-videos">
+          <div class="ad-form-box">
+            <div class="ad-form-box-title"><i class="fas fa-film"></i> <span id="avFormTitle">Add Official Video</span></div>
+            <input type="hidden" id="avEditingId" value="">
+            <div class="form-group"><label>Artist Name *</label><input type="text" id="avArtist" placeholder="e.g. Samarid"></div>
+            <div class="form-group"><label>Video Title *</label><input type="text" id="avTitle" placeholder="e.g. Back To Sender (Official Video)"></div>
+            <div class="form-group"><label>YouTube URL *</label><input type="text" id="avUrl" placeholder="https://youtube.com/watch?v=..." oninput="updateAvPreview()"></div>
+            <div class="form-group"><label>Thumbnail URL (optional)</label><input type="text" id="avThumb" placeholder="Auto from YouTube if empty" oninput="updateAvPreview()"></div>
+            <div class="form-group"><label>Official</label>
+              <select id="avOfficial"><option value="true">Yes — Official</option><option value="false">No</option></select>
+            </div>
+            <div class="form-group"><label>Sort Order</label><input type="number" id="avSort" value="0"></div>
+
+            <div class="live-preview-box">
+              <div class="lp-label">Preview</div>
+              <img id="avPreview" src="" alt="" style="width:100%; max-height:220px; object-fit:cover; border-radius:10px; display:none; background:#111;">
+            </div>
+
+            <button class="add-artist-btn" id="avSubmitBtn" onclick="saveAv()"><i class="fas fa-save"></i> Save Video</button>
+            <button id="avCancelBtn" onclick="cancelAvEdit()" style="display:none; width:100%; padding:14px; background:#222; color:#fff; border:none; border-radius:12px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; margin-top:8px;">Cancel Edit</button>
+            <p id="avStatus" style="font-size:12px; text-align:center; margin-top:10px; font-weight:bold;"></p>
+          </div>
+
+          <div class="ad-form-box">
+            <div class="ad-form-box-title"><i class="fas fa-list"></i> Official Videos</div>
+            <div id="avList"><p class="empty">Loading...</p></div>
+          </div>
+        </div>
       </div>
 
       <div class="page" data-page="verify">
@@ -221,7 +391,7 @@
     <div class="bottom-nav" id="bottomNav">
       <button class="nav-item active" data-nav="artists" onclick="goTab('artists')"><div class="icon"><i class="fas fa-user"></i></div><div class="label">ARTISTS</div></button>
       <button class="nav-item" data-nav="videos" onclick="goTab('videos')"><div class="icon"><i class="fas fa-video"></i></div><div class="label">VIDEOS</div></button>
-      <button class="nav-item" data-nav="colors" onclick="goTab('colors')"><div class="icon"><i class="fas fa-palette"></i></div><div class="label">COLORS</div></button>
+      <button class="nav-item" data-nav="ads" onclick="goTab('ads')"><div class="icon"><i class="fas fa-image"></i></div><div class="label">ADS</div></button>
       <button class="nav-item" data-nav="verify" onclick="goTab('verify')"><div class="icon"><i class="fas fa-check-circle"></i></div><div class="label">VERIFY</div></button>
     </div>
   </div>
@@ -270,7 +440,9 @@
         <button class="confirm-blue" onclick="saveVideoEdit()">Save</button>
       </div>
     </div>
-  </div>  <script>
+  </div>
+
+  <script>
     const SECRET_PASSWORD = "samarid2026";
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
@@ -278,17 +450,6 @@
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
 
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
-
-    const PAGES = [
-      { key: 'index', name: 'Homepage', url: 'index.html' },
-      { key: 'song', name: 'Song Page', url: 'song.html' },
-      { key: 'artist', name: 'Artist Page', url: 'artist-template.html' },
-      { key: 'album', name: 'Album Page', url: 'album.html' },
-      { key: 'albums', name: 'Albums Page', url: 'albums.html' },
-      { key: 'artists', name: 'Artists Page', url: 'artists.html' },
-      { key: 'videos', name: 'Videos Page', url: 'videos.html' },
-      { key: 'search', name: 'Search Page', url: 'search.html' }
-    ];
 
     function escapeHtml(s) {
       if (s === null || s === undefined) return '';
@@ -299,7 +460,10 @@
     let allVerifyList = [];
     let allManualVideos = [];
     let allYouTubeVideos = [];
-    let pageSettings = {};
+    let allAds = [];
+    let allTexts = [];
+    let allImages = [];
+    let allArtistVideos = [];
     let pendingConfirm = null;
 
     window.togglePassword = function() {
@@ -327,7 +491,8 @@
       loadVerifyList();
       loadManualVideos();
       loadYouTubeVideos();
-      loadPageSettings();
+      loadAds();
+      updateAdPreview();
     }
 
     window.goTab = function(tab) {
@@ -338,7 +503,7 @@
         b.classList.toggle('active', b.dataset.nav === tab);
       });
       if (tab === 'verify') loadVerifyList();
-      if (tab === 'colors') loadPageSettings();
+      if (tab === 'ads') { loadAds(); updateAdPreview(); }
       window.scrollTo(0, 0);
     }
 
@@ -480,83 +645,432 @@
       }
     }
 
-    // ===== COLORS =====
-    async function loadPageSettings() {
-      const list = document.getElementById('colorPagesList');
-      try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/page_settings?select=*', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        const data = await res.json();
-        pageSettings = {};
-        if (Array.isArray(data)) data.forEach(row => { pageSettings[row.page_name] = row.theme; });
-        PAGES.forEach(p => { if (!pageSettings[p.key]) pageSettings[p.key] = 'light'; });
-        renderColorPages('');
-      } catch (e) {
-        console.error(e);
-        list.innerHTML = '<p class="empty" style="color:#ff0033;">Could not load settings. Did you run the SQL?</p>';
-      }
+    // ===== ADS SUB-TABS =====
+    window.adsSubTab = function(id, btn) {
+      document.querySelectorAll('#pageAds .sub-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('#pageAds .sub-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('ads-sec-' + id).classList.add('active');
+      if (id === 'texts') loadTexts();
+      if (id === 'images') loadImages();
+      if (id === 'videos') loadArtistVideos();
+    };
+
+    // ===== LIVE ADS =====
+    window.updateAdPreview = function() {
+      const title = document.getElementById('adTitle').value.trim();
+      const desc = document.getElementById('adDescription').value.trim();
+      const img = document.getElementById('adImage').value.trim();
+      const titleColor = document.getElementById('adTitleColor').value;
+      const titleSize = document.getElementById('adTitleSize').value;
+      const descColor = document.getElementById('adDescColor').value;
+      const descSize = document.getElementById('adDescSize').value;
+      const link = document.getElementById('adLink').value.trim();
+
+      document.getElementById('adTitleColorHex').innerText = titleColor;
+      document.getElementById('adDescColorHex').innerText = descColor;
+
+      const lpImg = document.getElementById('lpImg');
+      if (img && /^https?:\/\//i.test(img)) { lpImg.src = img; lpImg.style.display = 'block'; }
+      else { lpImg.style.display = 'none'; }
+
+      const lpTitle = document.getElementById('lpTitle');
+      lpTitle.innerText = title || 'Your Title Here';
+      lpTitle.style.color = titleColor;
+      lpTitle.className = 'lp-title sz-' + titleSize;
+
+      const lpDesc = document.getElementById('lpDesc');
+      lpDesc.innerText = desc || 'Your description will appear here...';
+      lpDesc.style.color = descColor;
+      lpDesc.className = 'lp-desc sz-desc-' + descSize;
+
+      document.getElementById('lpCta').style.display = link ? 'inline-flex' : 'none';
     }
 
-    function renderColorPages(query) {
-      const list = document.getElementById('colorPagesList');
-      let filtered = PAGES;
-      if (query) filtered = PAGES.filter(p => p.name.toLowerCase().includes(query) || p.key.toLowerCase().includes(query));
-      if (filtered.length === 0) {
-        list.innerHTML = '<p class="empty">No pages match.</p>';
-        return;
-      }
-      list.innerHTML = filtered.map(p => {
-        const current = pageSettings[p.key] || 'light';
+    async function loadAds() {
+      const list = document.getElementById('adsList');
+      if (!list) return;
+      list.innerHTML = '<p class="empty">Loading ads...</p>';
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/ads?select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const ads = await res.json();
+        allAds = Array.isArray(ads) ? ads : [];
+        renderAdsList();
+      } catch (e) { list.innerHTML = '<p class="empty" style="color:#ff0033;">Could not load ads.</p>'; }
+    }
+
+    function renderAdsList() {
+      const list = document.getElementById('adsList');
+      if (allAds.length === 0) { list.innerHTML = '<p class="empty">No ads yet. Create your first one above!</p>'; return; }
+      list.innerHTML = allAds.map(a => {
+        const statusPill = a.active ? '<span class="ad-status-pill live">LIVE</span>' : '<span class="ad-status-pill hidden">HIDDEN</span>';
+        const pos = a.position || 'song';
+        const desc = a.description ? a.description : '(No description)';
+        return '<div class="ad-card"><img src="' + (a.image_url || '') + '" alt="' + (a.title || 'Ad') + '" onerror="this.style.opacity=0.3;"><div class="info"><h4>' + escapeHtml(a.title || 'Untitled Ad') + '</h4><p>' + escapeHtml(desc) + '</p><p style="color:#666; margin-top:4px;">Position: <strong style="color:#ff0033;">' + pos + '</strong> • ' + statusPill + '</p></div><div class="actions"><button class="action-btn edit-btn" onclick=\'editAd(' + JSON.stringify(a).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" onclick="deleteAd(' + a.id + ')"><i class="fas fa-trash"></i></button></div></div>';
+      }).join('');
+    }
+
+    window.saveAd = async function() {
+      const status = document.getElementById('adStatus');
+      const editingId = document.getElementById('adEditingId').value;
+      const image_url = document.getElementById('adImage').value.trim();
+      const title = document.getElementById('adTitle').value.trim();
+      const description = document.getElementById('adDescription').value.trim();
+      const link_url = document.getElementById('adLink').value.trim();
+      const position = document.getElementById('adPosition').value;
+      const active = document.getElementById('adActive').value === 'true';
+      const title_color = document.getElementById('adTitleColor').value;
+      const title_size = document.getElementById('adTitleSize').value;
+      const description_color = document.getElementById('adDescColor').value;
+      const description_size = document.getElementById('adDescSize').value;
+
+      if (!image_url) { status.style.color = '#ff0033'; status.innerText = 'Image URL is required!'; return; }
+
+      status.style.color = '#ffcc00'; status.innerText = 'Saving...';
+
+      try {
+        const payload = { image_url, title, description, link_url, position, active, title_color, title_size, description_color, description_size };
+        let res;
+        if (editingId) {
+          res = await fetch(SUPABASE_URL + '/rest/v1/ads?id=eq.' + editingId, { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
+        } else {
+          res = await fetch(SUPABASE_URL + '/rest/v1/ads', { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
+        }
+        if (!res.ok) { const err = await res.text(); throw new Error(err); }
+        status.style.color = '#00cc44';
+        status.innerText = editingId ? 'Ad updated!' : 'Ad published!';
+        setTimeout(() => { cancelAdEdit(); loadAds(); }, 900);
+      } catch (e) { status.style.color = '#ff0033'; status.innerText = 'Error: ' + e.message.substring(0, 100); }
+    }
+
+    window.editAd = function(ad) {
+      document.getElementById('adEditingId').value = ad.id;
+      document.getElementById('adImage').value = ad.image_url || '';
+      document.getElementById('adTitle').value = ad.title || '';
+      document.getElementById('adDescription').value = ad.description || '';
+      document.getElementById('adLink').value = ad.link_url || '';
+      document.getElementById('adPosition').value = ad.position || 'song';
+      document.getElementById('adActive').value = ad.active ? 'true' : 'false';
+      document.getElementById('adTitleColor').value = ad.title_color || '#ffffff';
+      document.getElementById('adTitleSize').value = ad.title_size || 'medium';
+      document.getElementById('adDescColor').value = ad.description_color || '#a0a0a0';
+      document.getElementById('adDescSize').value = ad.description_size || 'medium';
+      document.getElementById('adSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Update Ad';
+      document.getElementById('adCancelBtn').style.display = 'block';
+      document.getElementById('adFormTitle').innerText = 'Edit Ad';
+      document.getElementById('adStatus').innerText = '';
+      updateAdPreview();
+      window.scrollTo(0, 0);
+    }
+
+    window.cancelAdEdit = function() {
+      document.getElementById('adEditingId').value = '';
+      document.getElementById('adImage').value = '';
+      document.getElementById('adTitle').value = '';
+      document.getElementById('adDescription').value = '';
+      document.getElementById('adLink').value = '';
+      document.getElementById('adPosition').value = 'song';
+      document.getElementById('adActive').value = 'true';
+      document.getElementById('adTitleColor').value = '#ffffff';
+      document.getElementById('adTitleSize').value = 'medium';
+      document.getElementById('adDescColor').value = '#a0a0a0';
+      document.getElementById('adDescSize').value = 'medium';
+      document.getElementById('adSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Publish Ad';
+      document.getElementById('adCancelBtn').style.display = 'none';
+      document.getElementById('adFormTitle').innerText = 'Create New Ad';
+      document.getElementById('adStatus').innerText = '';
+      updateAdPreview();
+    }
+
+    window.deleteAd = async function(id) {
+      if (!confirm('Delete this ad permanently?')) return;
+      try {
+        await fetch(SUPABASE_URL + '/rest/v1/ads?id=eq.' + id, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        loadAds();
+      } catch (e) { alert('Could not delete.'); }
+    };
+
+    // ===== RAW TEXTS =====
+    async function loadTexts() {
+      const list = document.getElementById('textsList');
+      list.innerHTML = '<p class="empty">Loading texts...</p>';
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/page_texts?select=*&order=page_key.asc,sort_order.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const data = await res.json();
+        allTexts = Array.isArray(data) ? data : [];
+        renderTextsList();
+      } catch (e) { list.innerHTML = '<p class="empty" style="color:#ff0033;">Could not load texts.</p>'; }
+    }
+    function renderTextsList() {
+      const list = document.getElementById('textsList');
+      if (allTexts.length === 0) { list.innerHTML = '<p class="empty">No text blocks yet.</p>'; return; }
+      list.innerHTML = allTexts.map(t => `
+        <div class="ad-card">
+          <div class="info">
+            <h4>${escapeHtml(t.section_title || '(No title)')}</h4>
+            <p>${escapeHtml((t.content || '').substring(0, 80))}${(t.content || '').length > 80 ? '…' : ''}</p>
+            <p style="color:#666; margin-top:4px;">Page: <strong style="color:#ff0033;">${escapeHtml(t.page_key)}</strong></p>
+          </div>
+          <div class="actions">
+            <button class="action-btn edit-btn" onclick='editText(${JSON.stringify(t).replace(/'/g, "&#39;")})'><i class="fas fa-edit"></i></button>
+            <button class="action-btn delete-btn" onclick="deleteText(${t.id})"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+      `).join('');
+    }
+    window.saveText = async function() {
+      const status = document.getElementById('textStatus');
+      const editingId = document.getElementById('textEditingId').value;
+      const page_key = document.getElementById('textPage').value;
+      const section_title = document.getElementById('textTitle').value.trim();
+      const content = document.getElementById('textContent').value.trim();
+      const sort_order = parseInt(document.getElementById('textSort').value) || 0;
+      if (!content) { status.style.color = '#ff0033'; status.innerText = 'Content is required!'; return; }
+      status.style.color = '#ffcc00'; status.innerText = 'Saving...';
+      try {
+        const payload = { page_key, section_title, content, sort_order };
+        const url = editingId ? SUPABASE_URL + '/rest/v1/page_texts?id=eq.' + editingId : SUPABASE_URL + '/rest/v1/page_texts';
+        const method = editingId ? 'PATCH' : 'POST';
+        const res = await fetch(url, { method, headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
+        if (!res.ok) throw new Error(await res.text());
+        status.style.color = '#00cc44'; status.innerText = editingId ? 'Text updated!' : 'Text saved!';
+        setTimeout(() => { cancelTextEdit(); loadTexts(); }, 800);
+      } catch (e) { status.style.color = '#ff0033'; status.innerText = 'Error: ' + e.message.substring(0, 80); }
+    };
+    window.editText = function(t) {
+      document.getElementById('textEditingId').value = t.id;
+      document.getElementById('textPage').value = t.page_key || 'home';
+      document.getElementById('textTitle').value = t.section_title || '';
+      document.getElementById('textContent').value = t.content || '';
+      document.getElementById('textSort').value = t.sort_order || 0;
+      document.getElementById('textSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Update Text';
+      document.getElementById('textCancelBtn').style.display = 'block';
+      document.getElementById('textFormTitle').innerText = 'Edit Text Block';
+      window.scrollTo(0, 0);
+    };
+    window.cancelTextEdit = function() {
+      document.getElementById('textEditingId').value = '';
+      document.getElementById('textPage').value = 'home';
+      document.getElementById('textTitle').value = '';
+      document.getElementById('textContent').value = '';
+      document.getElementById('textSort').value = 0;
+      document.getElementById('textSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Save Text';
+      document.getElementById('textCancelBtn').style.display = 'none';
+      document.getElementById('textFormTitle').innerText = 'Add Text Block';
+      document.getElementById('textStatus').innerText = '';
+    };
+    window.deleteText = async function(id) {
+      if (!confirm('Delete this text block?')) return;
+      try {
+        await fetch(SUPABASE_URL + '/rest/v1/page_texts?id=eq.' + id, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        loadTexts();
+      } catch (e) { alert('Could not delete.'); }
+    };
+
+    // ===== IMAGES =====
+    window.updateImgPreview = function() {
+      const url = document.getElementById('imgUrl').value.trim();
+      const p = document.getElementById('imgPreview');
+      if (url && /^https?:\/\//i.test(url)) { p.src = url; p.style.display = 'block'; }
+      else { p.style.display = 'none'; }
+    };
+    async function loadImages() {
+      const list = document.getElementById('imagesList');
+      list.innerHTML = '<p class="empty">Loading images...</p>';
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/images?select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const data = await res.json();
+        allImages = Array.isArray(data) ? data : [];
+        renderImagesList();
+      } catch (e) { list.innerHTML = '<p class="empty" style="color:#ff0033;">Could not load images.</p>'; }
+    }
+    function renderImagesList() {
+      const list = document.getElementById('imagesList');
+      if (allImages.length === 0) { list.innerHTML = '<p class="empty">No images yet.</p>'; return; }
+      list.innerHTML = allImages.map(i => `
+        <div class="ad-card">
+          <img src="${escapeHtml(i.image_url || '')}" onerror="this.style.opacity=0.3">
+          <div class="info">
+            <h4>${escapeHtml(i.title || 'Untitled')}</h4>
+            <p>${escapeHtml(i.description || 'No description')}</p>
+            <p style="color:#666; margin-top:4px;">Section: <strong style="color:#ff0033;">${escapeHtml(i.section || 'general')}</strong></p>
+          </div>
+          <div class="actions">
+            <button class="action-btn edit-btn" onclick='editImg(${JSON.stringify(i).replace(/'/g, "&#39;")})'><i class="fas fa-edit"></i></button>
+            <button class="action-btn delete-btn" onclick="deleteImg(${i.id})"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+      `).join('');
+    }
+    window.saveImg = async function() {
+      const status = document.getElementById('imgStatus');
+      const editingId = document.getElementById('imgEditingId').value;
+      const image_url = document.getElementById('imgUrl').value.trim();
+      const title = document.getElementById('imgTitle').value.trim();
+      const description = document.getElementById('imgDesc').value.trim();
+      const section = document.getElementById('imgSection').value;
+      const sort_order = parseInt(document.getElementById('imgSort').value) || 0;
+      const active = document.getElementById('imgActive').value === 'true';
+      if (!image_url) { status.style.color = '#ff0033'; status.innerText = 'Image URL required!'; return; }
+      status.style.color = '#ffcc00'; status.innerText = 'Saving...';
+      try {
+        const payload = { image_url, title, description, section, sort_order, active };
+        const url = editingId ? SUPABASE_URL + '/rest/v1/images?id=eq.' + editingId : SUPABASE_URL + '/rest/v1/images';
+        const method = editingId ? 'PATCH' : 'POST';
+        const res = await fetch(url, { method, headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
+        if (!res.ok) throw new Error(await res.text());
+        status.style.color = '#00cc44'; status.innerText = editingId ? 'Image updated!' : 'Image saved!';
+        setTimeout(() => { cancelImgEdit(); loadImages(); }, 800);
+      } catch (e) { status.style.color = '#ff0033'; status.innerText = 'Error: ' + e.message.substring(0, 80); }
+    };
+    window.editImg = function(i) {
+      document.getElementById('imgEditingId').value = i.id;
+      document.getElementById('imgUrl').value = i.image_url || '';
+      document.getElementById('imgTitle').value = i.title || '';
+      document.getElementById('imgDesc').value = i.description || '';
+      document.getElementById('imgSection').value = i.section || 'general';
+      document.getElementById('imgSort').value = i.sort_order || 0;
+      document.getElementById('imgActive').value = i.active ? 'true' : 'false';
+      document.getElementById('imgSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Update Image';
+      document.getElementById('imgCancelBtn').style.display = 'block';
+      document.getElementById('imgFormTitle').innerText = 'Edit Image';
+      updateImgPreview();
+      window.scrollTo(0, 0);
+    };
+    window.cancelImgEdit = function() {
+      document.getElementById('imgEditingId').value = '';
+      document.getElementById('imgUrl').value = '';
+      document.getElementById('imgTitle').value = '';
+      document.getElementById('imgDesc').value = '';
+      document.getElementById('imgSection').value = 'general';
+      document.getElementById('imgSort').value = 0;
+      document.getElementById('imgActive').value = 'true';
+      document.getElementById('imgSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Save Image';
+      document.getElementById('imgCancelBtn').style.display = 'none';
+      document.getElementById('imgFormTitle').innerText = 'Add Image';
+      document.getElementById('imgStatus').innerText = '';
+      updateImgPreview();
+    };
+    window.deleteImg = async function(id) {
+      if (!confirm('Delete this image?')) return;
+      try {
+        await fetch(SUPABASE_URL + '/rest/v1/images?id=eq.' + id, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        loadImages();
+      } catch (e) { alert('Could not delete.'); }
+    };
+
+    // ===== ARTIST VIDEOS =====
+    function ytId(url) {
+      if (!url) return '';
+      if (url.includes('youtu.be/')) return url.split('youtu.be/')[1].split('?')[0];
+      if (url.includes('youtube.com/watch')) { try { return new URL(url).searchParams.get('v') || ''; } catch(e) {} }
+      if (url.includes('youtube.com/embed/')) return url.split('embed/')[1].split('?')[0];
+      return '';
+    }
+    window.updateAvPreview = function() {
+      const url = document.getElementById('avUrl').value.trim();
+      const thumbInput = document.getElementById('avThumb').value.trim();
+      const vid = ytId(url);
+      const thumb = thumbInput || (vid ? 'https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg' : '');
+      const p = document.getElementById('avPreview');
+      if (thumb) { p.src = thumb; p.style.display = 'block'; }
+      else { p.style.display = 'none'; }
+    };
+    async function loadArtistVideos() {
+      const list = document.getElementById('avList');
+      list.innerHTML = '<p class="empty">Loading videos...</p>';
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/artist_videos?select=*&order=artist_name.asc,sort_order.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const data = await res.json();
+        allArtistVideos = Array.isArray(data) ? data : [];
+        renderAvList();
+      } catch (e) { list.innerHTML = '<p class="empty" style="color:#ff0033;">Could not load videos.</p>'; }
+    }
+    function renderAvList() {
+      const list = document.getElementById('avList');
+      if (allArtistVideos.length === 0) { list.innerHTML = '<p class="empty">No official videos yet.</p>'; return; }
+      list.innerHTML = allArtistVideos.map(v => {
+        const vid = ytId(v.video_url);
+        const thumb = v.thumbnail_url || (vid ? 'https://i.ytimg.com/vi/' + vid + '/mqdefault.jpg' : '');
+        const badge = v.is_official ? '<span class="ad-status-pill live" style="margin-left:6px;">OFFICIAL</span>' : '';
         return `
-          <div class="page-color-item">
-            <div class="page-color-info">
-              <h4>${escapeHtml(p.name)}</h4>
-              <p>${escapeHtml(p.url)}</p>
+          <div class="ad-card">
+            <img src="${escapeHtml(thumb)}" onerror="this.style.opacity=0.3">
+            <div class="info">
+              <h4>${escapeHtml(v.video_title || 'Untitled Video')}${badge}</h4>
+              <p>Artist: <strong style="color:#ff0033;">${escapeHtml(v.artist_name)}</strong></p>
             </div>
-            <div class="color-btns">
-              <button class="color-btn black-btn ${current === 'dark' ? 'active' : ''}" onclick="setPageColor('${p.key}', 'dark', this)" title="Set Black"><i class="fas fa-moon"></i></button>
-              <button class="color-btn white-btn ${current === 'light' ? 'active' : ''}" onclick="setPageColor('${p.key}', 'light', this)" title="Set White"><i class="fas fa-sun"></i></button>
+            <div class="actions">
+              <button class="action-btn edit-btn" onclick='editAv(${JSON.stringify(v).replace(/'/g, "&#39;")})'><i class="fas fa-edit"></i></button>
+              <button class="action-btn delete-btn" onclick="deleteAv(${v.id})"><i class="fas fa-trash"></i></button>
             </div>
           </div>
         `;
       }).join('');
     }
-
-    window.filterColorPages = function() {
-      const q = document.getElementById('colorSearch').value.toLowerCase().trim();
-      document.getElementById('clearColorSearch').classList.toggle('show', !!q);
-      renderColorPages(q);
-    }
-    window.clearColorSearch = function() {
-      document.getElementById('colorSearch').value = '';
-      document.getElementById('clearColorSearch').classList.remove('show');
-      renderColorPages('');
-    }
-
-    window.setPageColor = async function(pageKey, theme, btn) {
-      pageSettings[pageKey] = theme;
-      const item = btn.closest('.page-color-item');
-      item.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/page_settings?page_name=eq.' + encodeURIComponent(pageKey), {
-          method: 'PATCH',
-          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-          body: JSON.stringify({ theme: theme })
-        });
-        if (!res.ok) throw new Error('Update failed');
-      } catch (e) {
-        try {
-          await fetch(SUPABASE_URL + '/rest/v1/page_settings', {
-            method: 'POST',
-            headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-            body: JSON.stringify({ page_name: pageKey, theme: theme })
-          });
-        } catch (e2) { console.error('Save failed:', e2); }
+    window.saveAv = async function() {
+      const status = document.getElementById('avStatus');
+      const editingId = document.getElementById('avEditingId').value;
+      const artist_name = document.getElementById('avArtist').value.trim();
+      const video_title = document.getElementById('avTitle').value.trim();
+      const video_url = document.getElementById('avUrl').value.trim();
+      let thumbnail_url = document.getElementById('avThumb').value.trim();
+      const is_official = document.getElementById('avOfficial').value === 'true';
+      const sort_order = parseInt(document.getElementById('avSort').value) || 0;
+      if (!artist_name) { status.style.color = '#ff0033'; status.innerText = 'Artist name required!'; return; }
+      if (!video_url) { status.style.color = '#ff0033'; status.innerText = 'Video URL required!'; return; }
+      if (!thumbnail_url) {
+        const vid = ytId(video_url);
+        if (vid) thumbnail_url = 'https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg';
       }
-    }
+      status.style.color = '#ffcc00'; status.innerText = 'Saving...';
+      try {
+        const payload = { artist_name, video_title, video_url, thumbnail_url, is_official, sort_order };
+        const url = editingId ? SUPABASE_URL + '/rest/v1/artist_videos?id=eq.' + editingId : SUPABASE_URL + '/rest/v1/artist_videos';
+        const method = editingId ? 'PATCH' : 'POST';
+        const res = await fetch(url, { method, headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
+        if (!res.ok) throw new Error(await res.text());
+        status.style.color = '#00cc44'; status.innerText = editingId ? 'Video updated!' : 'Video saved!';
+        setTimeout(() => { cancelAvEdit(); loadArtistVideos(); }, 800);
+      } catch (e) { status.style.color = '#ff0033'; status.innerText = 'Error: ' + e.message.substring(0, 80); }
+    };
+    window.editAv = function(v) {
+      document.getElementById('avEditingId').value = v.id;
+      document.getElementById('avArtist').value = v.artist_name || '';
+      document.getElementById('avTitle').value = v.video_title || '';
+      document.getElementById('avUrl').value = v.video_url || '';
+      document.getElementById('avThumb').value = v.thumbnail_url || '';
+      document.getElementById('avOfficial').value = v.is_official ? 'true' : 'false';
+      document.getElementById('avSort').value = v.sort_order || 0;
+      document.getElementById('avSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Update Video';
+      document.getElementById('avCancelBtn').style.display = 'block';
+      document.getElementById('avFormTitle').innerText = 'Edit Official Video';
+      updateAvPreview();
+      window.scrollTo(0, 0);
+    };
+    window.cancelAvEdit = function() {
+      document.getElementById('avEditingId').value = '';
+      document.getElementById('avArtist').value = '';
+      document.getElementById('avTitle').value = '';
+      document.getElementById('avUrl').value = '';
+      document.getElementById('avThumb').value = '';
+      document.getElementById('avOfficial').value = 'true';
+      document.getElementById('avSort').value = 0;
+      document.getElementById('avSubmitBtn').innerHTML = '<i class="fas fa-save"></i> Save Video';
+      document.getElementById('avCancelBtn').style.display = 'none';
+      document.getElementById('avFormTitle').innerText = 'Add Official Video';
+      document.getElementById('avStatus').innerText = '';
+      updateAvPreview();
+    };
+    window.deleteAv = async function(id) {
+      if (!confirm('Delete this video?')) return;
+      try {
+        await fetch(SUPABASE_URL + '/rest/v1/artist_videos?id=eq.' + id, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        loadArtistVideos();
+      } catch (e) { alert('Could not delete.'); }
+    };
 
-    // ===== VERIFY (only shows artists WITH songs) =====
+    // ===== VERIFY =====
     async function loadVerifyList() {
       const list = document.getElementById('verifyList');
       list.innerHTML = '<p class="empty">Loading...</p>';
