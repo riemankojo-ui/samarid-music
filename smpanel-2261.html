@@ -6,6 +6,7 @@
 <title>Manager - Samarid Music</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
 <style>
   :root { --accent: #ff0033; --bg: #0a0a0a; --card: #141414; --border: #222; --text2: #888; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
@@ -132,7 +133,7 @@
 
   .live-preview-box { background: #050505; border: 1px solid #222; border-radius: 14px; padding: 16px; margin-bottom: 14px; }
   .live-preview-box .lp-label { font-size: 10px; font-weight: 900; letter-spacing: 2px; color: #666; text-transform: uppercase; margin-bottom: 12px; text-align: center; }
-  .lp-card { background: #141414; border: 1px solid #2a2a2a; border-radius: 12px; overflow: hidden; }
+  .lp-card { background: #0a0a0a; border-radius: 12px; overflow: hidden; }
   .lp-card img { width: 100%; display: block; background: #111; min-height: 60px; }
   .lp-card-body { padding: 14px 16px 16px; }
   .lp-title { font-weight: 900; margin-bottom: 6px; letter-spacing: -0.2px; line-height: 1.3; overflow-wrap: anywhere; }
@@ -158,6 +159,41 @@
   .ad-card .action-btn { background: transparent; border: none; font-size: 15px; cursor: pointer; padding: 6px; border-radius: 8px; }
   .ad-card .edit-btn { color: #00cc44; }
   .ad-card .delete-btn { color: #ff0033; }
+
+  /* ===== CROP TOOL ===== */
+  .crop-upload-zone { background: #0a0a0a; border: 2px dashed #333; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; margin-bottom: 10px; transition: 0.15s; }
+  .crop-upload-zone:active { border-color: var(--accent); background: #111; }
+  .crop-upload-zone i { font-size: 26px; color: var(--accent); margin-bottom: 8px; display: block; }
+  .crop-upload-zone h4 { font-size: 13px; font-weight: 800; margin-bottom: 4px; color: #fff; }
+  .crop-upload-zone p { font-size: 11px; color: #666; font-weight: 500; }
+
+  /* Crop Modal (full-screen) */
+  .crop-modal { position: fixed; inset: 0; background: #000; z-index: 99999; display: none; flex-direction: column; }
+  .crop-modal.open { display: flex; }
+  .crop-modal-header { padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #222; background: #0a0a0a; flex-shrink: 0; }
+  .crop-modal-title { font-size: 14px; font-weight: 900; color: #fff; display: flex; align-items: center; gap: 8px; }
+  .crop-modal-title i { color: var(--accent); }
+  .crop-close-btn { background: transparent; border: none; color: #888; font-size: 22px; cursor: pointer; padding: 4px 8px; }
+  .crop-modal-body { flex: 1; display: flex; align-items: center; justify-content: center; padding: 16px; overflow: hidden; position: relative; background: #050505; }
+  .crop-modal-body img { max-width: 100%; max-height: 100%; display: block; }
+  .crop-modal-toolbar { padding: 12px 16px; background: #0a0a0a; border-top: 1px solid #222; flex-shrink: 0; }
+  .crop-toolbar-row { display: flex; gap: 8px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+  .crop-toolbar-row::-webkit-scrollbar { display: none; }
+  .crop-tool-btn { flex-shrink: 0; padding: 9px 14px; background: #141414; border: 1px solid #2a2a2a; color: #ccc; border-radius: 10px; font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .crop-tool-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .crop-tool-btn i { font-size: 12px; }
+  .crop-actions { display: flex; gap: 10px; }
+  .crop-actions button { flex: 1; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; border: none; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .crop-cancel { background: #222; color: #fff; }
+  .crop-save { background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; }
+
+  /* ============================================================ */
+  /* Cropper.js dark theme overrides */
+  .cropper-view-box, .cropper-face { border-radius: 2px; }
+  .cropper-line, .cropper-point { background-color: var(--accent); }
+  .cropper-view-box { outline: 2px solid var(--accent); outline-color: var(--accent); }
+  .cropper-point { width: 10px; height: 10px; opacity: 1; }
+  /* ============================================================ */
 </style>
 </head><body>
 
@@ -213,7 +249,6 @@
         </div>
       </div>
 
-      <!-- ===== FULL ADS TAB (4 SECTIONS) ===== -->
       <div class="page" data-page="ads">
         <h1 class="page-title">Ads Manager</h1>
         <p class="page-subtitle">Ads, texts, images & artist videos</p>
@@ -230,8 +265,19 @@
           <div class="ad-form-box">
             <div class="ad-form-box-title"><i class="fas fa-plus-circle"></i> <span id="adFormTitle">Create New Ad</span></div>
             <input type="hidden" id="adEditingId" value="">
-            <div class="form-group"><label>Image URL *</label><input type="text" id="adImage" placeholder="https://...png" oninput="updateAdPreview()"></div>
+
+            <div class="form-group"><label>Image</label>
+              <div class="crop-upload-zone" onclick="document.getElementById('adFileInput').click()">
+                <i class="fas fa-crop-simple"></i>
+                <h4>Upload & Crop Image</h4>
+                <p>Pick a photo from your device, then crop it</p>
+              </div>
+              <input type="file" id="adFileInput" accept="image/*" style="display:none;" onchange="handleAdFile(event)">
+              <input type="text" id="adImage" placeholder="Or paste an image URL here" oninput="updateAdPreview()" style="margin-top:8px;">
+            </div>
+
             <div class="form-group"><label>Title</label><input type="text" id="adTitle" placeholder="e.g. Promoted by XYZ Brand" oninput="updateAdPreview()"></div>
+
             <div class="form-group"><label>Title Color & Size</label>
               <div class="color-row">
                 <input type="color" id="adTitleColor" value="#ffffff" oninput="updateAdPreview()">
@@ -239,7 +285,9 @@
                 <span class="hex-label" id="adTitleColorHex">#ffffff</span>
               </div>
             </div>
+
             <div class="form-group"><label>Description</label><textarea id="adDescription" placeholder="Short description..." oninput="updateAdPreview()"></textarea></div>
+
             <div class="form-group"><label>Description Color & Size</label>
               <div class="color-row">
                 <input type="color" id="adDescColor" value="#a0a0a0" oninput="updateAdPreview()">
@@ -247,7 +295,9 @@
                 <span class="hex-label" id="adDescColorHex">#a0a0a0</span>
               </div>
             </div>
+
             <div class="form-group"><label>Link URL</label><input type="text" id="adLink" placeholder="https://wa.me/233..." oninput="updateAdPreview()"></div>
+
             <div class="form-group"><label>Where to show</label>
               <select id="adPosition">
                 <option value="song">Song Page</option><option value="home">Home Page</option><option value="promo">Promo Page</option><option value="all">All Pages</option>
@@ -313,7 +363,15 @@
           <div class="ad-form-box">
             <div class="ad-form-box-title"><i class="fas fa-images"></i> <span id="imgFormTitle">Add Image</span></div>
             <input type="hidden" id="imgEditingId" value="">
-            <div class="form-group"><label>Image URL *</label><input type="text" id="imgUrl" placeholder="https://...jpg" oninput="updateImgPreview()"></div>
+            <div class="form-group"><label>Image</label>
+              <div class="crop-upload-zone" onclick="document.getElementById('imgFileInput').click()">
+                <i class="fas fa-crop-simple"></i>
+                <h4>Upload & Crop Image</h4>
+                <p>Pick a photo from your device, then crop it</p>
+              </div>
+              <input type="file" id="imgFileInput" accept="image/*" style="display:none;" onchange="handleImgFile(event)">
+              <input type="text" id="imgUrl" placeholder="Or paste an image URL here" oninput="updateImgPreview()" style="margin-top:8px;">
+            </div>
             <div class="form-group"><label>Title</label><input type="text" id="imgTitle" placeholder="e.g. Studio Session"></div>
             <div class="form-group"><label>Description</label><textarea id="imgDesc" placeholder="Short description..."></textarea></div>
             <div class="form-group"><label>Section</label>
@@ -442,6 +500,38 @@
     </div>
   </div>
 
+  <!-- ===== FULL-SCREEN CROP MODAL ===== -->
+  <div class="crop-modal" id="cropModal">
+    <div class="crop-modal-header">
+      <div class="crop-modal-title"><i class="fas fa-crop-simple"></i> Crop Image</div>
+      <button class="crop-close-btn" onclick="closeCropModal()">✕</button>
+    </div>
+    <div class="crop-modal-body">
+      <img id="cropImage" src="" alt="">
+    </div>
+    <div class="crop-modal-toolbar">
+      <div class="crop-toolbar-row">
+        <button class="crop-tool-btn active" data-ratio="free" onclick="setCropRatio('free', this)"><i class="fas fa-expand"></i> Free</button>
+        <button class="crop-tool-btn" data-ratio="1" onclick="setCropRatio('1', this)"><i class="fas fa-square"></i> 1:1</button>
+        <button class="crop-tool-btn" data-ratio="1.7777" onclick="setCropRatio('1.7777', this)"><i class="fas fa-tv"></i> 16:9</button>
+        <button class="crop-tool-btn" data-ratio="0.8" onclick="setCropRatio('0.8', this)"><i class="fas fa-mobile-screen"></i> 4:5</button>
+        <button class="crop-tool-btn" data-ratio="0.5625" onclick="setCropRatio('0.5625', this)"><i class="fas fa-mobile"></i> 9:16</button>
+      </div>
+      <div class="crop-toolbar-row">
+        <button class="crop-tool-btn" onclick="rotateCrop(90)"><i class="fas fa-rotate-right"></i> Rotate</button>
+        <button class="crop-tool-btn" onclick="rotateCrop(-90)"><i class="fas fa-rotate-left"></i> Rotate L</button>
+        <button class="crop-tool-btn" onclick="flipCrop('h')"><i class="fas fa-arrows-left-right"></i> Flip H</button>
+        <button class="crop-tool-btn" onclick="flipCrop('v')"><i class="fas fa-arrows-up-down"></i> Flip V</button>
+        <button class="crop-tool-btn" onclick="resetCrop()"><i class="fas fa-undo"></i> Reset</button>
+      </div>
+      <div class="crop-actions">
+        <button class="crop-cancel" onclick="closeCropModal()">Cancel</button>
+        <button class="crop-save" onclick="saveCrop()"><i class="fas fa-check"></i> Crop & Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
   <script>
     const SECRET_PASSWORD = "samarid2026";
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
@@ -465,6 +555,11 @@
     let allImages = [];
     let allArtistVideos = [];
     let pendingConfirm = null;
+
+    // ===== CROP TOOL STATE =====
+    let cropper = null;
+    let cropTargetInput = null;  // which input will receive the cropped image
+    let cropTargetPreview = null; // callback to update preview
 
     window.togglePassword = function() {
       const input = document.getElementById('passwordInput');
@@ -514,6 +609,109 @@
       btn.classList.add('active');
       document.getElementById(id).classList.add('active');
     }
+
+    // ===== CROP TOOL =====
+    window.handleAdFile = function(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      openCropperForFile(file, document.getElementById('adImage'), function() { updateAdPreview(); });
+      event.target.value = ''; // allow re-selecting same file
+    };
+    window.handleImgFile = function(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      openCropperForFile(file, document.getElementById('imgUrl'), function() { updateImgPreview(); });
+      event.target.value = '';
+    };
+
+    function openCropperForFile(file, targetInput, afterCallback) {
+      if (!file.type.startsWith('image/')) { alert('Please pick an image file'); return; }
+      cropTargetInput = targetInput;
+      cropTargetPreview = afterCallback;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.getElementById('cropImage');
+        img.src = e.target.result;
+        document.getElementById('cropModal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+        // Wait for image to load, then init cropper
+        img.onload = function() {
+          if (cropper) { cropper.destroy(); cropper = null; }
+          cropper = new Cropper(img, {
+            viewMode: 1,
+            dragMode: 'move',
+            aspectRatio: NaN, // free
+            autoCropArea: 0.9,
+            restore: false,
+            guides: true,
+            center: true,
+            highlight: false,
+            cropBoxMovable: true,
+            cropBoxResizable: true,
+            toggleDragModeOnDblclick: false,
+            background: false,
+            responsive: true,
+            checkOrientation: true
+          });
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+
+    window.closeCropModal = function() {
+      if (cropper) { cropper.destroy(); cropper = null; }
+      document.getElementById('cropModal').classList.remove('open');
+      document.body.style.overflow = '';
+      document.getElementById('cropImage').src = '';
+    };
+
+    window.setCropRatio = function(ratio, btn) {
+      if (!cropper) return;
+      document.querySelectorAll('.crop-tool-btn[data-ratio]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (ratio === 'free') cropper.setAspectRatio(NaN);
+      else cropper.setAspectRatio(parseFloat(ratio));
+    };
+
+    window.rotateCrop = function(deg) {
+      if (!cropper) return;
+      cropper.rotate(deg);
+    };
+    window.flipCrop = function(dir) {
+      if (!cropper) return;
+      if (dir === 'h') {
+        const scaleX = cropper.getData().scaleX || 1;
+        cropper.scaleX(-scaleX);
+      } else {
+        const scaleY = cropper.getData().scaleY || 1;
+        cropper.scaleY(-scaleY);
+      }
+    };
+    window.resetCrop = function() {
+      if (!cropper) return;
+      cropper.reset();
+      document.querySelectorAll('.crop-tool-btn[data-ratio]').forEach(b => b.classList.remove('active'));
+      document.querySelector('.crop-tool-btn[data-ratio="free"]').classList.add('active');
+    };
+
+    window.saveCrop = function() {
+      if (!cropper || !cropTargetInput) return;
+      // Output as base64 data URL
+      const canvas = cropper.getCroppedCanvas({
+        maxWidth: 1600,
+        maxHeight: 1600,
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'high'
+      });
+      if (!canvas) { alert('Could not crop. Try again.'); return; }
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
+      cropTargetInput.value = dataUrl;
+      if (typeof cropTargetPreview === 'function') cropTargetPreview();
+      // Flash the input to show success
+      cropTargetInput.style.borderColor = '#00cc44';
+      setTimeout(() => { cropTargetInput.style.borderColor = ''; }, 1200);
+      closeCropModal();
+    };
 
     // ===== ARTISTS =====
     async function loadArtists() {
@@ -671,7 +869,7 @@
       document.getElementById('adDescColorHex').innerText = descColor;
 
       const lpImg = document.getElementById('lpImg');
-      if (img && /^https?:\/\//i.test(img)) { lpImg.src = img; lpImg.style.display = 'block'; }
+      if (img) { lpImg.src = img; lpImg.style.display = 'block'; }
       else { lpImg.style.display = 'none'; }
 
       const lpTitle = document.getElementById('lpTitle');
@@ -724,7 +922,7 @@
       const description_color = document.getElementById('adDescColor').value;
       const description_size = document.getElementById('adDescSize').value;
 
-      if (!image_url) { status.style.color = '#ff0033'; status.innerText = 'Image URL is required!'; return; }
+      if (!image_url) { status.style.color = '#ff0033'; status.innerText = 'Please add or crop an image first!'; return; }
 
       status.style.color = '#ffcc00'; status.innerText = 'Saving...';
 
@@ -871,7 +1069,7 @@
     window.updateImgPreview = function() {
       const url = document.getElementById('imgUrl').value.trim();
       const p = document.getElementById('imgPreview');
-      if (url && /^https?:\/\//i.test(url)) { p.src = url; p.style.display = 'block'; }
+      if (url) { p.src = url; p.style.display = 'block'; }
       else { p.style.display = 'none'; }
     };
     async function loadImages() {
@@ -911,7 +1109,7 @@
       const section = document.getElementById('imgSection').value;
       const sort_order = parseInt(document.getElementById('imgSort').value) || 0;
       const active = document.getElementById('imgActive').value === 'true';
-      if (!image_url) { status.style.color = '#ff0033'; status.innerText = 'Image URL required!'; return; }
+      if (!image_url) { status.style.color = '#ff0033'; status.innerText = 'Please add or crop an image first!'; return; }
       status.style.color = '#ffcc00'; status.innerText = 'Saving...';
       try {
         const payload = { image_url, title, description, section, sort_order, active };

@@ -83,18 +83,16 @@
   .top-album-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .song-card-info, .top-album-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; overflow: hidden; gap: 6px; }
   
-  /* --- UPDATED: GENRE & COUNTRY TAG (LIGHTER, SOFTER GREEN) --- */
   .song-card-info .genre-country {
       font-size: 10px;
-      font-weight: 600; /* Reduced weight so it doesn't look too bold */
-      color: #8fdfa8; /* Very light, soft pastel green */
+      font-weight: 600;
+      color: #8fdfa8;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       margin-bottom: 2px;
   }
   body.light .song-card-info .genre-country { color: #8fdfa8; }
   
-  /* --- SONG CARD TITLES --- */
   body.light .song-card-info h3 { 
       font-size: 13.5px; 
       font-weight: 800; 
@@ -105,13 +103,11 @@
   }
   .song-card-info h3 { font-size: 14px; font-weight: 800; line-height: 1.35; color: var(--text); letter-spacing: -0.2px; overflow-wrap: anywhere; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   
-  /* --- FEAT TAG --- */
   body.light .song-card-info h3 .feat-tag { font-weight: 800; color: #000000; font-size: 13.5px; }
   .song-card-info h3 .feat-tag { font-weight: 700; color: #aaaaaa; font-size: 13.5px; }
 
   .top-album-name { font-size: 15px; font-weight: 900; line-height: 1.35; color: var(--text); letter-spacing: -0.3px; overflow-wrap: anywhere; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   
-  /* --- DATE TEXT --- */
   body.light .song-card-info .date, body.light .top-album-date { 
       font-size: 11px; 
       color: #888888; 
@@ -133,7 +129,6 @@
   .hot-artists-viewport::-webkit-scrollbar { display: none; }
   .hot-artists-track { display: flex; gap: 16px; padding: 0 22px; width: max-content; min-width: 100%; }
   
-  /* --- ARTIST PROFILES --- */
   .hot-artist { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: inherit; width: 72px; flex-shrink: 0; cursor: pointer; scroll-snap-align: start; min-width: 0; }
   .hot-artist-avatar { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg, #1a1a1a 0%, #262626 100%); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; color: #555; box-shadow: 0 6px 20px rgba(0,0,0,0.5); transition: transform 0.25s ease; }
   .hot-artist-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -146,7 +141,7 @@
   .hot-arrow.hidden { opacity: 0; pointer-events: none; }
   .hot-artists-empty { padding: 40px 22px; text-align: center; color: #666; font-size: 13px; width: 100%; }
   
-  /* --- EXTENDED SEO / TAGLINE SECTION --- */
+  /* ===== EXTENDED SEO / TAGLINE SECTION ===== */
   .dark-tagline { background: #0a0a0a; color: #ffffff; margin: 0 -16px; padding: 55px 28px 45px; text-align: left; position: relative; overflow: hidden; }
   .dark-tagline::before { content: ''; position: absolute; top: -60px; right: -60px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 0, 51, 0.15) 0%, transparent 70%); pointer-events: none; }
   .dark-tagline::after { content: ''; position: absolute; bottom: -80px; left: -80px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 136, 0, 0.12) 0%, transparent 70%); pointer-events: none; }
@@ -161,6 +156,27 @@
   .dark-tagline-cta { display: inline-flex; align-items: center; gap: 10px; padding: 14px 26px; background: var(--accent); color: #fff; text-decoration: none; border-radius: 30px; font-size: 13px; font-weight: 900; letter-spacing: 0.5px; box-shadow: 0 10px 30px rgba(255, 0, 51, 0.4); }
   .dark-tagline-cta:active { transform: scale(0.95); }
   .dark-tagline-cta i { font-size: 13px; }
+
+  /* ===== HOME ADS SECTION (inside the black tagline block) ===== */
+  .home-ads-wrap { margin-top: 45px; padding-top: 32px; border-top: 1px solid #1c1c1c; }
+  .home-ads-label { text-align: center; font-size: 10px; font-weight: 900; letter-spacing: 4px; color: #ff8800; text-transform: uppercase; margin-bottom: 12px; }
+  .home-ads-title { text-align: center; font-size: 22px; font-weight: 900; color: #fff; letter-spacing: -0.5px; line-height: 1.25; margin-bottom: 8px; }
+  .home-ads-title span { color: #ff8800; }
+  .home-ads-sub { text-align: center; font-size: 13px; color: #a0a0a0; line-height: 1.6; font-weight: 500; max-width: 460px; margin: 0 auto 22px; }
+
+  .home-ads-container { display: flex; flex-direction: column; gap: 26px; }
+
+  .home-ad-card { display: block; text-decoration: none; transition: opacity 0.2s; width: 100%; }
+  .home-ad-card:active { opacity: 0.85; }
+  .home-ad-img { width: 100%; height: auto; display: block; background: #111; border-radius: 12px; overflow: hidden; }
+  .home-ad-body { padding: 14px 4px 0; }
+  .home-ad-title { font-weight: 900; margin-bottom: 6px; letter-spacing: -0.3px; line-height: 1.3; overflow-wrap: anywhere; }
+  .home-ad-desc { font-weight: 500; line-height: 1.55; overflow-wrap: anywhere; }
+  .home-ad-cta { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 13px; font-weight: 800; color: #ff8800; letter-spacing: 0.3px; }
+
+  .home-ad-placeholder { padding: 32px 24px; text-align: center; background: #141414; border: 2px dashed #2a2a2a; border-radius: 14px; }
+  .home-ad-placeholder i { font-size: 28px; color: #ff8800; margin-bottom: 10px; display: block; opacity: 0.75; }
+  .home-ad-placeholder p { font-size: 12px; color: #666; font-weight: 600; }
 
   .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
   .sub-modal.open { display: flex; }
@@ -269,7 +285,7 @@
     </div>
   </div>
 
-  <!-- EXPANDED SEO & ARTIST STORIES / SOCIAL PROMOTION SECTION -->
+  <!-- ===== SEO / STORY SECTION (with HOME ADS at the bottom, same black bg) ===== -->
   <div class="dark-tagline">
     <div class="dark-tagline-inner">
       <div class="dark-tagline-label">Samarid Music • Culture & Community</div>
@@ -282,7 +298,7 @@
       <p>Every great song carries a personal story—from late-night studio sessions in Accra and Lagos to the raw emotion put into every lyric and beat. At Samarid Music, we go beyond just providing audio files. We celebrate the unique style, hustle, and individual journeys of rising African creators. Whether it's a breakout street anthem or a soulful highlife fusion, we give artists the spotlight they deserve so their true creative voices resonate deeply with fans across the globe.</p>
       
       <h3>Powering Social Media Music Promotion</h3>
-      <p>In today’s digital era, music thrives on connection. Our platform is designed to fuel viral social media moments across TikTok, Instagram Reels, and YouTube Shorts. When you discover a fresh track here, it's instantly ready to soundtrack your next viral video, challenge, or daily vlog. We empower fans and creators to share, promote, and vibe to the hottest sounds effortlessly, turning local hits into worldwide sensations.</p>
+      <p>In today's digital era, music thrives on connection. Our platform is designed to fuel viral social media moments across TikTok, Instagram Reels, and YouTube Shorts. When you discover a fresh track here, it's instantly ready to soundtrack your next viral video, challenge, or daily vlog. We empower fans and creators to share, promote, and vibe to the hottest sounds effortlessly, turning local hits into worldwide sensations.</p>
       
       <h3>Discover The Latest Afrobeats, Hip Hop & Afropop</h3>
       <p>The African music revolution is taking over the world, and Samarid Music is at the absolute forefront of the movement. Whether you are searching for high-energy street bangers, soul-lifting highlife rhythms, or smooth contemporary R&B tracks, our catalog is updated daily with fresh content. Download high-quality MP3 songs directly to your device and experience crisp audio crafted by the finest producers and artists.</p>
@@ -295,6 +311,22 @@
           <i class="fas fa-arrow-right"></i> Read Our Full Story
         </a>
       </div>
+
+      <!-- ===== HOME ADS (right after the CTA, same black bg) ===== -->
+      <div class="home-ads-wrap">
+        <div class="home-ads-label">Sponsored</div>
+        <div class="home-ads-title">Promote Your Brand <span>To Thousands</span></div>
+        <div class="home-ads-sub">Get your song, business, or brand seen by real music lovers across Ghana, Nigeria, and beyond. Every single day.</div>
+
+        <div class="home-ads-container" id="homeAdsContainer">
+          <div class="home-ad-placeholder">
+            <i class="fas fa-image"></i>
+            <p>Your ad could be here</p>
+          </div>
+        </div>
+      </div>
+      <!-- ===== END HOME ADS ===== -->
+
     </div>
   </div>
 
@@ -369,7 +401,37 @@
     }
     window.setTheme = (theme) => { localStorage.setItem('samarid-theme', theme); applySettings(); }
 
-    // renderSongCard with updated light green Genre • Country
+    // ===== HOME ADS LOADER =====
+    async function loadHomeAds() {
+      const container = document.getElementById('homeAdsContainer');
+      if (!container) return;
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/ads?active=eq.true&or=(position.eq.home,position.eq.all)&select=*&order=sort_order.asc,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const ads = await res.json();
+        if (!Array.isArray(ads) || ads.length === 0) {
+          container.innerHTML = '<div class="home-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
+          return;
+        }
+
+        const titleSizes = { small: '18px', medium: '24px', large: '30px' };
+        const descSizes = { small: '13px', medium: '15px', large: '17px' };
+
+        container.innerHTML = ads.map(ad => {
+          const link = ad.link_url || '#';
+          const titleColor = ad.title_color || '#ffffff';
+          const titleSize = titleSizes[ad.title_size] || '24px';
+          const descColor = ad.description_color || '#a0a0a0';
+          const descSize = descSizes[ad.description_size] || '15px';
+          const title = ad.title ? '<div class="home-ad-title" style="color:' + titleColor + '; font-size:' + titleSize + ';">' + escapeHtml(ad.title) + '</div>' : '';
+          const desc = ad.description ? '<div class="home-ad-desc" style="color:' + descColor + '; font-size:' + descSize + ';">' + escapeHtml(ad.description) + '</div>' : '';
+          const cta = ad.link_url ? '<div class="home-ad-cta">Learn More <i class="fas fa-arrow-right"></i></div>' : '';
+          return '<a href="' + escapeHtml(link) + '" target="_blank" rel="noopener" class="home-ad-card"><img class="home-ad-img" src="' + escapeHtml(ad.image_url) + '" alt="' + escapeHtml(ad.title || 'Ad') + '" loading="lazy"><div class="home-ad-body">' + title + desc + cta + '</div></a>';
+        }).join('');
+      } catch (e) {
+        container.innerHTML = '<div class="home-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
+      }
+    }
+
     function renderSongCard(s) {
       const artist = (s.artist_name || 'Samarid').trim();
       const featuring = (s.featuring || '').trim();
@@ -592,6 +654,7 @@
     renderSongs();
     loadTopAlbums();
     loadTopArtists();
+    loadHomeAds();
     setupLatestSearch();
   </script>
 </body>
