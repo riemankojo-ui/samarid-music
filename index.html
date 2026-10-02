@@ -56,10 +56,8 @@
   .theme-btn.active { border-color: var(--accent); color: var(--accent); font-weight: 700; }
   .section-head { display: flex; align-items: center; gap: 10px; margin: 30px 0 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border); min-width: 0; }
   .section-head:first-of-type { margin-top: 0; }
-  
   .section-head h3 { font-size: 16px; font-weight: 900; letter-spacing: -0.3px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; color: #000000; }
   body.dark .section-head h3 { color: #ffffff; }
-  
   .section-head .icon-social { color: #0084ff; font-size: 18px; }
   .section-head .icon-mail { color: #ff8800; font-size: 18px; }
   .latest-search-wrap { position: relative; margin-bottom: 14px; }
@@ -73,62 +71,36 @@
   .social-btn { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; text-decoration: none; color: var(--text); font-size: 13px; font-weight: 700; transition: 0.2s; overflow: hidden; }
   .social-btn:active { transform: scale(0.96); }
   .social-btn i { font-size: 16px; flex-shrink: 0; }
-  .song-list, .top-albums-list { display: flex; flex-direction: column; }
-  .song-card, .top-album-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; transition: opacity 0.15s; }
-  .song-card:last-child, .top-album-card:last-child { border-bottom: none; }
+
+  /* ===== SONG CARDS ===== */
+  .song-list { display: flex; flex-direction: column; }
+  .song-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; border-radius: 10px; transition: background 0.15s ease; }
+  .song-card:last-child { border-bottom: none; }
   .song-card-img { width: 96px; height: 96px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 12px; position: relative; }
   .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .song-card-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; overflow: hidden; gap: 6px; }
+  .song-card-info .genre-country { font-size: 10px; font-weight: 600; color: #8fdfa8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+  .song-card-info h3 { font-size: 13.5px; font-weight: 800; line-height: 1.3; color: #000000; letter-spacing: -0.2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; word-break: break-word; transition: color 0.15s ease; }
+  .song-card-info h3 .dash { font-weight: 600; color: #000000; margin: 0 2px; }
+  .song-card-info h3 .feat-tag { font-weight: 800; color: #000000; font-size: 13.5px; }
+  .song-card-info .date { font-size: 11px; color: #888888; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* ===== TOP ALBUM CARDS ===== */
+  .top-albums-list { display: flex; flex-direction: column; }
+  .top-album-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; border-radius: 10px; transition: background 0.15s ease; }
+  .top-album-card:last-child { border-bottom: none; }
   .top-album-cover { width: 115px; height: 115px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 14px; position: relative; }
   .top-album-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .song-card-info, .top-album-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; overflow: hidden; gap: 6px; }
-  
-  .song-card-info .genre-country {
-      font-size: 10px;
-      font-weight: 600;
-      color: #8fdfa8;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 2px;
-  }
-  body.light .song-card-info .genre-country { color: #8fdfa8; }
-  
-  body.light .song-card-info h3 { 
-      font-size: 13.5px; 
-      font-weight: 800; 
-      line-height: 1.3; 
-      color: #000000; 
-      margin-bottom: 2px;
-      letter-spacing: -0.2px;
-  }
-  .song-card-info h3 { font-size: 14px; font-weight: 800; line-height: 1.35; color: var(--text); letter-spacing: -0.2px; overflow-wrap: anywhere; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  
-  body.light .song-card-info h3 .feat-tag { font-weight: 800; color: #000000; font-size: 13.5px; }
-  .song-card-info h3 .feat-tag { font-weight: 700; color: #aaaaaa; font-size: 13.5px; }
+  .top-album-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; overflow: hidden; gap: 6px; }
+  .top-album-name { font-size: 15px; font-weight: 900; line-height: 1.35; color: #000000; letter-spacing: -0.3px; overflow-wrap: anywhere; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; transition: color 0.15s ease; }
+  .top-album-date { font-size: 11px; color: #888888; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  .top-album-name { font-size: 15px; font-weight: 900; line-height: 1.35; color: var(--text); letter-spacing: -0.3px; overflow-wrap: anywhere; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  
-  body.light .song-card-info .date, body.light .top-album-date { 
-      font-size: 11px; 
-      color: #888888; 
-      font-weight: 400; 
-      overflow: hidden; 
-      text-overflow: ellipsis; 
-      white-space: nowrap; 
-  }
-  .song-card-info .date, .top-album-date { font-size: 12.5px; color: var(--text2); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-  /* ===== TAP/HOVER EFFECT (link-feel, no underline) ===== */
-  .song-card, .top-album-card { transition: background 0.15s ease; border-radius: 10px; }
-  .song-card-info h3, .top-album-info .top-album-name { transition: color 0.15s ease; }
-
-  /* Desktop hover */
+  /* ===== TAP / HOVER EFFECT ===== */
   @media (hover: hover) and (pointer: fine) {
     .song-card:hover, .top-album-card:hover { background: rgba(0, 0, 0, 0.03); }
     .song-card:hover .song-card-info h3,
     .top-album-card:hover .top-album-info .top-album-name { color: var(--accent); }
   }
-
-  /* Tap (mobile + desktop press) */
   .song-card:active, .top-album-card:active { background: rgba(255, 0, 51, 0.06); }
   .song-card:active .song-card-info h3,
   .top-album-card:active .top-album-info .top-album-name { color: var(--accent); }
@@ -148,19 +120,17 @@
   .hot-artists-viewport { position: relative; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; scroll-snap-type: x proximity; padding: 4px 0 8px; }
   .hot-artists-viewport::-webkit-scrollbar { display: none; }
   .hot-artists-track { display: flex; gap: 16px; padding: 0 22px; width: max-content; min-width: 100%; }
-  
   .hot-artist { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: inherit; width: 72px; flex-shrink: 0; cursor: pointer; scroll-snap-align: start; min-width: 0; }
   .hot-artist-avatar { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg, #1a1a1a 0%, #262626 100%); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; color: #555; box-shadow: 0 6px 20px rgba(0,0,0,0.5); transition: transform 0.25s ease; }
   .hot-artist-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .hot-artist:active .hot-artist-avatar { transform: scale(0.94); }
   .hot-artist-name { font-size: 12px; font-weight: 800; color: #ffffff; letter-spacing: -0.2px; text-align: center; max-width: 72px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; justify-content: center; gap: 4px; }
-  
   .hot-arrow { position: absolute; top: 50%; transform: translateY(-50%); width: 42px; height: 42px; border-radius: 50%; background: #ffffff; border: none; color: #0a0a0a; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(0,0,0,0.5); z-index: 5; }
   .hot-arrow.left { left: 6px; }
   .hot-arrow.right { right: 6px; }
   .hot-arrow.hidden { opacity: 0; pointer-events: none; }
   .hot-artists-empty { padding: 40px 22px; text-align: center; color: #666; font-size: 13px; width: 100%; }
-  
+
   .dark-tagline { background: #0a0a0a; color: #ffffff; margin: 0 -16px; padding: 55px 28px 45px; text-align: left; position: relative; overflow: hidden; }
   .dark-tagline::before { content: ''; position: absolute; top: -60px; right: -60px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 0, 51, 0.15) 0%, transparent 70%); pointer-events: none; }
   .dark-tagline::after { content: ''; position: absolute; bottom: -80px; left: -80px; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 136, 0, 0.12) 0%, transparent 70%); pointer-events: none; }
@@ -176,7 +146,6 @@
   .dark-tagline-cta:active { transform: scale(0.95); }
   .dark-tagline-cta i { font-size: 13px; }
 
-  /* ===== INLINE AD BLOCKS (Inside Story Text) ===== */
   .inline-ad-block { margin: 28px 0; border-radius: 14px; overflow: hidden; }
   .inline-ad-block img { width: 100%; display: block; border-radius: 14px; }
   .inline-ad-block a { display: block; }
@@ -184,7 +153,6 @@
   .inline-ad-placeholder i { font-size: 26px; color: #ff8800; margin-bottom: 8px; display: block; opacity: 0.7; }
   .inline-ad-placeholder p { font-size: 12px; color: #666; font-weight: 600; margin: 0; }
 
-  /* ===== SECOND AD (after CTA button) ===== */
   .ad-after-cta { margin: 36px 0 0; border-radius: 14px; overflow: hidden; }
   .ad-after-cta img { width: 100%; display: block; border-radius: 14px; }
   .ad-after-cta a { display: block; }
@@ -313,7 +281,6 @@
       <h3>Amplifying Artist Stories & Unique Styles</h3>
       <p>Every great song carries a personal story—from late-night studio sessions in Accra and Lagos to the raw emotion put into every lyric and beat. At Samarid Music, we go beyond just providing audio files. We celebrate the unique style, hustle, and individual journeys of rising African creators. Whether it's a breakout street anthem or a soulful highlife fusion, we give artists the spotlight they deserve so their true creative voices resonate deeply with fans across the globe.</p>
 
-      <!-- ===== INLINE AD #1 (Inside Story Text) ===== -->
       <div class="inline-ad-block" id="inlineAdsContainer">
         <div class="inline-ad-placeholder">
           <i class="fas fa-image"></i>
@@ -336,14 +303,12 @@
         </a>
       </div>
 
-      <!-- ===== INLINE AD #2 (After CTA button) ===== -->
       <div class="ad-after-cta" id="adAfterCtaContainer">
         <div class="ad-after-placeholder">
           <i class="fas fa-image"></i>
           <p>Your ad could be here</p>
         </div>
       </div>
-      <!-- ===== END AD #2 ===== -->
 
     </div>
   </div>
@@ -425,14 +390,9 @@
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/content_blocks?page_key=eq.home&active=eq.true&select=*&order=sort_order.asc,id.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const blocks = await res.json();
-        if (!Array.isArray(blocks) || blocks.length === 0) {
-          container.innerHTML = '';
-          return;
-        }
-
+        if (!Array.isArray(blocks) || blocks.length === 0) { container.innerHTML = ''; return; }
         const sizes = { small: '12px', medium: '15px', large: '20px', xlarge: '28px', huge: '38px' };
         const weights = { normal: '500', bold: '800', black: '900' };
-
         container.innerHTML = blocks.map(b => {
           const color = b.text_color || '#ffffff';
           const size = sizes[b.text_size] || '15px';
@@ -441,73 +401,42 @@
           const bg = b.bg_color || 'transparent';
           const styleStr = 'color:' + color + '; font-size:' + size + '; font-weight:' + weight + '; text-align:' + align + '; line-height:1.45;';
           const wrapStyle = 'background:' + bg + '; border-radius:14px; padding:18px 20px; margin-bottom:20px; overflow-wrap:anywhere; word-break:break-word;';
-
-          if (b.block_type === 'spacer') {
-            const h = parseInt(b.content) || 40;
-            return '<div style="height:' + h + 'px; margin-bottom:20px;"></div>';
-          }
-          if (b.block_type === 'image') {
-            if (!b.content) return '';
-            return '<div style="margin-bottom:20px;"><img src="' + escapeHtml(b.content) + '" alt="' + escapeHtml(b.button_text || 'Image') + '" style="width:100%; display:block; border-radius:14px;"></div>';
-          }
-          if (b.block_type === 'button') {
-            const txt = b.content || b.button_text || 'Click Here';
-            const link = b.button_link || '#';
-            return '<div style="' + wrapStyle + ' text-align:' + align + ';"><a href="' + escapeHtml(link) + '" style="display:inline-block; padding:14px 28px; background:#ff0033; color:#fff; border-radius:30px; font-size:14px; font-weight:900; text-decoration:none; box-shadow:0 8px 24px rgba(255,0,51,0.35);">' + escapeHtml(txt) + '</a></div>';
-          }
-          if (b.block_type === 'hero') {
-            const btnText = b.button_text ? '<a href="' + escapeHtml(b.button_link || '#') + '" style="display:inline-block; margin-top:16px; padding:13px 28px; background:#ff0033; color:#fff; border-radius:30px; font-size:13px; font-weight:900; text-decoration:none; box-shadow:0 8px 24px rgba(255,0,51,0.35);">' + escapeHtml(b.button_text) + '</a>' : '';
-            return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + (btnText ? '<div style="text-align:' + align + '; margin-top:16px;">' + btnText + '</div>' : '') + '</div>';
-          }
-          if (b.block_type === 'heading') {
-            return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + '</div>';
-          }
+          if (b.block_type === 'spacer') { const h = parseInt(b.content) || 40; return '<div style="height:' + h + 'px; margin-bottom:20px;"></div>'; }
+          if (b.block_type === 'image') { if (!b.content) return ''; return '<div style="margin-bottom:20px;"><img src="' + escapeHtml(b.content) + '" alt="' + escapeHtml(b.button_text || 'Image') + '" style="width:100%; display:block; border-radius:14px;"></div>'; }
+          if (b.block_type === 'button') { const txt = b.content || b.button_text || 'Click Here'; const link = b.button_link || '#'; return '<div style="' + wrapStyle + ' text-align:' + align + ';"><a href="' + escapeHtml(link) + '" style="display:inline-block; padding:14px 28px; background:#ff0033; color:#fff; border-radius:30px; font-size:14px; font-weight:900; text-decoration:none; box-shadow:0 8px 24px rgba(255,0,51,0.35);">' + escapeHtml(txt) + '</a></div>'; }
+          if (b.block_type === 'hero') { const btnText = b.button_text ? '<a href="' + escapeHtml(b.button_link || '#') + '" style="display:inline-block; margin-top:16px; padding:13px 28px; background:#ff0033; color:#fff; border-radius:30px; font-size:13px; font-weight:900; text-decoration:none; box-shadow:0 8px 24px rgba(255,0,51,0.35);">' + escapeHtml(b.button_text) + '</a>' : ''; return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + (btnText ? '<div style="text-align:' + align + '; margin-top:16px;">' + btnText + '</div>' : '') + '</div>'; }
+          if (b.block_type === 'heading') { return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + '</div>'; }
           const btnText = b.button_text ? '<div style="margin-top:14px;"><a href="' + escapeHtml(b.button_link || '#') + '" style="display:inline-block; padding:12px 24px; background:#ff0033; color:#fff; border-radius:30px; font-size:13px; font-weight:900; text-decoration:none;">' + escapeHtml(b.button_text) + '</a></div>' : '';
           return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + btnText + '</div>';
         }).join('');
-      } catch (e) {
-        console.warn('Page builder blocks failed to load:', e);
-        container.innerHTML = '';
-      }
+      } catch (e) { container.innerHTML = ''; }
     }
 
-    // ===== INLINE AD #1 LOADER (inside story text) =====
     async function loadInlineAds() {
       const container = document.getElementById('inlineAdsContainer');
       if (!container) return;
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/ads?active=eq.true&or=(position.eq.home,position.eq.all)&select=*&order=sort_order.asc,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const ads = await res.json();
-        if (!Array.isArray(ads) || ads.length === 0) {
-          container.innerHTML = '<div class="inline-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
-          return;
-        }
+        if (!Array.isArray(ads) || ads.length === 0) { container.innerHTML = '<div class="inline-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>'; return; }
         const ad = ads[0];
         const link = ad.link_url || '#';
         container.innerHTML = '<a href="' + escapeHtml(link) + '" target="_blank" rel="noopener"><img src="' + escapeHtml(ad.image_url) + '" alt="' + escapeHtml(ad.title || 'Ad') + '" loading="lazy"></a>';
-      } catch (e) {
-        container.innerHTML = '<div class="inline-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
-      }
+      } catch (e) { container.innerHTML = '<div class="inline-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>'; }
     }
 
-    // ===== INLINE AD #2 LOADER (after CTA button) =====
     async function loadAdAfterCta() {
       const container = document.getElementById('adAfterCtaContainer');
       if (!container) return;
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/ads?active=eq.true&or=(position.eq.home,position.eq.all)&select=*&order=sort_order.asc,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const ads = await res.json();
-        // Use the SECOND ad if available, otherwise fall back to the first one
-        const ad = (Array.isArray(ads) && ads.length > 1) ? ads[1] : (Array.isArray(ads) && ads[0] ? ads[0] : null);
-        if (!ad) {
-          container.innerHTML = '<div class="ad-after-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
-          return;
-        }
+        const ad = (Array.isArray(ads) && ads.length > 1) ? ads[1] : null;
+        if (!ad) { container.style.display = 'none'; container.innerHTML = ''; return; }
+        container.style.display = '';
         const link = ad.link_url || '#';
         container.innerHTML = '<a href="' + escapeHtml(link) + '" target="_blank" rel="noopener"><img src="' + escapeHtml(ad.image_url) + '" alt="' + escapeHtml(ad.title || 'Ad') + '" loading="lazy"></a>';
-      } catch (e) {
-        container.innerHTML = '<div class="ad-after-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
-      }
+      } catch (e) { container.style.display = 'none'; container.innerHTML = ''; }
     }
 
     function renderSongCard(s) {
@@ -516,13 +445,9 @@
       const date = s.date || '';
       const genre = s.category || 'Music';
       const country = s.country || 'Ghana';
-
       let titleHTML = escapeHtml(artist);
-      if (featuring) {
-        titleHTML += ' <span class="feat-tag">Feat ' + escapeHtml(featuring) + '</span>';
-      }
+      if (featuring) titleHTML += ' <span class="feat-tag">Feat ' + escapeHtml(featuring) + '</span>';
       titleHTML += ' - ' + escapeHtml(s.title);
-
       return `<a href="song.html?id=${s.id}" class="song-card">
         <div class="song-card-img"><img src="${escapeHtml(s.cover)}" alt="${escapeHtml(s.title)}" loading="lazy"></div>
         <div class="song-card-info">
@@ -632,11 +557,7 @@
         const vp = document.getElementById('hotArtistsViewport');
         if (vp) vp.scrollLeft = 0;
         requestAnimationFrame(updateHotArrows);
-      } catch (e) {
-        console.error(e);
-        track.innerHTML = '<div class="hot-artists-empty">Could not load artists.</div>';
-        updateHotArrows();
-      }
+      } catch (e) { track.innerHTML = '<div class="hot-artists-empty">Could not load artists.</div>'; updateHotArrows(); }
     }
 
     window.scrollHotArtists = function(dir) {
@@ -681,7 +602,7 @@
         });
         const albums = Object.values(albumMap).sort((a, b) => b.totalPlays - a.totalPlays).slice(0, TOP_ALBUMS_LIMIT);
         container.innerHTML = albums.map(renderAlbumCard).join('');
-      } catch (e) { console.error(e); container.innerHTML = '<div class="empty-state"><div class="icon">📀</div><h3>Error loading albums.</h3></div>'; }
+      } catch (e) { container.innerHTML = '<div class="empty-state"><div class="icon">📀</div><h3>Error loading albums.</h3></div>'; }
     }
 
     (function() {
