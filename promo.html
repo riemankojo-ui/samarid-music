@@ -22,6 +22,19 @@
 
   .page-content { padding: 20px 16px 30px; max-width: 700px; margin: 0 auto; }
 
+  /* ===== PAGE BUILDER BLOCKS ===== */
+  .pb-block { margin-bottom: 20px; padding: 18px 20px; border-radius: 14px; }
+  .pb-block.pb-image { padding: 0; overflow: hidden; }
+  .pb-block.pb-image img { width: 100%; display: block; border-radius: 14px; }
+
+  /* ===== INLINE AD BLOCKS ===== */
+  .inline-ad-block { margin: 24px 0; border-radius: 14px; overflow: hidden; }
+  .inline-ad-block img { width: 100%; display: block; border-radius: 14px; }
+  .inline-ad-block a { display: block; }
+  .inline-ad-placeholder { padding: 30px 20px; text-align: center; background: #f9f9f9; border: 2px dashed #e0e0e0; border-radius: 14px; }
+  .inline-ad-placeholder i { font-size: 26px; color: #ff8800; margin-bottom: 8px; display: block; opacity: 0.7; }
+  .inline-ad-placeholder p { font-size: 12px; color: #999; font-weight: 600; margin: 0; }
+
   /* HERO */
   .promo-hero { background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); border-radius: 20px; padding: 32px 24px; text-align: center; color: #fff; box-shadow: 0 15px 40px rgba(255,0,51,0.3); margin-bottom: 24px; position: relative; overflow: hidden; }
   .promo-hero::before { content: ''; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; border-radius: 50%; background: rgba(255,255,255,0.08); }
@@ -38,144 +51,37 @@
   .stat-box .num { font-size: 22px; font-weight: 900; color: var(--accent); margin-bottom: 4px; }
   .stat-box .lbl { font-size: 10px; color: var(--text2); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; }
 
-  /* ===== LIVE DISTRIBUTORS SLIDER BOX ===== */
-  @keyframes slideLogos {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
+  /* SUBMIT CTA */
+  .submit-cta { background: linear-gradient(180deg, #1a0008 0%, #0a0a0a 100%); border: 1px solid #2a0a14; border-radius: 24px; padding: 32px 22px; margin: 26px 0 24px; text-align: center; position: relative; overflow: hidden; box-shadow: 0 20px 50px rgba(255,0,51,0.25); }
+  .submit-cta::before { content: ''; position: absolute; top: -60px; right: -60px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(255,0,51,0.35) 0%, transparent 70%); pointer-events: none; }
+  .submit-cta::after { content: ''; position: absolute; bottom: -80px; left: -80px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(255,136,0,0.15) 0%, transparent 70%); pointer-events: none; }
+  .submit-cta-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; font-size: 10px; font-weight: 900; letter-spacing: 2px; padding: 6px 14px; border-radius: 20px; margin-bottom: 14px; box-shadow: 0 6px 20px rgba(255,0,51,0.5); position: relative; z-index: 1; }
+  .submit-cta h2 { font-size: 26px; font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 10px; letter-spacing: -0.8px; position: relative; z-index: 1; }
+  .submit-cta h2 span { color: #ff0033; }
+  .submit-cta p { font-size: 13px; color: #999; line-height: 1.6; max-width: 360px; margin: 0 auto 22px; position: relative; z-index: 1; }
+  .submit-cta-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 16px 32px; background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; border-radius: 40px; text-decoration: none; font-size: 15px; font-weight: 900; letter-spacing: 0.5px; box-shadow: 0 12px 35px rgba(255,0,51,0.5); transition: transform 0.15s; position: relative; z-index: 1; min-width: 240px; }
+  .submit-cta-btn:active { transform: scale(0.96); }
+  .submit-cta-btn i { font-size: 15px; }
 
-  .distributors-bounce {
-    position: relative;
-    background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
-    border: 1px solid #86efac;
-    border-radius: 20px;
-    padding: 24px 0 26px;
-    margin-top: 26px;
-    overflow: hidden;
-    text-align: center;
-  }
-  .distributors-bounce::before {
-    content: '';
-    position: absolute;
-    top: -40px;
-    right: -40px;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: rgba(0, 204, 68, 0.08);
-    pointer-events: none;
-  }
-
-  .dist-label {
-    font-size: 11px;
-    font-weight: 900;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #16a34a;
-    margin-bottom: 16px;
-    position: relative;
-    z-index: 3;
-  }
+  /* DISTRIBUTORS SLIDER */
+  @keyframes slideLogos { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .distributors-bounce { position: relative; background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%); border: 1px solid #86efac; border-radius: 20px; padding: 24px 0 26px; margin-top: 26px; overflow: hidden; text-align: center; }
+  .distributors-bounce::before { content: ''; position: absolute; top: -40px; right: -40px; width: 120px; height: 120px; border-radius: 50%; background: rgba(0, 204, 68, 0.08); pointer-events: none; }
+  .dist-label { font-size: 11px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; color: #16a34a; margin-bottom: 16px; position: relative; z-index: 3; }
   .dist-label span { color: #0a0a0a; }
-
-  .logo-slider {
-    position: relative;
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
-    margin-bottom: 20px;
-    height: 66px;
-    display: flex;
-    align-items: center;
-    contain: layout paint;
-  }
-  .logo-slider::before,
-  .logo-slider::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 40px;
-    z-index: 2;
-    pointer-events: none;
-  }
-  .logo-slider::before {
-    left: 0;
-    background: linear-gradient(to right, #f5fdf8 0%, rgba(245,253,248,0) 100%);
-  }
-  .logo-slider::after {
-    right: 0;
-    background: linear-gradient(to left, #f5fdf8 0%, rgba(245,253,248,0) 100%);
-  }
-
-  .logo-track {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    animation: slideLogos 22s linear infinite;
-    flex-shrink: 0;
-    padding-left: 30px;
-    width: max-content;
-    will-change: transform;
-  }
-  .logo-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    flex-shrink: 0;
-    min-width: 80px;
-  }
-  .logo-item img {
-    width: 44px;
-    height: 44px;
-    object-fit: contain;
-    display: block;
-  }
-  .logo-item .logo-name {
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.8px;
-    color: #16a34a;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-
-  .dist-content {
-    padding: 0 20px;
-    position: relative;
-    z-index: 3;
-  }
-  .dist-content h3 {
-    font-size: 20px;
-    font-weight: 900;
-    color: #0a0a0a;
-    margin-bottom: 5px;
-    letter-spacing: -0.4px;
-  }
+  .logo-slider { position: relative; width: 100%; max-width: 100%; overflow: hidden; margin-bottom: 20px; height: 66px; display: flex; align-items: center; contain: layout paint; }
+  .logo-slider::before, .logo-slider::after { content: ''; position: absolute; top: 0; bottom: 0; width: 40px; z-index: 2; pointer-events: none; }
+  .logo-slider::before { left: 0; background: linear-gradient(to right, #f5fdf8 0%, rgba(245,253,248,0) 100%); }
+  .logo-slider::after { right: 0; background: linear-gradient(to left, #f5fdf8 0%, rgba(245,253,248,0) 100%); }
+  .logo-track { display: flex; align-items: center; gap: 30px; animation: slideLogos 22s linear infinite; flex-shrink: 0; padding-left: 30px; width: max-content; will-change: transform; }
+  .logo-item { display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; min-width: 80px; }
+  .logo-item img { width: 44px; height: 44px; object-fit: contain; display: block; }
+  .logo-item .logo-name { font-size: 10px; font-weight: 800; letter-spacing: 0.8px; color: #16a34a; text-transform: uppercase; white-space: nowrap; }
+  .dist-content { padding: 0 20px; position: relative; z-index: 3; }
+  .dist-content h3 { font-size: 20px; font-weight: 900; color: #0a0a0a; margin-bottom: 5px; letter-spacing: -0.4px; }
   .dist-content h3 span { color: #16a34a; }
-  .dist-content p {
-    font-size: 12px;
-    color: #555;
-    line-height: 1.5;
-    margin-bottom: 16px;
-  }
-  .distributors-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 24px;
-    background: linear-gradient(135deg, #00cc44 0%, #00a838 100%);
-    color: #fff;
-    border-radius: 30px;
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 900;
-    letter-spacing: 0.3px;
-    box-shadow: 0 8px 25px rgba(0, 204, 68, 0.4);
-    transition: transform 0.15s;
-    position: relative;
-  }
+  .dist-content p { font-size: 12px; color: #555; line-height: 1.5; margin-bottom: 16px; }
+  .distributors-btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: linear-gradient(135deg, #00cc44 0%, #00a838 100%); color: #fff; border-radius: 30px; text-decoration: none; font-size: 13px; font-weight: 900; letter-spacing: 0.3px; box-shadow: 0 8px 25px rgba(0, 204, 68, 0.4); transition: transform 0.15s; position: relative; }
   .distributors-btn:active { transform: scale(0.95); }
   .distributors-btn i { font-size: 13px; }
 
@@ -204,8 +110,7 @@
   .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); letter-spacing: 1px; border-top: 1px solid var(--border); margin-top: 30px; }
   .footer .brand { color: var(--accent); font-weight: 700; }
 </style>
-</head>
-<body>
+</head><body>
 
   <header class="header">
     <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
@@ -214,6 +119,9 @@
   </header>
 
   <div class="page-content">
+
+    <!-- ===== PAGE BUILDER BLOCKS ===== -->
+    <div id="pageBuilderBlocks"></div>
 
     <!-- HERO -->
     <div class="promo-hero">
@@ -230,13 +138,29 @@
       <div class="stat-box"><div class="num">24/7</div><div class="lbl">Support</div></div>
     </div>
 
-    <!-- LIVE DISTRIBUTORS SLIDER (NEW!) -->
+    <!-- ===== INLINE AD #1 ===== -->
+    <div class="inline-ad-block" id="promoAd1Container">
+      <div class="inline-ad-placeholder">
+        <i class="fas fa-image"></i>
+        <p>Your ad could be here</p>
+      </div>
+    </div>
+
+    <!-- SUBMIT CTA -->
+    <div class="submit-cta">
+      <span class="submit-cta-badge"><i class="fas fa-star"></i> FREE • TAKES 1 MINUTE</span>
+      <h2>Submit Your <span>Music</span></h2>
+      <p>Fill in 5 quick steps and we'll review your song. We respond within 24 hours.</p>
+      <a href="submit.html" class="submit-cta-btn">
+        <i class="fas fa-music"></i> Submit Your Music <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- DISTRIBUTORS SLIDER -->
     <div class="distributors-bounce">
       <div class="dist-label">Live On <span>Every Platform</span></div>
-
       <div class="logo-slider">
         <div class="logo-track">
-          <!-- Set 1 -->
           <div class="logo-item"><img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_Green.png" alt="Spotify"><span class="logo-name">Spotify</span></div>
           <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Music"><span class="logo-name">Apple Music</span></div>
           <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=boomplay.com&sz=128" alt="Boomplay"><span class="logo-name">Boomplay</span></div>
@@ -245,7 +169,6 @@
           <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=audiomack.com&sz=128" alt="Audiomack"><span class="logo-name">Audiomack</span></div>
           <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=tidal.com&sz=128" alt="Tidal"><span class="logo-name">Tidal</span></div>
           <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=deezer.com&sz=128" alt="Deezer"><span class="logo-name">Deezer</span></div>
-          <!-- Set 2 (duplicate for seamless loop) -->
           <div class="logo-item"><img src="https://storage.googleapis.com/pr-newsroom-wp/1/2018/11/Spotify_Logo_RGB_Green.png" alt="Spotify"><span class="logo-name">Spotify</span></div>
           <div class="logo-item"><img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Music"><span class="logo-name">Apple Music</span></div>
           <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=boomplay.com&sz=128" alt="Boomplay"><span class="logo-name">Boomplay</span></div>
@@ -256,7 +179,6 @@
           <div class="logo-item"><img src="https://www.google.com/s2/favicons?domain=deezer.com&sz=128" alt="Deezer"><span class="logo-name">Deezer</span></div>
         </div>
       </div>
-
       <div class="dist-content">
         <h3>Music <span>Distributers</span></h3>
         <p>Spotify • Apple Music • Boomplay • YouTube</p>
@@ -288,6 +210,14 @@
       <div class="service-info"><h4>Artist Development</h4><p>Brand building, image consulting, social media strategy, and one-on-one coaching for emerging artists.</p></div>
     </div>
 
+    <!-- ===== INLINE AD #2 ===== -->
+    <div class="inline-ad-block" id="promoAd2Container">
+      <div class="inline-ad-placeholder">
+        <i class="fas fa-image"></i>
+        <p>Your ad could be here</p>
+      </div>
+    </div>
+
     <!-- CTA -->
     <div class="cta-box">
       <h3>Ready To Blow Up?</h3>
@@ -300,6 +230,112 @@
   </div>
 
   <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
+
+  <script>
+    const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
+    const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+
+    function escapeHtml(s) {
+      if (s === null || s === undefined) return '';
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    // ===== PAGE BUILDER BLOCKS LOADER =====
+    async function loadPageBuilderBlocks() {
+      const container = document.getElementById('pageBuilderBlocks');
+      if (!container) return;
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/content_blocks?page_key=eq.promo&active=eq.true&select=*&order=sort_order.asc,id.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const blocks = await res.json();
+        if (!Array.isArray(blocks) || blocks.length === 0) {
+          container.innerHTML = '';
+          return;
+        }
+
+        const sizes = { small: '12px', medium: '15px', large: '20px', xlarge: '28px', huge: '38px' };
+        const weights = { normal: '500', bold: '800', black: '900' };
+
+        container.innerHTML = blocks.map(b => {
+          const color = b.text_color || '#ffffff';
+          const size = sizes[b.text_size] || '15px';
+          const weight = weights[b.font_weight] || '500';
+          const align = b.text_align || 'center';
+          const bg = b.bg_color || 'transparent';
+          const styleStr = 'color:' + color + '; font-size:' + size + '; font-weight:' + weight + '; text-align:' + align + '; line-height:1.45;';
+          const wrapStyle = 'background:' + bg + '; border-radius:14px; padding:18px 20px; margin-bottom:20px; overflow-wrap:anywhere; word-break:break-word;';
+
+          if (b.block_type === 'spacer') {
+            const h = parseInt(b.content) || 40;
+            return '<div style="height:' + h + 'px; margin-bottom:20px;"></div>';
+          }
+          if (b.block_type === 'image') {
+            if (!b.content) return '';
+            return '<div style="margin-bottom:20px;"><img src="' + escapeHtml(b.content) + '" alt="' + escapeHtml(b.button_text || 'Image') + '" style="width:100%; display:block; border-radius:14px;"></div>';
+          }
+          if (b.block_type === 'button') {
+            const txt = b.content || b.button_text || 'Click Here';
+            const link = b.button_link || '#';
+            return '<div style="' + wrapStyle + ' text-align:' + align + ';"><a href="' + escapeHtml(link) + '" style="display:inline-block; padding:14px 28px; background:#ff0033; color:#fff; border-radius:30px; font-size:14px; font-weight:900; text-decoration:none; box-shadow:0 8px 24px rgba(255,0,51,0.35);">' + escapeHtml(txt) + '</a></div>';
+          }
+          if (b.block_type === 'hero') {
+            const btnText = b.button_text ? '<a href="' + escapeHtml(b.button_link || '#') + '" style="display:inline-block; margin-top:16px; padding:13px 28px; background:#ff0033; color:#fff; border-radius:30px; font-size:13px; font-weight:900; text-decoration:none; box-shadow:0 8px 24px rgba(255,0,51,0.35);">' + escapeHtml(b.button_text) + '</a>' : '';
+            return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + (btnText ? '<div style="text-align:' + align + '; margin-top:16px;">' + btnText + '</div>' : '') + '</div>';
+          }
+          if (b.block_type === 'heading') {
+            return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + '</div>';
+          }
+          const btnText = b.button_text ? '<div style="margin-top:14px;"><a href="' + escapeHtml(b.button_link || '#') + '" style="display:inline-block; padding:12px 24px; background:#ff0033; color:#fff; border-radius:30px; font-size:13px; font-weight:900; text-decoration:none;">' + escapeHtml(b.button_text) + '</a></div>' : '';
+          return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + btnText + '</div>';
+        }).join('');
+      } catch (e) {
+        console.warn('Page builder blocks failed to load:', e);
+        container.innerHTML = '';
+      }
+    }
+
+    // ===== INLINE AD #1 LOADER =====
+    async function loadPromoAd1() {
+      const container = document.getElementById('promoAd1Container');
+      if (!container) return;
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/ads?active=eq.true&or=(position.eq.promo,position.eq.all)&select=*&order=sort_order.asc,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const ads = await res.json();
+        if (!Array.isArray(ads) || ads.length === 0) {
+          container.innerHTML = '<div class="inline-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
+          return;
+        }
+        const ad = ads[0];
+        const link = ad.link_url || '#';
+        container.innerHTML = '<a href="' + escapeHtml(link) + '" target="_blank" rel="noopener"><img src="' + escapeHtml(ad.image_url) + '" alt="' + escapeHtml(ad.title || 'Ad') + '" loading="lazy"></a>';
+      } catch (e) {
+        container.innerHTML = '<div class="inline-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
+      }
+    }
+
+    // ===== INLINE AD #2 LOADER =====
+    async function loadPromoAd2() {
+      const container = document.getElementById('promoAd2Container');
+      if (!container) return;
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/ads?active=eq.true&or=(position.eq.promo,position.eq.all)&select=*&order=sort_order.asc,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const ads = await res.json();
+        // Use second ad if available, else first one
+        const ad = (Array.isArray(ads) && ads.length > 1) ? ads[1] : (Array.isArray(ads) && ads[0] ? ads[0] : null);
+        if (!ad) {
+          container.innerHTML = '<div class="inline-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
+          return;
+        }
+        const link = ad.link_url || '#';
+        container.innerHTML = '<a href="' + escapeHtml(link) + '" target="_blank" rel="noopener"><img src="' + escapeHtml(ad.image_url) + '" alt="' + escapeHtml(ad.title || 'Ad') + '" loading="lazy"></a>';
+      } catch (e) {
+        container.innerHTML = '<div class="inline-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
+      }
+    }
+
+    loadPageBuilderBlocks();
+    loadPromoAd1();
+    loadPromoAd2();
+  </script>
 
 </body>
 </html>

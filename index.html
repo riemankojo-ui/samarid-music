@@ -117,39 +117,22 @@
   }
   .song-card-info .date, .top-album-date { font-size: 12.5px; color: var(--text2); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* ===== LINK-STYLE HOVER / TAP EFFECT ON SONG CARDS ===== */
-  .song-card, .top-album-card {
-    transition: background 0.15s ease;
-    border-radius: 10px;
-  }
-
-  /* Desktop only — real mouse hover */
+  /* ===== LINK-STYLE HOVER / TAP EFFECT ===== */
+  .song-card, .top-album-card { transition: background 0.15s ease; border-radius: 10px; }
   @media (hover: hover) and (pointer: fine) {
     .song-card:hover .song-card-info h3,
     .top-album-card:hover .top-album-info .top-album-name {
-      text-decoration: underline;
-      text-decoration-thickness: 2px;
-      text-underline-offset: 3px;
-      text-decoration-color: #000000;
-      color: #000000 !important;
+      text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px;
+      text-decoration-color: #000000; color: #000000 !important;
     }
-    .song-card:hover, .top-album-card:hover {
-      background: rgba(0, 0, 0, 0.03);
-    }
+    .song-card:hover, .top-album-card:hover { background: rgba(0, 0, 0, 0.03); }
   }
-
-  /* Mobile — only show effect while finger is pressed (not stuck) */
   .song-card:active .song-card-info h3,
   .top-album-card:active .top-album-info .top-album-name {
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 3px;
-    text-decoration-color: #000000;
-    color: #000000 !important;
+    text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px;
+    text-decoration-color: #000000; color: #000000 !important;
   }
-  .song-card:active, .top-album-card:active {
-    background: rgba(0, 0, 0, 0.06);
-  }
+  .song-card:active, .top-album-card:active { background: rgba(0, 0, 0, 0.06); }
 
   /* ===== PAGE BUILDER BLOCKS ===== */
   .pb-block { margin-bottom: 20px; padding: 18px 20px; border-radius: 14px; }
@@ -194,25 +177,21 @@
   .dark-tagline-cta:active { transform: scale(0.95); }
   .dark-tagline-cta i { font-size: 13px; }
 
-  .home-ads-wrap { margin-top: 45px; padding-top: 32px; border-top: 1px solid #1c1c1c; }
-  .home-ads-label { text-align: center; font-size: 10px; font-weight: 900; letter-spacing: 4px; color: #ff8800; text-transform: uppercase; margin-bottom: 12px; }
-  .home-ads-title { text-align: center; font-size: 22px; font-weight: 900; color: #fff; letter-spacing: -0.5px; line-height: 1.25; margin-bottom: 8px; }
-  .home-ads-title span { color: #ff8800; }
-  .home-ads-sub { text-align: center; font-size: 13px; color: #a0a0a0; line-height: 1.6; font-weight: 500; max-width: 460px; margin: 0 auto 22px; }
+  /* ===== INLINE AD BLOCKS (Inside Story Text) ===== */
+  .inline-ad-block { margin: 28px 0; border-radius: 14px; overflow: hidden; }
+  .inline-ad-block img { width: 100%; display: block; border-radius: 14px; }
+  .inline-ad-block a { display: block; }
+  .inline-ad-placeholder { padding: 30px 20px; text-align: center; background: #141414; border: 2px dashed #2a2a2a; border-radius: 14px; }
+  .inline-ad-placeholder i { font-size: 26px; color: #ff8800; margin-bottom: 8px; display: block; opacity: 0.7; }
+  .inline-ad-placeholder p { font-size: 12px; color: #666; font-weight: 600; margin: 0; }
 
-  .home-ads-container { display: flex; flex-direction: column; gap: 26px; }
-
-  .home-ad-card { display: block; text-decoration: none; transition: opacity 0.2s; width: 100%; }
-  .home-ad-card:active { opacity: 0.85; }
-  .home-ad-img { width: 100%; height: auto; display: block; background: #111; border-radius: 12px; overflow: hidden; }
-  .home-ad-body { padding: 14px 4px 0; }
-  .home-ad-title { font-weight: 900; margin-bottom: 6px; letter-spacing: -0.3px; line-height: 1.3; overflow-wrap: anywhere; }
-  .home-ad-desc { font-weight: 500; line-height: 1.55; overflow-wrap: anywhere; }
-  .home-ad-cta { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 13px; font-weight: 800; color: #ff8800; letter-spacing: 0.3px; }
-
-  .home-ad-placeholder { padding: 32px 24px; text-align: center; background: #141414; border: 2px dashed #2a2a2a; border-radius: 14px; }
-  .home-ad-placeholder i { font-size: 28px; color: #ff8800; margin-bottom: 10px; display: block; opacity: 0.75; }
-  .home-ad-placeholder p { font-size: 12px; color: #666; font-weight: 600; }
+  /* ===== SECOND AD (after CTA button) ===== */
+  .ad-after-cta { margin: 36px 0 0; border-radius: 14px; overflow: hidden; }
+  .ad-after-cta img { width: 100%; display: block; border-radius: 14px; }
+  .ad-after-cta a { display: block; }
+  .ad-after-cta .ad-after-placeholder { padding: 30px 20px; text-align: center; background: #141414; border: 2px dashed #2a2a2a; border-radius: 14px; }
+  .ad-after-cta .ad-after-placeholder i { font-size: 26px; color: #ff8800; margin-bottom: 8px; display: block; opacity: 0.7; }
+  .ad-after-cta .ad-after-placeholder p { font-size: 12px; color: #666; font-weight: 600; margin: 0; }
 
   .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
   .sub-modal.open { display: flex; }
@@ -264,7 +243,6 @@
 
   <div class="page-content">
 
-    <!-- ===== PAGE BUILDER BLOCKS (loaded from Supabase) ===== -->
     <div id="pageBuilderBlocks"></div>
 
     <div class="section-head"><h3>Top Songs</h3></div>
@@ -335,7 +313,15 @@
       
       <h3>Amplifying Artist Stories & Unique Styles</h3>
       <p>Every great song carries a personal story—from late-night studio sessions in Accra and Lagos to the raw emotion put into every lyric and beat. At Samarid Music, we go beyond just providing audio files. We celebrate the unique style, hustle, and individual journeys of rising African creators. Whether it's a breakout street anthem or a soulful highlife fusion, we give artists the spotlight they deserve so their true creative voices resonate deeply with fans across the globe.</p>
-      
+
+      <!-- ===== INLINE AD #1 (Inside Story Text) ===== -->
+      <div class="inline-ad-block" id="inlineAdsContainer">
+        <div class="inline-ad-placeholder">
+          <i class="fas fa-image"></i>
+          <p>Your ad could be here</p>
+        </div>
+      </div>
+
       <h3>Powering Social Media Music Promotion</h3>
       <p>In today's digital era, music thrives on connection. Our platform is designed to fuel viral social media moments across TikTok, Instagram Reels, and YouTube Shorts. When you discover a fresh track here, it's instantly ready to soundtrack your next viral video, challenge, or daily vlog. We empower fans and creators to share, promote, and vibe to the hottest sounds effortlessly, turning local hits into worldwide sensations.</p>
       
@@ -351,18 +337,14 @@
         </a>
       </div>
 
-      <div class="home-ads-wrap">
-        <div class="home-ads-label">Sponsored</div>
-        <div class="home-ads-title">Promote Your Brand <span>To Thousands</span></div>
-        <div class="home-ads-sub">Get your song, business, or brand seen by real music lovers across Ghana, Nigeria, and beyond. Every single day.</div>
-
-        <div class="home-ads-container" id="homeAdsContainer">
-          <div class="home-ad-placeholder">
-            <i class="fas fa-image"></i>
-            <p>Your ad could be here</p>
-          </div>
+      <!-- ===== INLINE AD #2 (After CTA button) ===== -->
+      <div class="ad-after-cta" id="adAfterCtaContainer">
+        <div class="ad-after-placeholder">
+          <i class="fas fa-image"></i>
+          <p>Your ad could be here</p>
         </div>
       </div>
+      <!-- ===== END AD #2 ===== -->
 
     </div>
   </div>
@@ -490,33 +472,42 @@
       }
     }
 
-    async function loadHomeAds() {
-      const container = document.getElementById('homeAdsContainer');
+    // ===== INLINE AD #1 LOADER (inside story text) =====
+    async function loadInlineAds() {
+      const container = document.getElementById('inlineAdsContainer');
       if (!container) return;
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/ads?active=eq.true&or=(position.eq.home,position.eq.all)&select=*&order=sort_order.asc,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const ads = await res.json();
         if (!Array.isArray(ads) || ads.length === 0) {
-          container.innerHTML = '<div class="home-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
+          container.innerHTML = '<div class="inline-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
           return;
         }
-
-        const titleSizes = { small: '18px', medium: '24px', large: '30px' };
-        const descSizes = { small: '13px', medium: '15px', large: '17px' };
-
-        container.innerHTML = ads.map(ad => {
-          const link = ad.link_url || '#';
-          const titleColor = ad.title_color || '#ffffff';
-          const titleSize = titleSizes[ad.title_size] || '24px';
-          const descColor = ad.description_color || '#a0a0a0';
-          const descSize = descSizes[ad.description_size] || '15px';
-          const title = ad.title ? '<div class="home-ad-title" style="color:' + titleColor + '; font-size:' + titleSize + ';">' + escapeHtml(ad.title) + '</div>' : '';
-          const desc = ad.description ? '<div class="home-ad-desc" style="color:' + descColor + '; font-size:' + descSize + ';">' + escapeHtml(ad.description) + '</div>' : '';
-          const cta = ad.link_url ? '<div class="home-ad-cta">Learn More <i class="fas fa-arrow-right"></i></div>' : '';
-          return '<a href="' + escapeHtml(link) + '" target="_blank" rel="noopener" class="home-ad-card"><img class="home-ad-img" src="' + escapeHtml(ad.image_url) + '" alt="' + escapeHtml(ad.title || 'Ad') + '" loading="lazy"><div class="home-ad-body">' + title + desc + cta + '</div></a>';
-        }).join('');
+        const ad = ads[0];
+        const link = ad.link_url || '#';
+        container.innerHTML = '<a href="' + escapeHtml(link) + '" target="_blank" rel="noopener"><img src="' + escapeHtml(ad.image_url) + '" alt="' + escapeHtml(ad.title || 'Ad') + '" loading="lazy"></a>';
       } catch (e) {
-        container.innerHTML = '<div class="home-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
+        container.innerHTML = '<div class="inline-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
+      }
+    }
+
+    // ===== INLINE AD #2 LOADER (after CTA button) =====
+    async function loadAdAfterCta() {
+      const container = document.getElementById('adAfterCtaContainer');
+      if (!container) return;
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/ads?active=eq.true&or=(position.eq.home,position.eq.all)&select=*&order=sort_order.asc,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const ads = await res.json();
+        // Use the SECOND ad if available, otherwise fall back to the first one
+        const ad = (Array.isArray(ads) && ads.length > 1) ? ads[1] : (Array.isArray(ads) && ads[0] ? ads[0] : null);
+        if (!ad) {
+          container.innerHTML = '<div class="ad-after-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
+          return;
+        }
+        const link = ad.link_url || '#';
+        container.innerHTML = '<a href="' + escapeHtml(link) + '" target="_blank" rel="noopener"><img src="' + escapeHtml(ad.image_url) + '" alt="' + escapeHtml(ad.title || 'Ad') + '" loading="lazy"></a>';
+      } catch (e) {
+        container.innerHTML = '<div class="ad-after-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>';
       }
     }
 
@@ -743,7 +734,8 @@
     renderSongs();
     loadTopAlbums();
     loadTopArtists();
-    loadHomeAds();
+    loadInlineAds();
+    loadAdAfterCta();
     setupLatestSearch();
   </script>
 </body>
