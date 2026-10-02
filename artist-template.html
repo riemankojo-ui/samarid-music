@@ -111,6 +111,41 @@
       white-space: nowrap; 
   }
 
+  /* ===== LINK-STYLE HOVER / TAP EFFECT (Fixed) ===== */
+  .song-card {
+    transition: background 0.15s ease;
+    border-radius: 10px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .song-card:hover .song-card-info h3 {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+      text-decoration-color: #000000;
+      color: #000000 !important;
+    }
+    .song-card:hover {
+      background: rgba(0, 0, 0, 0.03);
+    }
+  }
+
+  .song-card:active .song-card-info h3 {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+    text-decoration-color: #000000;
+    color: #000000 !important;
+  }
+  .song-card:active {
+    background: rgba(0, 0, 0, 0.06);
+  }
+
+  /* ===== PAGE BUILDER BLOCKS ===== */
+  .pb-block { margin-bottom: 20px; padding: 18px 20px; border-radius: 14px; }
+  .pb-block.pb-image { padding: 0; overflow: hidden; }
+  .pb-block.pb-image img { width: 100%; display: block; border-radius: 14px; }
+
   .bottom-controls { display: flex; align-items: center; gap: 12px; padding: 22px 0 8px; margin-top: 8px; border-top: 1px solid var(--border); }
   .bottom-search-wrap { position: relative; flex: 1; min-width: 0; }
   .bottom-search-wrap input { width: 100%; padding: 12px 38px 12px 38px; background: transparent; border: 1.5px solid var(--border); border-radius: 30px; color: var(--text); font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s; }
@@ -128,14 +163,6 @@
   .empty-state h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
   .verify-badge { display: inline-block; width: 14px; height: 14px; vertical-align: middle; flex-shrink: 0; margin-left: 4px; }
   
-  /* ===== PAGE BUILDER BLOCKS ===== */
-  .pb-block { margin-bottom: 20px; padding: 18px 20px; border-radius: 14px; }
-  .pb-block.pb-image { padding: 0; overflow: hidden; }
-  .pb-block.pb-image img { width: 100%; display: block; border-radius: 14px; }
-  .pb-block .pb-btn { display: inline-block; margin-top: 16px; padding: 13px 28px; background: #ff0033; color: #fff; border-radius: 30px; font-size: 13px; font-weight: 900; text-decoration: none; box-shadow: 0 8px 24px rgba(255, 0, 51, 0.35); }
-  .pb-block .pb-btn:active { transform: scale(0.96); }
-  
-  /* --- FLOWING EDITORIAL STORY SECTION --- */
   .artist-story-section { margin-top: 50px; background: #0a0a0a; color: #ffffff; padding: 40px 20px; border-top: 4px solid var(--accent); }
   .artist-story-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 14px; }
   .artist-story-header i { font-size: 18px; color: var(--accent); }
@@ -201,7 +228,6 @@
   <div class="container">
     <div class="page-title">Browse <span class="accent" id="pageTitle">Artist</span></div>
 
-    <!-- ===== PAGE BUILDER BLOCKS (loaded from Supabase) ===== -->
     <div id="pageBuilderBlocks"></div>
 
     <div class="song-list" id="songList">
