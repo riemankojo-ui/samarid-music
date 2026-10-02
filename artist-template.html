@@ -19,7 +19,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  :root { --bg: #ffffff; --card: #f5f5f5; --border: #e5e5e5; --text: #0a0a0a; --text2: #666; --accent: #ff8800; --red: #ff0033; }
+  :root { --bg: #ffffff; --card: #f5f5f5; --border: #e5e5e5; --text: #0a0a0a; --text2: #666; --accent: #ff0033; --red: #ff0033; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
   html, body { overflow-x: hidden; max-width: 100vw; }
   body { background: #fafafa; color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 40px; }
@@ -37,7 +37,7 @@
   .side-menu-title { font-size: 16px; font-weight: 900; color: #fff; }
   .side-menu-close { background: transparent; border: none; color: #666; font-size: 22px; cursor: pointer; }
   .side-menu-artist { padding: 25px 20px; border-bottom: 1px solid #222; text-align: center; }
-  .side-menu-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #ff8800 0%, #cc6600 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; border: 3px solid var(--accent); font-size: 28px; font-weight: 900; color: #fff; overflow: hidden; flex-shrink: 0; }
+  .side-menu-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; border: 3px solid var(--accent); font-size: 28px; font-weight: 900; color: #fff; overflow: hidden; flex-shrink: 0; }
   .side-menu-avatar img { width: 100%; height: 100%; object-fit: cover; }
   .side-menu-artist-name { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 4px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px; }
   .side-menu-artist-bio { font-size: 12px; color: #999; line-height: 1.5; margin-bottom: 12px; text-align: center; padding: 0 4px; overflow-wrap: anywhere; word-break: break-word; max-width: 100%; }
@@ -61,7 +61,7 @@
   .side-menu-item .share-whatsapp-icon { color: #25D366; }
   .side-menu-item .share-facebook-icon { color: #1877F2; }
   .side-menu-item .share-twitter-icon { color: #ffffff; }
-  .side-menu-item .share-copy-icon { color: #ff8800; }
+  .side-menu-item .share-copy-icon { color: #ff0033; }
   .side-menu-footer { padding: 25px 20px; text-align: center; font-size: 10px; color: #444; letter-spacing: 1px; }
   .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9998; display: none; }
   .menu-overlay.open { display: block; }
@@ -69,85 +69,40 @@
   .page-title { font-size: 12px; font-weight: 800; color: var(--text2); letter-spacing: 0.5px; padding: 8px 0 14px; text-align: left; text-transform: uppercase; }
   .page-title .accent { color: var(--text); font-weight: 900; }
   .song-list { display: flex; flex-direction: column; }
-  .song-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; transition: opacity 0.15s; }
+  .song-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; }
   .song-card:last-child { border-bottom: none; }
-  .song-card:active { opacity: 0.7; }
   .song-card-img { width: 96px; height: 96px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 12px; }
   .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .song-card-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; gap: 6px; }
-  
-  .song-card-info .genre-country {
-      font-size: 10px;
-      font-weight: 600;
-      color: #8fdfa8;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 2px;
-  }
-  
-  .song-card-info h3 { 
-      font-size: 13.5px; 
-      font-weight: 800; 
-      line-height: 1.3; 
-      color: #000000; 
-      letter-spacing: -0.2px; 
-      display: -webkit-box; 
-      -webkit-line-clamp: 2; 
-      -webkit-box-orient: vertical; 
-      overflow: hidden; 
-      overflow-wrap: anywhere; 
-      word-break: break-word; 
-      max-width: 100%; 
-  }
+  .song-card-info .genre-country { font-size: 10px; font-weight: 600; color: #8fdfa8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+  .song-card-info h3 { font-size: 13.5px; font-weight: 800; line-height: 1.3; color: #000000; letter-spacing: -0.2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; word-break: break-word; max-width: 100%; transition: color 0.15s ease; }
   .song-card-info h3 .dash { font-weight: 600; color: #000000; margin: 0 2px; }
   .song-card-info h3 .feat-tag { font-weight: 800; color: #000000; font-size: 13.5px; }
-  
-  .song-card-info .date { 
-      font-size: 11px; 
-      color: #888888; 
-      font-weight: 400; 
-      overflow: hidden; 
-      text-overflow: ellipsis; 
-      white-space: nowrap; 
-  }
+  .song-card-info .date { font-size: 11px; color: #888888; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* ===== TAP/HOVER EFFECT (link-feel, no underline) ===== */
-  .song-card {
-    transition: background 0.15s ease;
-    border-radius: 10px;
-  }
-  .song-card-info h3 { transition: color 0.15s ease; }
-
+  /* ===== TAP / HOVER EFFECT (title only) ===== */
   @media (hover: hover) and (pointer: fine) {
-    .song-card:hover { background: rgba(0, 0, 0, 0.03); }
     .song-card:hover .song-card-info h3 { color: var(--accent); }
   }
-
-  .song-card:active { background: rgba(255, 136, 0, 0.06); }
   .song-card:active .song-card-info h3 { color: var(--accent); }
 
-  /* ===== PAGE BUILDER BLOCKS ===== */
   .pb-block { margin-bottom: 20px; padding: 18px 20px; border-radius: 14px; }
   .pb-block.pb-image { padding: 0; overflow: hidden; }
   .pb-block.pb-image img { width: 100%; display: block; border-radius: 14px; }
 
-  /* ===== ARTIST VIDEOS SECTION ===== */
   .videos-section { margin-top: 34px; padding-top: 24px; border-top: 1px solid var(--border); }
   .videos-section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
   .videos-section-head .bar { width: 5px; height: 22px; background: var(--accent); border-radius: 3px; flex-shrink: 0; }
   .videos-section-head h3 { font-size: 17px; font-weight: 900; letter-spacing: -0.3px; color: #000; }
   .videos-section-head .count { font-size: 11px; font-weight: 800; color: #999; background: #f0f0f0; padding: 3px 9px; border-radius: 12px; margin-left: auto; }
   .video-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .video-card { display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: inherit; cursor: pointer; transition: transform 0.15s ease; }
-  .video-card:active { transform: scale(0.97); }
+  .video-card { display: flex; flex-direction: column; gap: 8px; text-decoration: none; color: inherit; cursor: pointer; }
   .video-card-img { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; }
   .video-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .video-card-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.35) 100%); pointer-events: none; }
-  .video-card-play i { color: #fff; font-size: 38px; filter: drop-shadow(0 3px 10px rgba(0,0,0,0.6)); transition: transform 0.2s; }
-  .video-card:active .video-card-play i { transform: scale(0.9); }
+  .video-card-play i { color: #fff; font-size: 38px; filter: drop-shadow(0 3px 10px rgba(0,0,0,0.6)); }
   .video-card-badge { position: absolute; top: 8px; left: 8px; background: var(--red); color: #fff; font-size: 9px; font-weight: 900; letter-spacing: 0.8px; padding: 3px 7px; border-radius: 5px; text-transform: uppercase; }
   .video-card-title { font-size: 12.5px; font-weight: 800; line-height: 1.35; color: #000; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; word-break: break-word; }
-  .video-card-meta { font-size: 10px; font-weight: 700; color: #999; letter-spacing: 0.3px; text-transform: uppercase; }
 
   .bottom-controls { display: flex; align-items: center; gap: 12px; padding: 22px 0 8px; margin-top: 8px; border-top: 1px solid var(--border); }
   .bottom-search-wrap { position: relative; flex: 1; min-width: 0; }
@@ -176,7 +131,7 @@
   .artist-story-body .accent-word { color: var(--accent); font-weight: 800; }
   .artist-story-quote { border-left: 3px solid var(--accent); padding-left: 16px; font-style: italic; color: #e0e0e0; font-size: 14px; font-weight: 500; margin: 4px 0; background: #141414; padding-top: 10px; padding-bottom: 10px; border-radius: 0 8px 8px 0; }
   .artist-story-footer-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; padding-top: 16px; border-top: 1px solid #222; }
-  .story-tag { background: rgba(255, 136, 0, 0.12); border: 1px solid rgba(255, 136, 0, 0.3); color: var(--accent); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
+  .story-tag { background: rgba(255, 0, 51, 0.12); border: 1px solid rgba(255, 0, 51, 0.3); color: var(--accent); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
 
   .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 25px; }
   .footer .brand { color: var(--red); font-weight: 700; }
@@ -246,7 +201,6 @@
       <button class="next-btn" id="nextBtn" onclick="nextPage()">Next <i class="fas fa-arrow-right"></i></button>
     </div>
 
-    <!-- ===== ARTIST VIDEOS (middle of page) ===== -->
     <div class="videos-section" id="artistVideosSection" style="display:none;">
       <div class="videos-section-head">
         <div class="bar"></div>
@@ -255,8 +209,6 @@
       </div>
       <div class="video-grid" id="artistVideosGrid"></div>
     </div>
-    <!-- ===== END ARTIST VIDEOS ===== -->
-
   </div>
 
   <div class="artist-story-section">
@@ -354,7 +306,6 @@
     }
     function showToast(msg) { const toast = document.createElement('div'); toast.innerText = msg; toast.className = 'toast'; document.body.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; }, 1800); setTimeout(() => { if (toast.parentNode) document.body.removeChild(toast); }, 2200); }
 
-    // ===== YT ID HELPER =====
     function ytId(url) {
       if (!url) return '';
       if (url.includes('youtu.be/')) return url.split('youtu.be/')[1].split('?')[0];
@@ -363,21 +314,15 @@
       return '';
     }
 
-    // ===== PAGE BUILDER BLOCKS LOADER =====
     async function loadPageBuilderBlocks() {
       const container = document.getElementById('pageBuilderBlocks');
       if (!container) return;
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/content_blocks?page_key=eq.artist&active=eq.true&select=*&order=sort_order.asc,id.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const blocks = await res.json();
-        if (!Array.isArray(blocks) || blocks.length === 0) {
-          container.innerHTML = '';
-          return;
-        }
-
+        if (!Array.isArray(blocks) || blocks.length === 0) { container.innerHTML = ''; return; }
         const sizes = { small: '12px', medium: '15px', large: '20px', xlarge: '28px', huge: '38px' };
         const weights = { normal: '500', bold: '800', black: '900' };
-
         container.innerHTML = blocks.map(b => {
           const color = b.text_color || '#ffffff';
           const size = sizes[b.text_size] || '15px';
@@ -386,55 +331,28 @@
           const bg = b.bg_color || 'transparent';
           const styleStr = 'color:' + color + '; font-size:' + size + '; font-weight:' + weight + '; text-align:' + align + '; line-height:1.45;';
           const wrapStyle = 'background:' + bg + '; border-radius:14px; padding:18px 20px; margin-bottom:20px; overflow-wrap:anywhere; word-break:break-word;';
-
-          if (b.block_type === 'spacer') {
-            const h = parseInt(b.content) || 40;
-            return '<div style="height:' + h + 'px; margin-bottom:20px;"></div>';
-          }
-          if (b.block_type === 'image') {
-            if (!b.content) return '';
-            return '<div style="margin-bottom:20px;"><img src="' + escapeHtml(b.content) + '" alt="' + escapeHtml(b.button_text || 'Image') + '" style="width:100%; display:block; border-radius:14px;"></div>';
-          }
-          if (b.block_type === 'button') {
-            const txt = b.content || b.button_text || 'Click Here';
-            const link = b.button_link || '#';
-            return '<div style="' + wrapStyle + ' text-align:' + align + ';"><a href="' + escapeHtml(link) + '" style="display:inline-block; padding:14px 28px; background:#ff0033; color:#fff; border-radius:30px; font-size:14px; font-weight:900; text-decoration:none; box-shadow:0 8px 24px rgba(255,0,51,0.35);">' + escapeHtml(txt) + '</a></div>';
-          }
-          if (b.block_type === 'hero') {
-            const btnText = b.button_text ? '<a href="' + escapeHtml(b.button_link || '#') + '" style="display:inline-block; margin-top:16px; padding:13px 28px; background:#ff0033; color:#fff; border-radius:30px; font-size:13px; font-weight:900; text-decoration:none; box-shadow:0 8px 24px rgba(255,0,51,0.35);">' + escapeHtml(b.button_text) + '</a>' : '';
-            return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + (btnText ? '<div style="text-align:' + align + '; margin-top:16px;">' + btnText + '</div>' : '') + '</div>';
-          }
-          if (b.block_type === 'heading') {
-            return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + '</div>';
-          }
+          if (b.block_type === 'spacer') { const h = parseInt(b.content) || 40; return '<div style="height:' + h + 'px; margin-bottom:20px;"></div>'; }
+          if (b.block_type === 'image') { if (!b.content) return ''; return '<div style="margin-bottom:20px;"><img src="' + escapeHtml(b.content) + '" alt="' + escapeHtml(b.button_text || 'Image') + '" style="width:100%; display:block; border-radius:14px;"></div>'; }
+          if (b.block_type === 'button') { const txt = b.content || b.button_text || 'Click Here'; const link = b.button_link || '#'; return '<div style="' + wrapStyle + ' text-align:' + align + ';"><a href="' + escapeHtml(link) + '" style="display:inline-block; padding:14px 28px; background:#ff0033; color:#fff; border-radius:30px; font-size:14px; font-weight:900; text-decoration:none; box-shadow:0 8px 24px rgba(255,0,51,0.35);">' + escapeHtml(txt) + '</a></div>'; }
+          if (b.block_type === 'hero') { const btnText = b.button_text ? '<a href="' + escapeHtml(b.button_link || '#') + '" style="display:inline-block; margin-top:16px; padding:13px 28px; background:#ff0033; color:#fff; border-radius:30px; font-size:13px; font-weight:900; text-decoration:none; box-shadow:0 8px 24px rgba(255,0,51,0.35);">' + escapeHtml(b.button_text) + '</a>' : ''; return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + (btnText ? '<div style="text-align:' + align + '; margin-top:16px;">' + btnText + '</div>' : '') + '</div>'; }
+          if (b.block_type === 'heading') { return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + '</div>'; }
           const btnText = b.button_text ? '<div style="margin-top:14px;"><a href="' + escapeHtml(b.button_link || '#') + '" style="display:inline-block; padding:12px 24px; background:#ff0033; color:#fff; border-radius:30px; font-size:13px; font-weight:900; text-decoration:none;">' + escapeHtml(b.button_text) + '</a></div>' : '';
           return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + btnText + '</div>';
         }).join('');
-      } catch (e) {
-        console.warn('Page builder blocks failed to load:', e);
-        container.innerHTML = '';
-      }
+      } catch (e) { container.innerHTML = ''; }
     }
 
-    // ===== ARTIST VIDEOS LOADER (middle of page) =====
     async function loadArtistVideos() {
       const section = document.getElementById('artistVideosSection');
       const grid = document.getElementById('artistVideosGrid');
       const countEl = document.getElementById('artistVideosCount');
       if (!section || !grid) return;
       try {
-        const res = await fetch(
-          SUPABASE_URL + '/rest/v1/artist_videos?artist_name=ilike.' + encodeURIComponent(artistName) + '&select=*&order=sort_order.asc,id.desc',
-          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
-        );
+        const res = await fetch(SUPABASE_URL + '/rest/v1/artist_videos?artist_name=ilike.' + encodeURIComponent(artistName) + '&select=*&order=sort_order.asc,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const videos = await res.json();
-        if (!Array.isArray(videos) || videos.length === 0) {
-          section.style.display = 'none';
-          return;
-        }
+        if (!Array.isArray(videos) || videos.length === 0) { section.style.display = 'none'; return; }
         section.style.display = 'block';
         if (countEl) countEl.innerText = videos.length;
-
         grid.innerHTML = videos.map(v => {
           const vid = ytId(v.video_url);
           const thumb = v.thumbnail_url || (vid ? 'https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg' : '');
@@ -449,10 +367,7 @@
             '<div class="video-card-title">' + escapeHtml(v.video_title || 'Untitled Video') + '</div>' +
           '</a>';
         }).join('');
-      } catch (e) {
-        console.warn('Artist videos failed to load:', e);
-        section.style.display = 'none';
-      }
+      } catch (e) { section.style.display = 'none'; }
     }
 
     async function loadFollowState() {
@@ -599,12 +514,9 @@
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/songs?select=*' + LIVE_FILTER + '&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const allSongs = await res.json();
-        if (Array.isArray(allSongs)) {
-          allArtistSongs = allSongs.filter(s => songHasArtist(s, artistKey));
-        } else {
-          allArtistSongs = [];
-        }
-      } catch (e) { console.error(e); allArtistSongs = []; }
+        if (Array.isArray(allSongs)) allArtistSongs = allSongs.filter(s => songHasArtist(s, artistKey));
+        else allArtistSongs = [];
+      } catch (e) { allArtistSongs = []; }
 
       filteredSongs = allArtistSongs.slice();
 

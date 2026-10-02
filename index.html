@@ -74,7 +74,7 @@
 
   /* ===== SONG CARDS ===== */
   .song-list { display: flex; flex-direction: column; }
-  .song-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; border-radius: 10px; transition: background 0.15s ease; }
+  .song-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; border-radius: 10px; }
   .song-card:last-child { border-bottom: none; }
   .song-card-img { width: 96px; height: 96px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 12px; position: relative; }
   .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -87,7 +87,7 @@
 
   /* ===== TOP ALBUM CARDS ===== */
   .top-albums-list { display: flex; flex-direction: column; }
-  .top-album-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; border-radius: 10px; transition: background 0.15s ease; }
+  .top-album-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; border-radius: 10px; }
   .top-album-card:last-child { border-bottom: none; }
   .top-album-cover { width: 115px; height: 115px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 14px; position: relative; }
   .top-album-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -95,13 +95,11 @@
   .top-album-name { font-size: 15px; font-weight: 900; line-height: 1.35; color: #000000; letter-spacing: -0.3px; overflow-wrap: anywhere; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; transition: color 0.15s ease; }
   .top-album-date { font-size: 11px; color: #888888; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* ===== TAP / HOVER EFFECT ===== */
+  /* ===== TAP / HOVER EFFECT (title only — no background tint) ===== */
   @media (hover: hover) and (pointer: fine) {
-    .song-card:hover, .top-album-card:hover { background: rgba(0, 0, 0, 0.03); }
     .song-card:hover .song-card-info h3,
     .top-album-card:hover .top-album-info .top-album-name { color: var(--accent); }
   }
-  .song-card:active, .top-album-card:active { background: rgba(255, 0, 51, 0.06); }
   .song-card:active .song-card-info h3,
   .top-album-card:active .top-album-info .top-album-name { color: var(--accent); }
 
