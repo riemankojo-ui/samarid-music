@@ -154,6 +154,7 @@
   .ad-card .ad-status-pill { display: inline-block; font-size: 9px; font-weight: 900; padding: 2px 8px; border-radius: 6px; letter-spacing: 0.5px; text-transform: uppercase; }
   .ad-status-pill.live { background: rgba(0,204,68,0.15); color: #00cc44; }
   .ad-status-pill.hidden { background: rgba(255,255,255,0.08); color: #888; }
+  .ad-status-pill.slot { background: rgba(29,155,240,0.15); color: #1d9bf0; }
   .ad-card .actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
   .ad-card .action-btn { background: transparent; border: none; font-size: 15px; cursor: pointer; padding: 6px; border-radius: 8px; }
   .ad-card .edit-btn { color: #00cc44; }
@@ -285,14 +286,29 @@
               </div>
             </div>
             <div class="form-group"><label>Link URL</label><input type="text" id="adLink" placeholder="https://wa.me/233..." oninput="updateAdPreview()"></div>
-            <div class="form-group"><label>Where to show</label>
+
+            <!-- ===== NEW: SLOT-AWARE POSITION DROPDOWN ===== -->
+            <div class="form-group"><label>Where to show (slot)</label>
               <select id="adPosition">
-                <option value="home" selected>🏠 Home Page (recommended)</option>
-                <option value="all">🌍 All Pages (Home + Promo + Song)</option>
-                <option value="song">🎵 Song Page Only</option>
-                <option value="promo">📢 Promo Page Only</option>
+                <optgroup label="🏠 Home Page">
+                  <option value="home-1" selected>🏠 Home — Ad 1 (story text slot)</option>
+                  <option value="home-2">🏠 Home — Ad 2 (after CTA button)</option>
+                </optgroup>
+                <optgroup label="📢 Promo Page">
+                  <option value="promo-1">📢 Promo — Ad 1 (after stats)</option>
+                  <option value="promo-2">📢 Promo — Ad 2 (after services)</option>
+                </optgroup>
+                <optgroup label="🎵 Song Page">
+                  <option value="song-1">🎵 Song — Ad 1 (song.html)</option>
+                </optgroup>
+                <optgroup label="🌍 Everywhere">
+                  <option value="all">🌍 All Pages (every slot)</option>
+                </optgroup>
               </select>
+              <p style="font-size:10px; color:#666; margin-top:6px; line-height:1.5;">"All Pages" shows this ad in every available slot on every page.</p>
             </div>
+            <!-- ===== END NEW ===== -->
+
             <div class="form-group"><label>Status</label>
               <select id="adActive"><option value="true">Active</option><option value="false">Hidden</option></select>
             </div>
@@ -645,6 +661,21 @@
 
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
+    // ===== POSITION LABELS (friendly names) =====
+    const POSITION_LABELS = {
+      'home-1': '🏠 Home Ad 1',
+      'home-2': '🏠 Home Ad 2',
+      'promo-1': '📢 Promo Ad 1',
+      'promo-2': '📢 Promo Ad 2',
+      'song-1': '🎵 Song Ad',
+      'all': '🌍 All Pages',
+      // legacy
+      'home': '🏠 Home (legacy)',
+      'promo': '📢 Promo (legacy)',
+      'song': '🎵 Song (legacy)'
+    };
+    function positionLabel(p) { return POSITION_LABELS[p] || p || '—'; }
+
     function escapeHtml(s) {
       if (s === null || s === undefined) return '';
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -909,24 +940,15 @@
       }
     }
 
-    // ===== ADS SUB-TABS (FIXED — no more stacking) =====
+    // ===== ADS SUB-TABS =====
     window.adsSubTab = function(id, btn) {
-      // Scope to the ADS page only (works even without an #pageAds id)
       const adsPage = btn.closest('.page');
       if (!adsPage) return;
-
-      // 1. Remove "active" from every sub-tab in this page
       adsPage.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
-
-      // 2. Remove "active" from every sub-content in this page
       adsPage.querySelectorAll('.sub-content').forEach(c => c.classList.remove('active'));
-
-      // 3. Activate only the clicked tab + its matching content
       btn.classList.add('active');
       const target = document.getElementById('ads-sec-' + id);
       if (target) target.classList.add('active');
-
-      // 4. Lazy-load content for that section
       if (id === 'texts') loadTexts();
       if (id === 'images') loadImages();
       if (id === 'videos') loadArtistVideos();
@@ -980,9 +1002,9 @@
       if (allAds.length === 0) { list.innerHTML = '<p class="empty">No ads yet. Create your first one above!</p>'; return; }
       list.innerHTML = allAds.map(a => {
         const statusPill = a.active ? '<span class="ad-status-pill live">LIVE</span>' : '<span class="ad-status-pill hidden">HIDDEN</span>';
-        const pos = a.position || 'song';
+        const slotPill = '<span class="ad-status-pill slot">' + escapeHtml(positionLabel(a.position)) + '</span>';
         const desc = a.description ? a.description : '(No description)';
-        return '<div class="ad-card"><img src="' + (a.image_url || '') + '" alt="' + (a.title || 'Ad') + '" onerror="this.style.opacity=0.3;"><div class="info"><h4>' + escapeHtml(a.title || 'Untitled Ad') + '</h4><p>' + escapeHtml(desc) + '</p><p style="color:#666; margin-top:4px;">Position: <strong style="color:#ff0033;">' + pos + '</strong> • ' + statusPill + '</p></div><div class="actions"><button class="action-btn edit-btn" onclick=\'editAd(' + JSON.stringify(a).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" onclick="deleteAd(' + a.id + ')"><i class="fas fa-trash"></i></button></div></div>';
+        return '<div class="ad-card"><img src="' + (a.image_url || '') + '" alt="' + (a.title || 'Ad') + '" onerror="this.style.opacity=0.3;"><div class="info"><h4>' + escapeHtml(a.title || 'Untitled Ad') + '</h4><p>' + escapeHtml(desc) + '</p><p style="margin-top:4px;">' + slotPill + ' ' + statusPill + '</p></div><div class="actions"><button class="action-btn edit-btn" onclick=\'editAd(' + JSON.stringify(a).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" onclick="deleteAd(' + a.id + ')"><i class="fas fa-trash"></i></button></div></div>';
       }).join('');
     }
     window.saveAd = async function() {
@@ -1022,7 +1044,7 @@
       document.getElementById('adTitle').value = ad.title || '';
       document.getElementById('adDescription').value = ad.description || '';
       document.getElementById('adLink').value = ad.link_url || '';
-      document.getElementById('adPosition').value = ad.position || 'home';
+      document.getElementById('adPosition').value = ad.position || 'home-1';
       document.getElementById('adActive').value = ad.active ? 'true' : 'false';
       document.getElementById('adTitleColor').value = ad.title_color || '#ffffff';
       document.getElementById('adTitleSize').value = ad.title_size || 'medium';
@@ -1041,7 +1063,7 @@
       document.getElementById('adTitle').value = '';
       document.getElementById('adDescription').value = '';
       document.getElementById('adLink').value = '';
-      document.getElementById('adPosition').value = 'home';
+      document.getElementById('adPosition').value = 'home-1';
       document.getElementById('adActive').value = 'true';
       document.getElementById('adTitleColor').value = '#ffffff';
       document.getElementById('adTitleSize').value = 'medium';
