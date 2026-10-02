@@ -117,22 +117,21 @@
   }
   .song-card-info .date, .top-album-date { font-size: 12.5px; color: var(--text2); font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* ===== LINK-STYLE HOVER / TAP EFFECT ===== */
+  /* ===== TAP/HOVER EFFECT (link-feel, no underline) ===== */
   .song-card, .top-album-card { transition: background 0.15s ease; border-radius: 10px; }
+  .song-card-info h3, .top-album-info .top-album-name { transition: color 0.15s ease; }
+
+  /* Desktop hover */
   @media (hover: hover) and (pointer: fine) {
-    .song-card:hover .song-card-info h3,
-    .top-album-card:hover .top-album-info .top-album-name {
-      text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px;
-      text-decoration-color: #000000; color: #000000 !important;
-    }
     .song-card:hover, .top-album-card:hover { background: rgba(0, 0, 0, 0.03); }
+    .song-card:hover .song-card-info h3,
+    .top-album-card:hover .top-album-info .top-album-name { color: var(--accent); }
   }
+
+  /* Tap (mobile + desktop press) */
+  .song-card:active, .top-album-card:active { background: rgba(255, 0, 51, 0.06); }
   .song-card:active .song-card-info h3,
-  .top-album-card:active .top-album-info .top-album-name {
-    text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px;
-    text-decoration-color: #000000; color: #000000 !important;
-  }
-  .song-card:active, .top-album-card:active { background: rgba(0, 0, 0, 0.06); }
+  .top-album-card:active .top-album-info .top-album-name { color: var(--accent); }
 
   /* ===== PAGE BUILDER BLOCKS ===== */
   .pb-block { margin-bottom: 20px; padding: 18px 20px; border-radius: 14px; }
