@@ -287,7 +287,10 @@
             <div class="form-group"><label>Link URL</label><input type="text" id="adLink" placeholder="https://wa.me/233..." oninput="updateAdPreview()"></div>
             <div class="form-group"><label>Where to show</label>
               <select id="adPosition">
-                <option value="song">Song Page</option><option value="home">Home Page</option><option value="promo">Promo Page</option><option value="all">All Pages</option>
+                <option value="home" selected>🏠 Home Page (recommended)</option>
+                <option value="all">🌍 All Pages (Home + Promo + Song)</option>
+                <option value="song">🎵 Song Page Only</option>
+                <option value="promo">📢 Promo Page Only</option>
               </select>
             </div>
             <div class="form-group"><label>Status</label>
@@ -906,12 +909,24 @@
       }
     }
 
-    // ===== ADS SUB-TABS =====
+    // ===== ADS SUB-TABS (FIXED — no more stacking) =====
     window.adsSubTab = function(id, btn) {
-      document.querySelectorAll('#pageAds .sub-tab').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('#pageAds .sub-content').forEach(c => c.classList.remove('active'));
+      // Scope to the ADS page only (works even without an #pageAds id)
+      const adsPage = btn.closest('.page');
+      if (!adsPage) return;
+
+      // 1. Remove "active" from every sub-tab in this page
+      adsPage.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+
+      // 2. Remove "active" from every sub-content in this page
+      adsPage.querySelectorAll('.sub-content').forEach(c => c.classList.remove('active'));
+
+      // 3. Activate only the clicked tab + its matching content
       btn.classList.add('active');
-      document.getElementById('ads-sec-' + id).classList.add('active');
+      const target = document.getElementById('ads-sec-' + id);
+      if (target) target.classList.add('active');
+
+      // 4. Lazy-load content for that section
       if (id === 'texts') loadTexts();
       if (id === 'images') loadImages();
       if (id === 'videos') loadArtistVideos();
@@ -1007,7 +1022,7 @@
       document.getElementById('adTitle').value = ad.title || '';
       document.getElementById('adDescription').value = ad.description || '';
       document.getElementById('adLink').value = ad.link_url || '';
-      document.getElementById('adPosition').value = ad.position || 'song';
+      document.getElementById('adPosition').value = ad.position || 'home';
       document.getElementById('adActive').value = ad.active ? 'true' : 'false';
       document.getElementById('adTitleColor').value = ad.title_color || '#ffffff';
       document.getElementById('adTitleSize').value = ad.title_size || 'medium';
@@ -1026,7 +1041,7 @@
       document.getElementById('adTitle').value = '';
       document.getElementById('adDescription').value = '';
       document.getElementById('adLink').value = '';
-      document.getElementById('adPosition').value = 'song';
+      document.getElementById('adPosition').value = 'home';
       document.getElementById('adActive').value = 'true';
       document.getElementById('adTitleColor').value = '#ffffff';
       document.getElementById('adTitleSize').value = 'medium';
