@@ -130,6 +130,49 @@
   .color-row select { flex: 1; }
   .color-row .hex-label { font-size: 11px; color: var(--text2); min-width: 60px; text-align: right; font-family: monospace; }
 
+  /* ===== MULTI-SELECT CHIP GRID (for page slots) ===== */
+  .slot-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .slot-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    padding: 8px 10px;
+    background: #0a0a0a;
+    border: 1.5px solid #2a2a2a;
+    border-radius: 10px;
+    color: #aaa;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    transition: all 0.12s;
+    min-height: 36px;
+    line-height: 1.2;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .slot-chip:active { transform: scale(0.96); }
+  .slot-chip.on {
+    background: rgba(255, 0, 51, 0.12);
+    border-color: var(--accent);
+    color: #fff;
+  }
+  .slot-chip .chip-name { flex: 1; overflow: hidden; text-overflow: ellipsis; }
+  .slot-chip .chip-check { width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid #444; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; color: transparent; }
+  .slot-chip.on .chip-check { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .slot-chip.all-chip { grid-column: 1 / -1; }
+
+  .slot-summary { font-size: 10px; color: #666; margin-top: 8px; line-height: 1.5; }
+  .slot-summary .pill { display: inline-block; background: rgba(255,0,51,0.15); color: #ff6680; font-weight: 800; padding: 2px 6px; border-radius: 5px; margin: 2px 3px 0 0; font-size: 9px; }
+
   .live-preview-box { background: #050505; border: 1px solid #222; border-radius: 14px; padding: 16px; margin-bottom: 14px; }
   .live-preview-box .lp-label { font-size: 10px; font-weight: 900; letter-spacing: 2px; color: #666; text-transform: uppercase; margin-bottom: 12px; text-align: center; }
   .lp-card { background: #0a0a0a; border-radius: 12px; overflow: hidden; }
@@ -154,7 +197,7 @@
   .ad-card .ad-status-pill { display: inline-block; font-size: 9px; font-weight: 900; padding: 2px 8px; border-radius: 6px; letter-spacing: 0.5px; text-transform: uppercase; }
   .ad-status-pill.live { background: rgba(0,204,68,0.15); color: #00cc44; }
   .ad-status-pill.hidden { background: rgba(255,255,255,0.08); color: #888; }
-  .ad-status-pill.slot { background: rgba(29,155,240,0.15); color: #1d9bf0; }
+  .ad-status-pill.slot { background: rgba(29,155,240,0.15); color: #1d9bf0; margin-right: 4px; margin-bottom: 3px; }
   .ad-card .actions { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
   .ad-card .action-btn { background: transparent; border: none; font-size: 15px; cursor: pointer; padding: 6px; border-radius: 8px; }
   .ad-card .edit-btn { color: #00cc44; }
@@ -287,27 +330,36 @@
             </div>
             <div class="form-group"><label>Link URL</label><input type="text" id="adLink" placeholder="https://wa.me/233..." oninput="updateAdPreview()"></div>
 
-            <!-- ===== NEW: SLOT-AWARE POSITION DROPDOWN ===== -->
-            <div class="form-group"><label>Where to show (slot)</label>
-              <select id="adPosition">
-                <optgroup label="🏠 Home Page">
-                  <option value="home-1" selected>🏠 Home — Ad 1 (story text slot)</option>
-                  <option value="home-2">🏠 Home — Ad 2 (after CTA button)</option>
-                </optgroup>
-                <optgroup label="📢 Promo Page">
-                  <option value="promo-1">📢 Promo — Ad 1 (after stats)</option>
-                  <option value="promo-2">📢 Promo — Ad 2 (after services)</option>
-                </optgroup>
-                <optgroup label="🎵 Song Page">
-                  <option value="song-1">🎵 Song — Ad 1 (song.html)</option>
-                </optgroup>
-                <optgroup label="🌍 Everywhere">
-                  <option value="all">🌍 All Pages (every slot)</option>
-                </optgroup>
-              </select>
-              <p style="font-size:10px; color:#666; margin-top:6px; line-height:1.5;">"All Pages" shows this ad in every available slot on every page.</p>
+            <!-- ===== MULTI-SELECT SLOT GRID ===== -->
+            <div class="form-group">
+              <label>Where to show (tap to select multiple)</label>
+              <div class="slot-grid" id="slotGrid">
+                <button type="button" class="slot-chip" data-pos="home-1" onclick="toggleSlot(this)"><span class="chip-name">Home Ad 1</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="home-2" onclick="toggleSlot(this)"><span class="chip-name">Home Ad 2</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="song-1" onclick="toggleSlot(this)"><span class="chip-name">Song Ad</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="promo-1" onclick="toggleSlot(this)"><span class="chip-name">Promo Ad 1</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="promo-2" onclick="toggleSlot(this)"><span class="chip-name">Promo Ad 2</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="artist-1" onclick="toggleSlot(this)"><span class="chip-name">Artist Ad 1</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="artist-2" onclick="toggleSlot(this)"><span class="chip-name">Artist Ad 2</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="album-1" onclick="toggleSlot(this)"><span class="chip-name">Album Ad 1</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="album-2" onclick="toggleSlot(this)"><span class="chip-name">Album Ad 2</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="albums-1" onclick="toggleSlot(this)"><span class="chip-name">Albums Ad 1</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="albums-2" onclick="toggleSlot(this)"><span class="chip-name">Albums Ad 2</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="artists-1" onclick="toggleSlot(this)"><span class="chip-name">Artists Ad 1</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="artists-2" onclick="toggleSlot(this)"><span class="chip-name">Artists Ad 2</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="videos-1" onclick="toggleSlot(this)"><span class="chip-name">Videos Ad 1</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="videos-2" onclick="toggleSlot(this)"><span class="chip-name">Videos Ad 2</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="weekend-1" onclick="toggleSlot(this)"><span class="chip-name">Weekend Ad 1</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="weekend-2" onclick="toggleSlot(this)"><span class="chip-name">Weekend Ad 2</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="search-1" onclick="toggleSlot(this)"><span class="chip-name">Search Ad 1</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="search-2" onclick="toggleSlot(this)"><span class="chip-name">Search Ad 2</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="about-1" onclick="toggleSlot(this)"><span class="chip-name">About Ad 1</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip" data-pos="about-2" onclick="toggleSlot(this)"><span class="chip-name">About Ad 2</span><span class="chip-check">✓</span></button>
+                <button type="button" class="slot-chip all-chip" data-pos="all" onclick="toggleSlot(this)"><span class="chip-name">All Pages (every slot everywhere)</span><span class="chip-check">✓</span></button>
+              </div>
+              <div class="slot-summary" id="slotSummary">Nothing selected yet — tap chips above.</div>
             </div>
-            <!-- ===== END NEW ===== -->
+            <!-- ===== END ===== -->
 
             <div class="form-group"><label>Status</label>
               <select id="adActive"><option value="true">Active</option><option value="false">Hidden</option></select>
@@ -436,7 +488,6 @@
           </div>
         </div>
 
-        <!-- ===== PAGE BUILDER ===== -->
         <div class="sub-content" id="ads-sec-builder">
           <div class="ad-form-box">
             <div class="ad-form-box-title"><i class="fas fa-layer-group"></i> <span id="cbFormTitle">Add Content Block</span></div>
@@ -444,17 +495,17 @@
 
             <div class="form-group"><label>Page (where to show)</label>
               <select id="cbPage">
-                <option value="home">🏠 Home Page</option>
-                <option value="about">ℹ️ About Page</option>
-                <option value="promo">📢 Promo Page</option>
-                <option value="artist">🎤 Artist Page (every artist)</option>
-                <option value="song">🎵 Song Page (every song)</option>
-                <option value="album">💿 Album Page (single album)</option>
-                <option value="albums">📀 Albums Page (list)</option>
-                <option value="artists">👥 Artists Page (list)</option>
-                <option value="videos">🎬 Videos Page</option>
-                <option value="weekend">🔥 Weekend Trend Page</option>
-                <option value="search">🔍 Search Page</option>
+                <option value="home">Home Page</option>
+                <option value="about">About Page</option>
+                <option value="promo">Promo Page</option>
+                <option value="artist">Artist Page (every artist)</option>
+                <option value="song">Song Page (every song)</option>
+                <option value="album">Album Page (single album)</option>
+                <option value="albums">Albums Page (list)</option>
+                <option value="artists">Artists Page (list)</option>
+                <option value="videos">Videos Page</option>
+                <option value="weekend">Weekend Trend Page</option>
+                <option value="search">Search Page</option>
               </select>
             </div>
 
@@ -661,20 +712,22 @@
 
     const VERIFY_BADGE = '<svg class="verify-badge" viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
 
-    // ===== POSITION LABELS (friendly names) =====
-    const POSITION_LABELS = {
-      'home-1': '🏠 Home Ad 1',
-      'home-2': '🏠 Home Ad 2',
-      'promo-1': '📢 Promo Ad 1',
-      'promo-2': '📢 Promo Ad 2',
-      'song-1': '🎵 Song Ad',
-      'all': '🌍 All Pages',
-      // legacy
-      'home': '🏠 Home (legacy)',
-      'promo': '📢 Promo (legacy)',
-      'song': '🎵 Song (legacy)'
+    const SLOT_LABELS = {
+      'home-1': 'Home Ad 1', 'home-2': 'Home Ad 2',
+      'song-1': 'Song Ad',
+      'promo-1': 'Promo Ad 1', 'promo-2': 'Promo Ad 2',
+      'artist-1': 'Artist Ad 1', 'artist-2': 'Artist Ad 2',
+      'album-1': 'Album Ad 1', 'album-2': 'Album Ad 2',
+      'albums-1': 'Albums Ad 1', 'albums-2': 'Albums Ad 2',
+      'artists-1': 'Artists Ad 1', 'artists-2': 'Artists Ad 2',
+      'videos-1': 'Videos Ad 1', 'videos-2': 'Videos Ad 2',
+      'weekend-1': 'Weekend Ad 1', 'weekend-2': 'Weekend Ad 2',
+      'search-1': 'Search Ad 1', 'search-2': 'Search Ad 2',
+      'about-1': 'About Ad 1', 'about-2': 'About Ad 2',
+      'all': 'All Pages',
+      'home': 'Home (legacy)', 'promo': 'Promo (legacy)', 'song': 'Song (legacy)'
     };
-    function positionLabel(p) { return POSITION_LABELS[p] || p || '—'; }
+    function slotLabel(p) { return SLOT_LABELS[p] || p || ''; }
 
     function escapeHtml(s) {
       if (s === null || s === undefined) return '';
@@ -695,6 +748,40 @@
     let cropper = null;
     let cropTargetInput = null;
     let cropTargetPreview = null;
+
+    // ===== SLOT CHIP HELPERS =====
+    window.toggleSlot = function(btn) {
+      const pos = btn.dataset.pos;
+      // If "all" is tapped, uncheck all others
+      if (pos === 'all' && !btn.classList.contains('on')) {
+        document.querySelectorAll('#slotGrid .slot-chip').forEach(c => c.classList.remove('on'));
+      } else if (pos !== 'all') {
+        // If picking a specific one, remove "all"
+        const allChip = document.querySelector('#slotGrid .slot-chip[data-pos="all"]');
+        if (allChip) allChip.classList.remove('on');
+      }
+      btn.classList.toggle('on');
+      updateSlotSummary();
+    };
+    function getSelectedSlots() {
+      const out = [];
+      document.querySelectorAll('#slotGrid .slot-chip.on').forEach(c => out.push(c.dataset.pos));
+      return out;
+    }
+    function setSelectedSlots(arr) {
+      document.querySelectorAll('#slotGrid .slot-chip').forEach(c => c.classList.remove('on'));
+      (arr || []).forEach(p => {
+        const chip = document.querySelector('#slotGrid .slot-chip[data-pos="' + p + '"]');
+        if (chip) chip.classList.add('on');
+      });
+      updateSlotSummary();
+    }
+    function updateSlotSummary() {
+      const el = document.getElementById('slotSummary');
+      const sel = getSelectedSlots();
+      if (sel.length === 0) { el.innerHTML = 'Nothing selected yet — tap chips above.'; return; }
+      el.innerHTML = 'Showing on: ' + sel.map(p => '<span class="pill">' + escapeHtml(slotLabel(p)) + '</span>').join('');
+    }
 
     window.togglePassword = function() {
       const input = document.getElementById('passwordInput');
@@ -746,6 +833,20 @@
       btn.classList.add('active');
       document.getElementById(id).classList.add('active');
     }
+
+    window.adsSubTab = function(id, btn) {
+      const adsPage = btn.closest('.page');
+      if (!adsPage) return;
+      adsPage.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+      adsPage.querySelectorAll('.sub-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      const target = document.getElementById('ads-sec-' + id);
+      if (target) target.classList.add('active');
+      if (id === 'texts') loadTexts();
+      if (id === 'images') loadImages();
+      if (id === 'videos') loadArtistVideos();
+      if (id === 'builder') { loadCb(); cbTypeChanged(); }
+    };
 
     window.handleAdFile = function(event) {
       const file = event.target.files && event.target.files[0];
@@ -825,7 +926,6 @@
       closeCropModal();
     };
 
-    // ===== ARTISTS =====
     async function loadArtists() {
       const list = document.getElementById('artistsList');
       try {
@@ -837,17 +937,14 @@
           if (!nameSet.has(name)) nameSet.set(name, false);
           if (s.verified) nameSet.set(name, true);
         });
-
         let profiles = [];
         try {
           const aRes = await fetch(SUPABASE_URL + '/rest/v1/artists?select=*', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
           profiles = await aRes.json();
           if (!Array.isArray(profiles)) profiles = [];
         } catch (e) { profiles = []; }
-
         const profileMap = {};
         profiles.forEach(p => { profileMap[(p.name || '').toLowerCase()] = p; });
-
         allArtists = [...nameSet.keys()].map(name => {
           const p = profileMap[name.toLowerCase()];
           if (p) return p;
@@ -919,10 +1016,8 @@
       const instagram = document.getElementById('artistInstagram').value.trim();
       const youtube = document.getElementById('artistYoutube').value.trim();
       const spotify = document.getElementById('artistSpotify').value.trim();
-
       if (!name) { status.style.color = '#ff0033'; status.innerText = 'Name required'; return; }
       status.style.color = '#ffcc00'; status.innerText = 'Saving...';
-
       try {
         const payload = { name, profile_pic, bio, tiktok, instagram, youtube, spotify };
         let res;
@@ -940,22 +1035,6 @@
       }
     }
 
-    // ===== ADS SUB-TABS =====
-    window.adsSubTab = function(id, btn) {
-      const adsPage = btn.closest('.page');
-      if (!adsPage) return;
-      adsPage.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
-      adsPage.querySelectorAll('.sub-content').forEach(c => c.classList.remove('active'));
-      btn.classList.add('active');
-      const target = document.getElementById('ads-sec-' + id);
-      if (target) target.classList.add('active');
-      if (id === 'texts') loadTexts();
-      if (id === 'images') loadImages();
-      if (id === 'videos') loadArtistVideos();
-      if (id === 'builder') { loadCb(); cbTypeChanged(); }
-    };
-
-    // ===== LIVE ADS =====
     window.updateAdPreview = function() {
       const title = document.getElementById('adTitle').value.trim();
       const desc = document.getElementById('adDescription').value.trim();
@@ -965,24 +1044,19 @@
       const descColor = document.getElementById('adDescColor').value;
       const descSize = document.getElementById('adDescSize').value;
       const link = document.getElementById('adLink').value.trim();
-
       document.getElementById('adTitleColorHex').innerText = titleColor;
       document.getElementById('adDescColorHex').innerText = descColor;
-
       const lpImg = document.getElementById('lpImg');
       if (img) { lpImg.src = img; lpImg.style.display = 'block'; }
       else { lpImg.style.display = 'none'; }
-
       const lpTitle = document.getElementById('lpTitle');
       lpTitle.innerText = title || 'Your Title Here';
       lpTitle.style.color = titleColor;
       lpTitle.className = 'lp-title sz-' + titleSize;
-
       const lpDesc = document.getElementById('lpDesc');
       lpDesc.innerText = desc || 'Your description will appear here...';
       lpDesc.style.color = descColor;
       lpDesc.className = 'lp-desc sz-desc-' + descSize;
-
       document.getElementById('lpCta').style.display = link ? 'inline-flex' : 'none';
     }
 
@@ -1002,9 +1076,10 @@
       if (allAds.length === 0) { list.innerHTML = '<p class="empty">No ads yet. Create your first one above!</p>'; return; }
       list.innerHTML = allAds.map(a => {
         const statusPill = a.active ? '<span class="ad-status-pill live">LIVE</span>' : '<span class="ad-status-pill hidden">HIDDEN</span>';
-        const slotPill = '<span class="ad-status-pill slot">' + escapeHtml(positionLabel(a.position)) + '</span>';
+        const positions = (a.position || '').split(',').map(x => x.trim()).filter(x => x);
+        const slotPills = positions.map(p => '<span class="ad-status-pill slot">' + escapeHtml(slotLabel(p)) + '</span>').join('');
         const desc = a.description ? a.description : '(No description)';
-        return '<div class="ad-card"><img src="' + (a.image_url || '') + '" alt="' + (a.title || 'Ad') + '" onerror="this.style.opacity=0.3;"><div class="info"><h4>' + escapeHtml(a.title || 'Untitled Ad') + '</h4><p>' + escapeHtml(desc) + '</p><p style="margin-top:4px;">' + slotPill + ' ' + statusPill + '</p></div><div class="actions"><button class="action-btn edit-btn" onclick=\'editAd(' + JSON.stringify(a).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" onclick="deleteAd(' + a.id + ')"><i class="fas fa-trash"></i></button></div></div>';
+        return '<div class="ad-card"><img src="' + (a.image_url || '') + '" alt="' + (a.title || 'Ad') + '" onerror="this.style.opacity=0.3;"><div class="info"><h4>' + escapeHtml(a.title || 'Untitled Ad') + '</h4><p>' + escapeHtml(desc) + '</p><p style="margin-top:4px;">' + slotPills + ' ' + statusPill + '</p></div><div class="actions"><button class="action-btn edit-btn" onclick=\'editAd(' + JSON.stringify(a).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" onclick="deleteAd(' + a.id + ')"><i class="fas fa-trash"></i></button></div></div>';
       }).join('');
     }
     window.saveAd = async function() {
@@ -1014,16 +1089,16 @@
       const title = document.getElementById('adTitle').value.trim();
       const description = document.getElementById('adDescription').value.trim();
       const link_url = document.getElementById('adLink').value.trim();
-      const position = document.getElementById('adPosition').value;
+      const positions = getSelectedSlots();
       const active = document.getElementById('adActive').value === 'true';
       const title_color = document.getElementById('adTitleColor').value;
       const title_size = document.getElementById('adTitleSize').value;
       const description_color = document.getElementById('adDescColor').value;
       const description_size = document.getElementById('adDescSize').value;
-
       if (!image_url) { status.style.color = '#ff0033'; status.innerText = 'Please add or crop an image first!'; return; }
+      if (positions.length === 0) { status.style.color = '#ff0033'; status.innerText = 'Please tap at least one page slot!'; return; }
       status.style.color = '#ffcc00'; status.innerText = 'Saving...';
-
+      const position = positions.join(',');
       try {
         const payload = { image_url, title, description, link_url, position, active, title_color, title_size, description_color, description_size };
         let res;
@@ -1044,7 +1119,8 @@
       document.getElementById('adTitle').value = ad.title || '';
       document.getElementById('adDescription').value = ad.description || '';
       document.getElementById('adLink').value = ad.link_url || '';
-      document.getElementById('adPosition').value = ad.position || 'home-1';
+      const positions = (ad.position || '').split(',').map(x => x.trim()).filter(x => x);
+      setSelectedSlots(positions.length ? positions : ['home-1']);
       document.getElementById('adActive').value = ad.active ? 'true' : 'false';
       document.getElementById('adTitleColor').value = ad.title_color || '#ffffff';
       document.getElementById('adTitleSize').value = ad.title_size || 'medium';
@@ -1063,7 +1139,7 @@
       document.getElementById('adTitle').value = '';
       document.getElementById('adDescription').value = '';
       document.getElementById('adLink').value = '';
-      document.getElementById('adPosition').value = 'home-1';
+      setSelectedSlots(['home-1']);
       document.getElementById('adActive').value = 'true';
       document.getElementById('adTitleColor').value = '#ffffff';
       document.getElementById('adTitleSize').value = 'medium';
@@ -1083,7 +1159,6 @@
       } catch (e) { alert('Could not delete.'); }
     };
 
-    // ===== RAW TEXTS =====
     async function loadTexts() {
       const list = document.getElementById('textsList');
       list.innerHTML = '<p class="empty">Loading texts...</p>';
@@ -1160,7 +1235,6 @@
       } catch (e) { alert('Could not delete.'); }
     };
 
-    // ===== IMAGES =====
     window.updateImgPreview = function() {
       const url = document.getElementById('imgUrl').value.trim();
       const p = document.getElementById('imgPreview');
@@ -1252,7 +1326,6 @@
       } catch (e) { alert('Could not delete.'); }
     };
 
-    // ===== ARTIST VIDEOS =====
     function ytId(url) {
       if (!url) return '';
       if (url.includes('youtu.be/')) return url.split('youtu.be/')[1].split('?')[0];
@@ -1363,25 +1436,21 @@
       } catch (e) { alert('Could not delete.'); }
     };
 
-    // ===== PAGE BUILDER =====
     window.cbTypeChanged = function() {
       const type = document.getElementById('cbType').value;
       const contentLabel = document.getElementById('cbContentLabel');
       const contentGroup = document.getElementById('cbContentGroup');
       const imgGroup = document.getElementById('cbImageUploadGroup');
       const btnGroup = document.getElementById('cbButtonGroup');
-
       imgGroup.style.display = 'none';
       btnGroup.style.display = 'none';
       contentGroup.style.display = 'block';
-
       if (type === 'text') { contentLabel.innerText = 'Text Content'; }
       else if (type === 'heading') { contentLabel.innerText = 'Heading Text'; }
       else if (type === 'hero') { contentLabel.innerText = 'Hero Text (big tagline)'; btnGroup.style.display = 'block'; }
       else if (type === 'image') { contentGroup.style.display = 'none'; imgGroup.style.display = 'block'; }
       else if (type === 'button') { contentLabel.innerText = 'Button Text'; btnGroup.style.display = 'block'; }
       else if (type === 'spacer') { contentLabel.innerText = 'Enter height in px (e.g. 40)'; }
-
       cbPreview();
     };
 
@@ -1395,20 +1464,14 @@
       const bgEnabled = document.getElementById('cbBgEnabled').value;
       const bg = document.getElementById('cbBg').value;
       const btnText = document.getElementById('cbButtonText').value;
-      const btnLink = document.getElementById('cbButtonLink').value;
-
       document.getElementById('cbColorHex').innerText = color;
       document.getElementById('cbBgHex').innerText = bg;
-
       const sizes = { small: '12px', medium: '15px', large: '20px', xlarge: '28px', huge: '38px' };
       const weights = { normal: '500', bold: '800', black: '900' };
-
       const preview = document.getElementById('cbPreview');
       preview.style.background = bgEnabled === 'yes' ? bg : '#050505';
       preview.style.textAlign = align;
-
       let html = '';
-
       if (type === 'spacer') {
         const h = parseInt(content) || 40;
         html = '<div style="height:' + h + 'px;"></div>';
@@ -1482,16 +1545,13 @@
       const bgEnabled = document.getElementById('cbBgEnabled').value;
       const bg_color = bgEnabled === 'yes' ? document.getElementById('cbBg').value : null;
       const sort_order = parseInt(document.getElementById('cbSort').value) || 0;
-
       if (block_type !== 'spacer' && block_type !== 'image' && !content.trim()) {
         status.style.color = '#ff0033'; status.innerText = 'Content is required!'; return;
       }
       if (block_type === 'image' && !content.trim()) {
         status.style.color = '#ff0033'; status.innerText = 'Please upload an image first!'; return;
       }
-
       status.style.color = '#ffcc00'; status.innerText = 'Saving...';
-
       try {
         const payload = { page_key, block_type, content, button_text, button_link, text_color, text_size, text_align, font_weight, bg_color, sort_order, active: true };
         const url = editingId ? SUPABASE_URL + '/rest/v1/content_blocks?id=eq.' + editingId : SUPABASE_URL + '/rest/v1/content_blocks';
@@ -1554,7 +1614,6 @@
       } catch (e) { alert('Could not delete.'); }
     };
 
-    // ===== VERIFY =====
     async function loadVerifyList() {
       const list = document.getElementById('verifyList');
       list.innerHTML = '<p class="empty">Loading...</p>';
@@ -1565,10 +1624,8 @@
         ]);
         const songs = await songsRes.json();
         const artistProfiles = await artistsRes.json();
-
         const profileMap = {};
         artistProfiles.forEach(a => { if (a.name) profileMap[a.name.trim().toLowerCase()] = a; });
-
         const map = {};
         songs.forEach(s => {
           const name = (s.artist_name || 'Samarid').trim();
@@ -1582,7 +1639,6 @@
             if (p.name) map[key].name = p.name;
           }
         });
-
         allVerifyList = Object.values(map).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
         renderVerifyList('');
       } catch (e) { list.innerHTML = '<p class="empty" style="color:#ff0033;">Error.</p>'; }
@@ -1652,7 +1708,6 @@
       } catch (e) { alert('Network error.'); }
     }
 
-    // ===== MANUAL VIDEOS =====
     function getYouTubeId(url) {
       if (!url) return '';
       if (url.includes('youtu.be/')) return url.split('youtu.be/')[1].split('?')[0];
@@ -1716,7 +1771,6 @@
       } catch (e) { alert('Network error.'); }
     }
 
-    // ===== YOUTUBE VIDEOS =====
     async function loadYouTubeVideos() {
       const container = document.getElementById('youtubeVideosList');
       try {
@@ -1747,6 +1801,9 @@
         </div>
       `).join('');
     }
+
+    // Initialize slot summary on load
+    updateSlotSummary();
   </script>
 </body>
 </html>
