@@ -6,12 +6,17 @@
 <title>Search - FlexTune</title>
 <meta name="description" content="Search songs, artists, videos, and albums on FlexTune — Africa's Music Hub.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script>
   (function() {
-    var theme = localStorage.getItem('samarid-theme') || 'light';
-    document.documentElement.setAttribute('data-theme', theme);
+    try {
+      var theme = localStorage.getItem('samarid-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch(e) {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
   })();
 </script>
 <style>
@@ -42,35 +47,50 @@
   }
   img { max-width: 100%; }
 
-  .header { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--border); padding: 12px; display: flex; align-items: center; gap: 8px; z-index: 100; }
-  .menu-btn { background: var(--card); color: var(--text); border: 1px solid var(--border); width: 42px; height: 42px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; flex-shrink: 0; padding: 0; }
-  .menu-btn span { display: block; width: 20px; height: 2px; background: var(--text); border-radius: 2px; }
-  .menu-btn:active { background: var(--accent); border-color: var(--accent); }
-  .menu-btn:active span { background: #fff; }
-  .logo { display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; flex: 1; min-width: 0; padding: 0 8px; }
-  .logo-text { font-size: 16px; font-weight: 900; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.5px; }
+  /* ===== HEADER ===== */
+  .header { background: #0a0a0a; border-bottom: 1px solid #222; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; min-height: 50px; position: relative; }
+  .menu-btn { width: 36px; height: 36px; background: transparent; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; transition: all 0.2s; }
+  .menu-btn .bar { display: block; width: 22px; height: 2.5px; background: #999999; border-radius: 2px; transition: all 0.3s ease; transform-origin: center; }
+  .menu-btn.open .bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .menu-btn.open .bar:nth-child(2) { opacity: 0; }
+  .menu-btn.open .bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  .menu-btn.menu-open { position: fixed; top: 14px; left: 14px; z-index: 10001; }
+
+  .logo { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; padding: 0 8px; min-width: 0; }
+  .logo-text { font-size: 16px; font-weight: 900; letter-spacing: -0.4px; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .logo-text span { color: var(--accent); }
-  .header-spacer { width: 42px; flex-shrink: 0; }
+  .header-spacer { width: 36px; flex-shrink: 0; }
 
-  .menu-dropdown { position: fixed; top: 66px; left: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); width: 250px; max-width: calc(100vw - 24px); max-height: 70vh; overflow-y: auto; display: none; z-index: 9999; }
-  .menu-dropdown.open { display: block; animation: menuPop 0.2s ease; }
-  @keyframes menuPop { from { opacity: 0; transform: translateY(-8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-  .menu-title { padding: 14px 18px 8px; font-size: 10px; color: var(--text2); letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
-  .menu-item { padding: 13px 18px; font-size: 14px; color: var(--text); cursor: pointer; display: flex; align-items: center; gap: 12px; text-decoration: none; transition: background 0.15s; }
-  .menu-item:active { background: var(--border); }
-  .menu-item i { width: 20px; text-align: center; font-size: 15px; color: var(--accent); flex-shrink: 0; }
-  .menu-item .label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .menu-divider { height: 1px; background: var(--border); margin: 4px 0; }
+  /* ===== MENU OVERLAY ===== */
+  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  .menu-overlay.open { opacity: 1; pointer-events: auto; }
 
-  .theme-toggle-row { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
-  .theme-toggle-label { font-size: 13px; color: var(--text); font-weight: 700; }
-  .theme-toggle-btns { display: flex; gap: 6px; }
-  .theme-toggle-btn { padding: 6px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; }
-  .theme-toggle-btn.active { border-color: var(--accent); color: var(--accent); }
+  /* ===== SLIDE-IN MENU ===== */
+  .menu-dropdown { position: fixed; top: 0; left: -320px; width: 290px; max-width: 85vw; height: 100vh; background: #141414; border-right: 1px solid #222; z-index: 9999; transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; box-shadow: 10px 0 50px rgba(0,0,0,0.6); padding-top: 60px; }
+  .menu-dropdown.open { left: 0; }
+  .menu-title { padding: 20px 26px 10px; font-size: 10px; color: #666; letter-spacing: 2.5px; font-weight: 800; text-transform: uppercase; border-top: 1px solid #1e1e1e; margin-top: 6px; }
+  .menu-title:first-child { border-top: none; margin-top: 0; }
+  .menu-item { padding: 16px 26px; font-size: 16px; color: #ffffff; cursor: pointer; display: flex; align-items: center; gap: 14px; text-decoration: none; transition: background 0.15s; background: transparent; border: none; width: 100%; font-family: inherit; text-align: left; font-weight: 700; letter-spacing: -0.2px; }
+  .menu-item:active { background: #1f1f1f; }
+  .menu-item .label { flex: 1; color: #ffffff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; font-size: 16px; }
+  .menu-item .arrow { color: #444; font-size: 12px; flex-shrink: 0; }
 
-  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; display: none; }
-  .menu-overlay.open { display: block; }
+  .theme-row { padding: 14px 26px 18px; display: flex; align-items: center; justify-content: space-between; }
+  .theme-label { font-size: 15px; color: #fff; font-weight: 700; }
+  .theme-toggle { display: flex; gap: 6px; }
+  .theme-btn { padding: 8px 14px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; color: #ccc; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .theme-btn.active { border-color: var(--accent); color: var(--accent); }
 
+  /* ===== SUB MODAL ===== */
+  .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+  .sub-modal.open { display: flex; }
+  .sub-modal-inner { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 30px 24px; text-align: center; max-width: 340px; width: 100%; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .sub-modal-btn { display: block; width: 100%; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; margin-bottom: 10px; }
+  .sub-modal-btn.confirm { background: #ff0033; color: #ffffff; }
+  .sub-modal-btn.close { background: transparent; color: var(--text2); font-size: 12px; }
+
+  /* ===== CONTENT ===== */
   .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
 
   .pb-block { margin-bottom: 20px; padding: 18px 20px; border-radius: 14px; }
@@ -109,24 +129,17 @@
   .result-video-play::before { content: ''; width: 0; height: 0; border-left: 8px solid #fff; border-top: 5px solid transparent; border-bottom: 5px solid transparent; margin-left: 2px; }
 
   .result-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; gap: 4px; }
-  
-  html[data-theme="light"] .result-cat { color: #000000; }
-  .result-cat { font-size: 10px; color: var(--accent); font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
 
-  .result-info .genre-country {
-      font-size: 10px;
-      font-weight: 600;
-      color: #8fdfa8;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 2px;
-  }
-  
-  html[data-theme="light"] .result-name { color: #000000; }
+  .result-cat { font-size: 10px; color: var(--accent); font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+  html[data-theme="light"] .result-cat { color: #000000; }
+
+  .result-info .genre-country { font-size: 10px; font-weight: 600; color: #8fdfa8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+
   .result-name { font-size: 13.5px; font-weight: 800; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color 0.15s ease; }
-  
-  html[data-theme="light"] .result-meta { color: #888888; }
+  html[data-theme="light"] .result-name { color: #000000; }
+
   .result-meta { font-size: 11px; color: var(--text2); font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  html[data-theme="light"] .result-meta { color: #888888; }
 
   .verify-badge { display: inline-block; width: 13px; height: 13px; vertical-align: middle; flex-shrink: 0; margin-left: 2px; }
 
@@ -152,43 +165,52 @@
 <body>
 
   <header class="header">
-    <button class="menu-btn" onclick="toggleMenu(event)" aria-label="Menu">
-      <span></span>
-      <span></span>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu(event)" aria-label="Menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
     </button>
-    <a href="index.html" class="logo"><span class="logo-text">FLEX<span>TUNE</span></span></a>
+    <a href="index.html" class="logo">
+      <span class="logo-text">FLEX<span>TUNE</span></span>
+    </a>
     <div class="header-spacer"></div>
   </header>
 
   <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
-  <div class="menu-dropdown" id="menuDropdown" onclick="event.stopPropagation()">
+  <div class="menu-dropdown" id="menuDropdown">
     <div class="menu-title">Navigation</div>
-    <a href="index.html" class="menu-item"><i class="fas fa-music"></i><span class="label">Music</span></a>
-    <a href="search.html" class="menu-item"><i class="fas fa-search"></i><span class="label">Search</span></a>
-    <a href="weekend.html" class="menu-item"><i class="fas fa-fire"></i><span class="label">Weekend Trend</span></a>
-    <a href="albums.html" class="menu-item"><i class="fas fa-compact-disc"></i><span class="label">Albums</span></a>
-    <a href="artists.html" class="menu-item"><i class="fas fa-user-group"></i><span class="label">Artists</span></a>
-    <a href="videos.html" class="menu-item"><i class="fas fa-video"></i><span class="label">Videos</span></a>
-    <div class="menu-divider"></div>
+    <a href="search.html" class="menu-item"><span class="label">Search</span><span class="arrow">→</span></a>
+    <a href="weekend.html" class="menu-item"><span class="label">Trend</span><span class="arrow">→</span></a>
+    <a href="index.html" class="menu-item"><span class="label">Music</span><span class="arrow">→</span></a>
+    <a href="albums.html" class="menu-item"><span class="label">Albums</span><span class="arrow">→</span></a>
+    <a href="artists.html" class="menu-item"><span class="label">Artists</span><span class="arrow">→</span></a>
+    <a href="videos.html" class="menu-item"><span class="label">Videos</span><span class="arrow">→</span></a>
+
+    <div class="menu-title">Subscribe</div>
+    <a href="#" onclick="fakeSubscribe(event)" class="menu-item">
+      <span class="label" style="color: #ff0033;"><i class="fab fa-youtube" style="margin-right: 10px;"></i>Subscribe</span>
+      <span class="arrow">→</span>
+    </a>
+
     <div class="menu-title">Settings</div>
-    <div class="theme-toggle-row">
-      <span class="theme-toggle-label">Theme</span>
-      <div class="theme-toggle-btns">
-        <button class="theme-toggle-btn" id="btnDark" onclick="setTheme('dark')">⚫ Dark</button>
-        <button class="theme-toggle-btn" id="btnLight" onclick="setTheme('light')">⚪ Light</button>
+    <div class="theme-row">
+      <span class="theme-label">Theme</span>
+      <div class="theme-toggle">
+        <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">Dark</button>
+        <button class="theme-btn" data-theme="light" onclick="setTheme('light')">Light</button>
       </div>
     </div>
-    <div class="menu-divider"></div>
+
     <div class="menu-title">More</div>
-    <a href="about.html" class="menu-item"><i class="fas fa-info-circle"></i><span class="label">About</span></a>
-    <a href="promo.html" class="menu-item"><i class="fas fa-bullhorn"></i><span class="label">Promo</span></a>
-    <a href="distributors.html" class="menu-item"><i class="fas fa-headphones"></i><span class="label">Get On Spotify</span></a>
+    <a href="about.html" class="menu-item"><span class="label">About</span><span class="arrow">→</span></a>
+    <a href="promo.html" class="menu-item"><span class="label">Promo</span><span class="arrow">→</span></a>
+    <a href="distributors.html" class="menu-item"><span class="label">Get On Spotify</span><span class="arrow">→</span></a>
   </div>
 
   <div class="container">
     <div class="search-box">
       <i class="fas fa-search search-icon-left"></i>
-      <input type="text" id="searchInput" placeholder="Search songs, artists, videos, albums..." autocomplete="off" autofocus>
+      <input type="text" id="searchInput" placeholder="Search songs, artists, videos, albums..." autocomplete="off">
       <button class="clear-btn" id="clearBtn" onclick="clearSearch()">✕</button>
     </div>
 
@@ -205,6 +227,16 @@
   </div>
 
   <footer class="footer"><span class="brand">FLEXTUNE</span> © 2026</footer>
+
+  <div class="sub-modal" id="subModal" onclick="closeSubModal()">
+    <div class="sub-modal-inner" onclick="event.stopPropagation()">
+      <div style="font-size: 40px; margin-bottom: 10px;">🎵</div>
+      <h2 style="font-size: 20px; font-weight: 900; margin-bottom: 10px;">Support FlexTune</h2>
+      <p style="font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.5;">Subscribe to the official YouTube channel!</p>
+      <a href="#" id="popupSubBtn" target="_blank" class="sub-modal-btn confirm">Subscribe on YouTube</a>
+      <button onclick="closeSubModal()" class="sub-modal-btn close">I'll do it later</button>
+    </div>
+  </div>
 
   <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
@@ -227,35 +259,64 @@
     let allVideos = [];
     let currentTab = 'all';
     let searchDebounce = null;
+    let lastResults = null;
 
-    function applyTheme() {
+    window.applySettings = function() {
       const theme = localStorage.getItem('samarid-theme') || 'light';
+      const accent = localStorage.getItem('samarid-accent') || '#ff0033';
       document.documentElement.setAttribute('data-theme', theme);
-      const btnDark = document.getElementById('btnDark');
-      const btnLight = document.getElementById('btnLight');
-      if (btnDark) btnDark.classList.toggle('active', theme === 'dark');
-      if (btnLight) btnLight.classList.toggle('active', theme === 'light');
+      document.documentElement.style.setProperty('--accent', accent);
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
     }
     window.setTheme = function(theme) {
       localStorage.setItem('samarid-theme', theme);
-      applyTheme();
+      applySettings();
     }
-    applyTheme();
 
     window.toggleMenu = function(e) {
       e.stopPropagation();
       const menu = document.getElementById('menuDropdown');
       const overlay = document.getElementById('menuOverlay');
-      if (menu.classList.contains('open')) { menu.classList.remove('open'); overlay.classList.remove('open'); }
-      else { menu.classList.add('open'); overlay.classList.add('open'); }
+      const btn = document.getElementById('menuBtn');
+      if (menu.classList.contains('open')) {
+        menu.classList.remove('open');
+        overlay.classList.remove('open');
+        btn.classList.remove('open');
+        btn.classList.remove('menu-open');
+      } else {
+        menu.classList.add('open');
+        overlay.classList.add('open');
+        btn.classList.add('open');
+        btn.classList.add('menu-open');
+      }
     }
-    window.closeMenu = function() { document.getElementById('menuDropdown').classList.remove('open'); document.getElementById('menuOverlay').classList.remove('open'); }
+    window.closeMenu = function() {
+      document.getElementById('menuDropdown').classList.remove('open');
+      document.getElementById('menuOverlay').classList.remove('open');
+      const btn = document.getElementById('menuBtn');
+      btn.classList.remove('open');
+      btn.classList.remove('menu-open');
+    }
+
+    window.fakeSubscribe = function(e) {
+      e.preventDefault();
+      const channelId = localStorage.getItem('samarid_channel_id');
+      const subLink = channelId
+        ? 'https://www.youtube.com/channel/' + channelId + '?sub_confirmation=1'
+        : 'https://youtube.com/@realsamarid?sub_confirmation=1';
+      document.getElementById('popupSubBtn').href = subLink;
+      document.getElementById('subModal').classList.add('open');
+    }
+    window.closeSubModal = function() {
+      document.getElementById('subModal').classList.remove('open');
+    }
 
     window.clearSearch = function() {
       document.getElementById('searchInput').value = '';
       document.getElementById('clearBtn').classList.remove('show');
       showInitialState();
       document.getElementById('searchInput').focus();
+      history.replaceState({}, '', 'search.html');
     }
 
     function showInitialState() {
@@ -391,18 +452,21 @@
 
     function performSearch(query) {
       const q = query.toLowerCase().trim();
-      if (!q) { showInitialState(); return; }
-      
-      const songs = allSongs.filter(s => 
-        (s.title || '').toLowerCase().includes(q) || 
-        (s.artist_name || '').toLowerCase().includes(q) || 
-        (s.featuring || '').toLowerCase().includes(q) || 
+      if (!q) { showInitialState(); lastResults = null; return; }
+
+      const songs = allSongs.filter(s =>
+        (s.title || '').toLowerCase().includes(q) ||
+        (s.artist_name || '').toLowerCase().includes(q) ||
+        (s.featuring || '').toLowerCase().includes(q) ||
         (s.album_name || '').toLowerCase().includes(q)
       );
-      
+
       const artists = allArtists.filter(a => (a.name || '').toLowerCase().includes(q));
       const albums = allAlbums.filter(al => (al.name || '').toLowerCase().includes(q) || (al.artist || '').toLowerCase().includes(q));
       const videos = allVideos.filter(v => (v.title || '').toLowerCase().includes(q));
+
+      lastResults = { songs, artists, albums, videos, query: q };
+      history.replaceState({}, '', 'search.html?q=' + encodeURIComponent(query));
       renderResults(songs, artists, albums, videos, q);
     }
 
@@ -420,11 +484,11 @@
       }
       let html = '';
       html += '<div class="result-tabs">';
-      html += `<button class="result-tab ${currentTab === 'all' ? 'active' : ''}" onclick="switchTab('all', '${query.replace(/'/g, "\\'")}')">All (${total})</button>`;
-      if (songs.length) html += `<button class="result-tab ${currentTab === 'songs' ? 'active' : ''}" onclick="switchTab('songs', '${query.replace(/'/g, "\\'")}')">Songs (${songs.length})</button>`;
-      if (artists.length) html += `<button class="result-tab ${currentTab === 'artists' ? 'active' : ''}" onclick="switchTab('artists', '${query.replace(/'/g, "\\'")}')">Artists (${artists.length})</button>`;
-      if (videos.length) html += `<button class="result-tab ${currentTab === 'videos' ? 'active' : ''}" onclick="switchTab('videos', '${query.replace(/'/g, "\\'")}')">Videos (${videos.length})</button>`;
-      if (albums.length) html += `<button class="result-tab ${currentTab === 'albums' ? 'active' : ''}" onclick="switchTab('albums', '${query.replace(/'/g, "\\'")}')">Albums (${albums.length})</button>`;
+      html += `<button class="result-tab ${currentTab === 'all' ? 'active' : ''}" onclick="switchTab('all')">All (${total})</button>`;
+      if (songs.length) html += `<button class="result-tab ${currentTab === 'songs' ? 'active' : ''}" onclick="switchTab('songs')">Songs (${songs.length})</button>`;
+      if (artists.length) html += `<button class="result-tab ${currentTab === 'artists' ? 'active' : ''}" onclick="switchTab('artists')">Artists (${artists.length})</button>`;
+      if (videos.length) html += `<button class="result-tab ${currentTab === 'videos' ? 'active' : ''}" onclick="switchTab('videos')">Videos (${videos.length})</button>`;
+      if (albums.length) html += `<button class="result-tab ${currentTab === 'albums' ? 'active' : ''}" onclick="switchTab('albums')">Albums (${albums.length})</button>`;
       html += '</div>';
 
       if ((currentTab === 'all' || currentTab === 'artists') && artists.length > 0) {
@@ -453,7 +517,7 @@
               <div class="result-info">
                 <div class="result-cat">Video</div>
                 <div class="result-name">${escapeHtml(v.title)}</div>
-                <div class="result-meta">${escapeHtml(v.video_date || '')}</div>
+                <div class="result-meta">${escapeHtml(v.video_date || v.date || '')}</div>
               </div>
             </a>
           `;
@@ -499,9 +563,10 @@
       document.getElementById('content').innerHTML = html;
     }
 
-    window.switchTab = function(tab, query) {
+    window.switchTab = function(tab) {
+      if (!lastResults) return;
       currentTab = tab;
-      performSearch(query);
+      renderResults(lastResults.songs, lastResults.artists, lastResults.albums, lastResults.videos, lastResults.query);
     }
 
     document.getElementById('searchInput').addEventListener('input', function(e) {
@@ -510,7 +575,7 @@
       if (query.trim()) clearBtn.classList.add('show');
       else clearBtn.classList.remove('show');
       clearTimeout(searchDebounce);
-      searchDebounce = setTimeout(() => { currentTab = 'all'; performSearch(query); }, 500);
+      searchDebounce = setTimeout(() => { currentTab = 'all'; performSearch(query); }, 400);
     });
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -520,6 +585,7 @@
       document.getElementById('clearBtn').classList.add('show');
     }
 
+    applySettings();
     loadPageBuilderBlocks();
     loadAllData().then(() => { if (initialQuery) performSearch(initialQuery); });
   </script>
