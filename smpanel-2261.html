@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manager - Samarid Music</title>
+<title>Manager - FlexTune</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
@@ -130,7 +130,6 @@
   .color-row select { flex: 1; }
   .color-row .hex-label { font-size: 11px; color: var(--text2); min-width: 60px; text-align: right; font-family: monospace; }
 
-  /* ===== MULTI-SELECT CHIP GRID (for page slots) ===== */
   .slot-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -251,9 +250,9 @@
 
   <div id="dashboard">
     <div class="top-bar">
-      <div class="avatar">S</div>
+      <div class="avatar">F</div>
       <div class="title-block">
-        <h1>Samarid Music</h1>
+        <h1>FlexTune</h1>
         <div class="brand">MANAGER</div>
       </div>
       <a href="smstudio-8842.html" class="studio-link"><i class="fas fa-arrow-left"></i> Studio</a>
@@ -330,7 +329,6 @@
             </div>
             <div class="form-group"><label>Link URL</label><input type="text" id="adLink" placeholder="https://wa.me/233..." oninput="updateAdPreview()"></div>
 
-            <!-- ===== MULTI-SELECT SLOT GRID ===== -->
             <div class="form-group">
               <label>Where to show (tap to select multiple)</label>
               <div class="slot-grid" id="slotGrid">
@@ -359,7 +357,6 @@
               </div>
               <div class="slot-summary" id="slotSummary">Nothing selected yet — tap chips above.</div>
             </div>
-            <!-- ===== END ===== -->
 
             <div class="form-group"><label>Status</label>
               <select id="adActive"><option value="true">Active</option><option value="false">Hidden</option></select>
@@ -401,7 +398,7 @@
                 <option value="albums">Albums Page</option>
               </select>
             </div>
-            <div class="form-group"><label>Section Title</label><input type="text" id="textTitle" placeholder="e.g. About Samarid Music"></div>
+            <div class="form-group"><label>Section Title</label><input type="text" id="textTitle" placeholder="e.g. About FlexTune"></div>
             <div class="form-group"><label>Content</label><textarea id="textContent" placeholder="Write your text here..." style="min-height:140px;"></textarea></div>
             <div class="form-group"><label>Sort Order (small = first)</label><input type="number" id="textSort" value="0"></div>
             <button class="add-artist-btn" id="textSubmitBtn" onclick="saveText()"><i class="fas fa-save"></i> Save Text</button>
@@ -428,10 +425,11 @@
               <input type="file" id="imgFileInput" accept="image/*" style="display:none;" onchange="handleImgFile(event)">
               <input type="text" id="imgUrl" placeholder="Or paste an image URL here" oninput="updateImgPreview()" style="margin-top:8px;">
             </div>
-            <div class="form-group"><label>Title</label><input type="text" id="imgTitle" placeholder="e.g. Studio Session"></div>
+            <div class="form-group"><label>Title</label><input type="text" id="imgTitle" placeholder="e.g. FlexTune Logo"></div>
             <div class="form-group"><label>Description</label><textarea id="imgDesc" placeholder="Short description..."></textarea></div>
             <div class="form-group"><label>Section</label>
               <select id="imgSection">
+                <option value="logo">Site Logo (header icon)</option>
                 <option value="general">General</option>
                 <option value="gallery">Gallery</option>
                 <option value="covers">Covers</option>
@@ -749,14 +747,11 @@
     let cropTargetInput = null;
     let cropTargetPreview = null;
 
-    // ===== SLOT CHIP HELPERS =====
     window.toggleSlot = function(btn) {
       const pos = btn.dataset.pos;
-      // If "all" is tapped, uncheck all others
       if (pos === 'all' && !btn.classList.contains('on')) {
         document.querySelectorAll('#slotGrid .slot-chip').forEach(c => c.classList.remove('on'));
       } else if (pos !== 'all') {
-        // If picking a specific one, remove "all"
         const allChip = document.querySelector('#slotGrid .slot-chip[data-pos="all"]');
         if (allChip) allChip.classList.remove('on');
       }
@@ -1802,7 +1797,6 @@
       `).join('');
     }
 
-    // Initialize slot summary on load
     updateSlotSummary();
   </script>
 </body>

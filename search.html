@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Search - Samarid Music</title>
-<meta name="description" content="Search songs, artists, videos, and albums on Samarid Music.">
+<title>Search - FlexTune</title>
+<meta name="description" content="Search songs, artists, videos, and albums on FlexTune — Africa's Music Hub.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -47,8 +47,9 @@
   .menu-btn span { display: block; width: 20px; height: 2px; background: var(--text); border-radius: 2px; }
   .menu-btn:active { background: var(--accent); border-color: var(--accent); }
   .menu-btn:active span { background: #fff; }
-  .logo { font-size: 16px; font-weight: 900; color: var(--text); text-decoration: none; flex: 1; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 8px; }
-  .logo span { color: var(--accent); }
+  .logo { display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; flex: 1; min-width: 0; padding: 0 8px; }
+  .logo-text { font-size: 16px; font-weight: 900; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.5px; }
+  .logo-text span { color: var(--accent); }
   .header-spacer { width: 42px; flex-shrink: 0; }
 
   .menu-dropdown { position: fixed; top: 66px; left: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); width: 250px; max-width: calc(100vw - 24px); max-height: 70vh; overflow-y: auto; display: none; z-index: 9999; }
@@ -129,7 +130,6 @@
 
   .verify-badge { display: inline-block; width: 13px; height: 13px; vertical-align: middle; flex-shrink: 0; margin-left: 2px; }
 
-  /* ===== TAP / HOVER EFFECT (title only) ===== */
   @media (hover: hover) and (pointer: fine) {
     .result-card:hover .result-name { color: var(--accent); }
   }
@@ -156,7 +156,7 @@
       <span></span>
       <span></span>
     </button>
-    <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
+    <a href="index.html" class="logo"><span class="logo-text">FLEX<span>TUNE</span></span></a>
     <div class="header-spacer"></div>
   </header>
 
@@ -197,14 +197,14 @@
     <div id="content">
       <div class="state-box" id="initialState">
         <div class="icon">🔍</div>
-        <h3>Search Samarid Music</h3>
+        <h3>Search FlexTune</h3>
         <p>Type to find any song, artist, video or album</p>
         <div class="suggestion-chips" id="suggestions"></div>
       </div>
     </div>
   </div>
 
-  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
+  <footer class="footer"><span class="brand">FLEXTUNE</span> © 2026</footer>
 
   <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
@@ -262,7 +262,7 @@
       document.getElementById('content').innerHTML = `
         <div class="state-box" id="initialState">
           <div class="icon">🔍</div>
-          <h3>Search Samarid Music</h3>
+          <h3>Search FlexTune</h3>
           <p>Type to find any song, artist, video or album</p>
           <div class="suggestion-chips" id="suggestions">
             ${allArtists.slice(0, 6).map(a => '<button class="chip" onclick="quickSearch(\'' + a.name.replace(/'/g, "\\'") + '\')">' + escapeHtml(a.name) + '</button>').join('')}

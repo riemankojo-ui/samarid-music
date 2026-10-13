@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Artist - Samarid Music</title>
-<meta name="description" content="Download Mp3 songs from Samarid Music — Ghana's newest music label.">
+<title>Artist - FlexTune</title>
+<meta name="description" content="Download Mp3 songs from FlexTune — Africa's Music Hub.">
 <meta property="og:type" content="music.musician">
-<meta property="og:site_name" content="Samarid Music">
-<meta property="og:title" id="ogTitle" content="Artist - Samarid Music">
-<meta property="og:description" id="ogDescription" content="Download Mp3 songs from Samarid Music.">
+<meta property="og:site_name" content="FlexTune">
+<meta property="og:title" id="ogTitle" content="Artist - FlexTune">
+<meta property="og:description" id="ogDescription" content="Download Mp3 songs from FlexTune.">
 <meta property="og:image" id="ogImage" content="https://samarid-music.vercel.app/logo.png">
 <meta property="og:url" id="ogUrl" content="https://samarid-music.vercel.app/artist-template.html">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" id="twTitle" content="Artist - Samarid Music">
-<meta name="twitter:description" id="twDescription" content="Download Mp3 songs from Samarid Music.">
+<meta name="twitter:title" id="twTitle" content="Artist - FlexTune">
+<meta name="twitter:description" id="twDescription" content="Download Mp3 songs from FlexTune.">
 <meta name="twitter:image" id="twImage" content="https://samarid-music.vercel.app/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -28,8 +28,9 @@
   .menu-btn { background: transparent; color: var(--text); border: none; width: 40px; height: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; }
   .menu-btn span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; }
   .menu-btn:active span { background: var(--accent); }
-  .logo { font-size: 18px; font-weight: 900; color: var(--text); text-decoration: none; flex: 1; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px; }
-  .logo span { color: var(--red); }
+  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; flex: 1; justify-content: center; padding: 0 8px; min-width: 0; }
+  .logo-text { font-size: 18px; font-weight: 900; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.5px; }
+  .logo-text span { color: var(--red); }
   .header-spacer { width: 40px; flex-shrink: 0; }
   .side-menu { position: fixed; top: 0; right: -340px; width: 320px; max-width: 88%; height: 100vh; background: #0a0a0a; color: #fff; z-index: 9999; transition: right 0.3s ease; overflow-y: auto; box-shadow: -10px 0 40px rgba(0,0,0,0.3); }
   .side-menu.open { right: 0; }
@@ -80,7 +81,6 @@
   .song-card-info h3 .feat-tag { font-weight: 800; color: #000000; font-size: 13.5px; }
   .song-card-info .date { font-size: 11px; color: #888888; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  /* ===== TAP / HOVER EFFECT (title only) ===== */
   @media (hover: hover) and (pointer: fine) {
     .song-card:hover .song-card-info h3 { color: var(--accent); }
   }
@@ -89,6 +89,13 @@
   .pb-block { margin-bottom: 20px; padding: 18px 20px; border-radius: 14px; }
   .pb-block.pb-image { padding: 0; overflow: hidden; }
   .pb-block.pb-image img { width: 100%; display: block; border-radius: 14px; }
+
+  .inline-ad-block { margin: 26px 0; border-radius: 14px; overflow: hidden; }
+  .inline-ad-block img { width: 100%; display: block; border-radius: 14px; }
+  .inline-ad-block a { display: block; }
+  .inline-ad-placeholder { padding: 30px 20px; text-align: center; background: #fff; border: 2px dashed #e0e0e0; border-radius: 14px; }
+  .inline-ad-placeholder i { font-size: 26px; color: #ff0033; margin-bottom: 8px; display: block; opacity: 0.7; }
+  .inline-ad-placeholder p { font-size: 12px; color: #999; font-weight: 600; margin: 0; }
 
   .videos-section { margin-top: 34px; padding-top: 24px; border-top: 1px solid var(--border); }
   .videos-section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
@@ -145,7 +152,9 @@
       <span></span>
       <span></span>
     </button>
-    <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
+    <a href="index.html" class="logo">
+      <span class="logo-text">FLEX<span>TUNE</span></span>
+    </a>
     <div class="header-spacer"></div>
   </header>
 
@@ -159,7 +168,7 @@
       <div class="side-menu-avatar" id="menuAvatar">K</div>
       <div class="side-menu-artist-name" id="menuArtistName">Loading...</div>
       <div class="side-menu-artist-bio" id="menuArtistBio" style="display:none;"></div>
-      <div class="side-menu-artist-role" id="menuArtistRole">Samarid Music Artist</div>
+      <div class="side-menu-artist-role" id="menuArtistRole">FlexTune Artist</div>
       <div class="menu-follow-row">
         <button class="menu-follow-btn" id="followBtn" onclick="toggleFollow()">
           <i class="fas fa-plus" id="followIcon"></i>
@@ -180,13 +189,15 @@
     <button class="side-menu-item" onclick="shareFacebook()"><i class="fab fa-facebook share-facebook-icon"></i><span class="item-label">Facebook</span><span style="color:#444;">↗</span></button>
     <button class="side-menu-item" onclick="shareTwitter()"><i class="fab fa-x-twitter share-twitter-icon"></i><span class="item-label">X (Twitter)</span><span style="color:#444;">↗</span></button>
     <button class="side-menu-item" onclick="copyArtistLink()"><i class="fas fa-link share-copy-icon"></i><span class="item-label">Copy Link</span><span style="color:#444;">📋</span></button>
-    <div class="side-menu-footer">© 2026 SAMARID MUSIC</div>
+    <div class="side-menu-footer">© 2026 FLEXTUNE</div>
   </div>
 
   <div class="container">
     <div class="page-title">Browse <span class="accent" id="pageTitle">Artist</span></div>
 
     <div id="pageBuilderBlocks"></div>
+
+    <div id="artistAdContainer"></div>
 
     <div class="song-list" id="songList">
       <div class="loading">Loading songs...</div>
@@ -217,7 +228,7 @@
         <i class="fas fa-volume-high"></i>
         <h3>The Journey & Music Story of <span id="storyArtistName">This Artist</span></h3>
       </div>
-      <p>Welcome to the official music headquarters and streaming catalog for <strong id="storyArtistNameDesc" class="accent-word">this artist</strong>. As a standout voice under the innovative <strong style="color:var(--accent);">Samarid Music</strong> movement in Ghana, this creative force continues to redefine contemporary sound, delivering infectious melodies and deeply resonant lyricism that captivates listeners nationwide.</p>
+      <p>Welcome to the official music headquarters and streaming catalog for <strong id="storyArtistNameDesc" class="accent-word">this artist</strong>. As a standout voice under the innovative <strong style="color:var(--accent);">FlexTune</strong> movement in Africa, this creative force continues to redefine contemporary sound, delivering infectious melodies and deeply resonant lyricism that captivates listeners nationwide.</p>
       
       <div class="artist-story-quote">
         "Every track is crafted to tell a genuine story, bridging authentic African rhythms with modern production values for music lovers everywhere."
@@ -230,12 +241,12 @@
       <div class="artist-story-footer-tags">
         <span class="story-tag">🎵 100% Free Mp3 Download</span>
         <span class="story-tag">🔥 Latest 2026 Hits</span>
-        <span class="story-tag">🇬🇭 Samarid Music Ghana</span>
+        <span class="story-tag">🌍 FlexTune • Africa's Music Hub</span>
       </div>
     </div>
   </div>
 
-  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
+  <footer class="footer"><span class="brand">FLEXTUNE</span> © 2026</footer>
 
   <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
@@ -260,8 +271,8 @@
 
     const LIVE_FILTER = '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')';
 
-    const seoTitle = 'Download Mp3 ' + artistName + ' 2026 Songs | Albums for Free - Samarid Music';
-    const seoDesc = 'Download all ' + artistName + ' songs in MP3. 2026 releases from Samarid Music. Free HD audio downloads on Samarid Music Ghana.';
+    const seoTitle = 'Download Mp3 ' + artistName + ' 2026 Songs | Albums for Free - FlexTune';
+    const seoDesc = 'Download all ' + artistName + ' songs in MP3. 2026 releases from FlexTune. Free HD audio downloads on FlexTune.';
     document.title = seoTitle;
     document.querySelector('meta[name="description"]').setAttribute('content', seoDesc);
     document.getElementById('ogTitle').setAttribute('content', seoTitle);
@@ -291,7 +302,7 @@
     window.closeSideMenu = function() { document.getElementById('sideMenu').classList.remove('open'); document.getElementById('menuOverlay').classList.remove('open'); }
 
     function getArtistShareUrl() { return window.location.href; }
-    function getArtistShareText() { return '🎤 Download ' + artistName + ' songs on Samarid Music!'; }
+    function getArtistShareText() { return '🎤 Download ' + artistName + ' songs on FlexTune!'; }
     window.shareWhatsApp = function() { const text = encodeURIComponent(getArtistShareText() + ' ' + getArtistShareUrl()); window.open('https://wa.me/?text=' + text, '_blank'); }
     window.shareFacebook = function() { const url = encodeURIComponent(getArtistShareUrl()); window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, '_blank'); }
     window.shareTwitter = function() { const text = encodeURIComponent(getArtistShareText()); const url = encodeURIComponent(getArtistShareUrl()); window.open('https://twitter.com/intent/tweet?text=' + text + '&url=' + url, '_blank'); }
@@ -339,6 +350,19 @@
           const btnText = b.button_text ? '<div style="margin-top:14px;"><a href="' + escapeHtml(b.button_link || '#') + '" style="display:inline-block; padding:12px 24px; background:#ff0033; color:#fff; border-radius:30px; font-size:13px; font-weight:900; text-decoration:none;">' + escapeHtml(b.button_text) + '</a></div>' : '';
           return '<div style="' + wrapStyle + ' ' + styleStr + '">' + escapeHtml(b.content || '') + btnText + '</div>';
         }).join('');
+      } catch (e) { container.innerHTML = ''; }
+    }
+
+    async function loadArtistAd() {
+      const container = document.getElementById('artistAdContainer');
+      if (!container) return;
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/ads?active=eq.true&or=(position.like.*artist*,position.like.*all*)&select=*&order=sort_order.asc,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const ads = await res.json();
+        if (!Array.isArray(ads) || ads.length === 0) { container.innerHTML = ''; return; }
+        const ad = ads[0];
+        const link = ad.link_url || '#';
+        container.innerHTML = '<div class="inline-ad-block"><a href="' + escapeHtml(link) + '" target="_blank" rel="noopener"><img src="' + escapeHtml(ad.image_url) + '" alt="' + escapeHtml(ad.title || 'Ad') + '" loading="lazy"></a></div>';
       } catch (e) { container.innerHTML = ''; }
     }
 
@@ -564,6 +588,7 @@
     loadFollowState();
     loadPageBuilderBlocks();
     loadArtistVideos();
+    loadArtistAd();
   </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About - Samarid Music</title>
+<title>About - FlexTune</title>
 <meta name="google-site-verification" content="ERHvKE-6CNknsGMv75ePLrVpOGaURdtsnmuMh1VxG-4" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
     --bg: #ffffff;
     --text: #0a0a0a;
     --text2: #555555;
-    --accent: #ff8800;
+    --accent: #ff0033;
     --border: #eeeeee;
     --dark: #0a0a0a;
   }
@@ -22,18 +22,15 @@
   html, body { overflow-x: hidden; max-width: 100vw; }
   body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 0; }
 
-  /* HEADER */
   .header { position: sticky; top: 0; background: #0a0a0a; border-bottom: 1px solid #1e1e1e; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; gap: 10px; }
   .back-btn { background: #1a1a1a; color: #fff; border: 1px solid #2a2a2a; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
   .back-btn:active { background: var(--accent); border-color: var(--accent); }
   .logo { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; color: #ffffff; text-decoration: none; flex: 1; text-align: center; }
-  .logo span { color: #ff0033; }
+  .logo span { color: var(--accent); }
   .header-spacer { width: 78px; flex-shrink: 0; }
 
-  /* CONTENT */
   .page-content { padding: 40px 24px 60px; max-width: 680px; margin: 0 auto; background: #ffffff; }
 
-  /* PAGE TITLE */
   .page-label {
     font-size: 11px;
     font-weight: 900;
@@ -60,7 +57,6 @@
     font-weight: 500;
   }
 
-  /* SECTIONS */
   .section { margin-bottom: 38px; }
   .section-head {
     display: flex;
@@ -92,7 +88,6 @@
     color: var(--text2);
   }
 
-  /* MISSION LIST */
   .mission-list { list-style: none; padding: 0; }
   .mission-list li {
     font-size: 15px;
@@ -115,17 +110,14 @@
   }
   .mission-list li strong { color: var(--text); font-weight: 800; }
 
-  /* SYSTEM FLOW */
   .system-flow { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
   .flow-item { display: flex; align-items: center; gap: 14px; font-size: 14px; color: var(--text2); padding: 6px 0; }
   .flow-num { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--accent); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; }
   .flow-text strong { color: var(--text); font-weight: 800; }
 
-  /* VALUES */
   .value-line { font-size: 15px; line-height: 1.7; color: var(--text2); margin-bottom: 14px; padding-left: 18px; border-left: 3px solid var(--accent); }
   .value-line strong { color: var(--text); font-weight: 900; display: block; margin-bottom: 2px; font-size: 16px; }
 
-  /* TIMELINE */
   .timeline { margin-top: 14px; border-left: 2px solid var(--accent); padding-left: 20px; }
   .timeline-item { padding-bottom: 22px; position: relative; }
   .timeline-item:last-child { padding-bottom: 0; }
@@ -144,7 +136,6 @@
   .timeline-year { font-size: 13px; font-weight: 900; color: var(--accent); letter-spacing: 2px; margin-bottom: 4px; }
   .timeline-text { font-size: 14px; line-height: 1.6; color: var(--text2); }
 
-  /* QUOTE */
   .quote-block {
     text-align: center;
     padding: 34px 20px;
@@ -156,10 +147,8 @@
   .quote-block p span { color: var(--accent); }
   .quote-block .quote-mark { font-size: 44px; color: var(--accent); line-height: 1; margin-bottom: 10px; font-family: Georgia, serif; }
 
-  /* CONTACT */
   .contact-line { font-size: 15px; line-height: 1.7; color: var(--text2); margin-bottom: 20px; }
 
-  /* ===== BLACK EMAIL SECTION AT BOTTOM ===== */
   .email-section {
     background: #0a0a0a;
     padding: 60px 24px 70px;
@@ -197,16 +186,15 @@
     letter-spacing: 0.5px;
   }
 
-  /* FOOTER */
   .footer { background: #0a0a0a; padding: 20px 20px 30px; text-align: center; font-size: 11px; color: #555; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; border-top: 1px solid #1a1a1a; }
-  .footer .brand { color: #ff0033; font-weight: 900; }
+  .footer .brand { color: var(--accent); font-weight: 900; }
 </style>
 </head>
 <body>
 
   <header class="header">
     <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
-    <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
+    <a href="index.html" class="logo">FLEX<span>TUNE</span></a>
     <div class="header-spacer"></div>
   </header>
 
@@ -215,10 +203,9 @@
     <div class="page-label">About</div>
     <h1 class="page-title">The <span>Music System</span></h1>
     <p class="intro">
-      Samarid Music is more than a label — it's a full music system built to move Ghanaian and African sounds from the studio to the world. From production to distribution, promotion to fan engagement, everything connects here.
+      FlexTune is more than a label — it's a full music system built to move African sounds from the studio to the world. From production to distribution, promotion to fan engagement, everything connects here.
     </p>
 
-    <!-- 01 — THE VISION -->
     <div class="section">
       <div class="section-head">
         <span class="section-num">01</span>
@@ -230,7 +217,6 @@
       </p>
     </div>
 
-    <!-- 02 — OUR MISSION -->
     <div class="section">
       <div class="section-head">
         <span class="section-num">02</span>
@@ -238,21 +224,20 @@
       </div>
       <h2 class="section-title">Our Mission</h2>
       <ul class="mission-list">
-        <li><strong>Distribute</strong> Ghanaian music to every major streaming platform worldwide.</li>
+        <li><strong>Distribute</strong> African music to every major streaming platform worldwide.</li>
         <li><strong>Promote</strong> emerging artists with real reach — not empty promises.</li>
         <li><strong>Empower</strong> creators to own their masters and earn fairly.</li>
         <li><strong>Discover</strong> underground talent and give them a serious platform.</li>
       </ul>
     </div>
 
-    <!-- 03 — HOW THE SYSTEM WORKS -->
     <div class="section">
       <div class="section-head">
         <span class="section-num">03</span>
         <div class="section-divider"></div>
       </div>
       <h2 class="section-title">How The System Works</h2>
-      <p class="section-body" style="margin-bottom: 8px;">Every song that comes through Samarid Music travels through a simple, powerful chain:</p>
+      <p class="section-body" style="margin-bottom: 8px;">Every song that comes through FlexTune travels through a simple, powerful chain:</p>
       <div class="system-flow">
         <div class="flow-item">
           <div class="flow-num">1</div>
@@ -260,7 +245,7 @@
         </div>
         <div class="flow-item">
           <div class="flow-num">2</div>
-          <div class="flow-text"><strong>Samarid distributes</strong> — to Spotify, Apple, Boomplay, YouTube & more</div>
+          <div class="flow-text"><strong>FlexTune distributes</strong> — to Spotify, Apple, Boomplay, YouTube & more</div>
         </div>
         <div class="flow-item">
           <div class="flow-num">3</div>
@@ -273,7 +258,6 @@
       </div>
     </div>
 
-    <!-- 04 — WHAT WE BELIEVE -->
     <div class="section">
       <div class="section-head">
         <span class="section-num">04</span>
@@ -288,7 +272,7 @@
 
       <div class="value-line">
         <strong>Global Reach.</strong>
-        Ghana to the world — no borders, no limits, no gatekeepers.
+        Africa to the world — no borders, no limits, no gatekeepers.
       </div>
 
       <div class="value-line">
@@ -297,7 +281,6 @@
       </div>
     </div>
 
-    <!-- 05 — THE JOURNEY -->
     <div class="section">
       <div class="section-head">
         <span class="section-num">05</span>
@@ -307,20 +290,19 @@
       <div class="timeline">
         <div class="timeline-item">
           <div class="timeline-year">2024</div>
-          <div class="timeline-text">Samarid starts creating music independently — writing, recording, learning the craft.</div>
+          <div class="timeline-text">The vision begins — building a platform for African artists to thrive independently.</div>
         </div>
         <div class="timeline-item">
           <div class="timeline-year">2025</div>
-          <div class="timeline-text">Samarid Music is born — the label, the platform, the system.</div>
+          <div class="timeline-text">FlexTune is born — the label, the platform, the system.</div>
         </div>
         <div class="timeline-item">
           <div class="timeline-year">2026</div>
-          <div class="timeline-text">Reaching thousands of listeners across Ghana and beyond. Building for the next generation.</div>
+          <div class="timeline-text">Reaching thousands of listeners across Africa and beyond. Building for the next generation.</div>
         </div>
       </div>
     </div>
 
-    <!-- 06 — JOIN THE MOVEMENT -->
     <div class="section">
       <div class="section-head">
         <span class="section-num">06</span>
@@ -328,26 +310,24 @@
       </div>
       <h2 class="section-title">Join The Movement</h2>
       <p class="contact-line">
-        Whether you're an artist, a producer, a fan, or someone building in African music — you're already part of the Samarid Music system. Let's build together.
+        Whether you're an artist, a producer, a fan, or someone building in African music — you're already part of the FlexTune system. Let's build together.
       </p>
     </div>
 
-    <!-- QUOTE -->
     <div class="quote-block">
       <div class="quote-mark">&ldquo;</div>
-      <p>From Ghana to the world — <span>one song at a time.</span></p>
+      <p>From Africa to the world — <span>one song at a time.</span></p>
     </div>
 
   </div>
 
-  <!-- BLACK SECTION AT THE BOTTOM -->
   <div class="email-section">
     <div class="label">Get In Touch</div>
     <a href="mailto:wunatehk@gmail.com">wunatehk@gmail.com</a>
     <div class="hint">Tap to send an email</div>
   </div>
 
-  <div class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</div>
+  <div class="footer"><span class="brand">FLEXTUNE</span> © 2026</div>
 
 </body>
 </html>

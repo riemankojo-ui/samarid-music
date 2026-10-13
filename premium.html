@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Pitching - Samarid Music</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root { --bg: #ffffff; --text: #0a0a0a; --text2: #666; --accent: #ff8800; --border: #e5e5e5; }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 40px; }
+
+  .header { position: sticky; top: 0; background: #0a0a0a; border-bottom: 1px solid #1e1e1e; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; gap: 10px; }
+  .back-btn { background: #1a1a1a; color: #fff; border: 1px solid #2a2a2a; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .back-btn:active { background: var(--accent); border-color: var(--accent); }
+  .logo { font-size: 18px; font-weight: 900; letter-spacing: -0.5px; color: #fff; text-decoration: none; flex: 1; text-align: center; }
+  .logo span { color: #ff0033; }
+  .header-spacer { width: 78px; flex-shrink: 0; }
+
+  .page-content { padding: 30px 20px 40px; max-width: 700px; margin: 0 auto; }
+
+  .page-label { font-size: 11px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+  .page-title { font-size: 30px; font-weight: 900; line-height: 1.1; letter-spacing: -1px; color: var(--text); margin-bottom: 12px; }
+  .page-title span { color: var(--accent); }
+  .page-sub { font-size: 15px; line-height: 1.7; color: var(--text2); margin-bottom: 32px; }
+
+  .plan-card { background: #fafafa; border: 1px solid var(--border); border-radius: 20px; padding: 24px; margin-bottom: 16px; position: relative; }
+  .plan-card.featured { border: 2px solid var(--accent); background: #fff9f0; }
+  .plan-badge { position: absolute; top: -12px; right: 20px; background: var(--accent); color: #fff; font-size: 10px; font-weight: 900; letter-spacing: 1.5px; padding: 5px 14px; border-radius: 20px; text-transform: uppercase; box-shadow: 0 4px 12px rgba(255,136,0,0.4); }
+  .plan-name { font-size: 20px; font-weight: 900; letter-spacing: -0.4px; margin-bottom: 6px; color: var(--text); }
+  .plan-price { font-size: 32px; font-weight: 900; letter-spacing: -1px; color: var(--accent); margin-bottom: 4px; }
+  .plan-price small { font-size: 14px; font-weight: 700; color: var(--text2); letter-spacing: 0; }
+  .plan-desc { font-size: 13px; color: var(--text2); margin-bottom: 18px; line-height: 1.5; }
+
+  .plan-features { list-style: none; margin-bottom: 22px; }
+  .plan-features li { font-size: 14px; line-height: 1.6; color: #333; padding: 8px 0 8px 24px; position: relative; }
+  .plan-features li::before { content: ''; position: absolute; left: 0; top: 16px; width: 14px; height: 14px; background: var(--accent); border-radius: 50%; }
+  .plan-features li::after { content: '✓'; position: absolute; left: 3px; top: 14px; color: #fff; font-size: 10px; font-weight: 900; }
+
+  .pay-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px; background: var(--accent); color: #fff; border: none; border-radius: 14px; font-size: 15px; font-weight: 900; cursor: pointer; font-family: inherit; box-shadow: 0 6px 20px rgba(255,136,0,0.35); transition: transform 0.15s; }
+  .pay-btn:active { transform: scale(0.97); }
+  .pay-btn i { font-size: 16px; }
+
+  /* MOMO MODAL */
+  .momo-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(5px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; overflow-y: auto; }
+  .momo-modal.open { display: flex; }
+  .momo-box { background: #fff; border-radius: 22px; padding: 28px 24px; max-width: 440px; width: 100%; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  @keyframes popIn { 0% { transform: scale(0.85); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .momo-close { position: absolute; top: 20px; right: 20px; background: transparent; border: none; font-size: 22px; color: #888; cursor: pointer; }
+  .momo-icon { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #ffcc00, #ff9900); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 26px; margin: 0 auto 14px; box-shadow: 0 8px 20px rgba(255, 153, 0, 0.3); }
+  .momo-title { font-size: 20px; font-weight: 900; text-align: center; margin-bottom: 6px; color: #0a0a0a; letter-spacing: -0.4px; }
+  .momo-sub { font-size: 13px; color: #666; text-align: center; margin-bottom: 20px; line-height: 1.5; }
+
+  .momo-plan-summary { background: #fff9f0; border: 1px solid #ffd699; border-radius: 12px; padding: 14px 16px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+  .momo-plan-summary .lbl { font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #664400; }
+  .momo-plan-summary .amt { font-size: 22px; font-weight: 900; color: var(--accent); letter-spacing: -0.5px; }
+
+  .steps-list { margin-bottom: 20px; }
+  .step-item { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid #f0f0f0; align-items: flex-start; }
+  .step-item:last-child { border-bottom: none; }
+  .step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; flex-shrink: 0; }
+  .step-text { flex: 1; font-size: 13px; line-height: 1.55; color: #333; }
+  .step-text strong { color: #0a0a0a; font-weight: 800; }
+
+  .momo-number-box { background: #0a0a0a; border-radius: 14px; padding: 18px; text-align: center; margin-bottom: 16px; position: relative; }
+  .momo-number-label { font-size: 10px; font-weight: 900; color: #888; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .momo-number { font-size: 24px; font-weight: 900; color: #ffcc00; letter-spacing: 1px; font-family: 'Courier New', monospace; }
+  .momo-provider { font-size: 11px; color: #888; margin-top: 6px; font-weight: 700; }
+  .copy-momo-btn { position: absolute; top: 14px; right: 14px; background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 11px; font-weight: 700; }
+  .copy-momo-btn:active { background: var(--accent); }
+
+  .momo-ref-box { background: #f5f5f5; border: 2px dashed #ccc; border-radius: 12px; padding: 14px; text-align: center; margin-bottom: 16px; }
+  .momo-ref-label { font-size: 10px; font-weight: 900; color: #666; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+  .momo-ref { font-size: 20px; font-weight: 900; color: #0a0a0a; letter-spacing: 2px; font-family: 'Courier New', monospace; }
+
+  .momo-note { background: #fff5e6; border: 1px solid #ffd699; border-radius: 12px; padding: 12px 14px; font-size: 12px; line-height: 1.55; color: #664400; margin-bottom: 16px; }
+  .momo-note i { color: var(--accent); margin-right: 4px; }
+
+  .confirm-btn { width: 100%; padding: 15px; background: #25D366; color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 900; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 6px 20px rgba(37, 211, 102, 0.35); }
+  .confirm-btn:active { transform: scale(0.97); }
+
+  .info-box { background: #fff5e6; border: 1px solid #ffd699; border-radius: 14px; padding: 16px 18px; margin-top: 24px; font-size: 13px; line-height: 1.6; color: #664400; }
+  .info-box strong { color: var(--accent); }
+  .info-box i { color: var(--accent); margin-right: 6px; }
+
+  .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: #888; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; border-top: 1px solid var(--border); margin-top: 30px; }
+  .footer .brand { color: #ff0033; font-weight: 900; }
+</style>
+</head>
+<body>
+
+  <header class="header">
+    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+    <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
+    <div class="header-spacer"></div>
+  </header>
+
+  <div class="page-content">
+    <div class="page-label">Premium Service</div>
+    <h1 class="page-title">Get Your Song On <span>Big Playlists</span></h1>
+    <p class="page-sub">We pitch your music to Spotify editors, Ghanaian curators, and Afrobeats playlist owners — giving your song a real chance to blow up.</p>
+
+    <div class="plan-card">
+      <div class="plan-name">Single Song Pitch</div>
+      <div class="plan-price">GHS 50 <small>one-time</small></div>
+      <div class="plan-desc">Perfect for testing the waters with one track.</div>
+      <ul class="plan-features">
+        <li>1 song submitted for pitching</li>
+        <li>Pitched to 5+ playlist curators</li>
+        <li>Basic review within 7 days</li>
+        <li>Pitch status report</li>
+      </ul>
+      <button class="pay-btn" onclick="openMomoModal(50, 'Single Song Pitch')"><i class="fas fa-music"></i> Pay GHS 50 via MoMo</button>
+    </div>
+
+    <div class="plan-card">
+      <div class="plan-name">Monthly Pro</div>
+      <div class="plan-price">GHS 200 <small>/ month</small></div>
+      <div class="plan-desc">For artists actively releasing music every month.</div>
+      <ul class="plan-features">
+        <li>Up to 4 songs per month</li>
+        <li>Priority playlist pitching</li>
+        <li>Direct curator connections</li>
+        <li>Performance tracking dashboard</li>
+        <li>Access to Samarid Music playlists</li>
+      </ul>
+      <button class="pay-btn" onclick="openMomoModal(200, 'Monthly Pro')"><i class="fas fa-calendar"></i> Pay GHS 200 via MoMo</button>
+    </div>
+
+    <div class="plan-card featured">
+      <div class="plan-badge">Best Value</div>
+      <div class="plan-name">Yearly Pro</div>
+      <div class="plan-price">GHS 500 <small>/ year</small></div>
+      <div class="plan-desc">Serious artists and labels. Save GHS 1,900 vs monthly!</div>
+      <ul class="plan-features">
+        <li>Unlimited song submissions</li>
+        <li>Priority playlist pitching</li>
+        <li>Featured on home page for each release</li>
+        <li>Access to exclusive curator network</li>
+        <li>Priority support & 24hr response</li>
+      </ul>
+      <button class="pay-btn" onclick="openMomoModal(500, 'Yearly Pro')"><i class="fas fa-crown"></i> Pay GHS 500 via MoMo</button>
+    </div>
+
+    <div class="info-box">
+      <i class="fas fa-exclamation-triangle"></i><strong>Important:</strong> Playlist placement is <strong>not guaranteed</strong>. We pitch your song to curators and Spotify editors — the final decision is theirs. You pay for the pitching service, not guaranteed placement.
+    </div>
+  </div>
+
+  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
+
+  <!-- MOMO MODAL -->
+  <div class="momo-modal" id="momoModal" onclick="closeMomoModal(event)">
+    <div class="momo-box" onclick="event.stopPropagation()" style="position: relative;">
+      <button class="momo-close" onclick="closeMomoModal()">✕</button>
+
+      <div class="momo-icon"><i class="fas fa-mobile-alt"></i></div>
+      <div class="momo-title">Pay with Mobile Money</div>
+      <div class="momo-sub">Send the exact amount to the MoMo number below, then confirm with us.</div>
+
+      <div class="momo-plan-summary">
+        <div>
+          <div class="lbl">Paying For</div>
+          <div id="momoPlanName" style="font-size: 14px; font-weight: 800; color: #0a0a0a; margin-top: 2px;">Single Song Pitch</div>
+        </div>
+        <div class="amt" id="momoPlanAmount">GHS 50</div>
+      </div>
+
+      <div class="momo-number-box">
+        <button class="copy-momo-btn" onclick="copyMomoNumber()">📋 Copy</button>
+        <div class="momo-number-label">Send To</div>
+        <div class="momo-number" id="momoNumberDisplay">024 XXX XXXX</div>
+        <div class="momo-provider" id="momoProvider">MTN Mobile Money</div>
+      </div>
+
+      <div class="momo-ref-box">
+        <div class="momo-ref-label">Your Reference Code</div>
+        <div class="momo-ref" id="momoRef">SAM-00000</div>
+      </div>
+
+      <div class="steps-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-text"><strong>Open MoMo</strong> on your phone (MTN / Telecel / AirtelTigo).</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-text">Send <strong id="stepAmount">GHS 50</strong> to <strong id="stepNumber">024 XXX XXXX</strong>.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-text">Use your <strong>Reference Code</strong> as the payment reference.</div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">4</div>
+          <div class="step-text">Tap the green button below to send us proof of payment.</div>
+        </div>
+      </div>
+
+      <div class="momo-note">
+        <i class="fas fa-info-circle"></i>We verify your payment within <strong>5–30 minutes</strong>. You'll receive your access code to unlock the pitch form.
+      </div>
+
+      <button class="confirm-btn" onclick="sendToWhatsApp()">
+        <i class="fab fa-whatsapp"></i> I've Paid — Send Proof
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // ⚠️ CHANGE THESE TO YOUR REAL DETAILS
+    const MOMO_NUMBER = "0207425832 XXXX";           // ← Your MoMo number
+    const MOMO_PROVIDER = "MTN Mobile Money";     // ← MTN / Telecel / AirtelTigo
+    const WHATSAPP_NUMBER = "233XXXXXXXXX";       // ← Your WhatsApp (with country code, no +)
+
+    let currentPlan = { name: '', amount: 0 };
+
+    function generateRef() {
+      return 'SAM-' + Math.floor(10000 + Math.random() * 90000);
+    }
+
+    window.openMomoModal = function(amount, planName) {
+      currentPlan.name = planName;
+      currentPlan.amount = amount;
+      currentPlan.ref = generateRef();
+
+      document.getElementById('momoPlanName').innerText = planName;
+      document.getElementById('momoPlanAmount').innerText = 'GHS ' + amount;
+      document.getElementById('stepAmount').innerText = 'GHS ' + amount;
+      document.getElementById('momoNumberDisplay').innerText = MOMO_NUMBER;
+      document.getElementById('momoProvider').innerText = MOMO_PROVIDER;
+      document.getElementById('stepNumber').innerText = MOMO_NUMBER;
+      document.getElementById('momoRef').innerText = currentPlan.ref;
+
+      document.getElementById('momoModal').classList.add('open');
+    }
+
+    window.closeMomoModal = function(e) {
+      if (e && e.target !== e.currentTarget && e.type === 'click') {
+        // only close if clicked outside the box
+      }
+      document.getElementById('momoModal').classList.remove('open');
+    }
+
+    window.copyMomoNumber = function() {
+      navigator.clipboard.writeText(MOMO_NUMBER).then(() => {
+        alert('MoMo number copied!');
+      }).catch(() => {
+        alert('Copy this number: ' + MOMO_NUMBER);
+      });
+    }
+
+    window.sendToWhatsApp = function() {
+      const message = `Hello Samarid Music! I want to pay for the *${currentPlan.name}* plan.\n\n` +
+                      `Amount: *GHS ${currentPlan.amount}*\n` +
+                      `Reference: *${currentPlan.ref}*\n\n` +
+                      `I have sent the payment. Please find attached the proof of payment.`;
+
+      const encoded = encodeURIComponent(message);
+      window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encoded, '_blank');
+    }
+  </script>
+</body>
+</html>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Song - Samarid Music</title>
-<meta name="description" content="Listen and download music from Samarid Music — Ghana's newest music label.">
+<title>Song - FlexTune</title>
+<meta name="description" content="Listen and download music from FlexTune — Africa's Music Hub.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -18,7 +18,7 @@
   .menu-btn { background: transparent; color: #fff; border: none; width: 40px; height: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; }
   .menu-btn span { display: block; width: 22px; height: 2px; background: #fff; border-radius: 2px; }
   .menu-btn:active span { background: var(--accent); }
-  .logo { font-size: 18px; font-weight: 900; color: #fff; text-decoration: none; flex: 1; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px; }
+  .logo { font-size: 18px; font-weight: 900; color: #fff; text-decoration: none; flex: 1; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px; letter-spacing: -0.5px; }
   .logo span { color: var(--accent); }
   .header-spacer { width: 40px; flex-shrink: 0; }
   .menu-dropdown { position: fixed; top: 66px; left: 12px; background: #141414; border: 1px solid #2a2a2a; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.7); width: 250px; max-width: calc(100vw - 24px); max-height: 70vh; overflow-y: auto; display: none; z-index: 9999; }
@@ -116,32 +116,22 @@
 
   .email-compact-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 20px; }
   .email-compact-title { font-size: 13px; font-weight: 900; color: var(--text); margin-bottom: 4px; letter-spacing: -0.2px; display: flex; align-items: center; gap: 6px; }
-  .email-compact-title i { color: #ff8800; font-size: 14px; }
+  .email-compact-title i { color: #ff0033; font-size: 14px; }
   .email-compact-sub { font-size: 11.5px; color: var(--text2); line-height: 1.5; margin-bottom: 12px; }
   .email-compact-form { display: flex; gap: 8px; }
   .email-compact-input { flex: 1; padding: 11px 14px; background: #fff; border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 13px; font-family: inherit; min-width: 0; }
-  .email-compact-input:focus { outline: none; border-color: #ff8800; }
-  .email-compact-btn { padding: 11px 18px; background: linear-gradient(135deg, #ff8800 0%, #cc6600 100%); color: #fff; border: none; border-radius: 10px; font-size: 12px; font-weight: 900; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .email-compact-input:focus { outline: none; border-color: #ff0033; }
+  .email-compact-btn { padding: 11px 18px; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); color: #fff; border: none; border-radius: 10px; font-size: 12px; font-weight: 900; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
   .email-compact-btn:active { transform: scale(0.96); }
   .email-compact-success { display: none; text-align: center; padding: 8px 0; }
   .email-compact-success .title { font-size: 13px; font-weight: 900; color: #00cc44; margin-bottom: 4px; }
   .email-compact-success .text { font-size: 11.5px; color: var(--text2); line-height: 1.5; }
 
-  .promo-black-section {
-    background: #0a0a0a;
-    color: #fff;
-    margin: 30px -16px -20px;
-    width: calc(100% + 32px);
-    padding: 45px 0 40px;
-    border-top: 4px solid #ff0033;
-    position: relative;
-    overflow: hidden;
-  }
+  .promo-black-section { background: #0a0a0a; color: #fff; margin: 30px -16px -20px; width: calc(100% + 32px); padding: 45px 0 40px; border-top: 4px solid #ff0033; position: relative; overflow: hidden; }
   .promo-black-section::before { content: ''; position: absolute; top: -80px; right: -80px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 0, 51, 0.18) 0%, transparent 70%); pointer-events: none; }
-  .promo-black-section::after { content: ''; position: absolute; bottom: -100px; left: -100px; width: 240px; height: 240px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 136, 0, 0.12) 0%, transparent 70%); pointer-events: none; }
+  .promo-black-section::after { content: ''; position: absolute; bottom: -100px; left: -100px; width: 240px; height: 240px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 0, 51, 0.12) 0%, transparent 70%); pointer-events: none; }
 
   .promo-inner { max-width: 700px; margin: 0 auto; position: relative; z-index: 1; padding: 0 24px; }
-
   .promo-tagline { text-align: center; margin-bottom: 24px; }
   .promo-label { font-size: 10px; font-weight: 900; letter-spacing: 4px; color: #ff0033; text-transform: uppercase; margin-bottom: 10px; }
   .promo-tagline h2 { font-size: 26px; font-weight: 900; color: #ffffff; letter-spacing: -0.6px; line-height: 1.2; margin-bottom: 14px; overflow-wrap: anywhere; }
@@ -149,7 +139,6 @@
   .promo-tagline p { font-size: 14px; color: #b5b5b5; line-height: 1.7; font-weight: 500; max-width: 500px; margin: 0 auto; }
 
   .promo-ads-container { display: flex; flex-direction: column; gap: 26px; margin-bottom: 24px; margin-left: -24px; margin-right: -24px; }
-
   .promo-ad-card { display: block; background: transparent; overflow: hidden; text-decoration: none; transition: opacity 0.2s; width: 100%; }
   .promo-ad-card:active { opacity: 0.85; }
   .promo-ad-img { width: 100%; height: auto; display: block; background: #111; }
@@ -175,7 +164,7 @@
       <span></span>
       <span></span>
     </button>
-    <a href="index.html" class="logo">SAMARID <span>MUSIC</span></a>
+    <a href="index.html" class="logo">FLEX<span>TUNE</span></a>
     <div class="header-spacer"></div>
   </header>
 
@@ -197,7 +186,7 @@
 
   <div class="label-banner">
     <i class="fas fa-compact-disc"></i>
-    <span>Samarid Music Release</span>
+    <span>FlexTune Release</span>
     <i class="fas fa-compact-disc"></i>
   </div>
 
@@ -209,7 +198,7 @@
     </div>
   </div>
 
-  <footer class="footer"><span class="brand">SAMARID MUSIC</span> © 2026</footer>
+  <footer class="footer"><span class="brand">FLEXTUNE</span> © 2026</footer>
 
   <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
@@ -267,7 +256,7 @@
       if (!url || url === '#') { showToast('No download link available'); return; }
       const cleanArtist = artist.replace(/[^\w\s\-\.]/g, '').trim();
       const cleanTitle = title.replace(/[^\w\s\-\.]/g, '').trim();
-      const filename = cleanArtist + ' - ' + cleanTitle + ' [Samarid Music].mp3';
+      const filename = cleanArtist + ' - ' + cleanTitle + ' [FlexTune].mp3';
       const originalHTML = btn.innerHTML;
       btn.disabled = true;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
@@ -338,7 +327,6 @@
       } catch (e) { container.innerHTML = ''; }
     }
 
-    // ===== ADS LOADER (FIXED: matches song-1, song, all) =====
     async function loadAds() {
       const container = document.getElementById('promoAdsContainer');
       if (!container) return;
@@ -431,7 +419,7 @@
         currentArtistName = artist;
         const badge = s.verified ? VERIFY_BADGE : '';
         const downloadTitle = artist + (featuring ? ' Feat ' + featuring : '') + ' - ' + s.title;
-        document.title = downloadTitle + ' - Samarid Music';
+        document.title = downloadTitle + ' - FlexTune';
 
         const audioSrc = s.audio_url || s.downloadurl || '';
 
@@ -480,7 +468,7 @@
 
         const artistsHTML = artistsList.map(a => '<a href="artist-template.html?name=' + encodeURIComponent(a.name) + '" class="artist-link">' + escapeHtml(a.name) + (a.verified ? VERIFY_BADGE : '') + '</a>').join('') || '<p style="text-align:center; color:#444; font-size:12px; grid-column:1/-1;">More artists coming soon.</p>';
 
-        const shareText = encodeURIComponent('Listen to "' + s.title + '" by ' + artist + (featuring ? ' Feat ' + featuring : '') + ' on Samarid Music!');
+        const shareText = encodeURIComponent('Listen to "' + s.title + '" by ' + artist + (featuring ? ' Feat ' + featuring : '') + ' on FlexTune!');
         const shareUrl = encodeURIComponent(window.location.href);
         const artistLinksHTML = buildArtistLinks(artist, featuring, badge);
 
@@ -502,7 +490,7 @@
             <span class="play-count-badge" id="playCountBadge">🔥 ${s.plays || 0} plays</span>
           </div>
 
-          <p class="detail-label"><i class="fas fa-compact-disc"></i> A Samarid Music Release</p>
+          <p class="detail-label"><i class="fas fa-compact-disc"></i> A FlexTune Release</p>
 
           <div class="detail-description">
             <h4><i class="fas fa-info-circle"></i> About this Song</h4>
@@ -510,7 +498,7 @@
           </div>
 
           <div class="presented-by">
-            <strong>SAMARID MUSIC</strong> presents this track • © 2026 Samarid Music
+            <strong>FLEXTUNE</strong> presents this track • © 2026 FlexTune
           </div>
 
           <div class="audio-player-box">
@@ -567,7 +555,7 @@
           <div class="email-compact-box">
             <div id="songEmailFormArea">
               <div class="email-compact-title"><i class="fas fa-envelope-open-text"></i> Never Miss A Drop</div>
-              <div class="email-compact-sub">Get notified whenever new music drops from Samarid Music.</div>
+              <div class="email-compact-sub">Get notified whenever new music drops from FlexTune.</div>
               <div class="email-compact-form">
                 <input type="email" id="songEmailInput" class="email-compact-input" placeholder="your@email.com" onkeypress="if(event.key==='Enter')submitSongEmail()">
                 <button class="email-compact-btn" id="songEmailBtn" onclick="submitSongEmail()"><i class="fas fa-bell"></i> Notify</button>
@@ -603,8 +591,8 @@
           </div>
 
           <div class="dark-section">
-            <h3 class="dark-section-title">Samarid Music</h3>
-            <p class="dark-section-subtitle">Record Label • Ghana</p>
+            <h3 class="dark-section-title">FlexTune</h3>
+            <p class="dark-section-subtitle">Africa's Music Hub</p>
 
             <div class="contact-box">
               <p class="contact-label">Contact / Bookings</p>
@@ -612,10 +600,10 @@
               <p class="contact-hint">(Tap and hold to copy the email)</p>
             </div>
 
-            <p class="artists-label">More Artists on Samarid Music</p>
+            <p class="artists-label">More Artists on FlexTune</p>
             <div class="artists-list">${artistsHTML}</div>
 
-            <p class="dark-footer-note">© 2026 SAMARID MUSIC • ALL RIGHTS RESERVED</p>
+            <p class="dark-footer-note">© 2026 FLEXTUNE • ALL RIGHTS RESERVED</p>
           </div>
         `;
 
