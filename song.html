@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  :root { --bg: #f2f2f2; --card: #ffffff; --border: #e0e0e0; --text: #1a1a1a; --text2: #666666; --accent: #ff0033; --header-bg: #111111; --dark: #0a0a0a; --soft-green: #8fdfa8; }
+  :root { --bg: #fafaf8; --card: #ffffff; --border: #ececec; --text: #1a1a1a; --text2: #666666; --accent: #ff0033; --header-bg: #111111; --dark: #0a0a0a; --soft-green: #8fdfa8; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
   html, body { overflow-x: hidden; max-width: 100vw; }
   body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; padding-bottom: 40px; }
@@ -31,17 +31,15 @@
   .menu-divider { height: 1px; background: #222; margin: 4px 0; }
   .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; display: none; }
   .menu-overlay.open { display: block; }
-  .label-banner { background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); color: #fff; padding: 6px 16px; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 800; letter-spacing: 1.5px; font-size: 10px; text-transform: uppercase; }
-  .label-banner i { font-size: 10px; opacity: 0.85; }
   .container { max-width: 700px; margin: 0 auto; padding: 20px 16px; }
 
   .pb-block { margin-bottom: 20px; padding: 18px 20px; border-radius: 14px; }
   .pb-block.pb-image { padding: 0; overflow: hidden; }
   .pb-block.pb-image img { width: 100%; display: block; border-radius: 14px; }
 
-  .big-title { font-size: 18px; font-weight: 900; line-height: 1.3; text-align: center; margin-bottom: 20px; padding: 15px 10px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); overflow-wrap: anywhere; word-break: break-word; }
+ .big-title { font-size: 18px; font-weight: 900; line-height: 1.3; text-align: center; margin-bottom: 20px; padding: 8px 4px; background: transparent; border: none; color: var(--text); overflow-wrap: anywhere; word-break: break-word; }
   .big-title .accent { color: var(--accent); }
-  .detail-cover-box { width: 100%; max-width: 300px; margin: 0 auto 25px; aspect-ratio: 1 / 1; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.12); background: #000; }
+  .detail-cover-box { width: 100%; max-width: 300px; margin: 0 auto 25px; aspect-ratio: 1 / 1; border-radius: 0; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.12); background: #000; }
   .detail-cover-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .detail-title { font-size: 22px; font-weight: 900; line-height: 1.25; margin-bottom: 6px; text-align: center; overflow-wrap: anywhere; word-break: break-word; }
   .detail-meta { font-size: 13px; color: #999; margin-bottom: 8px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 5px; flex-wrap: wrap; }
@@ -182,12 +180,6 @@
     <a href="about.html" class="menu-item"><i class="fas fa-info-circle"></i><span class="label">About</span></a>
     <a href="promo.html" class="menu-item"><i class="fas fa-bullhorn"></i><span class="label">Promo</span></a>
     <a href="distributors.html" class="menu-item"><i class="fas fa-headphones"></i><span class="label">Get On Spotify</span></a>
-  </div>
-
-  <div class="label-banner">
-    <i class="fas fa-compact-disc"></i>
-    <span>FlexTune Release</span>
-    <i class="fas fa-compact-disc"></i>
   </div>
 
   <div class="container">

@@ -22,21 +22,36 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
   :root { --bg: #0a0a0a; --card: #141414; --border: #222; --text: #ffffff; --text2: #cccccc; --accent: #ff0033; }
-  body.light { --bg: #ffffff; --card: #ffffff; --border: #e5e5e5; --text: #0a0a0a; --text2: #444444; }
+  body.light { --bg: #fafaf8; --card: #ffffff; --border: #ececec; --text: #0a0a0a; --text2: #444444; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
   html, body { overflow-x: hidden; max-width: 100vw; }
   body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; transition: background 0.3s, color 0.3s; padding-bottom: 40px; }
   img { max-width: 100%; }
-  .header { position: sticky; top: 0; background: #0a0a0a; border-bottom: 1px solid #222; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 100; }
-  .menu-btn { width: 38px; height: 38px; border-radius: 50%; background: #222; border: 1px solid #333; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #ffffff; font-size: 18px; font-weight: 700; transition: all 0.15s; flex-shrink: 0; }
-  .menu-btn:active { background: var(--accent); }
+
+  /* ===== HEADER — scrolls with page ===== */
+  .header { background: #0a0a0a; border-bottom: 1px solid #222; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; min-height: 50px; position: relative; }
+  .menu-btn { width: 36px; height: 36px; background: transparent; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; transition: all 0.2s; }
+  .menu-btn .bar { display: block; width: 22px; height: 2.5px; background: #999999; border-radius: 2px; transition: all 0.3s ease; transform-origin: center; }
+  .menu-btn.open .bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .menu-btn.open .bar:nth-child(2) { opacity: 0; }
+  .menu-btn.open .bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* When menu is open — float the button above the menu */
+  .menu-btn.menu-open {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 10001;
+  }
+
   .logo { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; padding: 0 8px; min-width: 0; }
-  .logo-badge { width: 30px; height: 30px; background: #ff0033; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; box-shadow: 0 3px 10px rgba(255,0,51,0.4); }
-  .logo-badge img { width: 100%; height: 100%; object-fit: cover; border-radius: 9px; display: block; }
-  .logo-text { font-size: 17px; font-weight: 900; letter-spacing: -0.5px; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .logo-icon { width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0; object-fit: cover; }
+  .logo-text { font-size: 16px; font-weight: 900; letter-spacing: -0.4px; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .logo-text span { color: var(--accent); }
-  .header-spacer { width: 38px; flex-shrink: 0; }
-  .tabs-container { position: sticky; top: 58px; z-index: 90; display: flex; gap: 28px; padding: 14px 18px; background: var(--bg); overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  .header-spacer { width: 36px; flex-shrink: 0; }
+
+  /* ===== TABS — sticky ===== */
+  .tabs-container { position: sticky; top: 0; z-index: 90; display: flex; gap: 28px; padding: 14px 18px; background: var(--bg); overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; border-bottom: 1px solid var(--border); white-space: nowrap; }
   .tabs-container::-webkit-scrollbar { display: none; }
   .text-tab { flex-shrink: 0; padding: 6px 0; color: #999; font-weight: 700; font-size: 15px; text-decoration: none; transition: color 0.2s ease; white-space: nowrap; letter-spacing: 0.3px; }
   .text-tab:active { color: var(--accent); }
@@ -44,22 +59,50 @@
   body.light .text-tab { color: #888; }
   body.light .text-tab.active { color: #0a0a0a; }
   .page-content { padding: 20px 16px 0; max-width: 700px; margin: 0 auto; }
-  .menu-dropdown { position: fixed; top: 58px; left: 12px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); width: 260px; max-width: calc(100vw - 24px); max-height: 80vh; overflow-y: auto; display: none; z-index: 9999; }
-  .menu-dropdown.open { display: block; }
-  .menu-title { padding: 12px 18px 8px; font-size: 10px; color: var(--text2); letter-spacing: 2px; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid var(--border); margin-top: 5px; }
-  .menu-item { padding: 12px 18px; font-size: 13px; color: var(--text); cursor: pointer; display: flex; align-items: center; gap: 12px; text-decoration: none; border-bottom: 1px solid var(--border); transition: background 0.15s; background: transparent; border-left: none; border-right: none; border-top: none; width: 100%; font-family: inherit; text-align: left; }
-  .menu-item:last-child { border-bottom: none; }
-  .menu-item:active { background: var(--border); }
-  .menu-item .label { flex: 1; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .menu-item .arrow { color: var(--text2); font-size: 11px; flex-shrink: 0; }
-  .theme-row { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-  .theme-label { font-size: 13px; color: var(--text); }
+
+  /* ===== MENU OVERLAY ===== */
+  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  .menu-overlay.open { opacity: 1; pointer-events: auto; }
+
+  /* ===== SLIDE-IN MENU (from left) ===== */
+  .menu-dropdown {
+    position: fixed;
+    top: 0;
+    left: -320px;
+    width: 290px;
+    max-width: 85vw;
+    height: 100vh;
+    background: #141414;
+    border-right: 1px solid #222;
+    z-index: 9999;
+    transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    box-shadow: 10px 0 50px rgba(0,0,0,0.6);
+    padding-top: 60px;
+  }
+  .menu-dropdown.open { left: 0; }
+  .menu-title { padding: 20px 26px 10px; font-size: 10px; color: #666; letter-spacing: 2.5px; font-weight: 800; text-transform: uppercase; border-top: 1px solid #1e1e1e; margin-top: 6px; }
+  .menu-title:first-child { border-top: none; margin-top: 0; }
+  .menu-item { padding: 16px 26px; font-size: 16px; color: #ffffff; cursor: pointer; display: flex; align-items: center; gap: 14px; text-decoration: none; transition: background 0.15s; background: transparent; border: none; width: 100%; font-family: inherit; text-align: left; font-weight: 700; letter-spacing: -0.2px; }
+  .menu-item:active { background: #1f1f1f; }
+  .menu-item .label { flex: 1; color: #ffffff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; font-size: 16px; }
+  .menu-item .arrow { color: #444; font-size: 12px; flex-shrink: 0; }
+  .theme-row { padding: 14px 26px 18px; display: flex; align-items: center; justify-content: space-between; }
+  .theme-label { font-size: 15px; color: #fff; font-weight: 700; }
   .theme-toggle { display: flex; gap: 6px; }
-  .theme-btn { padding: 6px 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-size: 11px; cursor: pointer; transition: all 0.15s; }
-  .theme-btn.active { border-color: var(--accent); color: var(--accent); font-weight: 700; }
+  .theme-btn { padding: 8px 14px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; color: #ccc; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .theme-btn.active { border-color: var(--accent); color: var(--accent); }
+  .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+  .sub-modal.open { display: flex; }
+  .sub-modal-inner { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 30px 24px; text-align: center; max-width: 340px; width: 100%; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .sub-modal-btn { display: block; width: 100%; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; margin-bottom: 10px; }
+  .sub-modal-btn.confirm { background: #ff0033; color: #ffffff; }
+  .sub-modal-btn.close { background: transparent; color: var(--text2); font-size: 12px; }
+
   .section-head { display: flex; align-items: center; gap: 10px; margin: 30px 0 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border); min-width: 0; }
   .section-head:first-of-type { margin-top: 0; }
-  .section-head h3 { font-size: 16px; font-weight: 900; letter-spacing: -0.3px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; color: #000000; }
+  .section-head h3 { font-size: 16px; font-weight: 900; letter-spacing: -0.3px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; color: #1a1a1a; }
   body.dark .section-head h3 { color: #ffffff; }
   .section-head .icon-social { color: #0084ff; font-size: 18px; }
   .section-head .icon-mail { color: #ff8800; font-size: 18px; }
@@ -82,9 +125,9 @@
   .song-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .song-card-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; overflow: hidden; gap: 6px; }
   .song-card-info .genre-country { font-size: 10px; font-weight: 600; color: #8fdfa8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-  .song-card-info h3 { font-size: 13.5px; font-weight: 800; line-height: 1.3; color: #000000; letter-spacing: -0.2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; word-break: break-word; transition: color 0.15s ease; }
-  .song-card-info h3 .dash { font-weight: 600; color: #000000; margin: 0 2px; }
-  .song-card-info h3 .feat-tag { font-weight: 800; color: #000000; font-size: 13.5px; }
+  .song-card-info h3 { font-size: 13.5px; font-weight: 800; line-height: 1.3; color: #1a1a1a; letter-spacing: -0.2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; word-break: break-word; transition: color 0.15s ease; }
+  .song-card-info h3 .dash { font-weight: 600; color: #1a1a1a; margin: 0 2px; }
+  .song-card-info h3 .feat-tag { font-weight: 800; color: #1a1a1a; font-size: 13.5px; }
   .song-card-info .date { font-size: 11px; color: #888888; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   .top-albums-list { display: flex; flex-direction: column; }
@@ -93,7 +136,7 @@
   .top-album-cover { width: 115px; height: 115px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 14px; position: relative; }
   .top-album-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .top-album-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; overflow: hidden; gap: 6px; }
-  .top-album-name { font-size: 15px; font-weight: 900; line-height: 1.35; color: #000000; letter-spacing: -0.3px; overflow-wrap: anywhere; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; transition: color 0.15s ease; }
+  .top-album-name { font-size: 15px; font-weight: 900; line-height: 1.35; color: #1a1a1a; letter-spacing: -0.3px; overflow-wrap: anywhere; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; transition: color 0.15s ease; }
   .top-album-date { font-size: 11px; color: #888888; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   @media (hover: hover) and (pointer: fine) {
@@ -157,13 +200,6 @@
   .ad-after-cta .ad-after-placeholder i { font-size: 26px; color: #ff8800; margin-bottom: 8px; display: block; opacity: 0.7; }
   .ad-after-cta .ad-after-placeholder p { font-size: 12px; color: #666; font-weight: 600; margin: 0; }
 
-  .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
-  .sub-modal.open { display: flex; }
-  .sub-modal-inner { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 30px 24px; text-align: center; max-width: 340px; width: 100%; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-  @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-  .sub-modal-btn { display: block; width: 100%; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; margin-bottom: 10px; }
-  .sub-modal-btn.confirm { background: #ff0033; color: #ffffff; }
-  .sub-modal-btn.close { background: transparent; color: var(--text2); font-size: 12px; }
   .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); letter-spacing: 1px; border-top: 1px solid var(--border); margin-top: 20px; }
   .footer .brand { color: var(--accent); font-weight: 700; }
   .loading, .empty { text-align: center; padding: 40px 20px; color: var(--text2); font-size: 13px; }
@@ -189,15 +225,18 @@
 </head><body class="light">
 
   <header class="header">
-    <button class="menu-btn" onclick="toggleMenu(event)">☰</button>
-    <a href="index.html" class="logo">
-      <span class="logo-badge" id="siteLogoBadge">
-        <svg width="17" height="17" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 14.5v-2.5a8 8 0 0116 0v2.5" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-          <rect x="2" y="13.5" width="4.2" height="7.2" rx="1.8" fill="#ffffff"/>
-          <rect x="17.8" y="13.5" width="4.2" height="7.2" rx="1.8" fill="#ffffff"/>
-        </svg>
-      </span>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu(event)" aria-label="Menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+    <a href="index.html" class="logo" id="siteLogoBadge">
+      <svg width="26" height="26" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="logo-icon">
+        <rect width="24" height="24" rx="7" fill="#ff0033"/>
+        <path d="M5 14.5v-2.5a7 7 0 0114 0v2.5" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+        <rect x="3.5" y="13.8" width="3.6" height="6" rx="1.5" fill="#ffffff"/>
+        <rect x="16.9" y="13.8" width="3.6" height="6" rx="1.5" fill="#ffffff"/>
+      </svg>
       <span class="logo-text">FLEX<span>TUNE</span></span>
     </a>
     <div class="header-spacer"></div>
@@ -323,12 +362,17 @@
     <footer class="footer"><span class="brand">FLEXTUNE</span> © 2026</footer>
   </div>
 
-  <div class="menu-dropdown" id="menuDropdown" onclick="event.stopPropagation()">
+  <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+  <div class="menu-dropdown" id="menuDropdown">
     <div class="menu-title">Navigation</div>
-    <a href="search.html" class="menu-item"><span class="label" style="font-weight: 900; font-size: 15px;">🔍 Search</span><span class="arrow">➡</span></a>
-    <a href="weekend.html" class="menu-item"><span class="label" style="font-weight: 900; font-size: 15px;">🔥 Trend</span><span class="arrow">➡</span></a>
+    <a href="search.html" class="menu-item"><span class="label">Search</span><span class="arrow">→</span></a>
+    <a href="weekend.html" class="menu-item"><span class="label">Trend</span><span class="arrow">→</span></a>
+    <a href="index.html" class="menu-item"><span class="label">Music</span><span class="arrow">→</span></a>
+    <a href="albums.html" class="menu-item"><span class="label">Albums</span><span class="arrow">→</span></a>
+    <a href="artists.html" class="menu-item"><span class="label">Artists</span><span class="arrow">→</span></a>
+    <a href="videos.html" class="menu-item"><span class="label">Videos</span><span class="arrow">→</span></a>
     <div class="menu-title">Subscribe</div>
-    <a href="#" onclick="fakeSubscribe(event)" class="menu-item"><span class="label" style="color: #ff0033; font-weight: 900;"><i class="fab fa-youtube" style="margin-right: 8px;"></i>Subscribe on YouTube</span><span class="arrow">➡</span></a>
+    <a href="#" onclick="fakeSubscribe(event)" class="menu-item"><span class="label" style="color: #ff0033;"><i class="fab fa-youtube" style="margin-right: 10px;"></i>Subscribe on YouTube</span><span class="arrow">→</span></a>
     <div class="menu-title">Settings</div>
     <div class="theme-row">
       <span class="theme-label">Theme</span>
@@ -337,9 +381,10 @@
         <button class="theme-btn" data-theme="light" onclick="setTheme('light')">Light</button>
       </div>
     </div>
-    <a href="artists.html" class="menu-item"><span class="label" style="font-weight: 900; font-size: 15px;">All Artists</span><span class="arrow">➡</span></a>
-    <div class="menu-title">Resources</div>
-    <a href="distributors.html" class="menu-item"><span class="label">🎧 Get On Spotify</span><span class="arrow">➡</span></a>
+    <div class="menu-title">More</div>
+    <a href="about.html" class="menu-item"><span class="label">About</span><span class="arrow">→</span></a>
+    <a href="promo.html" class="menu-item"><span class="label">Promo</span><span class="arrow">→</span></a>
+    <a href="distributors.html" class="menu-item"><span class="label">Get On Spotify</span><span class="arrow">→</span></a>
   </div>
 
   <div class="sub-modal" id="subModal" onclick="closeSubModal()">
@@ -369,8 +414,30 @@
 
     let allLatestSongs = [];
 
-    window.toggleMenu = function(e) { e.stopPropagation(); document.getElementById('menuDropdown').classList.toggle('open'); }
-    document.addEventListener('click', () => document.getElementById('menuDropdown').classList.remove('open'));
+    window.toggleMenu = function(e) {
+      e.stopPropagation();
+      const menu = document.getElementById('menuDropdown');
+      const overlay = document.getElementById('menuOverlay');
+      const btn = document.getElementById('menuBtn');
+      if (menu.classList.contains('open')) {
+        menu.classList.remove('open');
+        overlay.classList.remove('open');
+        btn.classList.remove('open');
+        btn.classList.remove('menu-open');
+      } else {
+        menu.classList.add('open');
+        overlay.classList.add('open');
+        btn.classList.add('open');
+        btn.classList.add('menu-open');
+      }
+    }
+    window.closeMenu = function() {
+      document.getElementById('menuDropdown').classList.remove('open');
+      document.getElementById('menuOverlay').classList.remove('open');
+      const btn = document.getElementById('menuBtn');
+      btn.classList.remove('open');
+      btn.classList.remove('menu-open');
+    }
 
     window.fakeSubscribe = function(e) {
       e.preventDefault();
@@ -390,7 +457,7 @@
     }
     window.setTheme = (theme) => { localStorage.setItem('samarid-theme', theme); applySettings(); }
 
-    // ===== SITE LOGO LOADER (fetches from Supabase images table, section = 'logo') =====
+    // ===== SITE LOGO IMAGE — replaces only the SVG, keeps FLEX TUNE text =====
     async function loadSiteLogo() {
       const badge = document.getElementById('siteLogoBadge');
       if (!badge) return;
@@ -398,12 +465,16 @@
         const res = await fetch(SUPABASE_URL + '/rest/v1/images?section=eq.logo&active=eq.true&select=*&order=id.desc&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const logos = await res.json();
         if (Array.isArray(logos) && logos.length > 0 && logos[0].image_url) {
-          badge.innerHTML = '<img src="' + escapeHtml(logos[0].image_url) + '" alt="FlexTune" loading="eager">';
+          const svg = badge.querySelector('svg');
+          if (svg) {
+            const img = document.createElement('img');
+            img.src = logos[0].image_url;
+            img.alt = 'FlexTune';
+            img.className = 'logo-icon';
+            svg.replaceWith(img);
+          }
         }
-        // else: keep the SVG headphones fallback
-      } catch (e) {
-        console.warn('Logo fetch failed, using fallback:', e);
-      }
+      } catch (e) {}
     }
 
     async function loadPageBuilderBlocks() {
