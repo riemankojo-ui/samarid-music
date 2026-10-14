@@ -7,8 +7,10 @@
 <meta name="description" content="Search songs, artists, videos, and albums on FlexTune — Africa's Music Hub.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"></noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 <script>
   (function() {
     try {
@@ -27,7 +29,6 @@
     --text: #ffffff;
     --text2: #999999;
     --accent: #ff0033;
-    --header-bg: #0a0a0a;
   }
   html[data-theme="light"] {
     --bg: #ffffff;
@@ -35,52 +36,42 @@
     --border: #e5e5e5;
     --text: #0a0a0a;
     --text2: #666666;
-    --header-bg: #0a0a0a;
   }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
   html, body { overflow-x: hidden; max-width: 100vw; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    min-height: 100vh;
-    padding-bottom: 40px;
-    transition: background 0.2s, color 0.2s;
-  }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; padding-bottom: 40px; transition: background 0.2s, color 0.2s; }
   img { max-width: 100%; }
 
-  /* ===== HEADER — relative (matches index/song) ===== */
+  /* ===== HEADER ===== */
   .header { position: relative; background: #0a0a0a; border-bottom: 1px solid #222; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; min-height: 50px; }
-
   .menu-btn { width: 36px; height: 36px; background: transparent; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; transition: all 0.2s; }
   .menu-btn .bar { display: block; width: 22px; height: 2.5px; background: #999999; border-radius: 2px; transition: all 0.3s ease; transform-origin: center; }
   .menu-btn.open .bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
   .menu-btn.open .bar:nth-child(2) { opacity: 0; }
   .menu-btn.open .bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
   .menu-btn.menu-open { position: fixed; top: 14px; left: 14px; z-index: 10001; }
-
   .logo { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; padding: 0 8px; min-width: 0; }
   .logo-text { font-size: 16px; font-weight: 900; letter-spacing: -0.4px; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .logo-text span { color: var(--accent); }
   .header-spacer { width: 36px; flex-shrink: 0; }
 
   /* ===== MENU OVERLAY ===== */
-  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
   .menu-overlay.open { opacity: 1; pointer-events: auto; }
 
-  /* ===== SLIDE-IN MENU ===== */
-  .menu-dropdown { position: fixed; top: 0; left: -320px; width: 290px; max-width: 85vw; height: 100vh; background: #141414; border-right: 1px solid #222; z-index: 9999; transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; box-shadow: 10px 0 50px rgba(0,0,0,0.6); padding-top: 60px; }
+  /* ===== SLIDE-IN MENU — LIGHT + CUT ===== */
+  .menu-dropdown { position: fixed; top: 56px; left: -320px; width: 290px; max-width: 85vw; height: calc(100vh - 56px); background: #f7f7f7; border-right: 1px solid #e5e5e5; z-index: 9999; transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; box-shadow: 10px 0 40px rgba(0,0,0,0.15); padding-top: 12px; }
   .menu-dropdown.open { left: 0; }
-  .menu-title { padding: 20px 26px 10px; font-size: 10px; color: #666; letter-spacing: 2.5px; font-weight: 800; text-transform: uppercase; border-top: 1px solid #1e1e1e; margin-top: 6px; }
-  .menu-title:first-child { border-top: none; margin-top: 0; }
-  .menu-item { padding: 16px 26px; font-size: 16px; color: #ffffff; cursor: pointer; display: flex; align-items: center; gap: 14px; text-decoration: none; transition: background 0.15s; background: transparent; border: none; width: 100%; font-family: inherit; text-align: left; font-weight: 700; letter-spacing: -0.2px; }
-  .menu-item:active { background: #1f1f1f; }
-  .menu-item .label { flex: 1; color: #ffffff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; font-size: 16px; }
-  .menu-item .arrow { color: #444; font-size: 12px; flex-shrink: 0; }
+  .menu-title { padding: 20px 26px 10px; font-size: 10px; color: #999; letter-spacing: 2.5px; font-weight: 800; text-transform: uppercase; border-top: 1px solid #e8e8e8; margin-top: 6px; }
+  .menu-title:first-child { border-top: none; margin-top: 0; padding-top: 6px; }
+  .menu-item { padding: 16px 26px; font-size: 16px; color: #0a0a0a; cursor: pointer; display: flex; align-items: center; gap: 14px; text-decoration: none; transition: background 0.15s; background: transparent; border: none; width: 100%; font-family: inherit; text-align: left; font-weight: 700; letter-spacing: -0.2px; }
+  .menu-item:active { background: #ececec; }
+  .menu-item .label { flex: 1; color: #0a0a0a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; font-size: 16px; }
+  .menu-item .arrow { color: #bbb; font-size: 12px; flex-shrink: 0; }
   .theme-row { padding: 14px 26px 18px; display: flex; align-items: center; justify-content: space-between; }
-  .theme-label { font-size: 15px; color: #fff; font-weight: 700; }
+  .theme-label { font-size: 15px; color: #0a0a0a; font-weight: 700; }
   .theme-toggle { display: flex; gap: 6px; }
-  .theme-btn { padding: 8px 14px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; color: #ccc; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .theme-btn { padding: 8px 14px; background: #ffffff; border: 1px solid #ddd; border-radius: 8px; color: #666; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: inherit; }
   .theme-btn.active { border-color: var(--accent); color: var(--accent); }
 
   /* ===== SUB MODAL ===== */
@@ -118,13 +109,14 @@
   .section-title .count { color: var(--accent); margin-left: 6px; }
 
   .result-list { display: flex; flex-direction: column; }
-.result-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; }
-  .result-card:last-child { border-bottom: none; }
- .result-img { width: 79px; height: 70px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 5px; }
+  .result-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; }
+  .result-card:last-child { border-bottom: 1px solid var(--border); }
+  .result-card:first-child { border-top: 1px solid var(--border); }
+  .result-img { width: 79px; height: 70px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 5px; }
   .result-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .result-img.artist { border-radius: 50%; }
 
-  .result-video-img { width: 100px; height: 56px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 10px; position: relative; }
+  .result-video-img { width: 100px; height: 56px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 5px; position: relative; }
   .result-video-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .result-video-img::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.25); }
   .result-video-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 28px; height: 20px; background: rgba(0,0,0,0.8); border-radius: 4px; z-index: 2; display: flex; align-items: center; justify-content: center; }
@@ -372,7 +364,7 @@
     async function loadAllData() {
       try {
         const [songsRes, artistsRes, videosRes] = await Promise.all([
-          fetch(SUPABASE_URL + '/rest/v1/songs?select=id,title,artist_name,cover,category,date,verified,album_name,featuring,country' + LIVE_FILTER + '&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/songs?select=id,title,artist_name,cover,category,date,verified,album_name,featuring,country' + LIVE_FILTER + '&order=id.desc&limit=500', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
           fetch(SUPABASE_URL + '/rest/v1/artists?select=name,profile_pic,verified&order=name.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
           fetch(SUPABASE_URL + '/rest/v1/videos?select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
         ]);

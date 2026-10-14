@@ -16,61 +16,93 @@
 <meta name="twitter:description" id="twDescription" content="Download Mp3 songs from FlexTune.">
 <meta name="twitter:image" id="twImage" content="https://samarid-music.vercel.app/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"></noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 <style>
   :root { --bg: #ffffff; --card: #f5f5f5; --border: #e5e5e5; --text: #0a0a0a; --text2: #666; --accent: #ff0033; --red: #ff0033; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
   html, body { overflow-x: hidden; max-width: 100vw; }
   body { background: #fafafa; color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 40px; }
   img { max-width: 100%; }
-  .header { position: sticky; top: 0; background: #fff; border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 8px; z-index: 100; }
-  .menu-btn { background: transparent; color: var(--text); border: none; width: 40px; height: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; }
-  .menu-btn span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; }
-  .menu-btn:active span { background: var(--accent); }
-  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; flex: 1; justify-content: center; padding: 0 8px; min-width: 0; }
-  .logo-text { font-size: 18px; font-weight: 900; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.5px; }
-  .logo-text span { color: var(--red); }
-  .header-spacer { width: 40px; flex-shrink: 0; }
-  .side-menu { position: fixed; top: 0; right: -340px; width: 320px; max-width: 88%; height: 100vh; background: #0a0a0a; color: #fff; z-index: 9999; transition: right 0.3s ease; overflow-y: auto; box-shadow: -10px 0 40px rgba(0,0,0,0.3); }
-  .side-menu.open { right: 0; }
-  .side-menu-header { padding: 20px; border-bottom: 1px solid #222; display: flex; align-items: center; justify-content: space-between; }
-  .side-menu-title { font-size: 16px; font-weight: 900; color: #fff; }
-  .side-menu-close { background: transparent; border: none; color: #666; font-size: 22px; cursor: pointer; }
-  .side-menu-artist { padding: 25px 20px; border-bottom: 1px solid #222; text-align: center; }
-  .side-menu-avatar { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; border: 3px solid var(--accent); font-size: 28px; font-weight: 900; color: #fff; overflow: hidden; flex-shrink: 0; }
-  .side-menu-avatar img { width: 100%; height: 100%; object-fit: cover; }
-  .side-menu-artist-name { font-size: 18px; font-weight: 900; color: #fff; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 4px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px; }
-  .side-menu-artist-bio { font-size: 12px; color: #999; line-height: 1.5; margin-bottom: 12px; text-align: center; padding: 0 4px; overflow-wrap: anywhere; word-break: break-word; max-width: 100%; }
-  .side-menu-artist-role { font-size: 11px; color: #666; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-bottom: 14px; }
-  .menu-follow-row { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
-  .menu-follow-count { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #888; font-weight: 700; white-space: nowrap; }
-  .menu-follow-count .num { color: #fff; font-weight: 900; font-size: 14px; }
-  .menu-follow-btn { padding: 8px 18px; border-radius: 20px; font-size: 12px; font-weight: 800; border: 2px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 5px; }
+
+  /* ===== HEADER ===== */
+  .header { position: relative; background: #0a0a0a; border-bottom: 1px solid #222; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; min-height: 50px; }
+  .menu-btn { width: 36px; height: 36px; background: transparent; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; transition: all 0.2s; }
+  .menu-btn .bar { display: block; width: 22px; height: 2.5px; background: #999999; border-radius: 2px; transition: all 0.3s ease; transform-origin: center; }
+  .menu-btn.open .bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .menu-btn.open .bar:nth-child(2) { opacity: 0; }
+  .menu-btn.open .bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  .menu-btn.menu-open { position: fixed; top: 14px; left: 14px; z-index: 10001; }
+  .logo { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; padding: 0 8px; min-width: 0; }
+  .logo-text { font-size: 16px; font-weight: 900; letter-spacing: -0.4px; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .logo-text span { color: var(--accent); }
+  .header-spacer { width: 36px; flex-shrink: 0; }
+
+  /* ===== MENU OVERLAY ===== */
+  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  .menu-overlay.open { opacity: 1; pointer-events: auto; }
+
+  /* ===== SLIDE-IN MENU — LIGHT + CUT + ARTIST INFO ===== */
+  .menu-dropdown { position: fixed; top: 56px; left: -320px; width: 290px; max-width: 85vw; height: calc(100vh - 56px); background: #f7f7f7; border-right: 1px solid #e5e5e5; z-index: 9999; transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; box-shadow: 10px 0 40px rgba(0,0,0,0.15); padding-top: 0; }
+  .menu-dropdown.open { left: 0; }
+  .menu-title { padding: 20px 26px 10px; font-size: 10px; color: #999; letter-spacing: 2.5px; font-weight: 800; text-transform: uppercase; border-top: 1px solid #e8e8e8; margin-top: 6px; }
+  .menu-title:first-child { border-top: none; margin-top: 0; padding-top: 14px; }
+  .menu-item { padding: 16px 26px; font-size: 16px; color: #0a0a0a; cursor: pointer; display: flex; align-items: center; gap: 14px; text-decoration: none; transition: background 0.15s; background: transparent; border: none; width: 100%; font-family: inherit; text-align: left; font-weight: 700; letter-spacing: -0.2px; }
+  .menu-item:active { background: #ececec; }
+  .menu-item .label { flex: 1; color: #0a0a0a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; font-size: 16px; }
+  .menu-item .arrow { color: #bbb; font-size: 12px; flex-shrink: 0; }
+  .theme-row { padding: 14px 26px 18px; display: flex; align-items: center; justify-content: space-between; }
+  .theme-label { font-size: 15px; color: #0a0a0a; font-weight: 700; }
+  .theme-toggle { display: flex; gap: 6px; }
+  .theme-btn { padding: 8px 14px; background: #ffffff; border: 1px solid #ddd; border-radius: 8px; color: #666; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .theme-btn.active { border-color: var(--accent); color: var(--accent); }
+
+  /* Artist info block inside menu */
+  .menu-artist { padding: 20px 20px 18px; border-bottom: 1px solid #e8e8e8; text-align: center; }
+  .menu-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; border: 2px solid #fff; font-size: 24px; font-weight: 900; color: #fff; overflow: hidden; box-shadow: 0 4px 14px rgba(255,0,51,0.2); }
+  .menu-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .menu-artist-name { font-size: 16px; font-weight: 900; color: #0a0a0a; margin-bottom: 4px; display: flex; align-items: center; justify-content: center; gap: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 6px; }
+  .menu-artist-role { font-size: 10px; color: #999; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; margin-bottom: 12px; }
+  .menu-follow-row { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
+  .menu-follow-btn { padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; border: 1.5px solid var(--accent); background: var(--accent); color: #fff; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 5px; }
   .menu-follow-btn:active { transform: scale(0.94); }
   .menu-follow-btn:disabled { opacity: 0.6; }
   .menu-follow-btn.following { background: transparent; color: var(--accent); }
-  .side-menu-section-title { padding: 18px 20px 8px; font-size: 10px; color: #666; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
-  .side-menu-item { display: flex; align-items: center; gap: 14px; padding: 14px 20px; color: #fff; text-decoration: none; font-size: 14px; font-weight: 600; border-bottom: 1px solid #151515; cursor: pointer; background: transparent; border-left: none; border-right: none; border-top: none; width: 100%; font-family: inherit; text-align: left; overflow: hidden; }
-  .side-menu-item:active { background: #1a1a1a; }
-  .side-menu-item i { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
-  .side-menu-item .item-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .side-menu-item .tiktok-icon { color: #ffffff; }
-  .side-menu-item .insta-icon { color: #E1306C; }
-  .side-menu-item .youtube-icon { color: #FF0000; }
-  .side-menu-item .spotify-icon { color: #1DB954; }
-  .side-menu-item .share-whatsapp-icon { color: #25D366; }
-  .side-menu-item .share-facebook-icon { color: #1877F2; }
-  .side-menu-item .share-twitter-icon { color: #ffffff; }
-  .side-menu-item .share-copy-icon { color: #ff0033; }
-  .side-menu-footer { padding: 25px 20px; text-align: center; font-size: 10px; color: #444; letter-spacing: 1px; }
-  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9998; display: none; }
-  .menu-overlay.open { display: block; }
+  .menu-follow-count { font-size: 12px; color: #888; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+  .menu-follow-count .num { color: #0a0a0a; font-weight: 900; font-size: 13px; }
+
+  /* Social + share sub-items */
+  .submenu-item { display: flex; align-items: center; gap: 14px; padding: 13px 26px; color: #0a0a0a; text-decoration: none; font-size: 14px; font-weight: 700; border-bottom: 1px solid #ededed; cursor: pointer; background: transparent; border-left: none; border-right: none; border-top: none; width: 100%; font-family: inherit; text-align: left; }
+  .submenu-item:active { background: #ececec; }
+  .submenu-item i { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
+  .submenu-item .submenu-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .submenu-item .tiktok-icon { color: #000000; }
+  .submenu-item .insta-icon { color: #E1306C; }
+  .submenu-item .youtube-icon { color: #FF0000; }
+  .submenu-item .spotify-icon { color: #1DB954; }
+  .submenu-item .share-whatsapp-icon { color: #25D366; }
+  .submenu-item .share-facebook-icon { color: #1877F2; }
+  .submenu-item .share-twitter-icon { color: #000000; }
+  .submenu-item .share-copy-icon { color: #ff0033; }
+  .menu-footer-note { padding: 22px 26px 26px; text-align: center; font-size: 10px; color: #aaa; letter-spacing: 1px; }
+
+  /* ===== SUB MODAL ===== */
+  .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+  .sub-modal.open { display: flex; }
+  .sub-modal-inner { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 30px 24px; text-align: center; max-width: 340px; width: 100%; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .sub-modal-btn { display: block; width: 100%; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; margin-bottom: 10px; }
+  .sub-modal-btn.confirm { background: #ff0033; color: #ffffff; }
+  .sub-modal-btn.close { background: transparent; color: var(--text2); font-size: 12px; }
+
   .container { max-width: 700px; margin: 0 auto; padding: 8px 16px 16px; }
   .page-title { font-size: 12px; font-weight: 800; color: var(--text2); letter-spacing: 0.5px; padding: 8px 0 14px; text-align: left; text-transform: uppercase; }
   .page-title .accent { color: var(--text); font-weight: 900; }
 
-  /* ===== SONG CARD — matches index.html ===== */
+  /* ===== SONG CARD ===== */
   .song-list { display: flex; flex-direction: column; }
   .song-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; }
   .song-card:last-child { border-bottom: 1px solid var(--border); }
@@ -88,6 +120,16 @@
     .song-card:hover .song-card-info h3 { color: var(--accent); }
   }
   .song-card:active .song-card-info h3 { color: var(--accent); }
+
+  /* ===== SKELETON LOADERS ===== */
+  .skeleton-card { display: flex; gap: 14px; padding: 14px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); align-items: center; }
+  .skeleton-img { width: 109px; height: 96px; flex-shrink: 0; background: var(--border); border-radius: 5px; animation: skeleton-pulse 1.4s ease-in-out infinite; }
+  .skeleton-info { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .skeleton-line { height: 10px; background: var(--border); border-radius: 4px; animation: skeleton-pulse 1.4s ease-in-out infinite; }
+  .skeleton-line.short { width: 40%; height: 8px; }
+  .skeleton-line.medium { width: 70%; height: 12px; }
+  .skeleton-line.long { width: 90%; }
+  @keyframes skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
 
   .pb-block { margin-bottom: 20px; padding: 18px 20px; border-radius: 14px; }
   .pb-block.pb-image { padding: 0; overflow: hidden; }
@@ -130,7 +172,7 @@
   .empty-state .icon { font-size: 50px; margin-bottom: 15px; opacity: 0.5; }
   .empty-state h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
   .verify-badge { display: inline-block; width: 14px; height: 14px; vertical-align: middle; flex-shrink: 0; margin-left: 4px; }
-  
+
   .artist-story-section { margin-top: 50px; background: #0a0a0a; color: #ffffff; padding: 40px 20px; border-top: 4px solid var(--accent); }
   .artist-story-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #222; padding-bottom: 14px; }
   .artist-story-header i { font-size: 18px; color: var(--accent); }
@@ -147,13 +189,14 @@
   .footer .brand { color: var(--red); font-weight: 700; }
   .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: 600; z-index: 99999; box-shadow: 0 10px 30px rgba(0,0,0,0.3); max-width: calc(100vw - 40px); text-align: center; }
 </style>
-</head><body>
+</head>
+<body>
 
   <header class="header">
-    <button class="menu-btn" onclick="toggleSideMenu(event)" aria-label="Menu">
-      <span></span>
-      <span></span>
-      <span></span>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu(event)" aria-label="Menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
     </button>
     <a href="index.html" class="logo">
       <span class="logo-text">FLEX<span>TUNE</span></span>
@@ -161,17 +204,13 @@
     <div class="header-spacer"></div>
   </header>
 
-  <div class="menu-overlay" id="menuOverlay" onclick="closeSideMenu()"></div>
-  <div class="side-menu" id="sideMenu">
-    <div class="side-menu-header">
-      <span class="side-menu-title">Artist Info</span>
-      <button class="side-menu-close" onclick="closeSideMenu()">✕</button>
-    </div>
-    <div class="side-menu-artist">
-      <div class="side-menu-avatar" id="menuAvatar">K</div>
-      <div class="side-menu-artist-name" id="menuArtistName">Loading...</div>
-      <div class="side-menu-artist-bio" id="menuArtistBio" style="display:none;"></div>
-      <div class="side-menu-artist-role" id="menuArtistRole">FlexTune Artist</div>
+  <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+  <div class="menu-dropdown" id="menuDropdown">
+
+    <div class="menu-artist">
+      <div class="menu-avatar" id="menuAvatar">K</div>
+      <div class="menu-artist-name" id="menuArtistName">Loading...</div>
+      <div class="menu-artist-role">FlexTune Artist</div>
       <div class="menu-follow-row">
         <button class="menu-follow-btn" id="followBtn" onclick="toggleFollow()">
           <i class="fas fa-plus" id="followIcon"></i>
@@ -183,16 +222,47 @@
         </div>
       </div>
     </div>
-    <div class="side-menu-section-title">Follow on Social</div>
+
+    <div class="menu-title">Navigation</div>
+    <a href="search.html" class="menu-item"><span class="label">Search</span><span class="arrow">→</span></a>
+    <a href="weekend.html" class="menu-item"><span class="label">Trend</span><span class="arrow">→</span></a>
+    <a href="index.html" class="menu-item"><span class="label">Music</span><span class="arrow">→</span></a>
+    <a href="albums.html" class="menu-item"><span class="label">Albums</span><span class="arrow">→</span></a>
+    <a href="artists.html" class="menu-item"><span class="label">Artists</span><span class="arrow">→</span></a>
+    <a href="videos.html" class="menu-item"><span class="label">Videos</span><span class="arrow">→</span></a>
+
+    <div class="menu-title">Follow on Social</div>
     <div id="menuSocialLinks">
-      <p style="padding: 20px; text-align: center; color: #666; font-size: 13px;">Loading...</p>
+      <p style="padding: 16px 26px; color: #999; font-size: 13px;">Loading...</p>
     </div>
-    <div class="side-menu-section-title">Share this Artist</div>
-    <button class="side-menu-item" onclick="shareWhatsApp()"><i class="fab fa-whatsapp share-whatsapp-icon"></i><span class="item-label">WhatsApp</span><span style="color:#444;">↗</span></button>
-    <button class="side-menu-item" onclick="shareFacebook()"><i class="fab fa-facebook share-facebook-icon"></i><span class="item-label">Facebook</span><span style="color:#444;">↗</span></button>
-    <button class="side-menu-item" onclick="shareTwitter()"><i class="fab fa-x-twitter share-twitter-icon"></i><span class="item-label">X (Twitter)</span><span style="color:#444;">↗</span></button>
-    <button class="side-menu-item" onclick="copyArtistLink()"><i class="fas fa-link share-copy-icon"></i><span class="item-label">Copy Link</span><span style="color:#444;">📋</span></button>
-    <div class="side-menu-footer">© 2026 FLEXTUNE</div>
+
+    <div class="menu-title">Share this Artist</div>
+    <button class="submenu-item" onclick="shareWhatsApp()"><i class="fab fa-whatsapp share-whatsapp-icon"></i><span class="submenu-label">WhatsApp</span><span style="color:#bbb;">↗</span></button>
+    <button class="submenu-item" onclick="shareFacebook()"><i class="fab fa-facebook share-facebook-icon"></i><span class="submenu-label">Facebook</span><span style="color:#bbb;">↗</span></button>
+    <button class="submenu-item" onclick="shareTwitter()"><i class="fab fa-x-twitter share-twitter-icon"></i><span class="submenu-label">X (Twitter)</span><span style="color:#bbb;">↗</span></button>
+    <button class="submenu-item" onclick="copyArtistLink()"><i class="fas fa-link share-copy-icon"></i><span class="submenu-label">Copy Link</span><span style="color:#bbb;">📋</span></button>
+
+    <div class="menu-title">Subscribe</div>
+    <a href="#" onclick="fakeSubscribe(event)" class="menu-item">
+      <span class="label" style="color: #ff0033;"><i class="fab fa-youtube" style="margin-right: 10px;"></i>Subscribe</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <div class="menu-title">Settings</div>
+    <div class="theme-row">
+      <span class="theme-label">Theme</span>
+      <div class="theme-toggle">
+        <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">Dark</button>
+        <button class="theme-btn" data-theme="light" onclick="setTheme('light')">Light</button>
+      </div>
+    </div>
+
+    <div class="menu-title">More</div>
+    <a href="about.html" class="menu-item"><span class="label">About</span><span class="arrow">→</span></a>
+    <a href="promo.html" class="menu-item"><span class="label">Promo</span><span class="arrow">→</span></a>
+    <a href="distributors.html" class="menu-item"><span class="label">Get On Spotify</span><span class="arrow">→</span></a>
+
+    <div class="menu-footer-note">© 2026 FLEXTUNE</div>
   </div>
 
   <div class="container">
@@ -203,7 +273,9 @@
     <div id="artistAdContainer"></div>
 
     <div class="song-list" id="songList">
-      <div class="loading">Loading songs...</div>
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-info"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line long"></div></div></div>
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-info"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line long"></div></div></div>
+      <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-info"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line long"></div></div></div>
     </div>
     <div class="bottom-controls" id="bottomControls" style="display:none;">
       <div class="bottom-search-wrap">
@@ -232,7 +304,7 @@
         <h3>The Journey & Music Story of <span id="storyArtistName">This Artist</span></h3>
       </div>
       <p>Welcome to the official music headquarters and streaming catalog for <strong id="storyArtistNameDesc" class="accent-word">this artist</strong>. As a standout voice under the innovative <strong style="color:var(--accent);">FlexTune</strong> movement in Africa, this creative force continues to redefine contemporary sound, delivering infectious melodies and deeply resonant lyricism that captivates listeners nationwide.</p>
-      
+
       <div class="artist-story-quote">
         "Every track is crafted to tell a genuine story, bridging authentic African rhythms with modern production values for music lovers everywhere."
       </div>
@@ -250,6 +322,16 @@
   </div>
 
   <footer class="footer"><span class="brand">FLEXTUNE</span> © 2026</footer>
+
+  <div class="sub-modal" id="subModal" onclick="closeSubModal()">
+    <div class="sub-modal-inner" onclick="event.stopPropagation()">
+      <div style="font-size: 40px; margin-bottom: 10px;">🎵</div>
+      <h2 style="font-size: 20px; font-weight: 900; margin-bottom: 10px;">Support FlexTune</h2>
+      <p style="font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.5;">Subscribe to the official YouTube channel!</p>
+      <a href="#" id="popupSubBtn" target="_blank" class="sub-modal-btn confirm">Subscribe on YouTube</a>
+      <button onclick="closeSubModal()" class="sub-modal-btn close">I'll do it later</button>
+    </div>
+  </div>
 
   <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
@@ -301,24 +383,71 @@
     let currentPage = 1;
     let isVerifiedArtist = false;
 
-    window.toggleSideMenu = function(e) { e.stopPropagation(); document.getElementById('sideMenu').classList.add('open'); document.getElementById('menuOverlay').classList.add('open'); }
-    window.closeSideMenu = function() { document.getElementById('sideMenu').classList.remove('open'); document.getElementById('menuOverlay').classList.remove('open'); }
+    window.applySettings = function() {
+      const theme = localStorage.getItem('samarid-theme') || 'light';
+      const accent = localStorage.getItem('samarid-accent') || '#ff0033';
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.setProperty('--accent', accent);
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
+    }
+    window.setTheme = function(theme) {
+      localStorage.setItem('samarid-theme', theme);
+      applySettings();
+    }
+
+    window.toggleMenu = function(e) {
+      e.stopPropagation();
+      const menu = document.getElementById('menuDropdown');
+      const overlay = document.getElementById('menuOverlay');
+      const btn = document.getElementById('menuBtn');
+      if (menu.classList.contains('open')) {
+        menu.classList.remove('open');
+        overlay.classList.remove('open');
+        btn.classList.remove('open');
+        btn.classList.remove('menu-open');
+      } else {
+        menu.classList.add('open');
+        overlay.classList.add('open');
+        btn.classList.add('open');
+        btn.classList.add('menu-open');
+      }
+    }
+    window.closeMenu = function() {
+      document.getElementById('menuDropdown').classList.remove('open');
+      document.getElementById('menuOverlay').classList.remove('open');
+      const btn = document.getElementById('menuBtn');
+      btn.classList.remove('open');
+      btn.classList.remove('menu-open');
+    }
+
+    window.fakeSubscribe = function(e) {
+      e.preventDefault();
+      const channelId = localStorage.getItem('samarid_channel_id');
+      const subLink = channelId
+        ? 'https://www.youtube.com/channel/' + channelId + '?sub_confirmation=1'
+        : 'https://youtube.com/@realsamarid?sub_confirmation=1';
+      document.getElementById('popupSubBtn').href = subLink;
+      document.getElementById('subModal').classList.add('open');
+    }
+    window.closeSubModal = function() {
+      document.getElementById('subModal').classList.remove('open');
+    }
 
     function getArtistShareUrl() { return window.location.href; }
     function getArtistShareText() { return '🎤 Download ' + artistName + ' songs on FlexTune!'; }
-    window.shareWhatsApp = function() { const text = encodeURIComponent(getArtistShareText() + ' ' + getArtistShareUrl()); window.open('https://wa.me/?text=' + text, '_blank'); }
-    window.shareFacebook = function() { const url = encodeURIComponent(getArtistShareUrl()); window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, '_blank'); }
-    window.shareTwitter = function() { const text = encodeURIComponent(getArtistShareText()); const url = encodeURIComponent(getArtistShareUrl()); window.open('https://twitter.com/intent/tweet?text=' + text + '&url=' + url, '_blank'); }
+    window.shareWhatsApp = function() { const text = encodeURIComponent(getArtistShareText() + ' ' + getArtistShareUrl()); window.open('https://wa.me/?text=' + text, '_blank'); closeMenu(); }
+    window.shareFacebook = function() { const url = encodeURIComponent(getArtistShareUrl()); window.open('https://www.facebook.com/sharer/sharer.php?u=' + url, '_blank'); closeMenu(); }
+    window.shareTwitter = function() { const text = encodeURIComponent(getArtistShareText()); const url = encodeURIComponent(getArtistShareUrl()); window.open('https://twitter.com/intent/tweet?text=' + text + '&url=' + url, '_blank'); closeMenu(); }
     window.copyArtistLink = async function() {
       const url = getArtistShareUrl();
       try {
         if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(url);
         else { const ta = document.createElement('textarea'); ta.value = url; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); }
         showToast('Link copied!');
-        closeSideMenu();
+        closeMenu();
       } catch (e) { showToast('Could not copy link'); }
     }
-    function showToast(msg) { const toast = document.createElement('div'); toast.innerText = msg; toast.className = 'toast'; document.body.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; }, 1800); setTimeout(() => { if (toast.parentNode) document.body.removeChild(toast); }, 2200); }
+    function showToast(msg) { const toast = document.createElement('div'); toast.innerText = msg; toast.className = 'toast'; toast.style.transition = 'opacity 0.3s ease'; document.body.appendChild(toast); setTimeout(() => { toast.style.opacity = '0'; }, 1800); setTimeout(() => { if (toast.parentNode) document.body.removeChild(toast); }, 2200); }
 
     function ytId(url) {
       if (!url) return '';
@@ -326,6 +455,18 @@
       if (url.includes('youtube.com/watch')) { try { return new URL(url).searchParams.get('v') || ''; } catch(e) {} }
       if (url.includes('youtube.com/embed/')) return url.split('embed/')[1].split('?')[0];
       return '';
+    }
+
+    function renderSkeletons(count) {
+      const list = document.getElementById('songList');
+      let n = parseInt(count) || 1;
+      if (n < 1) n = 1;
+      if (n > 10) n = 10;
+      let html = '';
+      for (let i = 0; i < n; i++) {
+        html += '<div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-info"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line long"></div></div></div>';
+      }
+      list.innerHTML = html;
     }
 
     async function loadPageBuilderBlocks() {
@@ -531,6 +672,18 @@
     }
 
     async function loadArtistPage() {
+      try {
+        const countRes = await fetch(
+          SUPABASE_URL + '/rest/v1/songs?select=id' + LIVE_FILTER + '&artist_name=ilike.*' + encodeURIComponent(artistName) + '*',
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Prefer': 'count=exact', 'Range': '0-0' } }
+        );
+        const range = countRes.headers.get('Content-Range');
+        if (range && range.includes('/')) {
+          const c = parseInt(range.split('/')[1]);
+          if (!isNaN(c) && c > 0) renderSkeletons(c);
+        }
+      } catch (e) {}
+
       let artistProfile = null;
       try {
         const profileRes = await fetch(SUPABASE_URL + '/rest/v1/artists?name=ilike.' + encodeURIComponent(artistName) + '&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
@@ -568,16 +721,12 @@
         document.getElementById('twImage').setAttribute('content', profilePic);
       }
 
-      const bioEl = document.getElementById('menuArtistBio');
-      if (bio) { bioEl.innerText = bio; bioEl.style.display = 'block'; }
-      else { bioEl.style.display = 'none'; }
-
       const socialHTML = [];
-      if (tiktok) socialHTML.push('<a href="' + escapeHtml(tiktok) + '" target="_blank" rel="noopener" class="side-menu-item"><i class="fab fa-tiktok tiktok-icon"></i><span class="item-label">TikTok</span><span style="color:#444;">↗</span></a>');
-      if (instagram) socialHTML.push('<a href="' + escapeHtml(instagram) + '" target="_blank" rel="noopener" class="side-menu-item"><i class="fab fa-instagram insta-icon"></i><span class="item-label">Instagram</span><span style="color:#444;">↗</span></a>');
-      if (youtube) socialHTML.push('<a href="' + escapeHtml(youtube) + '" target="_blank" rel="noopener" class="side-menu-item"><i class="fab fa-youtube youtube-icon"></i><span class="item-label">YouTube</span><span style="color:#444;">↗</span></a>');
-      if (spotify) socialHTML.push('<a href="' + escapeHtml(spotify) + '" target="_blank" rel="noopener" class="side-menu-item"><i class="fab fa-spotify spotify-icon"></i><span class="item-label">Spotify</span><span style="color:#444;">↗</span></a>');
-      document.getElementById('menuSocialLinks').innerHTML = socialHTML.length > 0 ? socialHTML.join('') : '<p style="padding: 20px; text-align: center; color: #666; font-size: 13px;">No social links added yet.</p>';
+      if (tiktok) socialHTML.push('<a href="' + escapeHtml(tiktok) + '" target="_blank" rel="noopener" class="submenu-item"><i class="fab fa-tiktok tiktok-icon"></i><span class="submenu-label">TikTok</span><span style="color:#bbb;">↗</span></a>');
+      if (instagram) socialHTML.push('<a href="' + escapeHtml(instagram) + '" target="_blank" rel="noopener" class="submenu-item"><i class="fab fa-instagram insta-icon"></i><span class="submenu-label">Instagram</span><span style="color:#bbb;">↗</span></a>');
+      if (youtube) socialHTML.push('<a href="' + escapeHtml(youtube) + '" target="_blank" rel="noopener" class="submenu-item"><i class="fab fa-youtube youtube-icon"></i><span class="submenu-label">YouTube</span><span style="color:#bbb;">↗</span></a>');
+      if (spotify) socialHTML.push('<a href="' + escapeHtml(spotify) + '" target="_blank" rel="noopener" class="submenu-item"><i class="fab fa-spotify spotify-icon"></i><span class="submenu-label">Spotify</span><span style="color:#bbb;">↗</span></a>');
+      document.getElementById('menuSocialLinks').innerHTML = socialHTML.length > 0 ? socialHTML.join('') : '<p style="padding: 16px 26px; color: #999; font-size: 13px;">No social links added yet.</p>';
 
       if (allArtistSongs.length === 0) {
         document.getElementById('songList').innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3><p>Check back soon for new music!</p></div>';
@@ -587,6 +736,7 @@
       renderSongList();
     }
 
+    applySettings();
     loadArtistPage();
     loadFollowState();
     loadPageBuilderBlocks();

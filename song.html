@@ -7,28 +7,29 @@
 <meta name="description" content="Listen and download music from FlexTune — Africa's Music Hub.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"></noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 <script>
-  (function(){
+  (function() {
     try {
-      var t = localStorage.getItem('samarid-theme') || 'light';
-      document.documentElement.setAttribute('data-theme', t);
-    } catch(e){
-      document.documentElement.setAttribute('data-theme', 'light');
-    }
+      var theme = localStorage.getItem('samarid-theme') || 'light';
+      var isLight = (theme === 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+      if (isLight) document.documentElement.classList.add('theme-light');
+    } catch(e) {}
   })();
 </script>
 <style>
   :root { --bg: #0a0a0a; --card: #141414; --border: #222; --text: #ffffff; --text2: #cccccc; --accent: #ff0033; --header-bg: #111111; --dark: #0a0a0a; --soft-green: #8fdfa8; }
-  html[data-theme="light"] { --bg: #fafaf8; --card: #ffffff; --border: #ececec; --text: #1a1a1a; --text2: #666666; }
-
+  html.theme-light, html[data-theme="light"] { --bg: #fafaf8; --card: #ffffff; --border: #ececec; --text: #0a0a0a; --text2: #666666; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
   html, body { overflow-x: hidden; max-width: 100vw; }
   body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; padding-bottom: 40px; transition: background 0.25s, color 0.25s; }
   img { max-width: 100%; }
 
-.header { position: relative; background: var(--header-bg); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
+  .header { position: sticky; top: 0; background: var(--header-bg); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; }
 
   .menu-btn { background: transparent; color: #fff; border: none; width: 40px; height: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; flex-shrink: 0; padding: 0; transition: all 0.2s; }
   .menu-btn .bar { display: block; width: 24px; height: 3px; background: #999999; border-radius: 2px; transition: all 0.3s ease; transform-origin: center; }
@@ -41,22 +42,23 @@
   .logo span { color: var(--accent); }
   .header-spacer { width: 40px; flex-shrink: 0; }
 
-  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  /* ===== MENU OVERLAY ===== */
+  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
   .menu-overlay.open { opacity: 1; pointer-events: auto; }
 
-  .menu-dropdown { position: fixed; top: 0; left: -320px; width: 290px; max-width: 85vw; height: 100vh; background: #141414; border-right: 1px solid #222; z-index: 9999; transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; box-shadow: 10px 0 50px rgba(0,0,0,0.6); padding-top: 60px; }
+  /* ===== SLIDE-IN MENU — LIGHT + CUT ===== */
+  .menu-dropdown { position: fixed; top: 56px; left: -320px; width: 290px; max-width: 85vw; height: calc(100vh - 56px); background: #f7f7f7; border-right: 1px solid #e5e5e5; z-index: 9999; transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; box-shadow: 10px 0 40px rgba(0,0,0,0.15); padding-top: 12px; }
   .menu-dropdown.open { left: 0; }
-  .menu-title { padding: 20px 26px 10px; font-size: 10px; color: #666; letter-spacing: 2.5px; font-weight: 800; text-transform: uppercase; border-top: 1px solid #1e1e1e; margin-top: 6px; }
-  .menu-title:first-child { border-top: none; margin-top: 0; }
-  .menu-item { padding: 16px 26px; font-size: 16px; color: #ffffff; cursor: pointer; display: flex; align-items: center; gap: 14px; text-decoration: none; transition: background 0.15s; background: transparent; border: none; width: 100%; font-family: inherit; text-align: left; font-weight: 700; letter-spacing: -0.2px; }
-  .menu-item:active { background: #1f1f1f; }
-  .menu-item .label { flex: 1; color: #ffffff; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; font-size: 16px; }
-  .menu-item .arrow { color: #444; font-size: 12px; flex-shrink: 0; }
-
+  .menu-title { padding: 20px 26px 10px; font-size: 10px; color: #999; letter-spacing: 2.5px; font-weight: 800; text-transform: uppercase; border-top: 1px solid #e8e8e8; margin-top: 6px; }
+  .menu-title:first-child { border-top: none; margin-top: 0; padding-top: 6px; }
+  .menu-item { padding: 16px 26px; font-size: 16px; color: #0a0a0a; cursor: pointer; display: flex; align-items: center; gap: 14px; text-decoration: none; transition: background 0.15s; background: transparent; border: none; width: 100%; font-family: inherit; text-align: left; font-weight: 700; letter-spacing: -0.2px; }
+  .menu-item:active { background: #ececec; }
+  .menu-item .label { flex: 1; color: #0a0a0a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; font-size: 16px; }
+  .menu-item .arrow { color: #bbb; font-size: 12px; flex-shrink: 0; }
   .theme-row { padding: 14px 26px 18px; display: flex; align-items: center; justify-content: space-between; }
-  .theme-label { font-size: 15px; color: #fff; font-weight: 700; }
+  .theme-label { font-size: 15px; color: #0a0a0a; font-weight: 700; }
   .theme-toggle { display: flex; gap: 6px; }
-  .theme-btn { padding: 8px 14px; background: #0a0a0a; border: 1px solid #333; border-radius: 8px; color: #ccc; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .theme-btn { padding: 8px 14px; background: #ffffff; border: 1px solid #ddd; border-radius: 8px; color: #666; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: inherit; }
   .theme-btn.active { border-color: var(--accent); color: var(--accent); }
 
   .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
@@ -104,12 +106,11 @@
   .detail-section h4 { font-size: 11px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
   .detail-section h4 i { color: var(--accent); font-size: 11px; }
 
- .audio-player-box { background: transparent; border: none; border-radius: 0; padding: 6px 0; margin-bottom: 24px; }
-.player-row { display: flex; align-items: center; gap: 10px; }
-.play-pause-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(255, 0, 51, 0.3); transition: transform 0.15s; }
-.play-pause-btn:active { transform: scale(0.9); }
-.player-time { font-size: 11px; color: var(--text2); font-weight: 600; flex-shrink: 0; min-width: 34px; text-align: center; }
-.seek-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text2); font-weight: 600; }
+  .audio-player-box { background: transparent; border: none; border-radius: 0; padding: 6px 0; margin-bottom: 24px; }
+  .player-row { display: flex; align-items: center; gap: 10px; }
+  .play-pause-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(255, 0, 51, 0.3); transition: transform 0.15s; }
+  .play-pause-btn:active { transform: scale(0.9); }
+  .player-time { font-size: 11px; color: var(--text2); font-weight: 600; flex-shrink: 0; min-width: 34px; text-align: center; }
   input[type=range] { flex: 1; height: 5px; -webkit-appearance: none; background: var(--border); border-radius: 3px; outline: none; cursor: pointer; min-width: 0; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); cursor: pointer; }
 
@@ -321,6 +322,8 @@
       const theme = localStorage.getItem('samarid-theme') || 'light';
       const accent = localStorage.getItem('samarid-accent') || '#ff0033';
       document.documentElement.setAttribute('data-theme', theme);
+      if (theme === 'light') document.documentElement.classList.add('theme-light');
+      else document.documentElement.classList.remove('theme-light');
       document.documentElement.style.setProperty('--accent', accent);
       document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
     }
@@ -558,7 +561,7 @@
 
         let artistsList = [];
         try {
-         const artistsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,featuring,verified&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(nowIso) + ')' + '&limit=100', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+          const artistsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,featuring,verified&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(nowIso) + ')', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
           const artistsData = await artistsRes.json();
           const map = {};
           artistsData.forEach(a => {
@@ -605,15 +608,16 @@
             <strong>FLEXTUNE</strong> presents this track • © 2026 FlexTune
           </div>
 
-        <div class="audio-player-box">
-  <audio id="audioPlayer" src="${escapeHtml(audioSrc)}" preload="metadata"></audio>
-  <div class="player-row">
-    <button class="play-pause-btn" id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
-    <input type="range" id="seekSlider" value="0" max="100">
-    <span id="currentTime" class="player-time">0:00</span>
-    <span id="duration" class="player-time">0:00</span>
-  </div>
-</div>
+          <div class="audio-player-box">
+            <audio id="audioPlayer" src="${escapeHtml(audioSrc)}" preload="metadata"></audio>
+            <div class="player-row">
+              <button class="play-pause-btn" id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
+              <input type="range" id="seekSlider" value="0" max="100">
+              <span id="currentTime" class="player-time">0:00</span>
+              <span id="duration" class="player-time">0:00</span>
+            </div>
+          </div>
+
           <div class="detail-section">
             <h4><i class="fas fa-download"></i> Get the Song</h4>
             <div class="download-buttons">

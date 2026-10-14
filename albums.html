@@ -6,40 +6,87 @@
 <title>Albums - FlexTune</title>
 <meta name="description" content="Browse all albums from FlexTune — Africa's Music Hub.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"></noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+<script>
+  (function() {
+    try {
+      var theme = localStorage.getItem('samarid-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch(e) {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  })();
+</script>
 <style>
-  :root { --bg: #ffffff; --border: #e5e5e5; --text: #0a0a0a; --text2: #666; --accent: #ff0033; --red: #ff0033; }
+  :root {
+    --bg: #0a0a0a;
+    --card: #141414;
+    --border: #222;
+    --text: #ffffff;
+    --text2: #999999;
+    --accent: #ff0033;
+    --header-bg: #0a0a0a;
+  }
+  html[data-theme="light"] {
+    --bg: #ffffff;
+    --card: #f5f5f5;
+    --border: #e5e5e5;
+    --text: #0a0a0a;
+    --text2: #666666;
+    --header-bg: #0a0a0a;
+  }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
   html, body { overflow-x: hidden; max-width: 100vw; }
-  body { background: #fafafa; color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 40px; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 40px; transition: background 0.2s, color 0.2s; }
   img { max-width: 100%; }
 
-  .header { position: sticky; top: 0; background: #fff; border-bottom: 1px solid var(--border); padding: 12px 16px; display: flex; align-items: center; gap: 8px; z-index: 100; }
-  .menu-btn { background: transparent; color: var(--text); border: none; width: 40px; height: 40px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; }
-  .menu-btn span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: background 0.2s; }
-  .menu-btn:active span { background: var(--accent); }
-  .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; flex: 1; justify-content: center; padding: 0 8px; min-width: 0; }
-  .logo-text { font-size: 18px; font-weight: 900; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: -0.5px; }
-  .logo-text span { color: var(--red); }
-  .header-spacer { width: 40px; flex-shrink: 0; }
+  /* ===== HEADER ===== */
+  .header { position: relative; background: #0a0a0a; border-bottom: 1px solid #222; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; min-height: 50px; }
+  .menu-btn { width: 36px; height: 36px; background: transparent; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; transition: all 0.2s; }
+  .menu-btn .bar { display: block; width: 22px; height: 2.5px; background: #999999; border-radius: 2px; transition: all 0.3s ease; transform-origin: center; }
+  .menu-btn.open .bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .menu-btn.open .bar:nth-child(2) { opacity: 0; }
+  .menu-btn.open .bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  .menu-btn.menu-open { position: fixed; top: 14px; left: 14px; z-index: 10001; }
 
-  .menu-dropdown { position: fixed; top: 66px; left: 12px; background: #141414; border: 1px solid #2a2a2a; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.7); width: 250px; max-width: calc(100vw - 24px); max-height: 70vh; overflow-y: auto; display: none; z-index: 9999; }
-  .menu-dropdown.open { display: block; animation: menuPop 0.2s ease; }
-  @keyframes menuPop { from { opacity: 0; transform: translateY(-8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-  .menu-title { padding: 14px 18px 8px; font-size: 10px; color: #666; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
-  .menu-item { padding: 13px 18px; font-size: 14px; color: #fff; cursor: pointer; display: flex; align-items: center; gap: 12px; text-decoration: none; transition: background 0.15s; background: transparent; border: none; width: 100%; font-family: inherit; text-align: left; }
-  .menu-item:active { background: #1f1f1f; }
-  .menu-item i { width: 20px; text-align: center; font-size: 15px; color: var(--red); flex-shrink: 0; }
-  .menu-item .label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .menu-divider { height: 1px; background: #222; margin: 4px 0; }
-  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; display: none; }
-  .menu-overlay.open { display: block; }
+  .logo { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; padding: 0 8px; min-width: 0; }
+  .logo-text { font-size: 16px; font-weight: 900; letter-spacing: -0.4px; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .logo-text span { color: var(--accent); }
+  .header-spacer { width: 36px; flex-shrink: 0; }
+
+  /* ===== MENU OVERLAY ===== */
+  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  .menu-overlay.open { opacity: 1; pointer-events: auto; }
+
+  /* ===== SLIDE-IN MENU — LIGHT + CUT ===== */
+  .menu-dropdown { position: fixed; top: 56px; left: -320px; width: 290px; max-width: 85vw; height: calc(100vh - 56px); background: #f7f7f7; border-right: 1px solid #e5e5e5; z-index: 9999; transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; box-shadow: 10px 0 40px rgba(0,0,0,0.15); padding-top: 12px; }
+  .menu-dropdown.open { left: 0; }
+  .menu-title { padding: 20px 26px 10px; font-size: 10px; color: #999; letter-spacing: 2.5px; font-weight: 800; text-transform: uppercase; border-top: 1px solid #e8e8e8; margin-top: 6px; }
+  .menu-title:first-child { border-top: none; margin-top: 0; padding-top: 6px; }
+  .menu-item { padding: 16px 26px; font-size: 16px; color: #0a0a0a; cursor: pointer; display: flex; align-items: center; gap: 14px; text-decoration: none; transition: background 0.15s; background: transparent; border: none; width: 100%; font-family: inherit; text-align: left; font-weight: 700; letter-spacing: -0.2px; }
+  .menu-item:active { background: #ececec; }
+  .menu-item .label { flex: 1; color: #0a0a0a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; font-size: 16px; }
+  .menu-item .arrow { color: #bbb; font-size: 12px; flex-shrink: 0; }
+  .theme-row { padding: 14px 26px 18px; display: flex; align-items: center; justify-content: space-between; }
+  .theme-label { font-size: 15px; color: #0a0a0a; font-weight: 700; }
+  .theme-toggle { display: flex; gap: 6px; }
+  .theme-btn { padding: 8px 14px; background: #ffffff; border: 1px solid #ddd; border-radius: 8px; color: #666; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .theme-btn.active { border-color: var(--accent); color: var(--accent); }
+
+  /* ===== SUB MODAL ===== */
+  .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+  .sub-modal.open { display: flex; }
+  .sub-modal-inner { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 30px 24px; text-align: center; max-width: 340px; width: 100%; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .sub-modal-btn { display: block; width: 100%; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; margin-bottom: 10px; }
+  .sub-modal-btn.confirm { background: #ff0033; color: #ffffff; }
+  .sub-modal-btn.close { background: transparent; color: var(--text2); font-size: 12px; }
 
   .page-content { padding: 20px 16px 30px; max-width: 700px; margin: 0 auto; }
-
-  .page-title { font-size: 26px; font-weight: 900; letter-spacing: -0.8px; margin-bottom: 6px; color: var(--text); overflow-wrap: anywhere; }
-  .page-subtitle { font-size: 13px; color: var(--text2); margin-bottom: 22px; line-height: 1.5; }
 
   .pb-block { margin-bottom: 20px; padding: 18px 20px; border-radius: 14px; }
   .pb-block.pb-image { padding: 0; overflow: hidden; }
@@ -48,9 +95,9 @@
   .inline-ad-block { margin: 24px 0; border-radius: 14px; overflow: hidden; }
   .inline-ad-block img { width: 100%; display: block; border-radius: 14px; }
   .inline-ad-block a { display: block; }
-  .inline-ad-placeholder { padding: 30px 20px; text-align: center; background: #fff; border: 2px dashed #e0e0e0; border-radius: 14px; }
+  .inline-ad-placeholder { padding: 30px 20px; text-align: center; background: var(--card); border: 2px dashed var(--border); border-radius: 14px; }
   .inline-ad-placeholder i { font-size: 26px; color: #ff0033; margin-bottom: 8px; display: block; opacity: 0.7; }
-  .inline-ad-placeholder p { font-size: 12px; color: #999; font-weight: 600; margin: 0; }
+  .inline-ad-placeholder p { font-size: 12px; color: var(--text2); font-weight: 600; margin: 0; }
 
   .albums-list { display: flex; flex-direction: column; }
   .album-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; }
@@ -62,16 +109,16 @@
   .album-new-badge { position: absolute; top: 8px; left: 8px; background: linear-gradient(135deg, #ff0033, #b3002d); color: #fff; font-size: 9px; font-weight: 900; padding: 3px 8px; border-radius: 10px; letter-spacing: 1px; box-shadow: 0 3px 10px rgba(255, 0, 51, 0.45); z-index: 2; }
 
   .album-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; gap: 6px; }
-  
+
   .album-artist { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; gap: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .album-artist .artist-name { color: var(--accent); font-weight: 800; }
   .album-artist .genre-country { color: #8fdfa8; font-weight: 700; }
   .album-artist .dot { color: #8fdfa8; font-weight: 700; }
-  
+
   .album-name { font-size: 15px; font-weight: 900; line-height: 1.35; color: var(--text); letter-spacing: -0.3px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; word-break: break-word; max-width: 100%; transition: color 0.15s ease; }
-  
+
   .album-date { font-size: 11px; color: #888888; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  
+
   .album-songs { font-size: 12px; color: var(--accent); font-weight: 800; display: flex; align-items: center; gap: 5px; margin-top: 2px; }
   .album-songs i { font-size: 11px; }
 
@@ -80,6 +127,16 @@
   }
   .album-card:active .album-name { color: var(--accent); }
 
+  /* ===== SKELETON LOADERS ===== */
+  .skeleton-album-card { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); align-items: center; }
+  .skeleton-album-img { width: 115px; height: 115px; flex-shrink: 0; background: var(--border); border-radius: 14px; animation: skeleton-pulse 1.4s ease-in-out infinite; }
+  .skeleton-album-info { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .skeleton-album-line { height: 10px; background: var(--border); border-radius: 4px; animation: skeleton-pulse 1.4s ease-in-out infinite; }
+  .skeleton-album-line.short { width: 35%; height: 9px; }
+  .skeleton-album-line.medium { width: 65%; height: 14px; }
+  .skeleton-album-line.long { width: 45%; }
+  @keyframes skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+
   .album-flow-text { margin-top: 35px; padding: 10px 0; }
   .album-flow-text .flow-label { font-size: 10px; font-weight: 900; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
   .album-flow-text h2 { font-size: 18px; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.3px; color: var(--text); }
@@ -87,43 +144,58 @@
   .album-flow-text p { font-size: 13.5px; line-height: 1.7; color: var(--text2); margin-bottom: 14px; font-weight: 500; }
   .album-flow-text p:last-child { margin-bottom: 0; }
 
-  .loading, .empty { text-align: center; padding: 60px 20px; color: #999; font-size: 13px; }
-  .empty-state { text-align: center; padding: 50px 20px; background: #fff; border: 1px solid var(--border); border-radius: 16px; color: #999; }
+  .loading, .empty { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 13px; }
+  .empty-state { text-align: center; padding: 50px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 16px; color: var(--text2); }
   .empty-state .icon { font-size: 50px; margin-bottom: 15px; }
   .empty-state h3 { font-size: 17px; margin-bottom: 8px; color: var(--text); font-weight: 900; }
 
-  .end-marker { text-align: center; padding: 30px 20px 10px; font-size: 11px; color: #bbb; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
+  .end-marker { text-align: center; padding: 30px 20px 10px; font-size: 11px; color: var(--text2); letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
 
-  .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: #888; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; border-top: 1px solid var(--border); margin-top: 30px; }
-  .footer .brand { color: var(--red); font-weight: 900; }
+  .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: var(--text2); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; border-top: 1px solid var(--border); margin-top: 30px; }
+  .footer .brand { color: var(--accent); font-weight: 900; }
 </style>
 </head>
 <body>
 
   <header class="header">
-    <button class="menu-btn" onclick="toggleMenu(event)" aria-label="Menu">
-      <span></span>
-      <span></span>
-      <span></span>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu(event)" aria-label="Menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
     </button>
     <a href="index.html" class="logo"><span class="logo-text">FLEX<span>TUNE</span></span></a>
     <div class="header-spacer"></div>
   </header>
 
   <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
-  <div class="menu-dropdown" id="menuDropdown" onclick="event.stopPropagation()">
+  <div class="menu-dropdown" id="menuDropdown">
     <div class="menu-title">Navigation</div>
-    <a href="index.html" class="menu-item"><i class="fas fa-music"></i><span class="label">Music</span></a>
-    <a href="search.html" class="menu-item"><i class="fas fa-search"></i><span class="label">Search</span></a>
-    <a href="weekend.html" class="menu-item"><i class="fas fa-fire"></i><span class="label">Weekend Trend</span></a>
-    <a href="albums.html" class="menu-item"><i class="fas fa-compact-disc"></i><span class="label">Albums</span></a>
-    <a href="artists.html" class="menu-item"><i class="fas fa-user-group"></i><span class="label">Artists</span></a>
-    <a href="videos.html" class="menu-item"><i class="fas fa-video"></i><span class="label">Videos</span></a>
-    <div class="menu-divider"></div>
+    <a href="search.html" class="menu-item"><span class="label">Search</span><span class="arrow">→</span></a>
+    <a href="weekend.html" class="menu-item"><span class="label">Trend</span><span class="arrow">→</span></a>
+    <a href="index.html" class="menu-item"><span class="label">Music</span><span class="arrow">→</span></a>
+    <a href="albums.html" class="menu-item"><span class="label">Albums</span><span class="arrow">→</span></a>
+    <a href="artists.html" class="menu-item"><span class="label">Artists</span><span class="arrow">→</span></a>
+    <a href="videos.html" class="menu-item"><span class="label">Videos</span><span class="arrow">→</span></a>
+
+    <div class="menu-title">Subscribe</div>
+    <a href="#" onclick="fakeSubscribe(event)" class="menu-item">
+      <span class="label" style="color: #ff0033;"><i class="fab fa-youtube" style="margin-right: 10px;"></i>Subscribe</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <div class="menu-title">Settings</div>
+    <div class="theme-row">
+      <span class="theme-label">Theme</span>
+      <div class="theme-toggle">
+        <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">Dark</button>
+        <button class="theme-btn" data-theme="light" onclick="setTheme('light')">Light</button>
+      </div>
+    </div>
+
     <div class="menu-title">More</div>
-    <a href="about.html" class="menu-item"><i class="fas fa-info-circle"></i><span class="label">About</span></a>
-    <a href="promo.html" class="menu-item"><i class="fas fa-bullhorn"></i><span class="label">Promo</span></a>
-    <a href="distributors.html" class="menu-item"><i class="fas fa-headphones"></i><span class="label">Get On Spotify</span></a>
+    <a href="about.html" class="menu-item"><span class="label">About</span><span class="arrow">→</span></a>
+    <a href="promo.html" class="menu-item"><span class="label">Promo</span><span class="arrow">→</span></a>
+    <a href="distributors.html" class="menu-item"><span class="label">Get On Spotify</span><span class="arrow">→</span></a>
   </div>
 
   <div class="page-content">
@@ -132,11 +204,12 @@
 
     <div id="albumsAdTopContainer"></div>
 
-    <h1 class="page-title">Latest Albums</h1>
-    <p class="page-subtitle">The newest drops from FlexTune — tap any album to see all songs.</p>
-
     <div class="albums-list" id="albumsList">
-      <div class="loading">Loading albums...</div>
+      <div class="skeleton-album-card"><div class="skeleton-album-img"></div><div class="skeleton-album-info"><div class="skeleton-album-line short"></div><div class="skeleton-album-line medium"></div><div class="skeleton-album-line long"></div></div></div>
+      <div class="skeleton-album-card"><div class="skeleton-album-img"></div><div class="skeleton-album-info"><div class="skeleton-album-line short"></div><div class="skeleton-album-line medium"></div><div class="skeleton-album-line long"></div></div></div>
+      <div class="skeleton-album-card"><div class="skeleton-album-img"></div><div class="skeleton-album-info"><div class="skeleton-album-line short"></div><div class="skeleton-album-line medium"></div><div class="skeleton-album-line long"></div></div></div>
+      <div class="skeleton-album-card"><div class="skeleton-album-img"></div><div class="skeleton-album-info"><div class="skeleton-album-line short"></div><div class="skeleton-album-line medium"></div><div class="skeleton-album-line long"></div></div></div>
+      <div class="skeleton-album-card"><div class="skeleton-album-img"></div><div class="skeleton-album-info"><div class="skeleton-album-line short"></div><div class="skeleton-album-line medium"></div><div class="skeleton-album-line long"></div></div></div>
     </div>
 
     <div id="albumsAdBottomContainer"></div>
@@ -153,6 +226,16 @@
 
   <footer class="footer"><span class="brand">FLEXTUNE</span> © 2026</footer>
 
+  <div class="sub-modal" id="subModal" onclick="closeSubModal()">
+    <div class="sub-modal-inner" onclick="event.stopPropagation()">
+      <div style="font-size: 40px; margin-bottom: 10px;">🎵</div>
+      <h2 style="font-size: 20px; font-weight: 900; margin-bottom: 10px;">Support FlexTune</h2>
+      <p style="font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.5;">Subscribe to the official YouTube channel!</p>
+      <a href="#" id="popupSubBtn" target="_blank" class="sub-modal-btn confirm">Subscribe on YouTube</a>
+      <button onclick="closeSubModal()" class="sub-modal-btn close">I'll do it later</button>
+    </div>
+  </div>
+
   <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
@@ -163,16 +246,69 @@
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
+    window.applySettings = function() {
+      const theme = localStorage.getItem('samarid-theme') || 'light';
+      const accent = localStorage.getItem('samarid-accent') || '#ff0033';
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.setProperty('--accent', accent);
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
+    }
+    window.setTheme = function(theme) {
+      localStorage.setItem('samarid-theme', theme);
+      applySettings();
+    }
+
     window.toggleMenu = function(e) {
       e.stopPropagation();
       const menu = document.getElementById('menuDropdown');
       const overlay = document.getElementById('menuOverlay');
-      if (menu.classList.contains('open')) { menu.classList.remove('open'); overlay.classList.remove('open'); }
-      else { menu.classList.add('open'); overlay.classList.add('open'); }
+      const btn = document.getElementById('menuBtn');
+      if (menu.classList.contains('open')) {
+        menu.classList.remove('open');
+        overlay.classList.remove('open');
+        btn.classList.remove('open');
+        btn.classList.remove('menu-open');
+      } else {
+        menu.classList.add('open');
+        overlay.classList.add('open');
+        btn.classList.add('open');
+        btn.classList.add('menu-open');
+      }
     }
-    window.closeMenu = function() { document.getElementById('menuDropdown').classList.remove('open'); document.getElementById('menuOverlay').classList.remove('open'); }
+    window.closeMenu = function() {
+      document.getElementById('menuDropdown').classList.remove('open');
+      document.getElementById('menuOverlay').classList.remove('open');
+      const btn = document.getElementById('menuBtn');
+      btn.classList.remove('open');
+      btn.classList.remove('menu-open');
+    }
+
+    window.fakeSubscribe = function(e) {
+      e.preventDefault();
+      const channelId = localStorage.getItem('samarid_channel_id');
+      const subLink = channelId
+        ? 'https://www.youtube.com/channel/' + channelId + '?sub_confirmation=1'
+        : 'https://youtube.com/@realsamarid?sub_confirmation=1';
+      document.getElementById('popupSubBtn').href = subLink;
+      document.getElementById('subModal').classList.add('open');
+    }
+    window.closeSubModal = function() {
+      document.getElementById('subModal').classList.remove('open');
+    }
 
     const LIVE_FILTER = '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')';
+
+    function renderAlbumSkeletons(count) {
+      const list = document.getElementById('albumsList');
+      let n = parseInt(count) || 1;
+      if (n < 1) n = 1;
+      if (n > 10) n = 10;
+      let html = '';
+      for (let i = 0; i < n; i++) {
+        html += '<div class="skeleton-album-card"><div class="skeleton-album-img"></div><div class="skeleton-album-info"><div class="skeleton-album-line short"></div><div class="skeleton-album-line medium"></div><div class="skeleton-album-line long"></div></div></div>';
+      }
+      list.innerHTML = html;
+    }
 
     async function loadPageBuilderBlocks() {
       const container = document.getElementById('pageBuilderBlocks');
@@ -202,7 +338,6 @@
       } catch (e) { container.innerHTML = ''; }
     }
 
-    // ===== ALBUMS PAGE ADS (top + bottom, matches albums-1 and albums-2 / all) =====
     async function loadAlbumsAds() {
       const top = document.getElementById('albumsAdTopContainer');
       const bottom = document.getElementById('albumsAdBottomContainer');
@@ -267,7 +402,7 @@
           albumMap[albumName].totalPlays += (s.plays || 0);
         });
 
-        const albums = Object.values(albumMap);
+        const albums = Object.values(albumMap).sort((a, b) => b.totalPlays - a.totalPlays);
 
         container.innerHTML = albums.map(album => {
           const songLabel = album.songCount === 1 ? '1 song' : album.songCount + ' songs';
@@ -298,6 +433,7 @@
       }
     }
 
+    applySettings();
     loadPageBuilderBlocks();
     loadAlbums();
     loadAlbumsAds();
