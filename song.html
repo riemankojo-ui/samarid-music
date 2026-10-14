@@ -106,9 +106,9 @@
 
  .audio-player-box { background: transparent; border: none; border-radius: 0; padding: 6px 0; margin-bottom: 24px; }
 .player-row { display: flex; align-items: center; gap: 10px; }
-.play-pause-btn { width: 38px; height: 38px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(255, 0, 51, 0.3); transition: transform 0.15s; }
+.play-pause-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(255, 0, 51, 0.3); transition: transform 0.15s; }
 .play-pause-btn:active { transform: scale(0.9); }
-.player-time { font-size: 11px; color: var(--text2); font-weight: 600; flex-shrink: 0; min-width: 32px; text-align: center; }
+.player-time { font-size: 11px; color: var(--text2); font-weight: 600; flex-shrink: 0; min-width: 34px; text-align: center; }
 .seek-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text2); font-weight: 600; }
   input[type=range] { flex: 1; height: 5px; -webkit-appearance: none; background: var(--border); border-radius: 3px; outline: none; cursor: pointer; min-width: 0; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); cursor: pointer; }
@@ -558,7 +558,7 @@
 
         let artistsList = [];
         try {
-          const artistsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,featuring,verified&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(nowIso) + ')', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+         const artistsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,featuring,verified&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(nowIso) + ')' + '&limit=100', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
           const artistsData = await artistsRes.json();
           const map = {};
           artistsData.forEach(a => {
@@ -605,17 +605,15 @@
             <strong>FLEXTUNE</strong> presents this track • © 2026 FlexTune
           </div>
 
-          <div class="audio-player-box">
-            <h4><i class="fas fa-play"></i> Listen Now</h4>
-            <audio id="audioPlayer" src="${escapeHtml(audioSrc)}" preload="metadata"></audio>
-            <button class="play-pause-btn" id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
-            <div class="seek-row">
-              <span id="currentTime">0:00</span>
-              <input type="range" id="seekSlider" value="0" max="100">
-              <span id="duration">0:00</span>
-            </div>
-          </div>
-
+        <div class="audio-player-box">
+  <audio id="audioPlayer" src="${escapeHtml(audioSrc)}" preload="metadata"></audio>
+  <div class="player-row">
+    <button class="play-pause-btn" id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
+    <input type="range" id="seekSlider" value="0" max="100">
+    <span id="currentTime" class="player-time">0:00</span>
+    <span id="duration" class="player-time">0:00</span>
+  </div>
+</div>
           <div class="detail-section">
             <h4><i class="fas fa-download"></i> Get the Song</h4>
             <div class="download-buttons">
