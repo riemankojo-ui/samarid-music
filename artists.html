@@ -4,30 +4,97 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Artists - FlexTune</title>
+<meta name="description" content="Every artist on FlexTune — Africa's Music Hub.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"></noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+<script>
+  (function() {
+    try {
+      var theme = localStorage.getItem('samarid-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch(e) {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  })();
+</script>
 <style>
-  :root { --bg: #ffffff; --text: #0a0a0a; --text2: #888888; --accent: #ff0033; --orange: #ff0033; --border: #eeeeee; }
-  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 0px; }
-  .header { position: sticky; top: 0; background: #111111; padding: 12px 16px; display: flex; align-items: center; gap: 10px; z-index: 100; }
-  .back-btn { background: #222; color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
-  .back-btn:active { background: var(--accent); }
-  .logo { font-size: 18px; font-weight: 900; color: #fff; text-decoration: none; flex: 1; text-align: center; letter-spacing: -0.5px; }
-  .logo span { color: var(--accent); }
+  :root {
+    --bg: #0a0a0a;
+    --card: #141414;
+    --border: #222;
+    --text: #ffffff;
+    --text2: #888888;
+    --accent: #ff0033;
+    --orange: #ff0033;
+  }
+  html[data-theme="light"] {
+    --bg: #ffffff;
+    --card: #f5f5f5;
+    --border: #eeeeee;
+    --text: #0a0a0a;
+    --text2: #888888;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
+  html, body { overflow-x: hidden; max-width: 100vw; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 0; transition: background 0.2s, color 0.2s; }
+
+  /* ===== HEADER ===== */
+  .header { position: relative; background: #0a0a0a; border-bottom: 1px solid #222; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; min-height: 50px; }
+  .menu-btn { width: 36px; height: 36px; background: transparent; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; transition: all 0.2s; }
+  .menu-btn .bar { display: block; width: 22px; height: 2.5px; background: #999999; border-radius: 2px; transition: all 0.3s ease; transform-origin: center; }
+  .menu-btn.open .bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .menu-btn.open .bar:nth-child(2) { opacity: 0; }
+  .menu-btn.open .bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  .menu-btn.menu-open { position: fixed; top: 14px; left: 14px; z-index: 10001; }
+  .logo { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; padding: 0 8px; min-width: 0; }
+  .logo-text { font-size: 16px; font-weight: 900; letter-spacing: -0.4px; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .logo-text span { color: var(--accent); }
+  .header-spacer { width: 36px; flex-shrink: 0; }
+
+  /* ===== MENU OVERLAY ===== */
+  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  .menu-overlay.open { opacity: 1; pointer-events: auto; }
+
+  /* ===== SLIDE-IN MENU — LIGHT + CUT ===== */
+  .menu-dropdown { position: fixed; top: 56px; left: -320px; width: 290px; max-width: 85vw; height: calc(100vh - 56px); background: #f7f7f7; border-right: 1px solid #e5e5e5; z-index: 9999; transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; box-shadow: 10px 0 40px rgba(0,0,0,0.15); padding-top: 12px; }
+  .menu-dropdown.open { left: 0; }
+  .menu-title { padding: 20px 26px 10px; font-size: 10px; color: #999; letter-spacing: 2.5px; font-weight: 800; text-transform: uppercase; border-top: 1px solid #e8e8e8; margin-top: 6px; }
+  .menu-title:first-child { border-top: none; margin-top: 0; padding-top: 6px; }
+  .menu-item { padding: 16px 26px; font-size: 16px; color: #0a0a0a; cursor: pointer; display: flex; align-items: center; gap: 14px; text-decoration: none; transition: background 0.15s; background: transparent; border: none; width: 100%; font-family: inherit; text-align: left; font-weight: 700; letter-spacing: -0.2px; }
+  .menu-item:active { background: #ececec; }
+  .menu-item .label { flex: 1; color: #0a0a0a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; font-size: 16px; }
+  .menu-item .arrow { color: #bbb; font-size: 12px; flex-shrink: 0; }
+  .theme-row { padding: 14px 26px 18px; display: flex; align-items: center; justify-content: space-between; }
+  .theme-label { font-size: 15px; color: #0a0a0a; font-weight: 700; }
+  .theme-toggle { display: flex; gap: 6px; }
+  .theme-btn { padding: 8px 14px; background: #ffffff; border: 1px solid #ddd; border-radius: 8px; color: #666; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .theme-btn.active { border-color: var(--accent); color: var(--accent); }
+
+  /* ===== SUB MODAL ===== */
+  .sub-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(5px); }
+  .sub-modal.open { display: flex; }
+  .sub-modal-inner { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 30px 24px; text-align: center; max-width: 340px; width: 100%; animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+  @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .sub-modal-btn { display: block; width: 100%; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; cursor: pointer; border: none; margin-bottom: 10px; }
+  .sub-modal-btn.confirm { background: #ff0033; color: #ffffff; }
+  .sub-modal-btn.close { background: transparent; color: var(--text2); font-size: 12px; }
+
   .page-header { max-width: 700px; margin: 0 auto; padding: 30px 16px 8px; }
   .page-title { font-size: 28px; font-weight: 900; letter-spacing: -0.8px; margin-bottom: 6px; color: var(--text); }
   .page-sub { font-size: 13px; color: var(--text2); line-height: 1.5; }
   .search-wrap { position: relative; max-width: 700px; margin: 20px auto 20px; padding: 0 16px; }
   .search-wrap i { position: absolute; left: 30px; top: 50%; transform: translateY(-50%); color: var(--text2); font-size: 13px; }
-  .search-input { width: 100%; padding: 13px 14px 13px 42px; background: #f5f5f5; border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: inherit; }
-  .search-input:focus { outline: none; border-color: var(--orange); background: #fff; }
+  .search-input { width: 100%; padding: 13px 14px 13px 42px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 14px; font-family: inherit; }
+  .search-input:focus { outline: none; border-color: var(--orange); background: var(--card); }
   .search-input::placeholder { color: var(--text2); }
   .artist-grid { max-width: 700px; margin: 0 auto; padding: 0 16px 30px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 8px; }
-  .artist-cell { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-decoration: none; color: inherit; text-align: center; padding: 6px 2px; }
+  .artist-cell { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; text-decoration: none; color: inherit; text-align: center; padding: 6px 2px; transition: transform 0.12s; }
   .artist-cell:active { transform: scale(0.92); }
-  .artist-avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: 900; font-size: 20px; overflow: hidden; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(255, 0, 51, 0.2); border: 2px solid #ffffff; position: relative; }
+  .artist-avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; color: #ffffff; font-weight: 900; font-size: 20px; overflow: hidden; margin-bottom: 8px; box-shadow: 0 4px 12px rgba(255, 0, 51, 0.2); border: 2px solid var(--bg); position: relative; }
   .artist-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .artist-avatar .badge-on-avatar { position: absolute; bottom: -2px; right: -2px; width: 18px; height: 18px; background: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
   .artist-avatar .badge-on-avatar svg { width: 12px; height: 12px; }
@@ -36,28 +103,34 @@
   .loading .icon, .empty .icon { font-size: 42px; margin-bottom: 12px; }
   .loading h3, .empty h3 { font-size: 16px; color: var(--text); margin-bottom: 6px; font-weight: 900; }
 
+  /* ===== SKELETON ===== */
+  .skeleton-artist { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 6px 2px; }
+  .skeleton-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--border); animation: skeleton-pulse 1.4s ease-in-out infinite; }
+  .skeleton-name { width: 80%; height: 10px; background: var(--border); border-radius: 4px; animation: skeleton-pulse 1.4s ease-in-out infinite; }
+  @keyframes skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+
   .inline-ad-block { margin: 24px 16px; border-radius: 14px; overflow: hidden; }
   .inline-ad-block img { width: 100%; display: block; border-radius: 14px; }
   .inline-ad-block a { display: block; }
-  .inline-ad-placeholder { padding: 30px 20px; text-align: center; background: #f9f9f9; border: 2px dashed #e0e0e0; border-radius: 14px; }
+  .inline-ad-placeholder { padding: 30px 20px; text-align: center; background: var(--card); border: 2px dashed var(--border); border-radius: 14px; }
   .inline-ad-placeholder i { font-size: 26px; color: #ff0033; margin-bottom: 8px; display: block; opacity: 0.7; }
-  .inline-ad-placeholder p { font-size: 12px; color: #999; font-weight: 600; margin: 0; }
+  .inline-ad-placeholder p { font-size: 12px; color: var(--text2); font-weight: 600; margin: 0; }
 
   .artists-story-section { background: #0a0a0a; color: #ffffff; padding: 60px 20px; border-top: 4px solid var(--orange); margin-top: 20px; display: flex; flex-direction: column; gap: 40px; }
   .artists-story-container { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px; }
-  
+
   .story-block { display: flex; flex-direction: column; gap: 14px; }
   .artists-story-header { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
   .artists-story-header i { font-size: 18px; color: var(--orange); }
   .artists-story-header h3 { font-size: 16px; font-weight: 900; color: #ffffff; letter-spacing: -0.2px; text-transform: uppercase; }
   .artists-story-header h3 span { color: var(--orange); }
-  
+
   .story-block p { font-size: 14px; line-height: 1.8; color: #b5b5b5; }
   .story-block p strong { color: #ffffff; font-weight: 700; }
   .story-block .accent-word { color: var(--orange); font-weight: 800; }
-  
+
   .artists-story-quote { border-left: 3px solid var(--orange); padding: 14px 18px; font-style: italic; color: #e0e0e0; font-size: 14px; font-weight: 500; background: #141414; border-radius: 0 8px 8px 0; margin: 6px 0; }
-  
+
   .story-highlights-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 6px; }
   .story-highlight-card { background: #141414; border: 1px solid #222; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
   .story-highlight-card i { font-size: 18px; color: var(--orange); margin-bottom: 2px; }
@@ -77,10 +150,45 @@
 </head><body>
 
   <header class="header">
-    <a href="index.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
-    <a href="index.html" class="logo">FLEX<span>TUNE</span></a>
-    <div style="width: 70px;"></div>
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu(event)" aria-label="Menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+    <a href="index.html" class="logo"><span class="logo-text">FLEX<span>TUNE</span></span></a>
+    <div class="header-spacer"></div>
   </header>
+
+  <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+  <div class="menu-dropdown" id="menuDropdown">
+    <div class="menu-title">Navigation</div>
+    <a href="search.html" class="menu-item"><span class="label">Search</span><span class="arrow">→</span></a>
+    <a href="weekend.html" class="menu-item"><span class="label">Trend</span><span class="arrow">→</span></a>
+    <a href="index.html" class="menu-item"><span class="label">Music</span><span class="arrow">→</span></a>
+    <a href="albums.html" class="menu-item"><span class="label">Albums</span><span class="arrow">→</span></a>
+    <a href="artists.html" class="menu-item"><span class="label">Artists</span><span class="arrow">→</span></a>
+    <a href="videos.html" class="menu-item"><span class="label">Videos</span><span class="arrow">→</span></a>
+
+    <div class="menu-title">Subscribe</div>
+    <a href="#" onclick="fakeSubscribe(event)" class="menu-item">
+      <span class="label" style="color: #ff0033;"><i class="fab fa-youtube" style="margin-right: 10px;"></i>Subscribe</span>
+      <span class="arrow">→</span>
+    </a>
+
+    <div class="menu-title">Settings</div>
+    <div class="theme-row">
+      <span class="theme-label">Theme</span>
+      <div class="theme-toggle">
+        <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">Dark</button>
+        <button class="theme-btn" data-theme="light" onclick="setTheme('light')">Light</button>
+      </div>
+    </div>
+
+    <div class="menu-title">More</div>
+    <a href="about.html" class="menu-item"><span class="label">About</span><span class="arrow">→</span></a>
+    <a href="promo.html" class="menu-item"><span class="label">Promo</span><span class="arrow">→</span></a>
+    <a href="distributors.html" class="menu-item"><span class="label">Get On Spotify</span><span class="arrow">→</span></a>
+  </div>
 
   <div class="page-header">
     <h1 class="page-title">Artists</h1>
@@ -95,24 +203,28 @@
   </div>
 
   <div class="artist-grid" id="artistGrid">
-    <div class="loading">
-      <div class="icon">🎤</div>
-      <h3>Loading artists...</h3>
-    </div>
+    <div class="skeleton-artist"><div class="skeleton-avatar"></div><div class="skeleton-name"></div></div>
+    <div class="skeleton-artist"><div class="skeleton-avatar"></div><div class="skeleton-name"></div></div>
+    <div class="skeleton-artist"><div class="skeleton-avatar"></div><div class="skeleton-name"></div></div>
+    <div class="skeleton-artist"><div class="skeleton-avatar"></div><div class="skeleton-name"></div></div>
+    <div class="skeleton-artist"><div class="skeleton-avatar"></div><div class="skeleton-name"></div></div>
+    <div class="skeleton-artist"><div class="skeleton-avatar"></div><div class="skeleton-name"></div></div>
+    <div class="skeleton-artist"><div class="skeleton-avatar"></div><div class="skeleton-name"></div></div>
+    <div class="skeleton-artist"><div class="skeleton-avatar"></div><div class="skeleton-name"></div></div>
   </div>
 
   <div id="artistsAdBottomContainer"></div>
 
   <div class="artists-story-section">
     <div class="artists-story-container">
-      
+
       <div class="story-block">
         <div class="artists-story-header">
           <i class="fas fa-headphones-simple"></i>
           <h3>The Creative Force Behind <span style="color:var(--orange);">FlexTune</span></h3>
         </div>
         <p>Welcome to the ultimate directory of talent shaping the future of African sound. Under the flagship banner of <strong class="accent-word">FlexTune</strong> in Africa, this growing roster of musical creators brings together raw underground energy, infectious vocal delivery, and world-class audio engineering.</p>
-        
+
         <div class="artists-story-quote">
           "Music is a universal language, and every artist in our catalog represents a distinct voice, a unique story, and an unmistakable vibe."
         </div>
@@ -126,7 +238,7 @@
           <h3>Empowering Underground & Mainstream Talent</h3>
         </div>
         <p>At FlexTune, we believe that true artistry should never be locked behind paywalls or complex subscription models. Our platform is engineered to give every singer, rapper, and producer the digital stage they deserve. From soulful afrobeat rhythms to high-tempo street anthems, our artists push creative boundaries every single day.</p>
-        
+
         <div class="story-highlights-grid">
           <div class="story-highlight-card">
             <i class="fas fa-bolt"></i>
@@ -147,7 +259,7 @@
           <h3>The Sound of 2026 and Beyond</h3>
         </div>
         <p>The music landscape is evolving rapidly, and our roster is leading the charge with innovative production styles and unforgettable lyricism. When you explore our directory, you aren't just listening to songs—you are participating in a thriving musical community built on passion, dedication, and cultural excellence.</p>
-        
+
         <p>Stay connected, keep streaming the latest <strong>2026 releases</strong>, use our instant search bar above to find specific performers, and support the movement as we continue to elevate African music to unprecedented heights.</p>
 
         <div class="artists-story-tags">
@@ -163,15 +275,76 @@
 
   <footer class="footer"><span class="brand">FLEXTUNE</span> © 2026</footer>
 
+  <div class="sub-modal" id="subModal" onclick="closeSubModal()">
+    <div class="sub-modal-inner" onclick="event.stopPropagation()">
+      <div style="font-size: 40px; margin-bottom: 10px;">🎵</div>
+      <h2 style="font-size: 20px; font-weight: 900; margin-bottom: 10px;">Support FlexTune</h2>
+      <p style="font-size: 13px; color: var(--text2); margin-bottom: 20px; line-height: 1.5;">Subscribe to the official YouTube channel!</p>
+      <a href="#" id="popupSubBtn" target="_blank" class="sub-modal-btn confirm">Subscribe on YouTube</a>
+      <button onclick="closeSubModal()" class="sub-modal-btn close">I'll do it later</button>
+    </div>
+  </div>
+
   <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+    const LIVE_FILTER = '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')';
     const VERIFY_BADGE_SMALL = '<svg viewBox="0 0 22 22"><path fill="#1d9bf0" d="M20.396 11c-.018-.646-.215-1.275-.57-1.816-.354-.54-.852-.972-1.438-1.246.223-.607.27-1.264.14-1.897-.131-.634-.437-1.218-.882-1.687-.47-.445-1.053-.75-1.687-.882-.633-.13-1.29-.083-1.897.14-.273-.587-.704-1.086-1.245-1.44S11.647 1.62 11 1.604c-.646.017-1.273.213-1.813.568s-.969.854-1.24 1.44c-.608-.223-1.267-.272-1.902-.14-.635.13-1.22.436-1.687.882-.445.47-.749 1.055-.878 1.688-.13.633-.08 1.29.144 1.896-.587.274-1.087.705-1.443 1.245-.356.54-.555 1.17-.574 1.817.02.647.218 1.276.574 1.817.356.54.856.972 1.443 1.245-.224.606-.274 1.263-.144 1.896.13.634.433 1.218.877 1.688.47.443 1.054.747 1.687.878.633.132 1.29.084 1.897-.136.274.586.705 1.084 1.246 1.439.54.354 1.17.551 1.816.569.647-.016 1.276-.213 1.817-.567s.972-.854 1.245-1.44c.604.239 1.266.296 1.903.164.636-.132 1.22-.447 1.68-.907.46-.46.776-1.044.908-1.681s.075-1.299-.165-1.903c.586-.274 1.084-.705 1.439-1.246.354-.54.551-1.17.569-1.816zM9.662 14.85l-3.429-3.428 1.293-1.302 2.072 2.072 4.4-4.794 1.347 1.246z"/></svg>';
     let allArtists = [];
 
     function escapeHtml(s) {
       if (s === null || s === undefined) return '';
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    window.applySettings = function() {
+      const theme = localStorage.getItem('samarid-theme') || 'light';
+      const accent = localStorage.getItem('samarid-accent') || '#ff0033';
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.setProperty('--accent', accent);
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
+    }
+    window.setTheme = function(theme) {
+      localStorage.setItem('samarid-theme', theme);
+      applySettings();
+    }
+
+    window.toggleMenu = function(e) {
+      e.stopPropagation();
+      const menu = document.getElementById('menuDropdown');
+      const overlay = document.getElementById('menuOverlay');
+      const btn = document.getElementById('menuBtn');
+      if (menu.classList.contains('open')) {
+        menu.classList.remove('open');
+        overlay.classList.remove('open');
+        btn.classList.remove('open');
+        btn.classList.remove('menu-open');
+      } else {
+        menu.classList.add('open');
+        overlay.classList.add('open');
+        btn.classList.add('open');
+        btn.classList.add('menu-open');
+      }
+    }
+    window.closeMenu = function() {
+      document.getElementById('menuDropdown').classList.remove('open');
+      document.getElementById('menuOverlay').classList.remove('open');
+      const btn = document.getElementById('menuBtn');
+      btn.classList.remove('open');
+      btn.classList.remove('menu-open');
+    }
+
+    window.fakeSubscribe = function(e) {
+      e.preventDefault();
+      const channelId = localStorage.getItem('samarid_channel_id');
+      const subLink = channelId
+        ? 'https://www.youtube.com/channel/' + channelId + '?sub_confirmation=1'
+        : 'https://youtube.com/@realsamarid?sub_confirmation=1';
+      document.getElementById('popupSubBtn').href = subLink;
+      document.getElementById('subModal').classList.add('open');
+    }
+    window.closeSubModal = function() {
+      document.getElementById('subModal').classList.remove('open');
     }
 
     async function loadArtistsAds() {
@@ -198,7 +371,7 @@
       const container = document.getElementById('artistGrid');
       try {
         const [songsRes, profilesRes] = await Promise.all([
-          fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,featuring,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,featuring,verified' + LIVE_FILTER, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
           fetch(SUPABASE_URL + '/rest/v1/artists?select=name,profile_pic,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
         ]);
         const songs = await songsRes.json();
@@ -218,14 +391,6 @@
               if (!artistMap[fk]) artistMap[fk] = { name: featName, verified: false, profile_pic: null };
             });
           }
-          const p = profileMap[key];
-          if (p) {
-            if (p.verified) artistMap[key].verified = true;
-            if (p.profile_pic) artistMap[key].profile_pic = p.profile_pic;
-            if (p.name) artistMap[key].name = p.name;
-          }
-        });
-        Object.keys(artistMap).forEach(key => {
           const p = profileMap[key];
           if (p) {
             if (p.verified) artistMap[key].verified = true;
@@ -266,6 +431,7 @@
       renderArtists(filtered);
     }
 
+    applySettings();
     loadArtists();
     loadArtistsAds();
   </script>
