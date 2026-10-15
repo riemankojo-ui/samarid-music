@@ -111,6 +111,18 @@
   .play-pause-btn { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #fff; border: none; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 10px rgba(255, 0, 51, 0.3); transition: transform 0.15s; }
   .play-pause-btn:active { transform: scale(0.9); }
   .player-time { font-size: 11px; color: var(--text2); font-weight: 600; flex-shrink: 0; min-width: 34px; text-align: center; }
+  /* ===== LYRICS SECTION ===== */
+.lyrics-section { margin-bottom: 24px; margin-top: 4px; }
+.lyrics-section h4 { font-size: 11px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+.lyrics-section h4 i { color: var(--accent); font-size: 11px; }
+.lyrics-scroll { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 26px 20px; max-height: 320px; overflow-y: auto; scroll-behavior: smooth; scrollbar-width: thin; }
+.lyrics-scroll::-webkit-scrollbar { width: 5px; }
+.lyrics-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.lyrics-scroll::-webkit-scrollbar-track { background: transparent; }
+.lyric-line { font-size: 15px; line-height: 1.6; color: var(--text2); padding: 10px 0; font-weight: 500; opacity: 0.5; transition: all 0.3s ease; text-align: center; }
+.lyric-line.past { opacity: 0.3; }
+.lyric-line.future { opacity: 0.5; }
+.lyric-line.current { opacity: 1; color: var(--accent); font-weight: 900; font-size: 17px; transform: scale(1.02); }
   input[type=range] { flex: 1; height: 5px; -webkit-appearance: none; background: var(--border); border-radius: 3px; outline: none; cursor: pointer; min-width: 0; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); cursor: pointer; }
 
@@ -155,6 +167,14 @@
   .footer { padding: 30px; text-align: center; font-size: 11px; color: var(--text2); border-top: 1px solid var(--border); margin-top: 40px; background: var(--card); }
   .footer .brand { color: var(--accent); font-weight: 700; }
   .loading { text-align: center; padding: 60px 20px; color: var(--text2); }
+  /* ===== SKELETON LOADERS ===== */
+.skeleton-song { text-align: center; padding: 20px 0; }
+.skeleton-song-cover { width: 100%; max-width: 300px; aspect-ratio: 1 / 1; margin: 0 auto 25px; background: var(--border); border-radius: 8px; animation: skeleton-pulse 1.4s ease-in-out infinite; }
+.skeleton-song-title { width: 70%; height: 24px; background: var(--border); border-radius: 4px; margin: 0 auto 12px; animation: skeleton-pulse 1.4s ease-in-out infinite; }
+.skeleton-song-meta { width: 50%; height: 14px; background: var(--border); border-radius: 4px; margin: 0 auto 24px; animation: skeleton-pulse 1.4s ease-in-out infinite; }
+.skeleton-song-desc { width: 90%; height: 12px; background: var(--border); border-radius: 4px; margin: 0 auto 10px; animation: skeleton-pulse 1.4s ease-in-out infinite; }
+.skeleton-song-desc.short { width: 60%; }
+@keyframes skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
   .error-box { text-align: center; padding: 40px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; }
   .error-box .icon { font-size: 50px; margin-bottom: 15px; }
   .error-box h3 { font-size: 16px; margin-bottom: 8px; overflow-wrap: anywhere; }
@@ -250,9 +270,15 @@
   <div class="container">
     <div id="pageBuilderBlocks"></div>
 
-    <div id="songDetail">
-      <div class="loading">Loading song...</div>
-    </div>
+ <div id="songDetail">
+  <div class="skeleton-song">
+    <div class="skeleton-song-cover"></div>
+    <div class="skeleton-song-title"></div>
+    <div class="skeleton-song-meta"></div>
+    <div class="skeleton-song-desc"></div>
+    <div class="skeleton-song-desc short"></div>
+  </div>
+</div>
   </div>
 
   <footer class="footer"><span class="brand">FLEXTUNE</span> © 2026</footer>
@@ -603,6 +629,10 @@
             <h4><i class="fas fa-info-circle"></i> About this Song</h4>
             <p>${escapeHtml(s.description || 'No description yet.')}</p>
           </div>
+          <div class="lyrics-section" id="lyricsSection" style="display:none;">
+  <h4><i class="fas fa-music"></i> Lyrics</h4>
+  <div class="lyrics-scroll" id="lyricsScroll"></div>
+</div>
 
           <div class="presented-by">
             <strong>FLEXTUNE</strong> presents this track • © 2026 FlexTune
@@ -713,8 +743,9 @@
           </div>
         `;
 
-        loadLikeState(s.id);
-        loadAds();
+        renderLyrics(s.lyrics);
+loadLikeState(s.id);
+loadAds();
       } catch (e) {
         console.error(e);
         container.innerHTML = '<div class="error-box"><div class="icon">⚠️</div><h3>Error Loading Song</h3><p>' + escapeHtml(e.message || 'Something went wrong.') + '</p><a href="index.html">Go Home</a></div>';
@@ -763,17 +794,17 @@
     window.addEventListener('beforeunload', () => { if (playCountTimer) clearInterval(playCountTimer); });
 
     document.addEventListener('timeupdate', function(e) {
-      if (e.target.id === 'audioPlayer') {
-        const audio = e.target;
-        const slider = document.getElementById('seekSlider');
-        const currentTimeEl = document.getElementById('currentTime');
-        if (audio.duration) {
-          slider.value = (audio.currentTime / audio.duration) * 100;
-          currentTimeEl.innerText = formatTime(audio.currentTime);
-        }
-      }
-    }, true);
-
+  if (e.target.id === 'audioPlayer') {
+    const audio = e.target;
+    const slider = document.getElementById('seekSlider');
+    const currentTimeEl = document.getElementById('currentTime');
+    if (audio.duration) {
+      slider.value = (audio.currentTime / audio.duration) * 100;
+      currentTimeEl.innerText = formatTime(audio.currentTime);
+    }
+    updateLyricsHighlight();
+  }
+}, true);
     document.addEventListener('loadedmetadata', function(e) {
       if (e.target.id === 'audioPlayer') {
         document.getElementById('duration').innerText = formatTime(e.target.duration);
@@ -803,6 +834,70 @@
       return m + ':' + (s < 10 ? '0' : '') + s;
     }
 
+let lyricLines = [];
+let currentLyricIndex = -1;
+
+function renderLyrics(lyricsText) {
+  const section = document.getElementById('lyricsSection');
+  const container = document.getElementById('lyricsScroll');
+  if (!section || !container) return;
+
+  if (!lyricsText || !lyricsText.trim()) {
+    section.style.display = 'none';
+    lyricLines = [];
+    currentLyricIndex = -1;
+    return;
+  }
+
+  lyricLines = lyricsText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+  if (lyricLines.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  container.innerHTML = lyricLines.map((line, i) =>
+    '<div class="lyric-line future" data-index="' + i + '">' + escapeHtml(line) + '</div>'
+  ).join('');
+
+  section.style.display = 'block';
+  currentLyricIndex = -1;
+  updateLyricsHighlight();
+}
+
+function updateLyricsHighlight() {
+  const audio = document.getElementById('audioPlayer');
+  if (!audio || lyricLines.length === 0) return;
+  const duration = audio.duration;
+  if (!duration || isNaN(duration) || duration === 0) return;
+
+  const progress = audio.currentTime / duration;
+  let index = Math.floor(progress * lyricLines.length);
+  if (index < 0) index = 0;
+  if (index >= lyricLines.length) index = lyricLines.length - 1;
+
+  if (index === currentLyricIndex) return;
+  currentLyricIndex = index;
+
+  const container = document.getElementById('lyricsScroll');
+  if (!container) return;
+  const lines = container.querySelectorAll('.lyric-line');
+  lines.forEach((el, i) => {
+    el.classList.remove('past', 'current', 'future');
+    if (i < index) el.classList.add('past');
+    else if (i === index) el.classList.add('current');
+    else el.classList.add('future');
+  });
+
+  const active = lines[index];
+  if (active && container.scrollHeight > container.clientHeight) {
+    const containerHeight = container.clientHeight;
+    const lineTop = active.offsetTop;
+    const lineHeight = active.offsetHeight;
+    const targetScroll = lineTop - (containerHeight / 2) + (lineHeight / 2);
+    container.scrollTo({ top: targetScroll, behavior: 'smooth' });
+  }
+}
     async function loadLikeState(songId) {
       try {
         const [myLikeRes, allLikesRes] = await Promise.all([

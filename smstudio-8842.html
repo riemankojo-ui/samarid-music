@@ -41,14 +41,48 @@
   #loginScreen button.main-btn { background: var(--login-red); }
   button.secondary-btn { width: 100%; padding: 14px; background: #222; color: #fff; border: 1px solid #333; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; margin-top: 10px; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; }
   .status { font-size: 12px; margin-top: 12px; font-weight: bold; text-align: center; }
+  /* ===== PUBLISH PROGRESS BAR ===== */
+.publish-progress { margin-top: 14px; display: none; }
+.publish-progress.active { display: block; animation: fadeInProgress 0.3s ease; }
+@keyframes fadeInProgress { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+.publish-progress-bar { width: 100%; height: 6px; background: #1a1a1a; border-radius: 4px; overflow: hidden; position: relative; }
+.publish-progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ff8800 0%, #ffcc00 100%); border-radius: 4px; transition: width 0.25s ease; }
+.publish-progress-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+.publish-progress-text { font-size: 12px; color: #ccc; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+.publish-progress-pct { font-size: 12px; font-weight: 900; color: #ff8800; letter-spacing: 0.5px; }
+.publish-progress.done .publish-progress-fill { background: linear-gradient(90deg, #00cc44 0%, #00a838 100%); }
+.publish-progress.done .publish-progress-text { color: #00cc44; }
+.publish-progress.done .publish-progress-pct { color: #00cc44; }
+/* ===== EDIT MODAL ===== */
+.edit-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 5000; display: none; align-items: flex-start; justify-content: center; padding: 20px; overflow-y: auto; backdrop-filter: blur(5px); }
+.edit-modal-overlay.open { display: flex; }
+.edit-modal { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 22px 20px; width: 100%; max-width: 500px; margin: 20px 0; animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+@keyframes modalPop { 0% { transform: scale(0.9) translateY(20px); opacity: 0; } 100% { transform: scale(1) translateY(0); opacity: 1; } }
+.edit-modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.edit-modal-header h3 { font-size: 17px; font-weight: 900; display: flex; align-items: center; gap: 8px; }
+.edit-modal-header h3 i { color: var(--accent); }
+.edit-modal-close { background: transparent; border: none; color: var(--text2); font-size: 22px; cursor: pointer; padding: 6px 10px; border-radius: 8px; }
+.edit-modal-close:active { background: #222; }
+.edit-modal-cover { display: flex; align-items: center; gap: 14px; background: #0a0a0a; border: 1px solid #222; border-radius: 14px; padding: 14px; margin-bottom: 16px; }
+.edit-modal-cover img { width: 64px; height: 64px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #222; }
+.edit-modal-cover .info { flex: 1; min-width: 0; }
+.edit-modal-cover .info h4 { font-size: 14px; font-weight: 800; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.edit-modal-cover .info p { font-size: 11px; color: var(--text2); }
+.edit-modal .form-group { margin-bottom: 12px; }
+.edit-modal-actions { display: flex; gap: 10px; margin-top: 18px; }
+.edit-modal-actions button { flex: 1; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; border: none; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.btn-modal-cancel { background: #222; color: #fff; }
+.btn-modal-save { background: var(--accent); color: #fff; }
+.edit-modal-actions button:disabled { opacity: 0.5; cursor: not-allowed; }
   .success { color: #00cc44; } .error { color: #ff0033; } .info { color: #ffcc00; }
   .search-wrap { position: relative; margin-bottom: 12px; }
   .search-wrap input { width: 100%; padding: 12px 40px 12px 40px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; color: #fff; font-size: 13px; font-family: inherit; }
   .search-wrap input:focus { outline: none; border-color: var(--accent); }
   .search-wrap .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #666; font-size: 14px; pointer-events: none; }
   .song-count-label { text-align: center; font-size: 11px; color: #666; margin-bottom: 14px; font-weight: 600; letter-spacing: 0.3px; }
-  .admin-song { display: flex; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 12px; margin-bottom: 10px; }
-  .admin-song img { width: 55px; height: 55px; border-radius: 8px; object-fit: cover; }
+  .admin-song { display: flex; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 4
+  3px; margin-bottom: 10px; }
+  .admin-song img { width: 55px; height: 55px; border-radius: 2px; object-fit: cover; }
   .admin-song .info { flex: 1; min-width: 0; }
   .admin-song h4 { font-size: 14px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .admin-song p { font-size: 11px; color: var(--text2); }
@@ -58,6 +92,15 @@
   .admin-song .delete-btn { color: #ff0033; }
   .admin-song .link-btn { color: #1d9bf0; }
   .empty-songs { text-align: center; padding: 30px 20px; color: #666; font-size: 13px; }
+  /* ===== SKELETON LOADERS ===== */
+.skeleton-song { display: flex; gap: 6px; align-items: center; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 4px; margin-bottom: 10px; }
+.skeleton-song-img { width: 55px; height: 55px; border-radius: 8px; background: var(--border); animation: skeleton-pulse 1.4s ease-in-out infinite; flex-shrink: 0; }
+.skeleton-song-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.skeleton-song-line { height: 12px; background: var(--border); border-radius: 4px; animation: skeleton-pulse 1.4s ease-in-out infinite; }
+.skeleton-song-line.title { width: 60%; height: 14px; }
+.skeleton-song-line.meta { width: 85%; height: 10px; }
+.skeleton-song-line.meta.short { width: 45%; }
+@keyframes skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
   .show-all-btn { width: 100%; padding: 14px; margin-top: 10px; background: transparent; border: 2px dashed #333; border-radius: 12px; color: var(--accent); font-size: 13px; font-weight: 900; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.5px; }
   .show-all-btn.muted { color: var(--text2); }
   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card); border-top: 1px solid var(--border); display: flex; padding: 6px 0 max(6px, env(safe-area-inset-bottom)); z-index: 1000; }
@@ -189,13 +232,13 @@
 
   <div id="dashboard">
     <div class="top-bar">
-      <div class="avatar">S</div>
-      <div style="flex: 1;">
-        <h1>Samarid Music</h1>
-        <div class="brand">CREATOR STUDIO</div>
-      </div>
-      <a href="smpanel-2261.html" class="manager-quick-btn"><i class="fas fa-cog"></i> Manager</a>
-    </div>
+  <div class="avatar" id="studioLogo"><i class="fas fa-music"></i></div>
+  <div style="flex: 1;">
+    <h1>FlexTune</h1>
+    <div class="brand">FLEXTUNE STUDIO</div>
+  </div>
+  <a href="smpanel-2261.html" class="manager-quick-btn"><i class="fas fa-cog"></i> Manager</a>
+</div>
 
     <div class="content">
       <div class="page active" id="pageHome">
@@ -239,11 +282,21 @@
           </div>
           <div class="form-group"><label>Release Date (Text)</label><input type="text" id="songDate" placeholder="e.g. April 13, 2026"></div>
           <div class="form-group"><label>Description</label><textarea id="songDescription" placeholder="About this song..."></textarea></div>
+          <div class="form-group"><label>Lyrics</label><textarea id="songLyrics" placeholder="One line per lyric...&#10;Back to sender&#10;I no dey fear nobody"></textarea></div>
           <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="https://...mp3"></div>
           <div class="form-group"><label>Spotify Link</label><input type="text" id="songSpotify" placeholder="https://open.spotify.com/track/..."></div>
-          <button class="main-btn" id="submitBtn" onclick="saveSong()">Publish Song</button>
-          <button class="secondary-btn" id="cancelBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
-          <p id="songStatus" class="status"></p>
+        <button class="main-btn" id="submitBtn" onclick="saveSong()">Submit </button>
+<button class="secondary-btn" id="cancelBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
+
+<div class="publish-progress" id="songProgress">
+  <div class="publish-progress-bar"><div class="publish-progress-fill" id="songProgressFill"></div></div>
+  <div class="publish-progress-row">
+    <div class="publish-progress-text" id="songProgressText"><i class="fas fa-cloud-upload-alt"></i> Uploading...</div>
+    <div class="publish-progress-pct" id="songProgressPct">0%</div>
+  </div>
+</div>
+
+<p id="songStatus" class="status"></p>
         </div>
 
         <div class="subcontent" id="addContentAlbum">
@@ -275,8 +328,17 @@
             <div>Total songs in album: <strong id="albumSongCount">0</strong></div>
           </div>
 
-          <button class="main-btn" id="publishAlbumBtn" onclick="publishAlbum()">Publish Album</button>
-          <p id="albumStatus" class="status"></p>
+          <button class="main-btn" id="publishAlbumBtn" onclick="publishAlbum()">Submit</button>
+
+<div class="publish-progress" id="albumProgress">
+  <div class="publish-progress-bar"><div class="publish-progress-fill" id="albumProgressFill"></div></div>
+  <div class="publish-progress-row">
+    <div class="publish-progress-text" id="albumProgressText"><i class="fas fa-cloud-upload-alt"></i> Uploading...</div>
+    <div class="publish-progress-pct" id="albumProgressPct">0%</div>
+  </div>
+</div>
+
+<p id="albumStatus" class="status"></p>
         </div>
       </div>
 
@@ -310,6 +372,7 @@
           </div>
 
           <div class="form-group"><label>Description</label><textarea id="schDescription" placeholder="About this song..."></textarea></div>
+          <div class="form-group"><label>Lyrics</label><textarea id="schLyrics" placeholder="One line per lyric...&#10;Back to sender&#10;I no dey fear nobody"></textarea></div>
           <div class="form-group"><label>Download MP3 Link *</label><input type="text" id="schDownload" placeholder="https://...mp3"></div>
           <div class="form-group"><label>Spotify Link</label><input type="text" id="schSpotify" placeholder="https://open.spotify.com/track/..."></div>
 
@@ -338,8 +401,17 @@
             <div class="release-preview-text" id="releasePreview"><i class="fas fa-clock"></i> Pick a date...</div>
           </div>
 
-          <button class="main-btn" id="scheduleSingleBtn" onclick="scheduleSingle()">Schedule Release</button>
-          <p id="scheduleSingleStatus" class="status"></p>
+        <button class="main-btn" id="scheduleSingleBtn" onclick="scheduleSingle()">Schedule Release</button>
+
+<div class="publish-progress" id="scheduleSingleProgress">
+  <div class="publish-progress-bar"><div class="publish-progress-fill" id="scheduleSingleProgressFill"></div></div>
+  <div class="publish-progress-row">
+    <div class="publish-progress-text" id="scheduleSingleProgressText"><i class="fas fa-cloud-upload-alt"></i> Uploading...</div>
+    <div class="publish-progress-pct" id="scheduleSingleProgressPct">0%</div>
+  </div>
+</div>
+
+<p id="scheduleSingleStatus" class="status"></p>
         </div>
 
         <div class="subcontent" id="releaseContentAlbum">
@@ -396,8 +468,17 @@
             <div class="release-preview-text" id="releaseAlbumPreview"><i class="fas fa-clock"></i> Pick a date...</div>
           </div>
 
-          <button class="main-btn" onclick="scheduleAlbum()">Schedule Album</button>
-          <p id="scheduleAlbumStatus" class="status"></p>
+       <button class="main-btn" onclick="scheduleAlbum()">Schedule Album</button>
+
+<div class="publish-progress" id="scheduleAlbumProgress">
+  <div class="publish-progress-bar"><div class="publish-progress-fill" id="scheduleAlbumProgressFill"></div></div>
+  <div class="publish-progress-row">
+    <div class="publish-progress-text" id="scheduleAlbumProgressText"><i class="fas fa-cloud-upload-alt"></i> Uploading...</div>
+    <div class="publish-progress-pct" id="scheduleAlbumProgressPct">0%</div>
+  </div>
+</div>
+
+<p id="scheduleAlbumStatus" class="status"></p>
         </div>
 
         <div class="album-box" style="margin-top: 25px;">
@@ -451,6 +532,7 @@ Release: Now
 Category: Afrobeats
 Country: Ghana
 Description: A hard-hitting afrobeats banger.
+Lyrics: Back to sender / I no dey fear nobody / Trust no body
 Cover: https://example.com/cover.jpg
 Download: https://example.com/song.mp3
 Spotify: https://open.spotify.com/track/xxxxx
@@ -624,9 +706,130 @@ Download: https://example.com/cry-baby.mp3</div>
       <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon"><i class="fas fa-tv"></i></div><div class="label">CHANNEL</div></button>
     </div>
   </div>
+<div class="edit-modal-overlay" id="editModalOverlay" onclick="closeEditModal()">
+  <div class="edit-modal" onclick="event.stopPropagation()">
+    <div class="edit-modal-header">
+      <h3><i class="fas fa-edit"></i> Edit Song</h3>
+      <button class="edit-modal-close" onclick="closeEditModal()">✕</button>
+    </div>
+
+    <div class="edit-modal-cover">
+      <img id="editModalCover" src="" alt="">
+      <div class="info">
+        <h4 id="editModalTitle">Song Title</h4>
+        <p id="editModalArtist">Artist</p>
+      </div>
+    </div>
+
+    <input type="hidden" id="editSongId" value="">
+
+    <div class="form-group"><label>Song Title</label><input type="text" id="editTitle" placeholder="Song title"></div>
+    <div class="form-group"><label>Cover Art URL</label><input type="text" id="editCover" placeholder="https://...png"></div>
+    <div class="form-group"><label>Artist Name</label><input type="text" id="editArtist" placeholder="Artist"></div>
+    <div class="form-group"><label>Featuring</label><input type="text" id="editFeaturing" placeholder="Feat (optional)"></div>
+    <div class="form-group"><label>Category</label><input type="text" id="editCategory" placeholder="Genre"></div>
+    <div class="form-group">
+      <label>Country</label>
+      <select id="editCountry">
+        <option value="Ghana">Ghana</option>
+        <option value="Nigeria">Nigeria</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Release Date (Text)</label><input type="text" id="editDate" placeholder="April 13, 2026"></div>
+    <div class="form-group"><label>Description</label><textarea id="editDescription" placeholder="About this song..."></textarea></div>
+    <div class="form-group"><label>Lyrics</label><textarea id="editLyrics" placeholder="One line per lyric..."></textarea></div>
+    <div class="form-group"><label>Download MP3 Link</label><input type="text" id="editDownload" placeholder="https://...mp3"></div>
+    <div class="form-group"><label>Spotify Link</label><input type="text" id="editSpotify" placeholder="https://open.spotify.com/track/..."></div>
+
+ <div class="publish-progress" id="editProgress">
+  <div class="publish-progress-bar"><div class="publish-progress-fill" id="editProgressFill"></div></div>
+  <div class="publish-progress-row">
+    <div class="publish-progress-text" id="editProgressText"><i class="fas fa-cloud-upload-alt"></i> Preparing...</div>
+    <div class="publish-progress-pct" id="editProgressPct">0%</div>
+  </div>
+</div>
+
+<div class="edit-modal-actions">
+  <button class="btn-modal-cancel" onclick="closeEditModal()"><i class="fas fa-times"></i> Cancel</button>
+  <button class="btn-modal-save" id="editSaveBtn" onclick="saveEditModal()"><i class="fas fa-check"></i> Save Changes</button>
+</div>
+<p id="editModalStatus" class="status"></p>
+  </div>
+</div>
 
   <script>
     const SECRET_PASSWORD = "samarid2026";
+    async function loadStudioLogo() {
+  const box = document.getElementById('studioLogo');
+  if (!box) return;
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/images?section=eq.logo&active=eq.true&select=*&order=id.desc&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+    const logos = await res.json();
+    if (Array.isArray(logos) && logos.length > 0 && logos[0].image_url) {
+      box.innerHTML = '<img src="' + logos[0].image_url + '" alt="FlexTune" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+    }
+  } catch (e) {}
+}
+    document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const m = document.getElementById('editModalOverlay');
+    if (m && m.classList.contains('open')) closeEditModal();
+  }
+});
+    // ===== PUBLISH PROGRESS BAR =====
+function showEditToast(msg) {
+  const toast = document.createElement('div');
+  toast.innerText = msg;
+  toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#00cc44;color:#fff;padding:14px 26px;border-radius:30px;font-size:14px;font-weight:800;z-index:99999;box-shadow:0 10px 30px rgba(0,204,68,0.4);max-width:calc(100vw - 40px);text-align:center;transition:opacity 0.3s ease;opacity:1;';
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; }, 1400);
+setTimeout(() => { if (toast.parentNode) document.body.removeChild(toast); }, 1800);
+}
+function startPublishProgress(prefix, label) {
+  const box = document.getElementById(prefix + 'Progress');
+  const fill = document.getElementById(prefix + 'ProgressFill');
+  const text = document.getElementById(prefix + 'ProgressText');
+  const pct = document.getElementById(prefix + 'ProgressPct');
+  if (!box || !fill || !text || !pct) return null;
+
+  box.classList.add('active');
+  box.classList.remove('done');
+  fill.style.width = '0%';
+  pct.innerText = '0%';
+  text.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> ' + (label || 'Preparing...');
+
+  let current = 0;
+  const target = 90;
+  const stepTime = 120;
+  const timer = setInterval(() => {
+    const remaining = target - current;
+    current += Math.max(1, remaining * 0.08);
+    if (current >= target) current = target;
+    fill.style.width = current + '%';
+    pct.innerText = Math.round(current) + '%';
+    if (current < 30) text.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Uploading...';
+    else if (current < 70) text.innerHTML = '<i class="fas fa-cog fa-spin"></i> Processing...';
+    else text.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Almost done...';
+  }, stepTime);
+
+  return {
+    finish: function(successLabel) {
+      clearInterval(timer);
+      fill.style.width = '100%';
+      pct.innerText = '100%';
+      text.innerHTML = '<i class="fas fa-check-circle"></i> ' + (successLabel || 'Done!');
+      box.classList.add('done');
+    },
+    fail: function(errorLabel) {
+      clearInterval(timer);
+      box.classList.remove('active');
+      box.classList.remove('done');
+      fill.style.width = '0%';
+      pct.innerText = '0%';
+      if (errorLabel) text.innerHTML = '<i class="fas fa-times-circle"></i> ' + errorLabel;
+    }
+  };
+}
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
     const SONGS_TABLE = "songs";
@@ -733,6 +936,7 @@ Download: https://example.com/cry-baby.mp3</div>
         addAlbumSong();
         addSchAlbumSong();
         loadScheduled();
+        loadStudioLogo();
       } else {
         status.innerText = 'Wrong password. Try again.';
       }
@@ -775,8 +979,13 @@ Download: https://example.com/cry-baby.mp3</div>
       }
     }    
     async function loadAdminSongs() {
-      const list = document.getElementById('homeSongList');
-      list.innerHTML = '<p class="empty-songs">Loading songs...</p>';
+  const list = document.getElementById('homeSongList');
+  list.innerHTML = `
+    <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
+    <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
+    <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
+    <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
+  `;
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
@@ -830,26 +1039,158 @@ Download: https://example.com/cry-baby.mp3</div>
         alert('Song link copied!\n\n' + url);
       } catch (e) { alert('Could not copy: ' + url); }
     }
-    window.editSong = function(song) {
-      document.getElementById('editingId').value = song.id;
-      document.getElementById('songTitle').value = song.title;
-      document.getElementById('songCover').value = song.cover;
-      document.getElementById('songArtist').value = song.artist_name || '';
-      document.getElementById('songFeaturing').value = song.featuring || '';
-      document.getElementById('songCategory').value = song.category;
-      document.getElementById('songCountry').value = song.country || 'Ghana'; // NEW
-      document.getElementById('songDate').value = song.date;
-      document.getElementById('songDescription').value = song.description || '';
-      document.getElementById('songDownload').value = song.downloadurl || '';
-      document.getElementById('songSpotify').value = song.spotify || '';
-      document.getElementById('submitBtn').innerText = 'Update Song';
-      document.getElementById('cancelBtn').style.display = 'block';
-      switchAddTab('single', document.getElementById('addTabSingle'));
-      goToPage('add');
-    }
+   window.editSong = function(song) {
+  document.getElementById('editSongId').value = song.id;
+  document.getElementById('editModalCover').src = song.cover || '';
+  document.getElementById('editModalTitle').innerText = song.title || 'Song';
+  document.getElementById('editModalArtist').innerText = (song.artist_name || 'Samarid') + (song.album_name ? ' • ' + song.album_name : '');
+  document.getElementById('editTitle').value = song.title || '';
+  document.getElementById('editCover').value = song.cover || '';
+  document.getElementById('editArtist').value = song.artist_name || '';
+  document.getElementById('editFeaturing').value = song.featuring || '';
+  document.getElementById('editCategory').value = song.category || '';
+  document.getElementById('editCountry').value = song.country || 'Ghana';
+  document.getElementById('editDate').value = song.date || '';
+  document.getElementById('editDescription').value = song.description || '';
+  document.getElementById('editLyrics').value = song.lyrics || '';
+  document.getElementById('editDownload').value = song.downloadurl || '';
+  document.getElementById('editSpotify').value = song.spotify || '';
+  document.getElementById('editModalStatus').innerText = '';
+  document.getElementById('editModalStatus').className = 'status';
+
+  // RESET PROGRESS BAR
+  const progressBox = document.getElementById('editProgress');
+  const progressFill = document.getElementById('editProgressFill');
+  const progressPct = document.getElementById('editProgressPct');
+  const progressText = document.getElementById('editProgressText');
+  if (progressBox) {
+    progressBox.classList.remove('active');
+    progressBox.classList.remove('done');
+    progressFill.style.width = '0%';
+    progressPct.innerText = '0%';
+    progressText.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Preparing...';
+  }
+// REMOVE ANY LEFTOVER TOAST
+document.querySelectorAll('div').forEach(el => {
+  if (el.style.position === 'fixed' && el.style.bottom === '30px' && el.style.zIndex === '99999') {
+    el.remove();
+  }
+});
+
+  // RESET SAVE BUTTON
+  const saveBtn = document.getElementById('editSaveBtn');
+  saveBtn.disabled = false;
+  saveBtn.innerHTML = '<i class="fas fa-check"></i> Save Changes';
+
+  document.getElementById('editModalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+window.closeEditModal = function() {
+  document.getElementById('editModalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+window.saveEditModal = async function() {
+  const id = document.getElementById('editSongId').value;
+  const status = document.getElementById('editModalStatus');
+  const btn = document.getElementById('editSaveBtn');
+  const progressBox = document.getElementById('editProgress');
+  const progressFill = document.getElementById('editProgressFill');
+  const progressText = document.getElementById('editProgressText');
+  const progressPct = document.getElementById('editProgressPct');
+
+  const title = document.getElementById('editTitle').value.trim();
+  const cover = document.getElementById('editCover').value.trim();
+  const artist = document.getElementById('editArtist').value.trim() || 'Samarid';
+  const featuring = document.getElementById('editFeaturing').value.trim();
+  const category = document.getElementById('editCategory').value.trim() || 'Music';
+  const country = document.getElementById('editCountry').value;
+  const date = document.getElementById('editDate').value.trim();
+  const description = document.getElementById('editDescription').value.trim() || 'No description yet.';
+  const lyrics = document.getElementById('editLyrics').value.trim();
+  const downloadurl = document.getElementById('editDownload').value.trim() || '#';
+  const spotify = document.getElementById('editSpotify').value.trim();
+
+  if (!title || !cover) {
+    status.className = 'status error';
+    status.innerText = 'Title and Cover required!';
+    return;
+  }
+
+  // Start progress animation
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  status.className = 'status';
+  status.innerText = '';
+
+  progressBox.classList.add('active');
+  progressBox.classList.remove('done');
+  progressFill.style.width = '0%';
+  progressPct.innerText = '0%';
+  progressText.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Saving changes...';
+
+  let current = 0;
+  const target = 90;
+  const timer = setInterval(() => {
+    const remaining = target - current;
+    current += Math.max(1, remaining * 0.08);
+    if (current >= target) current = target;
+    progressFill.style.width = current + '%';
+    progressPct.innerText = Math.round(current) + '%';
+    if (current < 30) progressText.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Saving changes...';
+    else if (current < 70) progressText.innerHTML = '<i class="fas fa-cog fa-spin"></i> Processing...';
+    else progressText.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Almost done...';
+  }, 120);
+
+  try {
+    const payload = {
+      title, cover, category, country, date,
+      description, lyrics: lyrics || null,
+      downloadurl, artist_name: artist,
+      featuring: featuring || null,
+      spotify: spotify || null
+    };
+    const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + id, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) { const err = await res.text(); throw new Error(err); }
+
+    await ensureAllArtistsExist(artist, featuring);
+
+    // Success — finish the progress bar
+    clearInterval(timer);
+    progressFill.style.width = '100%';
+    progressPct.innerText = '100%';
+    progressText.innerHTML = '<i class="fas fa-check-circle"></i> Song updated!';
+    progressBox.classList.add('done');
+    btn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+
+    setTimeout(() => {
+      closeEditModal();
+      loadAdminSongs();
+      showEditToast('Song updated successfully!');
+    }, 1100);
+  } catch (e) {
+    clearInterval(timer);
+    progressBox.classList.remove('active');
+    progressBox.classList.remove('done');
+    progressFill.style.width = '0%';
+    progressPct.innerText = '0%';
+    status.className = 'status error';
+    status.innerText = 'Error: ' + e.message.substring(0, 80);
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-check"></i> Save Changes';
+  }
+}
     window.cancelEdit = function() {
       document.getElementById('editingId').value = '';
-      ['songTitle','songCover','songArtist','songFeaturing','songCategory','songDate','songDescription','songDownload','songSpotify'].forEach(id => { document.getElementById(id).value = ''; });
+      ['songTitle','songCover','songArtist','songFeaturing','songCategory','songDate','songDescription','songLyrics','songDownload','songSpotify'].forEach(id => { document.getElementById(id).value = ''; });
       document.getElementById('songCountry').value = 'Ghana'; // NEW
       document.getElementById('submitBtn').innerText = 'Publish Song';
       document.getElementById('cancelBtn').style.display = 'none';
@@ -866,12 +1207,15 @@ Download: https://example.com/cry-baby.mp3</div>
       const country = document.getElementById('songCountry').value; // NEW
       const date = document.getElementById('songDate').value.trim() || new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
       const description = document.getElementById('songDescription').value.trim() || 'No description yet.';
+      const lyrics = document.getElementById('songLyrics').value.trim();
       const downloadurl = document.getElementById('songDownload').value.trim() || '#';
       const spotify = document.getElementById('songSpotify').value.trim();
       if (!title || !cover) { status.className = 'status error'; status.innerText = 'Title and Cover required!'; return; }
-      status.className = 'status info'; status.innerText = 'Saving...';
+      status.className = 'status success';
+status.innerText = editingId ? 'Song updated!' : 'Song Submitted!';
+setTimeout(() => { cancelEdit(); loadAdminSongs(); }, 1200);
       try {
-        const payload = { title, cover, category, country, date, description, downloadurl, artist_name: artist, featuring: featuring, spotify: spotify, status: 'live', release_at: null };
+       const payload = { title, cover, category, country, date, description, lyrics: lyrics || null, downloadurl, artist_name: artist, featuring: featuring, spotify: spotify, status: 'live', release_at: null };
         let res;
         if (editingId) res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + editingId, { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         else res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
@@ -895,7 +1239,7 @@ Download: https://example.com/cry-baby.mp3</div>
       const div = document.createElement('div');
       div.className = 'album-song-item';
       div.id = 'album-song-' + albumSongIndex;
-      div.innerHTML = '<div class="album-song-num">SONG ' + albumSongIndex + '</div><button class="album-song-remove" onclick="removeAlbumSong(' + albumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="https://...mp3"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div>';
+      div.innerHTML = '<div class="album-song-num">SONG ' + albumSongIndex + '</div><button class="album-song-remove" onclick="removeAlbumSong(' + albumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="https://...mp3"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Lyrics</label><textarea class="album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
       container.appendChild(div);
       updateAlbumCount();
     }
@@ -917,25 +1261,29 @@ Download: https://example.com/cry-baby.mp3</div>
       if (!cover) { status.className = 'status error'; status.innerText = 'Album cover URL required!'; return; }
       const songItems = document.querySelectorAll('#albumSongsContainer .album-song-item');
       if (songItems.length === 0) { status.className = 'status error'; status.innerText = 'Add at least one song!'; return; }
-      const songs = [];
-      let valid = true;
-      songItems.forEach(item => {
-        const title = item.querySelector('.album-song-title').value.trim();
-        const download = item.querySelector('.album-song-download').value.trim() || '#';
-        const desc = item.querySelector('.album-song-desc').value.trim() || 'No description yet.';
-        if (!title) valid = false;
-        songs.push({ title, downloadurl: download, description: desc });
-      });
+     const songs = [];
+let valid = true;
+songItems.forEach(item => {
+  const title = item.querySelector('.sch-album-song-title').value.trim();
+  const download = item.querySelector('.sch-album-song-download').value.trim() || '#';
+  const desc = item.querySelector('.sch-album-song-desc').value.trim() || 'No description yet.';
+  const lyrics = item.querySelector('.sch-album-song-lyrics').value.trim();
+  if (!title) valid = false;
+  songs.push({ title, downloadurl: download, description: desc, lyrics });
+});
       if (!valid) { status.className = 'status error'; status.innerText = 'All songs need a title!'; return; }
-      status.className = 'status info'; status.innerText = 'Publishing album...';
+      status.className = 'status'; status.innerText = '';
+const prog = startPublishProgress('album', 'Publishing album...');
       try {
-        const payload = songs.map(s => ({ title: s.title, cover, artist_name: artist, category, country, date, description: s.description, downloadurl: s.downloadurl, album_name: albumName, status: 'live', release_at: null }));
+        const payload = songs.map(s => ({ title: s.title, cover, artist_name: artist, category, country, date, description: s.description, lyrics: s.lyrics || null, downloadurl: s.downloadurl, album_name: albumName, status: 'live', release_at: null }));
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
         await ensureArtistExists(artist);
-        status.className = 'status success'; status.innerText = 'Album "' + albumName + '" published with ' + songs.length + ' songs!';
-        setTimeout(() => {
-          ['albumName','albumArtist','albumCover','albumCategory','albumDate'].forEach(id => { document.getElementById(id).value = ''; });
+        if (prog) prog.finish('Album submitted! ' + songs.length + ' songs');
+setTimeout(() => {
+  const box = document.getElementById('albumProgress');
+  if (box) { box.classList.remove('active'); box.classList.remove('done'); }
+  ['albumName','albumArtist','albumCover','albumCategory','albumDate'].forEach(id => { document.getElementById(id).value = ''; });
           document.getElementById('albumCountry').value = 'Ghana'; // NEW
           document.getElementById('albumSongsContainer').innerHTML = '';
           albumSongIndex = 0;
@@ -944,7 +1292,11 @@ Download: https://example.com/cry-baby.mp3</div>
           loadAdminSongs();
           goToPage('home');
         }, 1800);
-      } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 100); }
+   } catch (e) {
+  if (typeof prog !== 'undefined' && prog) prog.fail('Failed');
+  status.className = 'status error';
+  status.innerText = 'Error: ' + e.message.substring(0, 100);
+}
     }
     window.scheduleSingle = async function() {
       const status = document.getElementById('scheduleSingleStatus');
@@ -955,6 +1307,7 @@ Download: https://example.com/cry-baby.mp3</div>
       const category = document.getElementById('schCategory').value.trim() || 'Music';
       const country = document.getElementById('schCountry').value; // NEW
       const description = document.getElementById('schDescription').value.trim() || 'No description yet.';
+      const lyrics = document.getElementById('schLyrics').value.trim();
       const downloadurl = document.getElementById('schDownload').value.trim() || '#';
       const spotify = document.getElementById('schSpotify').value.trim();
       if (!title) { status.className = 'status error'; status.innerText = 'Title required!'; return; }
@@ -962,19 +1315,28 @@ Download: https://example.com/cry-baby.mp3</div>
       if (!downloadurl || downloadurl === '#') { status.className = 'status error'; status.innerText = 'Download MP3 required!'; return; }
       const { date, iso } = getSelectedDateTime('schMonth','schDay','schYear','schHour','schMinute', currentAmPm);
       if (date.getTime() <= Date.now()) { status.className = 'status error'; status.innerText = 'Pick a future date & time!'; return; }
-      status.className = 'status info'; status.innerText = 'Scheduling...';
+      status.className = 'status'; status.innerText = '';
+const prog = startPublishProgress('scheduleSingle', 'Scheduling...');
       try {
         const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
-        const payload = { title, cover, artist_name: artist, featuring: featuring, category, country, description, downloadurl, spotify: spotify || null, date: displayDate, status: 'scheduled', release_at: iso };
+        const payload = { title, cover, artist_name: artist, featuring: featuring, category, country, description, lyrics: lyrics || null, downloadurl, spotify: spotify || null, date: displayDate, status: 'scheduled', release_at: iso };
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
         await ensureAllArtistsExist(artist, featuring);
-        status.className = 'status success';
-        status.innerText = 'Scheduled! Goes live ' + formatPreviewText(date);
-        ['schTitle','schCover','schArtist','schFeaturing','schCategory','schDescription','schDownload','schSpotify'].forEach(id => { document.getElementById(id).value = ''; });
-        document.getElementById('schCountry').value = 'Ghana'; // NEW
-        setTimeout(() => { status.innerText = ''; loadScheduled(); }, 2500);
-      } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 100); }
+        if (prog) prog.finish('Scheduled for ' + formatPreviewText(date).split(' · ')[0]);
+['schTitle','schCover','schArtist','schFeaturing','schCategory','schDescription','schDownload','schSpotify'].forEach(id => { document.getElementById(id).value = ''; });
+document.getElementById('schCountry').value = 'Ghana';
+setTimeout(() => {
+  const box = document.getElementById('scheduleSingleProgress');
+  if (box) { box.classList.remove('active'); box.classList.remove('done'); }
+  status.innerText = '';
+  loadScheduled();
+}, 1800);
+  } catch (e) {
+  if (typeof prog !== 'undefined' && prog) prog.fail('Failed');
+  status.className = 'status error';
+  status.innerText = 'Error: ' + e.message.substring(0, 100);
+}
     }
     window.addSchAlbumSong = function() {
       schAlbumSongIndex++;
@@ -982,7 +1344,7 @@ Download: https://example.com/cry-baby.mp3</div>
       const div = document.createElement('div');
       div.className = 'album-song-item';
       div.id = 'sch-album-song-' + schAlbumSongIndex;
-      div.innerHTML = '<div class="album-song-num">SONG ' + schAlbumSongIndex + '</div><button class="album-song-remove" onclick="removeSchAlbumSong(' + schAlbumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="https://...mp3"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div>';
+      div.innerHTML = '<div class="album-song-num">SONG ' + schAlbumSongIndex + '</div><button class="album-song-remove" onclick="removeSchAlbumSong(' + schAlbumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="https://...mp3"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Lyrics</label><textarea class="sch-album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
       container.appendChild(div);
       updateSchAlbumCount();
     }
@@ -1017,7 +1379,7 @@ Download: https://example.com/cry-baby.mp3</div>
       status.className = 'status info'; status.innerText = 'Scheduling album...';
       try {
         const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
-        const payload = songs.map(s => ({ title: s.title, cover, artist_name: artist, category, country, description: s.description, downloadurl: s.downloadurl, album_name: albumName, date: displayDate, status: 'scheduled', release_at: iso }));
+        const payload = songs.map(s => ({ title: s.title, cover, artist_name: artist, category, country, description: s.description, lyrics: s.lyrics || null, downloadurl: s.downloadurl, album_name: albumName, date: displayDate, status: 'scheduled', release_at: iso }));
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
         await ensureArtistExists(artist);
@@ -1034,7 +1396,10 @@ Download: https://example.com/cry-baby.mp3</div>
     async function loadScheduled() {
       const list = document.getElementById('scheduledList');
       if (!list) return;
-      list.innerHTML = '<p class="empty-songs">Loading...</p>';
+      list.innerHTML = `
+  <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div></div></div>
+  <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div></div></div>
+`;
       try {
         const nowIso = new Date().toISOString();
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?status=eq.scheduled&release_at=gt.' + encodeURIComponent(nowIso) + '&select=*&order=release_at.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
@@ -1147,6 +1512,8 @@ Download: https://example.com/cry-baby.mp3</div>
       const category = extractLabel(text, ['Category', 'Genre']) || 'Music';
       const country = extractLabel(text, ['Country', 'Location']) || 'Ghana'; // NEW
       const description = extractLabel(text, ['Description', 'About', 'Bio']) || '';
+      let lyrics = extractLabel(text, ['Lyrics', 'Lyric', 'Song Lyrics']) || '';
+lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
       const cover = extractLabel(text, ['Cover', 'Cover Art', 'Art', 'Image']) || '';
       const download = extractLabel(text, ['Download', 'Download MP3', 'Download Link', 'MP3', 'Audio']) || '';
       const spotify = extractLabel(text, ['Spotify', 'Spotify Link']) || '';
@@ -1167,7 +1534,7 @@ Download: https://example.com/cry-baby.mp3</div>
           tracks.push({ title: trackTitle, downloadurl: dlMatch ? dlMatch[1].trim() : '#' });
         }
       }
-      parsedImport = { isAlbum, isScheduled, title: title || (isAlbum ? albumName : ''), albumName: isAlbum ? (albumName || title) : '', artist, featuring, category, country, description, cover: finalCover, download: finalDownload, spotify: finalSpotify, scheduleDate, scheduleTime, tracks, rawText: text };
+      parsedImport = { isAlbum, isScheduled, title: title || (isAlbum ? albumName : ''), albumName: isAlbum ? (albumName || title) : '', artist, featuring, category, country, description, lyrics, cover: finalCover, download: finalDownload, spotify: finalSpotify, scheduleDate, scheduleTime, tracks, rawText: text };
       renderImportPreview();
     }
     async function renderImportPreview() {
@@ -1274,7 +1641,7 @@ Download: https://example.com/cry-baby.mp3</div>
           payload = data.tracks.map(t => ({ title: t.title, cover: data.cover, artist_name: data.artist, featuring: data.featuring || null, category: data.category, country: data.country, description: data.description || 'No description yet.', downloadurl: t.downloadurl || '#', album_name: data.albumName, date: dateText, spotify: data.spotify || null, status: data.isScheduled ? 'scheduled' : 'live', release_at: data.isScheduled ? scheduleInfo.iso : null }));
         } else {
           const dateText = data.isScheduled ? scheduleInfo.displayDate : today;
-          payload = { title: data.title, cover: data.cover, artist_name: data.artist, featuring: data.featuring || null, category: data.category, country: data.country, description: data.description || 'No description yet.', downloadurl: data.download, spotify: data.spotify || null, date: dateText, status: data.isScheduled ? 'scheduled' : 'live', release_at: data.isScheduled ? scheduleInfo.iso : null };
+          payload = { title: data.title, cover: data.cover, artist_name: data.artist, featuring: data.featuring || null, category: data.category, country: data.country, description: data.description || 'No description yet.', downloadurl: data.download, spotify: data.spotify || null, date: dateText, status: data.isScheduled ? 'scheduled' : 'live', release_at: data.isScheduled ? scheduleInfo.iso : null };payload = { title: data.title, cover: data.cover, artist_name: data.artist, featuring: data.featuring || null, category: data.category, country: data.country, description: data.description || 'No description yet.', lyrics: data.lyrics || null, downloadurl: data.download, spotify: data.spotify || null, date: dateText, status: data.isScheduled ? 'scheduled' : 'live', release_at: data.isScheduled ? scheduleInfo.iso : null };
         }
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
@@ -1434,7 +1801,11 @@ Download: https://example.com/cry-baby.mp3</div>
         status.className = 'status success';
         status.innerText = 'Bio saved!';
         loadSeoArtists();
-      } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 80); }
+   } catch (e) {
+  if (typeof prog !== 'undefined' && prog) prog.fail('Failed');
+  status.className = 'status error';
+  status.innerText = 'Error: ' + e.message.substring(0, 80);
+}
       finally { btn.disabled = false; }
     }
     window.copySeoArtistLink = async function() {
