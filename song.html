@@ -7,6 +7,7 @@
 <meta name="description" content="Listen and download music from FlexTune — Africa's Music Hub.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"></noscript>
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -89,7 +90,14 @@
   .detail-meta .feat-link { color: #1d9bf0; font-weight: 700; text-decoration: none; }
   .detail-label { text-align: center; font-size: 11px; color: #999; margin-bottom: 25px; letter-spacing: 1px; font-weight: 600; text-transform: uppercase; }
   .detail-label i { color: var(--accent); margin-right: 4px; }
-  .follow-row-compact { display: flex; align-items: center; gap: 10px; padding: 8px 0; margin-bottom: 16px; }
+ .follow-row-compact { display: flex; align-items: center; gap: 10px; padding: 0; margin: 0; }
+.profile-card { margin: 8px 0 48px; border: 3px solid #1c1c1c; border-radius: 18px 18px 4px 4px; overflow: hidden; background: #0f0f0f; box-shadow: 0 8px 22px rgba(0,0,0,0.12); }
+.profile-card-head { display: flex; align-items: center; justify-content: space-between; background: #2b2b2b; color: #fff; padding: 10px 14px 10px 18px; font-size: 14px; font-weight: 900; letter-spacing: 1.5px; text-transform: uppercase; }
+.profile-card-body { background: radial-gradient(circle at 80% 50%, rgba(120,30,140,0.55) 0%, rgba(60,15,75,0.25) 40%, transparent 70%), #0f0f0f; padding: 16px 16px; }
+.profile-card-body .follow-stats-flat { color: #b5b5b5; }
+.profile-logo { background: #fff; color: #0a0a0a; font-size: 10px; font-weight: 900; letter-spacing: -0.3px; padding: 5px 8px; border: 1px solid #1c1c1c; border-radius: 0; line-height: 1; text-decoration: none; }
+.profile-logo span { color: #ff0033; }
+.profile-card-body .follow-stats-flat .stat-num { color: #ffffff; }
   .follow-avatar-flat { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; overflow: hidden; background: #ddd; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 17px; }
   .follow-avatar-flat img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .follow-info-flat { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; overflow: hidden; }
@@ -97,10 +105,10 @@
   .follow-dot { color: #bbb; font-weight: 700; font-size: 12px; flex-shrink: 0; }
   .follow-stats-flat { font-size: 12px; color: #999; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
   .follow-stats-flat .stat-num { color: var(--text2); font-weight: 800; }
-  .follow-btn-flat { padding: 7px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; border: none; background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 5px; flex-shrink: 0; white-space: nowrap; }
+  .follow-btn-flat { padding: 5px 11px; border-radius: 20px; font-size: 11px; font-weight: 800; border: none; background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 5px; flex-shrink: 0; white-space: nowrap; }
   .follow-btn-flat:active { transform: scale(0.94); }
   .follow-btn-flat:disabled { opacity: 0.6; }
-  .follow-btn-flat.following { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); padding: 5.5px 14.5px; }
+ .follow-btn-flat.following { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); padding: 3.5px 9.5px; }
   .detail-description { padding: 8px 4px 24px; margin-bottom: 12px; text-align: left; }
   .detail-description h4 { font-size: 11px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
   .detail-description h4 i { color: var(--accent); font-size: 11px; }
@@ -116,25 +124,25 @@
   .player-time { font-size: 11px; color: var(--text2); font-weight: 600; flex-shrink: 0; min-width: 32px; text-align: center; }
 
   /* ===== LYRICS SECTION — FIXED ===== */
-  .lyrics-section { margin-bottom: 40px; margin-top: 20px; padding: 0 0 24px; position: relative; overflow: hidden; }
-  .lyrics-section h4 { font-size: 11px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 6px; }
-  .lyrics-section h4 i { color: var(--accent); font-size: 11px; }
-  .lyrics-scroll { background: transparent; border: none; border-radius: 0; padding: 0 0 10px; max-height: none; overflow: visible; scroll-behavior: smooth; }
+ .lyrics-section { margin: 24px auto 40px; padding: 22px 16px 16px; position: relative; overflow: hidden; width: 100%; max-width: 320px; background: #fffaf8; border: 1px solid #f0d9d9; border-radius: 6px; box-shadow: 0 10px 30px rgba(139,0,0,0.10); }
+  .lyrics-section h4 { font-size: 11px; color: #8b0000; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 900; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid #f0d9d9; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .lyrics-section h4 i { color: #8b0000; font-size: 11px; }
+  .lyrics-scroll { background: transparent; border: none; border-radius: 0; padding: 0 8px 6px 0; max-height: 300px; overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
   .lyrics-scroll::-webkit-scrollbar { width: 4px; }
-  .lyrics-scroll::-webkit-scrollbar-thumb { background: rgba(196, 0, 40, 0.25); border-radius: 2px; }
+  
   .lyrics-scroll::-webkit-scrollbar-track { background: transparent; }
-  .lyric-line { font-size: 15px; line-height: 1.75; color: #8b0000; padding: 6px 0; font-weight: 500; text-align: center; }
-
+  .lyric-line { font-size: 15px; line-height: 1.8; color: #6b0016; padding: 5px 0; font-weight: 600; text-align: center; }
   /* ===== ABOUT THIS RELEASE ===== */
   .release-note { margin-top: 40px; margin-bottom: 30px; }
   .release-note-divider { width: 60px; height: 3px; background: var(--accent); border-radius: 3px; margin: 0 auto 26px; }
-  .release-note-title { font-size: 11px; color: var(--text2); letter-spacing: 3px; text-transform: uppercase; font-weight: 900; margin-bottom: 20px; text-align: center; }
-  .release-note p { font-size: 15px; line-height: 1.8; color: var(--text); margin-bottom: 18px; font-weight: 400; text-align: left; overflow-wrap: anywhere; word-break: break-word; }
+  .release-note-title { font-family: 'Poppins', 'Inter', sans-serif; font-size: 12px; color: var(--accent); letter-spacing: 3px; text-transform: uppercase; font-weight: 800; margin-bottom: 20px; text-align: center; }
+  .release-note p { font-family: 'Poppins', 'Inter', sans-serif; font-size: 15px; line-height: 1.8; color: var(--text); margin-bottom: 18px; font-weight: 500; text-align: left; overflow-wrap: anywhere; word-break: break-word; }
   .release-note p:last-child { margin-bottom: 0; color: var(--text2); font-style: italic; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); cursor: pointer; }
 
-  .download-buttons { display: flex; flex-direction: column; gap: 12px; }
-  .btn-download { display: flex; align-items: center; justify-content: center; gap: 5px; padding: 9px 5px; border-radius: 2px; font-size: 14px; font-weight: 600; text-decoration: none; color: #fff; background: #e74c3c; cursor: pointer; border: none; font-family: inherit; width: 100%; max-width: 190px; margin: 0 auto; }
+  .download-buttons { display: flex; flex-direction: row; gap: 12px; justify-content: center; }
+.btn-play { order: 2; }
+  .btn-download { display: flex; align-items: center; justify-content: center; gap: 5px; padding: 9px 5px; border-radius: 3px; font-size: 11px; font-weight: 700; text-decoration: none; color: #fff; background: #e74c3c; cursor: pointer; border: none; font-family: inherit; flex: 0 1 auto; max-width: 120px; margin: 0; justify-content: space-between; gap: 6px; padding: 8px 10px; box-shadow: 0 2px 0 #b03a2e; }
   .btn-download:active { background: #c0392b; }
   .btn-download:disabled { opacity: 0.7; cursor: wait; }
 
@@ -212,7 +220,7 @@
   .email-compact-success .title { font-size: 13px; font-weight: 900; color: #00cc44; margin-bottom: 4px; }
   .email-compact-success .text { font-size: 11.5px; color: var(--text2); line-height: 1.5; }
 
-  .promo-black-section { background: #0a0a0a; color: #fff; margin: 30px -16px -20px; width: calc(100% + 32px); padding: 45px 0 40px; border-top: 4px solid #ff0033; position: relative; overflow: hidden; }
+  .promo-black-section { background: #0a0a0a; color: #fff; margin: 30px -16px -20px; width: calc(100% + 32px); padding: 45px 0 40px; border-top: none; position: relative; overflow: hidden; }
   .promo-black-section::before { content: ''; position: absolute; top: -80px; right: -80px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 0, 51, 0.18) 0%, transparent 70%); pointer-events: none; }
   .promo-black-section::after { content: ''; position: absolute; bottom: -100px; left: -100px; width: 240px; height: 240px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 0, 51, 0.12) 0%, transparent 70%); pointer-events: none; }
 
@@ -656,6 +664,17 @@
             <div class="lyrics-scroll" id="lyricsScroll"></div>
           </div>
 
+         <div class="release-note">
+            <div class="release-note-divider"></div>
+            <div class="release-note-title">About This Release</div>
+            <p>"${escapeHtml(s.title)}" by ${escapeHtml(artist)} is now available to stream and download for free on FlexTune, Africa's Music Hub. Press play below to listen, then download the MP3 to keep it on your phone.</p>
+            <p>FlexTune is built to help fans discover fresh music and to help artists get heard. If you enjoy this song, follow ${escapeHtml(artist)}, share it with your friends, and check out more music from the artist below.</p>
+            <p>Every song on FlexTune is shared to give artists a real platform. When you stream "${escapeHtml(s.title)}", download it, or send it to a friend, you help ${escapeHtml(artist)} reach more people and grow their music career.</p>
+            <p>Music is the heartbeat of Africa. From the streets to the studio, new sounds are being created every day, and FlexTune is here to bring them all to you in one place, fast and free.</p>
+            <p>Love this track? Turn the volume up, add it to your playlist, and tell someone about it. Your support is what keeps the music moving.</p>
+            <p>Thank you for supporting African music.</p>
+          </div>
+
           <div class="audio-player-box">
             <audio id="audioPlayer" src="${escapeHtml(audioSrc)}" preload="metadata"></audio>
             <div class="player-row">
@@ -668,12 +687,18 @@
 
           <div class="detail-section">
             <div class="download-buttons">
+              <button onclick="document.getElementById('audioPlayer').scrollIntoView({behavior:'smooth',block:'center'}); togglePlay()" class="btn-download btn-play">
+                Play Now <i class="fas fa-play"></i>
+              </button>
               <button onclick="smartDownload(this)" class="btn-download" id="downloadBtn">
-                <i class="fas fa-download"></i> Download MP3
+                Download Mp3 <i class="fas fa-download"></i>
               </button>
             </div>
           </div>
 
+          <div class="profile-card">
+         <div class="profile-card-head"><span>Artist Profile</span><a href="index.html" class="profile-logo">FLEX<span>TUNE</span></a></div>
+          <div class="profile-card-body">
           <div class="follow-row-compact">
             <div class="follow-avatar-flat">${avatarHTML}</div>
             <div class="follow-info-flat">
@@ -685,6 +710,9 @@
               <i class="fas fa-${myFollow ? 'check' : 'plus'}" id="songFollowIcon"></i>
               <span id="songFollowText">${myFollow ? 'Following' : 'Follow'}</span>
             </button>
+          </div>
+
+         </div>
           </div>
 
           <div class="more-from-section" id="moreFromSection" style="display:none;">
