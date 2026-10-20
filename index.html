@@ -62,7 +62,7 @@ body:not(.light) .tabs-container { background: #141414; border-bottom: 1px solid
   .menu-overlay.open { opacity: 1; pointer-events: auto; }
 
   /* ===== SLIDE-IN MENU — LIGHT + CUT ===== */
-  .menu-dropdown { position: fixed; top: 56px; left: -320px; width: 290px; max-width: 85vw; height: calc(100vh - 56px); background: #f7f7f7; border-right: 1px solid #e5e5e5; z-index: 9999; transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; box-shadow: 10px 0 40px rgba(0,0,0,0.15); padding-top: 12px; }
+  .menu-dropdown { position: fixed; top: 56px; left: -320px; width: 290px; max-width: 85vw; height: calc(100dvh - 56px); background: #f7f7f7; border-right: 1px solid #e5e5e5; z-index: 9999; transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; -webkit-overflow-scrolling: touch; box-shadow: 10px 0 40px rgba(0,0,0,0.15); padding-top: 12px; padding-bottom: 30px; }
   .menu-dropdown.open { left: 0; }
   .menu-title { padding: 20px 26px 10px; font-size: 10px; color: #999; letter-spacing: 2.5px; font-weight: 800; text-transform: uppercase; border-top: 1px solid #e8e8e8; margin-top: 6px; }
   .menu-title:first-child { border-top: none; margin-top: 0; padding-top: 6px; }
