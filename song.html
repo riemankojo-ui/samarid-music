@@ -499,7 +499,7 @@ window.smartDownload = async function(btn) {
 
     if (currentSongData.cover) {
       try {
-        let coverResponse = await fetch('/api/download?url=' + encodeURIComponent(currentSongData.cover));
+      let coverResponse = await fetch('/api/download?url=' + encodeURIComponent(currentSongData.cover));  
         if (!coverResponse.ok) {
            const cProxy = 'https://corsproxy.io/?' + encodeURIComponent(currentSongData.cover);
            coverResponse = await fetch(cProxy);
