@@ -790,6 +790,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
             </div>
           </div>
 
+          ${(function(){ var m = (s.youtube || '').match(new RegExp('(?:youtu[.]be/|v=|embed/|shorts/)([A-Za-z0-9_-]{11})')); if (!m) return ''; return '<div style="margin:0 0 20px;"><p style="font-size:12px;color:#888;text-align:center;margin:0 0 8px;">Watch the official video</p><div style="background:#fff;border:1px solid #ddd;padding:8px;border-radius:0;"><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000;"><iframe src="https://www.youtube-nocookie.com/embed/' + m[1] + '" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" loading="lazy" allowfullscreen></iframe></div></div></div>'; })()}
           <div class="profile-card">
          <div class="profile-card-head"><span>Artist Profile</span><a href="index.html" class="profile-logo">FLEX<span>TUNE</span></a></div>
           <div class="profile-card-body">
