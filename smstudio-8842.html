@@ -836,8 +836,16 @@ function startPublishProgress(prefix, label) {
     const VIDEOS_TABLE = "videos";
     const ARTISTS_TABLE = "artists";
     const HOME_SONGS_LIMIT = 5;
-    const GHANA_TZ = 0;
-    const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const GHANA_TZ = 0;
+
+// SECRET COMPRESSION FUNCTION
+function getCompressedCover(url) {
+  if (!url || url.trim() === '' || url === '#') return url;
+  if (url.includes('wsrv.nl')) return url;
+  return 'https://wsrv.nl/?url=' + encodeURIComponent(url) + '&w=600&output=webp&q=75';
+}
+
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     let allAdminSongs = [];
     let albumSongIndex = 0;
     let schAlbumSongIndex = 0;
@@ -1100,7 +1108,7 @@ window.saveEditModal = async function() {
   const progressPct = document.getElementById('editProgressPct');
 
   const title = document.getElementById('editTitle').value.trim();
-  const cover = document.getElementById('editCover').value.trim();
+  const cover = getCompressedCover(document.getElementById('editCover').value.trim());
   const artist = document.getElementById('editArtist').value.trim() || 'Samarid';
   const featuring = document.getElementById('editFeaturing').value.trim();
   const category = document.getElementById('editCategory').value.trim() || 'Music';
@@ -1200,7 +1208,7 @@ window.saveEditModal = async function() {
       const status = document.getElementById('songStatus');
       const editingId = document.getElementById('editingId').value;
       const title = document.getElementById('songTitle').value.trim();
-      const cover = document.getElementById('songCover').value.trim();
+      const cover = getCompressedCover(document.getElementById('songCover').value.trim());
       const artist = document.getElementById('songArtist').value.trim() || 'Samarid';
       const featuring = document.getElementById('songFeaturing').value.trim();
       const category = document.getElementById('songCategory').value.trim() || 'Music';
@@ -1250,7 +1258,7 @@ try {
       const status = document.getElementById('albumStatus');
       const albumName = document.getElementById('albumName').value.trim();
       const artist = document.getElementById('albumArtist').value.trim() || 'Samarid';
-      const cover = document.getElementById('albumCover').value.trim();
+      const cover = getCompressedCover(document.getElementById('albumCover').value.trim());
       const category = document.getElementById('albumCategory').value.trim() || 'Music';
       const country = document.getElementById('albumCountry').value; // NEW
       const date = document.getElementById('albumDate').value.trim() || new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
@@ -1298,7 +1306,7 @@ setTimeout(() => {
     window.scheduleSingle = async function() {
       const status = document.getElementById('scheduleSingleStatus');
       const title = document.getElementById('schTitle').value.trim();
-      const cover = document.getElementById('schCover').value.trim();
+      const cover = getCompressedCover(document.getElementById('schCover').value.trim());
       const artist = document.getElementById('schArtist').value.trim() || 'Samarid';
       const featuring = document.getElementById('schFeaturing').value.trim();
       const category = document.getElementById('schCategory').value.trim() || 'Music';
@@ -1354,7 +1362,7 @@ setTimeout(() => {
       const status = document.getElementById('scheduleAlbumStatus');
       const albumName = document.getElementById('schAlbumName').value.trim();
       const artist = document.getElementById('schAlbumArtist').value.trim() || 'Samarid';
-      const cover = document.getElementById('schAlbumCover').value.trim();
+      const cover = getCompressedCover(document.getElementById('schAlbumCover').value.trim());
       const category = document.getElementById('schAlbumCategory').value.trim() || 'Music';
       const country = document.getElementById('schAlbumCountry').value; // NEW
       if (!albumName) { status.className = 'status error'; status.innerText = 'Album name required!'; return; }
@@ -1516,7 +1524,7 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
       const cover = extractLabel(text, ['Cover', 'Cover Art', 'Art', 'Image']) || '';
       const download = extractLabel(text, ['Download', 'Download MP3', 'Download Link', 'MP3', 'Audio']) || '';
       const spotify = extractLabel(text, ['Spotify', 'Spotify Link']) || '';
-      let finalCover = cover, finalDownload = download, finalSpotify = spotify;
+      let finalCover = getCompressedCover(cover), finalDownload = download, finalSpotify = spotify;
       const urls = text.match(/https?:\/\/[^\s]+/g) || [];
       if (!finalSpotify) { const u = urls.find(x => x.includes('spotify.com')); if (u) finalSpotify = u; }
       if (!finalCover) { const u = urls.find(x => /\.(png|jpg|jpeg|webp|gif)(\?|$)/i.test(x) && !x.includes('spotify')); if (u) finalCover = u; }

@@ -692,7 +692,7 @@ let visitorId = localStorage.getItem('samarid_visitor_id');
           </div>
 
           <div class="audio-player-box">
-            <audio id="audioPlayer" src="${escapeHtml(audioSrc)}" preload="metadata"></audio>
+            <audio id="audioPlayer" src="${escapeHtml(audioSrc)}" preload="none"></audio>
             <div class="player-row">
               <button class="play-pause-btn" id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
               <input type="range" id="seekSlider" value="0" max="100">
