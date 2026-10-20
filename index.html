@@ -612,7 +612,7 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
       if (featuring) titleHTML += ' <span class="feat-tag">Feat ' + escapeHtml(featuring) + '</span>';
       titleHTML += ' - ' + escapeHtml(s.title);
       return `<a href="song.html?id=${s.id}" class="song-card">
-        <div class="song-card-img"><img src="https://wsrv.nl/?url=${encodeURIComponent(s.cover)}&w=250&output=webp" alt="${escapeHtml(s.title)}" loading="lazy"></div>
+        <div class="song-card-img"><img src="${escapeHtml(s.cover)}" alt="${escapeHtml(s.title)}" loading="lazy"></div>
         <div class="song-card-info">
           <div class="genre-country">${escapeHtml(genre)} • ${escapeHtml(country)}</div>
           <h3>${titleHTML}</h3>
@@ -625,7 +625,7 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
   const artist = album.artist || 'Samarid';
   const date = album.date || '';
   const linkUrl = 'album.html?name=' + encodeURIComponent(album.name);
-  return '<a href="' + linkUrl + '" class="top-album-card"><div class="top-album-cover"><img src="https://wsrv.nl/?url=' + encodeURIComponent(album.cover) + '&w=250&output=webp" alt="' + escapeHtml(album.name) + '" loading="lazy"></div><div class="top-album-info"><div class="top-album-name">' + escapeHtml(artist) + ' - ' + escapeHtml(album.name) + '</div><div class="top-album-date">' + escapeHtml(date) + '</div></div></a>';
+  return '<a href="' + linkUrl + '" class="top-album-card"><div class="top-album-cover"><img src="' + escapeHtml(album.cover) + '" alt="' + escapeHtml(album.name) + '" loading="lazy"></div><div class="top-album-info"><div class="top-album-name">' + escapeHtml(artist) + ' - ' + escapeHtml(album.name) + '</div><div class="top-album-date">' + escapeHtml(date) + '</div></div></a>';
 }
 
     async function loadTopSongs() {
