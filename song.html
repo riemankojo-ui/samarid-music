@@ -384,7 +384,21 @@
     }
     applySettings();
 
-    let visitorId = localStorage.getItem('samarid_visitor_id');
+(function() {
+  if (localStorage.getItem('samarid_subscribed') === 'true') {
+    const form = document.getElementById('songEmailFormArea');
+    const success = document.getElementById('songEmailSuccess');
+    if (form && success) {
+      const savedEmail = localStorage.getItem('samarid_subscriber_email') || 'you';
+      form.style.display = 'none';
+      success.style.display = 'block';
+      const txt = success.querySelector('.text');
+      if (txt) txt.innerText = 'You\'re subscribed as ' + savedEmail + '. We\'ll notify you when new songs drop!';
+    }
+  }
+})();
+
+let visitorId = localStorage.getItem('samarid_visitor_id');
     if (!visitorId) {
       visitorId = 'v_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
       localStorage.setItem('samarid_visitor_id', visitorId);
@@ -536,11 +550,13 @@
           body: JSON.stringify({ email: email })
         });
         if (res.ok || res.status === 409) {
-          document.getElementById('songEmailFormArea').style.display = 'none';
-          const success = document.getElementById('songEmailSuccess');
-          success.style.display = 'block';
-          success.querySelector('.text').innerText = 'You\'re subscribed as ' + email + '. We\'ll notify you when new songs drop!';
-        } else { throw new Error('Save failed'); }
+  localStorage.setItem('samarid_subscribed', 'true');
+  localStorage.setItem('samarid_subscriber_email', email);
+  document.getElementById('songEmailFormArea').style.display = 'none';
+  const success = document.getElementById('songEmailSuccess');
+  success.style.display = 'block';
+  success.querySelector('.text').innerText = 'You\'re subscribed as ' + email + '. We\'ll notify you when new songs drop!';
+} else { throw new Error('Save failed'); }
       } catch (e) {
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-bell"></i> Notify';
@@ -556,7 +572,7 @@
 
       if (!songId) {
         try {
-          const fallbackRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id&order=plays.desc.nullslast,id.desc&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+          const fallbackRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id&order=plays.desc.nullslast,id.desc&limit=1&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
           const fallbackData = await fallbackRes.json();
           if (Array.isArray(fallbackData) && fallbackData.length > 0) {
             songId = fallbackData[0].id;
@@ -572,7 +588,7 @@
       }
 
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + songId, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const res = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + songId + '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const data = await res.json();
 
         if (!data || data.length === 0) {
@@ -912,9 +928,9 @@
 
       try {
         const res = await fetch(
-          SUPABASE_URL + '/rest/v1/songs?artist_name=eq.' + encodeURIComponent(artistName) + '&id=neq.' + currentSongId + '&select=id,title,artist_name&order=id.desc&limit=5',
-          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
-        );
+  SUPABASE_URL + '/rest/v1/songs?artist_name=eq.' + encodeURIComponent(artistName) + '&id=neq.' + currentSongId + '&select=id,title,artist_name&order=id.desc&limit=5&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')',
+  { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }
+);
         const songs = await res.json();
 
         if (!Array.isArray(songs) || songs.length === 0) {
@@ -947,7 +963,51 @@
       } catch (e) { showToast('Could not copy link'); }
     }
 
-    function showToast(msg) {
+    window.toggleFollowSong = async function() {
+  if (!currentArtistName) return;
+  const btn = document.getElementById('songFollowBtn');
+  const icon = document.getElementById('songFollowIcon');
+  const text = document.getElementById('songFollowText');
+  const countEl = document.getElementById('followerCountNum');
+  if (!btn || !icon || !text || !countEl) return;
+
+  const wasFollowing = isFollowingArtist;
+  isFollowingArtist = !wasFollowing;
+  btn.disabled = true;
+
+  const currentCount = parseInt(countEl.innerText.replace(/,/g, '')) || 0;
+  const newCount = wasFollowing ? Math.max(0, currentCount - 1) : currentCount + 1;
+  countEl.innerText = newCount.toLocaleString();
+  btn.classList.toggle('following', isFollowingArtist);
+  icon.className = 'fas fa-' + (isFollowingArtist ? 'check' : 'plus');
+  text.innerText = isFollowingArtist ? 'Following' : 'Follow';
+
+  try {
+    if (isFollowingArtist) {
+      await fetch(SUPABASE_URL + '/rest/v1/follows', {
+        method: 'POST',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ artist_name: currentArtistName, visitor_id: visitorId })
+      });
+    } else {
+      await fetch(SUPABASE_URL + '/rest/v1/follows?artist_name=ilike.' + encodeURIComponent(currentArtistName) + '&visitor_id=eq.' + visitorId, {
+        method: 'DELETE',
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+    }
+  } catch (e) {
+    isFollowingArtist = wasFollowing;
+    countEl.innerText = currentCount.toLocaleString();
+    btn.classList.toggle('following', wasFollowing);
+    icon.className = 'fas fa-' + (wasFollowing ? 'check' : 'plus');
+    text.innerText = wasFollowing ? 'Following' : 'Follow';
+    showToast('Could not update follow state');
+  } finally {
+    btn.disabled = false;
+  }
+};
+
+function showToast(msg) {
       const toast = document.createElement('div');
       toast.innerText = msg;
       toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:12px 24px;border-radius:30px;font-size:14px;font-weight:600;z-index:99999;box-shadow:0 10px 30px rgba(0,0,0,0.3);max-width:calc(100vw - 40px);text-align:center;transition:opacity 0.3s ease;';

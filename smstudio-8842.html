@@ -1210,11 +1210,8 @@ window.saveEditModal = async function() {
       const lyrics = document.getElementById('songLyrics').value.trim();
       const downloadurl = document.getElementById('songDownload').value.trim() || '#';
       const spotify = document.getElementById('songSpotify').value.trim();
-      if (!title || !cover) { status.className = 'status error'; status.innerText = 'Title and Cover required!'; return; }
-      status.className = 'status success';
-status.innerText = editingId ? 'Song updated!' : 'Song Submitted!';
-setTimeout(() => { cancelEdit(); loadAdminSongs(); }, 1200);
-      try {
+if (!title || !cover) { status.className = 'status error'; status.innerText = 'Title and Cover required!'; return; }
+try {
        const payload = { title, cover, category, country, date, description, lyrics: lyrics || null, downloadurl, artist_name: artist, featuring: featuring, spotify: spotify, status: 'live', release_at: null };
         let res;
         if (editingId) res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + editingId, { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
@@ -1264,10 +1261,10 @@ setTimeout(() => { cancelEdit(); loadAdminSongs(); }, 1200);
      const songs = [];
 let valid = true;
 songItems.forEach(item => {
-  const title = item.querySelector('.sch-album-song-title').value.trim();
-  const download = item.querySelector('.sch-album-song-download').value.trim() || '#';
-  const desc = item.querySelector('.sch-album-song-desc').value.trim() || 'No description yet.';
-  const lyrics = item.querySelector('.sch-album-song-lyrics').value.trim();
+  const title = item.querySelector('.album-song-title').value.trim();
+  const download = item.querySelector('.album-song-download').value.trim() || '#';
+  const desc = item.querySelector('.album-song-desc').value.trim() || 'No description yet.';
+  const lyrics = item.querySelector('.album-song-lyrics').value.trim();
   if (!title) valid = false;
   songs.push({ title, downloadurl: download, description: desc, lyrics });
 });
@@ -1367,12 +1364,14 @@ setTimeout(() => {
       const songs = [];
       let valid = true;
       songItems.forEach(item => {
-        const title = item.querySelector('.sch-album-song-title').value.trim();
-        const download = item.querySelector('.sch-album-song-download').value.trim() || '#';
-        const desc = item.querySelector('.sch-album-song-desc').value.trim() || 'No description yet.';
-        if (!title) valid = false;
-        songs.push({ title, downloadurl: download, description: desc });
-      });
+  const title = item.querySelector('.sch-album-song-title').value.trim();
+  const download = item.querySelector('.sch-album-song-download').value.trim() || '#';
+  const desc = item.querySelector('.sch-album-song-desc').value.trim() || 'No description yet.';
+  const lyricsEl = item.querySelector('.sch-album-song-lyrics');
+  const lyrics = lyricsEl ? lyricsEl.value.trim() : '';
+  if (!title) valid = false;
+  songs.push({ title, downloadurl: download, description: desc, lyrics });
+});
       if (!valid) { status.className = 'status error'; status.innerText = 'All songs need a title!'; return; }
       const { date, iso } = getSelectedDateTime('schAMonth','schADay','schAYear','schAHour','schAMinute', currentAAmPm);
       if (date.getTime() <= Date.now()) { status.className = 'status error'; status.innerText = 'Pick a future date & time!'; return; }
