@@ -306,18 +306,66 @@
       history.replaceState({}, '', 'search.html');
     }
 
-    function showInitialState() {
-      document.getElementById('content').innerHTML = `
-        <div class="state-box" id="initialState">
-          <div class="icon">🔍</div>
-          <h3>Search FlexTune</h3>
-          <p>Type to find any song, artist, video or album</p>
-          <div class="suggestion-chips" id="suggestions">
-            ${allArtists.slice(0, 6).map(a => '<button class="chip" onclick="quickSearch(\'' + a.name.replace(/'/g, "\\'") + '\')">' + escapeHtml(a.name) + '</button>').join('')}
-          </div>
+    function getRecentSearches() {
+  try { 
+    const saved = localStorage.getItem('samarid_recent_searches');
+    return saved ? JSON.parse(saved) : []; 
+  } catch(e) { return []; }
+}
+
+function saveRecentSearch(query) {
+  if (!query || query.trim().length < 2) return;
+  const q = query.trim();
+  let recent = getRecentSearches();
+  recent = recent.filter(item => item.toLowerCase() !== q.toLowerCase());
+  recent.unshift(q);
+  recent = recent.slice(0, 8);
+  try { localStorage.setItem('samarid_recent_searches', JSON.stringify(recent)); } catch(e) {}
+}
+
+window.clearRecentSearches = function(e) {
+  if (e) e.stopPropagation();
+  try { localStorage.removeItem('samarid_recent_searches'); } catch(e) {}
+  showInitialState();
+}
+
+function showInitialState() {
+  const recent = getRecentSearches();
+  let recentHTML = '';
+  
+  if (recent.length > 0) {
+    recentHTML = `
+      <div style="margin-top: 34px; text-align: left; width: 100%; max-width: 450px; margin-left: auto; margin-right: auto; padding: 0 16px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-size: 11px; font-weight: 800; color: var(--text2); letter-spacing: 1.5px; text-transform: uppercase;">Recent Searches</span>
+          <button onclick="clearRecentSearches(event)" style="background: transparent; border: none; color: var(--accent); font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit; padding: 4px;">Clear</button>
         </div>
-      `;
-    }
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          ${recent.map(q => `
+            <button onclick="quickSearch('${q.replace(/'/g, "\\'")}')" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; background: transparent; border: 1px solid var(--border); border-radius: 20px; color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: 0.15s;" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+              <i class="fas fa-history" style="color: var(--text2); font-size: 11px;"></i> ${escapeHtml(q)}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById('content').innerHTML = `
+    <div class="state-box" id="initialState">
+      <div class="icon">🔍</div>
+      <h3>Search FlexTune</h3>
+      <p>Type to find any song, artist, video or album</p>
+      
+      ${recentHTML}
+
+      <div class="suggestion-chips" id="suggestions" style="margin-top: ${recent.length > 0 ? '40px' : '16px'};">
+        <div style="width: 100%; font-size: 11px; font-weight: 800; color: var(--text2); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; text-align: center;">Popular Artists</div>
+        ${allArtists.slice(0, 6).map(a => '<button class="chip" onclick="quickSearch(\'' + a.name.replace(/'/g, "\\'") + '\')">' + escapeHtml(a.name) + '</button>').join('')}
+      </div>
+    </div>
+  `;
+}
 
     window.quickSearch = function(term) {
       document.getElementById('searchInput').value = term;
@@ -438,8 +486,10 @@
     }
 
     function performSearch(query) {
-      const q = query.toLowerCase().trim();
-      if (!q) { showInitialState(); lastResults = null; return; }
+  const q = query.toLowerCase().trim();
+  if (!q) { showInitialState(); lastResults = null; return; }
+  
+  saveRecentSearch(query); // Save to recent searches
 
       const songs = allSongs.filter(s =>
         (s.title || '').toLowerCase().includes(q) ||
