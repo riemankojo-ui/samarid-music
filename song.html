@@ -476,7 +476,7 @@ window.smartDownload = async function(btn) {
         if (!res2.ok) throw new Error('Proxy 2 failed');
         mp3ArrayBuffer = await res2.arrayBuffer();
       } catch (err2) {
-        console.warn('All proxies failed. Opening direct link.');
+        console.warn('All proxies failed.'); showToast('Download failed: this song link is broken.'); btn.disabled = false; btn.innerHTML = originalHTML; return;
         const a = document.createElement('a');
         a.href = url;
         a.target = '_blank';
