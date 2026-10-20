@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Join FlexTune - Africa's Music Hub</title>
+<meta name="description" content="Join FlexTune as an Artist or Label. Distribute your music to Spotify, Apple Music, Boomplay and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"></noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+<script>
+  (function() {
+    try {
+      var theme = localStorage.getItem('samarid-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch(e) {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  })();
+</script>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --card: #141414;
+    --border: #222;
+    --text: #ffffff;
+    --text2: #cccccc;
+    --accent: #ff0033;
+  }
+  /* CLEAN LIGHT BLUE THEME */
+  html[data-theme="light"] {
+    --bg: #f0f6fc; /* Clean light blue background */
+    --card: #ffffff;
+    --border: #dbe7f3;
+    --text: #0a2540; /* Deep blue-black for text */
+    --text2: #557899; /* Soft blue-grey for secondary text */
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
+  html, body { overflow-x: hidden; max-width: 100vw; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 0; transition: background 0.2s, color 0.2s; }
+
+  /* ===== HEADER ===== */
+  .header { position: relative; background: #0a0a0a; border-bottom: 1px solid #222; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; min-height: 50px; }
+  .menu-btn { width: 36px; height: 36px; background: transparent; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; transition: all 0.2s; }
+  .menu-btn .bar { display: block; width: 22px; height: 2.5px; background: #999999; border-radius: 2px; transition: all 0.3s ease; transform-origin: center; }
+  .menu-btn.open .bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .menu-btn.open .bar:nth-child(2) { opacity: 0; }
+  .menu-btn.open .bar:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  .menu-btn.menu-open { position: fixed; top: 14px; left: 14px; z-index: 10001; }
+  .logo { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; padding: 0 8px; min-width: 0; }
+  .logo-text { font-size: 16px; font-weight: 900; letter-spacing: -0.4px; color: #ffffff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .logo-text span { color: var(--accent); }
+  .header-spacer { width: 36px; flex-shrink: 0; }
+
+  /* ===== MENU ===== */
+  .menu-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  .menu-overlay.open { opacity: 1; pointer-events: auto; }
+  .menu-dropdown { position: fixed; top: 56px; left: -320px; width: 290px; max-width: 85vw; height: calc(100vh - 56px); background: #f7f7f7; border-right: 1px solid #e5e5e5; z-index: 9999; transition: left 0.32s cubic-bezier(0.4, 0, 0.2, 1); overflow-y: auto; box-shadow: 10px 0 40px rgba(0,0,0,0.15); padding-top: 12px; }
+  .menu-dropdown.open { left: 0; }
+  .menu-title { padding: 20px 26px 10px; font-size: 10px; color: #999; letter-spacing: 2.5px; font-weight: 800; text-transform: uppercase; border-top: 1px solid #e8e8e8; margin-top: 6px; }
+  .menu-title:first-child { border-top: none; margin-top: 0; padding-top: 6px; }
+  .menu-item { padding: 16px 26px; font-size: 16px; color: #0a0a0a; cursor: pointer; display: flex; align-items: center; gap: 14px; text-decoration: none; transition: background 0.15s; background: transparent; border: none; width: 100%; font-family: inherit; text-align: left; font-weight: 700; letter-spacing: -0.2px; }
+  .menu-item:active { background: #ececec; }
+  .menu-item .label { flex: 1; color: #0a0a0a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; font-size: 16px; }
+  .menu-item .arrow { color: #bbb; font-size: 12px; flex-shrink: 0; }
+  .theme-row { padding: 14px 26px 18px; display: flex; align-items: center; justify-content: space-between; }
+  .theme-label { font-size: 15px; color: #0a0a0a; font-weight: 700; }
+  .theme-toggle { display: flex; gap: 6px; }
+  .theme-btn { padding: 8px 14px; background: #ffffff; border: 1px solid #ddd; border-radius: 8px; color: #666; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+  .theme-btn.active { border-color: var(--accent); color: var(--accent); }
+
+  /* ===== CONTENT ===== */
+  .page-content { padding: 40px 24px 60px; max-width: 680px; margin: 0 auto; }
+  .page-label { font-size: 11px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; text-align: center; }
+  .page-title { font-size: 34px; font-weight: 900; line-height: 1.1; letter-spacing: -1.2px; color: var(--text); margin-bottom: 22px; text-align: center; }
+  .page-title span { color: var(--accent); }
+  .intro { font-size: 16px; line-height: 1.75; color: var(--text2); margin-bottom: 32px; font-weight: 500; text-align: center; max-width: 540px; margin-left: auto; margin-right: auto; }
+
+  /* ===== INFO SECTIONS ===== */
+  .info-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px; }
+  .info-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+  .info-card i { font-size: 24px; color: var(--accent); margin-bottom: 14px; display: block; }
+  .info-card h3 { font-size: 18px; font-weight: 900; margin-bottom: 8px; color: var(--text); }
+  .info-card p { font-size: 14px; line-height: 1.6; color: var(--text2); }
+
+  .pre-form-text { text-align: center; margin-bottom: 24px; }
+  .pre-form-text h2 { font-size: 24px; font-weight: 900; color: var(--text); letter-spacing: -0.5px; margin-bottom: 8px; }
+  .pre-form-text p { font-size: 15px; color: var(--text2); line-height: 1.6; }
+
+  /* ===== TABS ===== */
+  .tabs-container { display: flex; gap: 8px; margin-bottom: 30px; background: var(--card); padding: 6px; border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+  .tab-btn { flex: 1; padding: 16px; background: transparent; border: none; color: var(--text2); font-size: 15px; font-weight: 800; cursor: pointer; border-radius: 10px; font-family: inherit; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .tab-btn.active { background: var(--accent); color: #fff; box-shadow: 0 4px 12px rgba(255,0,51,0.3); }
+
+  /* ===== FORM ===== */
+  .form-section { display: none; animation: fadeIn 0.3s ease; }
+  .form-section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 800; color: var(--text); margin-bottom: 8px; letter-spacing: 0.5px; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 16px; background: var(--card); border: 1.5px solid var(--border); border-radius: 12px; color: var(--text); font-size: 15px; font-family: inherit; outline: none; transition: border-color 0.2s; box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
+  .form-group textarea { min-height: 100px; resize: vertical; }
+
+  .submit-btn { width: 100%; padding: 18px; background: var(--accent); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 900; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 10px 25px rgba(255,0,51,0.3); margin-top: 10px; transition: transform 0.15s; }
+  .submit-btn:active { transform: scale(0.97); }
+
+  .success-msg { display: none; text-align: center; padding: 40px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+  .success-msg i { font-size: 50px; color: #00cc44; margin-bottom: 16px; }
+  .success-msg h3 { font-size: 22px; font-weight: 900; margin-bottom: 8px; color: var(--text); }
+  .success-msg p { font-size: 14px; color: var(--text2); line-height: 1.6; }
+
+  .footer { background: #0a0a0a; padding: 20px 20px 30px; text-align: center; font-size: 11px; color: #555; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; border-top: 1px solid #1a1a1a; margin-top: 40px; }
+  .footer .brand { color: var(--accent); font-weight: 900; }
+html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.header{position:sticky!important;top:0;z-index:100}</style>
+</head>
+<body>
+
+  <header class="header">
+    <button class="menu-btn" id="menuBtn" onclick="toggleMenu(event)" aria-label="Menu">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+    <a href="index.html" class="logo"><span class="logo-text">FLEX<span>TUNE</span></span></a>
+    <div class="header-spacer"></div>
+  </header>
+
+  <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+  <div class="menu-dropdown" id="menuDropdown">
+    <div class="menu-title">Navigation</div>
+    <a href="search.html" class="menu-item"><span class="label">Search</span><span class="arrow">→</span></a>
+    <a href="weekend.html" class="menu-item"><span class="label">Trend</span><span class="arrow">→</span></a>
+    <a href="index.html" class="menu-item"><span class="label">Music</span><span class="arrow">→</span></a>
+    <a href="albums.html" class="menu-item"><span class="label">Albums</span><span class="arrow">→</span></a>
+    <a href="artists.html" class="menu-item"><span class="label">Artists</span><span class="arrow">→</span></a>
+    <a href="videos.html" class="menu-item"><span class="label">Videos</span><span class="arrow">→</span></a>
+    <div class="menu-title">Subscribe</div>
+    <a href="#" onclick="fakeSubscribe(event)" class="menu-item"><span class="label" style="color: #ff0033;"><i class="fab fa-youtube" style="margin-right: 10px;"></i>Subscribe</span><span class="arrow">→</span></a>
+    <div class="menu-title">Settings</div>
+    <div class="theme-row">
+      <span class="theme-label">Theme</span>
+      <div class="theme-toggle">
+        <button class="theme-btn" data-theme="dark" onclick="setTheme('dark')">Dark</button>
+        <button class="theme-btn" data-theme="light" onclick="setTheme('light')">Light</button>
+      </div>
+    </div>
+    <div class="menu-title">More</div>
+    <a href="about.html" class="menu-item"><span class="label">About</span><span class="arrow">→</span></a>
+    <a href="promo.html" class="menu-item"><span class="label">Promo</span><span class="arrow">→</span></a>
+    <a href="distributors.html" class="menu-item"><span class="label">Get On Spotify</span><span class="arrow">→</span></a>
+    <a href="joining.html?type=artist" class="menu-item"><span class="label">Sign As Artist</span><span class="arrow">→</span></a>
+    <a href="joining.html?type=label" class="menu-item"><span class="label">Sign As Label</span><span class="arrow">→</span></a>
+  </div>
+
+  <div class="page-content">
+    
+    <div class="page-label">Join The Movement</div>
+    <h1 class="page-title">Become Part Of <span>FlexTune</span></h1>
+    
+    <!-- MORE TEXTS ADDED HERE -->
+    <p class="intro">
+      FlexTune is more than just a music platform — it is Africa's complete music ecosystem. We are dedicated to discovering raw talent, distributing premium sounds to the world, and ensuring creators get the recognition and revenue they deserve. 
+    </p>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <i class="fas fa-globe-africa"></i>
+        <h3>Global Distribution</h3>
+        <p>We push your music to over 150+ major streaming platforms including Spotify, Apple Music, Boomplay, Audiomack, and YouTube Music, ensuring your sound reaches every corner of the globe.</p>
+      </div>
+      <div class="info-card">
+        <i class="fas fa-bullhorn"></i>
+        <h3>Real Promotion</h3>
+        <p>We don't just host your music; we push it. From playlist pitching to social media campaigns and exclusive FlexTune features, we put your brand in front of real listeners.</p>
+      </div>
+      <div class="info-card">
+        <i class="fas fa-chart-line"></i>
+        <h3>Transparent Royalties</h3>
+        <p>Own your masters and earn what you deserve. Our system ensures you keep track of your streams and receive clear, transparent payouts for your hard work.</p>
+      </div>
+    </div>
+
+    <!-- BRIDGING TEXT BEFORE THE FORM -->
+    <div class="pre-form-text">
+      <h2>Ready to take the stage?</h2>
+      <p>Whether you're an independent artist ready to go global, or a label looking to expand your roster, select your path below to apply.</p>
+    </div>
+
+    <!-- TABS & FORMS -->
+    <div class="tabs-container">
+      <button class="tab-btn active" id="tabArtist" onclick="switchTab('artist')"><i class="fas fa-microphone"></i> Sign As Artist</button>
+      <button class="tab-btn" id="tabLabel" onclick="switchTab('label')"><i class="fas fa-building"></i> Sign As Label</button>
+    </div>
+
+    <div id="formContainer">
+      
+      <!-- ARTIST FORM -->
+      <div class="form-section active" id="sectionArtist">
+        <form onsubmit="submitForm(event, 'Artist')">
+          <div class="form-group">
+            <label>Artist / Stage Name *</label>
+            <input type="text" placeholder="e.g. Kuami Famous" required>
+          </div>
+          <div class="form-group">
+            <label>Email Address *</label>
+            <input type="email" placeholder="your@email.com" required>
+          </div>
+          <div class="form-group">
+            <label>WhatsApp / Phone Number *</label>
+            <input type="tel" placeholder="+233 XX XXX XXXX" required>
+          </div>
+          <div class="form-group">
+            <label>Primary Genre</label>
+            <select>
+              <option value="">Select a genre</option>
+              <option value="Afrobeats">Afrobeats</option>
+              <option value="Afro Drill">Afro Drill</option>
+              <option value="Hip Hop">Hip Hop</option>
+              <option value="Highlife">Highlife</option>
+              <option value="Amapiano">Amapiano</option>
+              <option value="R&B">R&B</option>
+              <option value="Gospel">Gospel</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Link to your music (Spotify, YouTube, Audiomack, etc.)</label>
+            <input type="url" placeholder="https://...">
+          </div>
+          <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Submit Application</button>
+        </form>
+      </div>
+
+      <!-- LABEL FORM -->
+      <div class="form-section" id="sectionLabel">
+        <form onsubmit="submitForm(event, 'Label')">
+          <div class="form-group">
+            <label>Record Label Name *</label>
+            <input type="text" placeholder="e.g. FlexTune Records" required>
+          </div>
+          <div class="form-group">
+            <label>Contact Person Name *</label>
+            <input type="text" placeholder="John Doe" required>
+          </div>
+          <div class="form-group">
+            <label>Business Email *</label>
+            <input type="email" placeholder="contact@label.com" required>
+          </div>
+          <div class="form-group">
+            <label>WhatsApp / Phone Number *</label>
+            <input type="tel" placeholder="+233 XX XXX XXXX" required>
+          </div>
+          <div class="form-group">
+            <label>Number of Artists on Roster</label>
+            <select>
+              <option value="">Select roster size</option>
+              <option value="1-5">1 - 5 Artists</option>
+              <option value="6-20">6 - 20 Artists</option>
+              <option value="20+">20+ Artists</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tell us about your label (Optional)</label>
+            <textarea placeholder="What kind of music do you release?"></textarea>
+          </div>
+          <button type="submit" class="submit-btn"><i class="fas fa-paper-plane"></i> Submit Application</button>
+        </form>
+      </div>
+
+    </div>
+
+    <div class="success-msg" id="successMsg">
+      <i class="fas fa-check-circle"></i>
+      <h3>Application Received!</h3>
+      <p>Thank you for your interest in joining FlexTune. Our team will review your application and get back to you within 48 hours.</p>
+    </div>
+
+  </div>
+
+  <div class="footer"><span class="brand">FLEXTUNE</span> © 2026</div>
+
+  <script>
+    // Theme & Menu Logic
+    window.applySettings = function() {
+      const theme = localStorage.getItem('samarid-theme') || 'light';
+      const accent = localStorage.getItem('samarid-accent') || '#ff0033';
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.style.setProperty('--accent', accent);
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
+    }
+    window.setTheme = function(theme) {
+      localStorage.setItem('samarid-theme', theme);
+      applySettings();
+    }
+    window.toggleMenu = function(e) {
+      e.stopPropagation();
+      const menu = document.getElementById('menuDropdown');
+      const overlay = document.getElementById('menuOverlay');
+      const btn = document.getElementById('menuBtn');
+      if (menu.classList.contains('open')) {
+        menu.classList.remove('open'); overlay.classList.remove('open');
+        btn.classList.remove('open'); btn.classList.remove('menu-open');
+      } else {
+        menu.classList.add('open'); overlay.classList.add('open');
+        btn.classList.add('open'); btn.classList.add('menu-open');
+      }
+    }
+    window.closeMenu = function() {
+      document.getElementById('menuDropdown').classList.remove('open');
+      document.getElementById('menuOverlay').classList.remove('open');
+      const btn = document.getElementById('menuBtn');
+      btn.classList.remove('open'); btn.classList.remove('menu-open');
+    }
+
+    // Tab Switching Logic
+    window.switchTab = function(type) {
+      document.getElementById('tabArtist').classList.toggle('active', type === 'artist');
+      document.getElementById('tabLabel').classList.toggle('active', type === 'label');
+      document.getElementById('sectionArtist').classList.toggle('active', type === 'artist');
+      document.getElementById('sectionLabel').classList.toggle('active', type === 'label');
+    }
+
+    // Read URL parameter to open the right tab automatically
+    const urlParams = new URLSearchParams(window.location.search);
+    const typeParam = urlParams.get('type');
+    if (typeParam === 'label') {
+      switchTab('label');
+    } else {
+      switchTab('artist');
+    }
+
+    // Form Submission (Visual only for now)
+    window.submitForm = function(e, roleType) {
+      e.preventDefault();
+      document.getElementById('formContainer').style.display = 'none';
+      document.querySelector('.tabs-container').style.display = 'none';
+      document.querySelector('.pre-form-text').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    applySettings();
+  </script>
+</body>
+</html>

@@ -158,6 +158,190 @@
   .state-box .icon { font-size: 52px; margin-bottom: 16px; opacity: 0.5; }
   .state-box h3 { font-size: 18px; font-weight: 800; color: var(--text); opacity: 0.85; margin-bottom: 8px; }
   .state-box p { font-size: 13px; line-height: 1.6; }
+
+/* ===== EDITORIAL SECTIONS ===== */
+.trend-editorial {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 50px 20px 20px;
+}
+
+.trend-editorial-section {
+  margin-bottom: 60px;
+}
+
+.trend-editorial-section:last-of-type {
+  margin-bottom: 30px;
+}
+
+.trend-editorial-label {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--trend-orange);
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.trend-editorial-title {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 16px;
+  overflow-wrap: anywhere;
+}
+
+.trend-editorial-title span {
+  color: var(--accent);
+}
+
+.trend-editorial-divider {
+  width: 50px;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 3px;
+  margin: 0 auto 24px;
+}
+
+.trend-editorial-body {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text2);
+  font-weight: 500;
+}
+
+.trend-editorial-body p {
+  margin-bottom: 16px;
+}
+
+.trend-editorial-body p:last-child {
+  margin-bottom: 0;
+}
+
+.trend-editorial-body strong {
+  color: var(--text);
+  font-weight: 800;
+}
+
+.trend-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.trend-step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 18px 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+.trend-step-num {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 900;
+  box-shadow: 0 6px 16px rgba(255, 0, 51, 0.3);
+}
+
+.trend-step-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.trend-step-title {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: -0.2px;
+  margin-bottom: 6px;
+}
+
+.trend-step-desc {
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text2);
+  font-weight: 500;
+}
+
+.trend-tagline {
+  background: #0a0a0a;
+  border: 1px solid #1c1c1c;
+  color: #ffffff;
+  padding: 42px 24px;
+  border-radius: 20px;
+  margin-top: 10px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.trend-tagline::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 0, 51, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.trend-tagline::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  left: -80px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 0, 51, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.trend-tagline-label {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.trend-tagline-text {
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.3;
+  letter-spacing: -0.6px;
+  color: #ffffff;
+  max-width: 500px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  overflow-wrap: anywhere;
+}
+
+.trend-tagline-text span {
+  color: var(--accent);
+}
 html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.header{position:sticky!important;top:0;z-index:100}</style>
 </head><body>
 
@@ -245,13 +429,75 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
   <div id="weekendAdBottomContainer"></div>
 
   <div class="trend-footer">
-    <p class="trend-footer-text">Want to hear more music?</p>
-    <a href="index.html" class="view-all-btn">
-      <i class="fas fa-music"></i> Browse All Songs
-    </a>
+  <p class="trend-footer-text">Want to hear more music?</p>
+  <a href="index.html" class="view-all-btn">
+    <i class="fas fa-music"></i> Browse All Songs
+  </a>
+</div>
+
+<section class="trend-editorial">
+
+  <div class="trend-editorial-section">
+    <div class="trend-editorial-label">What Is Weekend Trend</div>
+    <h2 class="trend-editorial-title">The Pulse Of <span>African Music</span> This Weekend</h2>
+    <div class="trend-editorial-divider"></div>
+    <div class="trend-editorial-body">
+      <p>This is the pulse of African music right now. Every week, we count down the songs getting played the most — on repeat, in the car, on WhatsApp status, at the gym, and everywhere else the culture is moving. If you want to know what Ghana, Nigeria, and the rest of West Africa are actually vibing to this weekend, you're in the right place.</p>
+      <p>Weekend Trend isn't a radio chart or a magazine list — it's a <strong>live ranking</strong> built from real listeners on FlexTune. That means the songs at the top are the ones people are genuinely streaming, downloading, and sharing with their friends right now. No labels, no gatekeepers, no politics. Just the music that's actually moving.</p>
+    </div>
   </div>
 
-  <footer class="site-footer"><span class="brand">FLEXTUNE</span> © 2026</footer>
+  <div class="trend-editorial-section">
+    <div class="trend-editorial-label">How The Chart Works</div>
+    <h2 class="trend-editorial-title">Ranked By <span>Real Plays</span>, Not Promises</h2>
+    <div class="trend-editorial-divider"></div>
+    <div class="trend-editorial-body">
+      <p>Every song on this chart earns its spot the same way — through plays. We don't sell placements, we don't boost numbers, and we don't let fake streams climb the list. Here's what goes into the ranking:</p>
+    </div>
+    <div class="trend-steps">
+      <div class="trend-step">
+        <div class="trend-step-num">1</div>
+        <div class="trend-step-body">
+          <div class="trend-step-title">Real Listener Plays</div>
+          <div class="trend-step-desc">Each song's position is based on plays from actual listeners on FlexTune. A play only counts after 30 seconds of genuine listening — no bots, no refreshes, no shortcuts.</div>
+        </div>
+      </div>
+      <div class="trend-step">
+        <div class="trend-step-num">2</div>
+        <div class="trend-step-body">
+          <div class="trend-step-title">Fresh Drops Get Flagged</div>
+          <div class="trend-step-desc">New releases are marked with a red NEW badge for their first 14 days so you don't miss the wave the moment it starts. It's not a boost in rank — just a signal to you.</div>
+        </div>
+      </div>
+      <div class="trend-step">
+        <div class="trend-step-num">3</div>
+        <div class="trend-step-body">
+          <div class="trend-step-title">Updated Every Week</div>
+          <div class="trend-step-desc">The chart refreshes weekly. What's hot this weekend might not be next week — so check back often to stay ahead of the curve.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="trend-editorial-section">
+    <div class="trend-editorial-label">Discover What's Next</div>
+    <h2 class="trend-editorial-title">The Artists <span>Pushing Africa</span> Forward</h2>
+    <div class="trend-editorial-divider"></div>
+    <div class="trend-editorial-body">
+      <p>Afrobeats, Amapiano, Afropop, Hip-Hop, Highlife, Drill — Africa isn't just <strong>a</strong> sound anymore, it <strong>is</strong> the sound. And the artists climbing this chart are the ones pushing it forward every single day, from Accra to Lagos to Kumasi to Nairobi.</p>
+      <p>Every play you give them on FlexTune puts them one step closer to the global stage. Whether you're here to vibe, to discover something new, or to share a song with someone who needs to hear it — you're already part of the movement. Tap any song above, press play, and help these artists build the career they're working so hard for.</p>
+      <p>Love something you hear? Follow the artist, share the song with a friend, and come back next weekend to see who's risen up the chart.</p>
+    </div>
+  </div>
+
+  <div class="trend-tagline">
+    <div class="trend-tagline-label">FlexTune • Weekend Trend</div>
+    <div class="trend-tagline-text">From Africa to the world — <span>one play at a time.</span></div>
+  </div>
+
+</section>
+
+<footer class="site-footer"><span class="brand">FLEXTUNE</span> © 2026</footer>
 
   <div class="sub-modal" id="subModal" onclick="closeSubModal()">
     <div class="sub-modal-inner" onclick="event.stopPropagation()">
