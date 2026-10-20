@@ -9,7 +9,7 @@ export default async function handler(req) {
     const up = await fetch(target, { redirect: 'follow' });
     if (!up.ok) return new Response('Upstream error', { status: 502 });
     const type = up.headers.get('content-type') || 'application/octet-stream';
-    if (!/^(audio|image)\/|octet-stream/i.test(type)) {
+    if (/text\/html/i.test(type)) {
       return new Response('Not allowed', { status: 415 });
     }
     return new Response(up.body, {

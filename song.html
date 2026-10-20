@@ -512,7 +512,7 @@ window.smartDownload = async function(btn) {
       }
     }
 
-    writer.addTag();
+    writer.addTag(); await new Promise(r => setTimeout(r, 5000));
     const taggedBlob = writer.getBlob();
     const blobUrl = URL.createObjectURL(taggedBlob);
     
@@ -524,7 +524,7 @@ window.smartDownload = async function(btn) {
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
     
-    showToast('Download started successfully!');
+    /* silent download */
   } catch (e) {
     console.error('Tagging error:', e);
     showToast('Error creating file. Opening link...');
