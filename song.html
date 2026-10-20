@@ -12,6 +12,7 @@
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"></noscript>
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+<script src="https://cdn.jsdelivr.net/npm/browser-id3-writer@6.0.0/dist/browser-id3-writer.min.js"></script>
 <script>
   (function() {
     try {
@@ -424,46 +425,101 @@ let visitorId = localStorage.getItem('samarid_visitor_id');
       localStorage.setItem(key, Date.now().toString());
     }
 
-    window.smartDownload = async function(btn) {
-      if (!currentSongData) return;
-      const url = currentSongData.downloadurl || currentSongData.audio_url || '';
-      const artist = currentSongData.artist_name || 'Samarid';
-      const title = currentSongData.title || 'Song';
-      if (!url || url === '#') { showToast('No download link available'); return; }
-      const cleanArtist = artist.replace(/[^\w\s\-\.]/g, '').trim();
-      const cleanTitle = title.replace(/[^\w\s\-\.]/g, '').trim();
-      const filename = cleanArtist + ' - ' + cleanTitle + ' [FlexTune].mp3';
-      const originalHTML = btn.innerHTML;
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
+    window.handleAudioError = function() {
+  showToast('Audio failed to load. The MP3 link might be broken.');
+  const btn = document.getElementById('playPauseBtn');
+  if (btn) { btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i>'; btn.disabled = true; }
+}
+
+window.smartDownload = async function(btn) {
+  if (!currentSongData) return;
+  const url = currentSongData.downloadurl || currentSongData.audio_url || '';
+  const artist = currentSongData.artist_name || 'Samarid';
+  const title = currentSongData.title || 'Song';
+  
+  if (!url || url === '#' || url.trim() === '') { 
+    showToast('No download link available for this song.'); 
+    return; 
+  }
+
+  if (url.includes('youtube.com') || url.includes('youtu.be')) {
+    showToast('This is a YouTube link. Direct MP3 download is not available.');
+    return;
+  }
+
+  const cleanArtist = artist.replace(/[^\w\s\-\.]/g, '').trim();
+  const cleanTitle = title.replace(/[^\w\s\-\.]/g, '').trim();
+  const filename = cleanArtist + ' - ' + cleanTitle + ' [FlexTune].mp3';
+  
+  const originalHTML = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Embedding Cover...';
+
+  try {
+    // 1. Fetch the MP3
+    const response = await fetch(url, { mode: 'cors' });
+    if (!response.ok) throw new Error('Fetch failed');
+    const mp3ArrayBuffer = await response.arrayBuffer();
+
+    // 2. Setup the ID3 Writer
+    let writer = new ID3Writer(mp3ArrayBuffer);
+    writer.setFrame('TIT2', title)
+          .setFrame('TPE1', [artist])
+          .setFrame('TALB', currentSongData.album_name || 'FlexTune Release');
+
+    // 3. Fetch and embed the Cover Art
+    if (currentSongData.cover && !currentSongData.cover.includes('wsrv.nl')) {
       try {
-        const response = await fetch(url, { mode: 'cors' });
-        if (!response.ok) throw new Error('Fetch failed');
-        const blob = await response.blob();
-        const blobUrl = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = blobUrl;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
-        showToast('Download started!');
-      } catch (e) {
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        a.target = '_blank';
-        a.rel = 'noopener';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        showToast('Downloading...');
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = originalHTML;
+        const coverResponse = await fetch(currentSongData.cover, { mode: 'cors' });
+        const coverArrayBuffer = await coverResponse.arrayBuffer();
+        
+        // Guess image type (png or jpeg)
+        let mimeType = 'image/jpeg';
+        if (currentSongData.cover.toLowerCase().includes('.png')) mimeType = 'image/png';
+        
+        writer.setFrame('APIC', {
+          type: 3, // 3 means front cover
+          data: coverArrayBuffer,
+          description: 'Cover',
+          mimeType: mimeType
+        });
+      } catch (coverErr) {
+        console.warn('Could not embed cover art (CORS issue?)', coverErr);
       }
-    };
+    }
+
+    // 4. Build the final MP3 file
+    writer.addTag();
+    const taggedBlob = writer.getBlob();
+    const blobUrl = URL.createObjectURL(taggedBlob);
+    
+    // 5. Trigger the download
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+    
+    showToast('Download started with cover art!');
+  } catch (e) {
+    console.error(e);
+    // Fallback: If CORS fails or MP3 is too large, just download normally
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showToast('Downloading...');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalHTML;
+  }
+};
 
     function buildArtistLinks(artist, featuring, badge) {
       let html = '<a href="artist-template.html?name=' + encodeURIComponent(artist) + '" class="artist">' + escapeHtml(artist) + badge + '</a>';
@@ -605,7 +661,8 @@ let visitorId = localStorage.getItem('samarid_visitor_id');
         const downloadTitle = artist + (featuring ? ' Feat ' + featuring : '') + ' - ' + s.title;
         document.title = downloadTitle + ' - FlexTune';
 
-        const audioSrc = s.audio_url || s.downloadurl || '';
+        const rawAudioSrc = s.audio_url || s.downloadurl || '';
+const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('youtu.be');
 
         let artistProfile = null;
         let followerCount = 0;
@@ -692,14 +749,21 @@ let visitorId = localStorage.getItem('samarid_visitor_id');
           </div>
 
           <div class="audio-player-box">
-            <audio id="audioPlayer" src="${escapeHtml(audioSrc)}" preload="none"></audio>
-            <div class="player-row">
-              <button class="play-pause-btn" id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
-              <input type="range" id="seekSlider" value="0" max="100">
-              <span id="currentTime" class="player-time">0:00</span>
-              <span id="duration" class="player-time">0:00</span>
-            </div>
-          </div>
+  ${isYouTube ? `
+    <div style="text-align: center; padding: 20px; background: var(--card); border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px;">
+      <p style="margin-bottom: 15px; color: var(--text2); font-weight: 600; font-size: 14px;">This track is hosted on YouTube. Watch the official video below.</p>
+      <a href="${escapeHtml(rawAudioSrc)}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: #ff0000; color: #fff; border-radius: 30px; text-decoration: none; font-weight: 900; font-size: 14px; box-shadow: 0 4px 15px rgba(255,0,0,0.3);"><i class="fab fa-youtube"></i> Play on YouTube</a>
+    </div>
+  ` : `
+    <audio id="audioPlayer" src="${escapeHtml(rawAudioSrc)}" preload="none" onerror="handleAudioError()"></audio>
+    <div class="player-row">
+      <button class="play-pause-btn" id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
+      <input type="range" id="seekSlider" value="0" max="100">
+      <span id="currentTime" class="player-time">0:00</span>
+      <span id="duration" class="player-time">0:00</span>
+    </div>
+  `}
+</div>
 
           <div class="detail-section">
             <div class="download-buttons">
