@@ -458,7 +458,7 @@ window.smartDownload = async function(btn) {
   let mp3ArrayBuffer = null;
 
   try {
-    const response = await fetch(url, { mode: 'cors' });
+    const response = await fetch('/api/download?url=' + encodeURIComponent(url));
     if (!response.ok) throw new Error('Direct failed');
     mp3ArrayBuffer = await response.arrayBuffer();
   } catch (err) {
@@ -499,7 +499,7 @@ window.smartDownload = async function(btn) {
 
     if (currentSongData.cover) {
       try {
-        let coverResponse = await fetch(currentSongData.cover, { mode: 'cors' });
+        let coverResponse = await fetch('/api/download?url=' + encodeURIComponent(currentSongData.cover));
         if (!coverResponse.ok) {
            const cProxy = 'https://corsproxy.io/?' + encodeURIComponent(currentSongData.cover);
            coverResponse = await fetch(cProxy);
