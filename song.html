@@ -528,7 +528,7 @@ window.smartDownload = async function(btn) {
   } catch (e) {
     console.error('Tagging error:', e);
     showToast('Error creating file. Opening link...');
-    window.open(url, '_blank');
+    showToast('Tag error: ' + (e && e.message)); const fb = document.createElement('a'); fb.href = URL.createObjectURL(new Blob([mp3ArrayBuffer], {type: 'audio/mpeg'})); fb.download = filename; document.body.appendChild(fb); fb.click(); document.body.removeChild(fb);
   } finally {
     btn.disabled = false;
     btn.innerHTML = originalHTML;
