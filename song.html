@@ -458,76 +458,60 @@ window.smartDownload = async function(btn) {
   let mp3ArrayBuffer = null;
 
   try {
-    // 1. Try direct fetch first
     const response = await fetch(url, { mode: 'cors' });
-    if (!response.ok) throw new Error('Direct fetch failed');
+    if (!response.ok) throw new Error('Direct failed');
     mp3ArrayBuffer = await response.arrayBuffer();
   } catch (err) {
-    console.warn('Direct fetch failed (CORS), trying proxy...', err);
+    console.warn('Direct fetch blocked. Trying Proxy 1...');
     try {
-      // 2. Fallback to CORS proxy to force the filename and cover
-      const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-      const proxyRes = await fetch(proxyUrl);
-      if (!proxyRes.ok) throw new Error('Proxy fetch failed');
-      mp3ArrayBuffer = await proxyRes.arrayBuffer();
-    } catch (proxyErr) {
-      console.warn('Proxy fetch also failed, falling back to host download...', proxyErr);
-      // 3. Final fallback: Direct download (will use hoster name if it fails)
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      a.target = '_blank';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      showToast('Downloading...');
-      btn.disabled = false;
-      btn.innerHTML = originalHTML;
-      return;
+      const proxy1 = 'https://corsproxy.io/?' + encodeURIComponent(url);
+      const res1 = await fetch(proxy1);
+      if (!res1.ok) throw new Error('Proxy 1 failed');
+      mp3ArrayBuffer = await res1.arrayBuffer();
+    } catch (err1) {
+      console.warn('Proxy 1 failed. Trying Proxy 2...');
+      try {
+        const proxy2 = 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url);
+        const res2 = await fetch(proxy2);
+        if (!res2.ok) throw new Error('Proxy 2 failed');
+        mp3ArrayBuffer = await res2.arrayBuffer();
+      } catch (err2) {
+        console.warn('All proxies failed. Opening direct link.');
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast('Hoster is blocking download. Opening link...');
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+        return;
+      }
     }
   }
 
   try {
-    // 4. ID3 Tagging (Title, Artist, Album)
     let writer = new ID3Writer(mp3ArrayBuffer);
     writer.setFrame('TIT2', title)
           .setFrame('TPE1', [artist])
           .setFrame('TALB', currentSongData.album_name || 'FlexTune Release');
 
-    // 5. Fetch and embed the Cover Art
     if (currentSongData.cover) {
       try {
         let coverResponse = await fetch(currentSongData.cover, { mode: 'cors' });
-        if (!coverResponse.ok) throw new Error('Direct cover failed');
-        const coverArrayBuffer = await coverResponse.arrayBuffer();
-        
-        let mimeType = 'image/jpeg';
-        if (currentSongData.cover.toLowerCase().includes('.png')) mimeType = 'image/png';
-        
-        writer.setFrame('APIC', {
-          type: 3, // 3 means front cover
-          data: coverArrayBuffer,
-          description: 'Cover',
-          mimeType: mimeType
-        });
-      } catch (coverErr) {
-        console.warn('Could not embed cover art directly, trying proxy...', coverErr);
-        try {
-          // Try proxy for cover art if direct fails
-          const proxyCoverUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(currentSongData.cover);
-          const proxyCoverRes = await fetch(proxyCoverUrl);
-          if (proxyCoverRes.ok) {
-            const coverArrayBuffer = await proxyCoverRes.arrayBuffer();
-            let mimeType = currentSongData.cover.toLowerCase().includes('.png') ? 'image/png' : 'image/jpeg';
-            writer.setFrame('APIC', { type: 3, data: coverArrayBuffer, description: 'Cover', mimeType: mimeType });
-          }
-        } catch (e) {
-          console.warn('Cover proxy failed too, skipping cover.');
+        if (!coverResponse.ok) {
+           const cProxy = 'https://corsproxy.io/?' + encodeURIComponent(currentSongData.cover);
+           coverResponse = await fetch(cProxy);
         }
+        const coverArrayBuffer = await coverResponse.arrayBuffer();
+        let mimeType = currentSongData.cover.toLowerCase().includes('.png') ? 'image/png' : 'image/jpeg';
+        writer.setFrame('APIC', { type: 3, data: coverArrayBuffer, description: 'Cover', mimeType: mimeType });
+      } catch (coverErr) {
+        console.warn('Cover fetch failed, downloading without cover.', coverErr);
       }
     }
 
-    // 6. Build the final MP3 file and trigger download
     writer.addTag();
     const taggedBlob = writer.getBlob();
     const blobUrl = URL.createObjectURL(taggedBlob);
@@ -540,18 +524,11 @@ window.smartDownload = async function(btn) {
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
     
-    showToast('Download started with FlexTune tags!');
+    showToast('Download started successfully!');
   } catch (e) {
-    console.error('Tagging failed:', e);
-    // Ultimate fallback if ID3 tagging fails
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.target = '_blank';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    showToast('Downloading...');
+    console.error('Tagging error:', e);
+    showToast('Error creating file. Opening link...');
+    window.open(url, '_blank');
   } finally {
     btn.disabled = false;
     btn.innerHTML = originalHTML;
