@@ -741,6 +741,7 @@ Download: https://example.com/cry-baby.mp3</div>
     <div class="form-group"><label>Lyrics</label><textarea id="editLyrics" placeholder="One line per lyric..."></textarea></div>
     <div class="form-group"><label>Download MP3 Link</label><input type="text" id="editDownload" placeholder="https://...mp3"></div>
     <div class="form-group"><label>Spotify Link</label><input type="text" id="editSpotify" placeholder="https://open.spotify.com/track/..."></div>
+    <div class="form-group"><label>YouTube Video Link</label><input type="text" id="editYoutube" placeholder="https://youtube.com/watch?v=..."></div>
 
  <div class="publish-progress" id="editProgress">
   <div class="publish-progress-bar"><div class="publish-progress-fill" id="editProgressFill"></div></div>
@@ -1064,6 +1065,7 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
   document.getElementById('editLyrics').value = song.lyrics || '';
   document.getElementById('editDownload').value = song.downloadurl || '';
   document.getElementById('editSpotify').value = song.spotify || '';
+  document.getElementById('editYoutube').value = song.youtube || '';
   document.getElementById('editModalStatus').innerText = '';
   document.getElementById('editModalStatus').className = 'status';
 
@@ -1157,7 +1159,8 @@ window.saveEditModal = async function() {
       description, lyrics: lyrics || null,
       downloadurl, artist_name: artist,
       featuring: featuring || null,
-      spotify: spotify || null
+      spotify: spotify || null,
+      youtube: (document.getElementById('editYoutube').value.trim() || null)
     };
     const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + id, {
       method: 'PATCH',
