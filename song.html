@@ -98,6 +98,18 @@
 .profile-card-body .follow-stats-flat { color: #b5b5b5; }
 .profile-logo { background: #fff; color: #0a0a0a; font-size: 10px; font-weight: 900; letter-spacing: -0.3px; padding: 5px 8px; border: 1px solid #1c1c1c; border-radius: 0; line-height: 1; text-decoration: none; }
 .profile-logo span { color: #ff0033; }
+.profile-card { margin-bottom: 18px; }
+.profile-card-head { padding: 12px 14px 12px 18px; }
+.profile-logo { font-size: 8px; padding: 4px 6px; }
+.profile-card-body { padding: 28px 18px; }
+.profile-card-body .follow-avatar-flat { width: 68px; height: 68px; font-size: 26px; }
+.profile-card-body .follow-name-flat { font-size: 18px; }
+.profile-card-body .follow-stats-flat { font-size: 13px; }
+.profile-card-body .follow-btn-flat { padding: 9px 16px; font-size: 12px; }
+.share-section { margin-top: 44px; }
+.artist-story { margin: 0 0 8px; }
+.artist-story h5 { font-family: 'Poppins', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text2); margin: 0 0 8px; }
+.artist-story p { font-family: 'Poppins', sans-serif; font-size: 14px; line-height: 1.8; color: var(--text); white-space: pre-line; margin: 0; }
 .profile-card-body .follow-stats-flat .stat-num { color: #ffffff; }
   .follow-avatar-flat { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; overflow: hidden; background: #ddd; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 17px; }
   .follow-avatar-flat img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -823,6 +835,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
          </div>
           </div>
 
+          ${artistProfile && artistProfile.bio ? '<div class="artist-story"><h5>About ' + escapeHtml(artist) + '</h5><p>' + escapeHtml(artistProfile.bio) + '</p></div>' : ''}
           <div style="display:none;" hidden>
             <h4 id="moreFromTitle"><i class="fas fa-music"></i> More From</h4>
             <div class="more-from-list" id="moreFromList"></div>
@@ -1035,7 +1048,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
         list.innerHTML = songs.map(s => `
           <a href="song.html?id=${s.id}" class="more-from-item">
             <span class="mf-title">${escapeHtml(s.title)}</span>
-            <span class="mf-by">by</span>
+            <span class="mf-by">By</span>
             <span class="mf-artist">${escapeHtml(s.artist_name || artistName)}</span>
           </a>
         `).join('');
