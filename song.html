@@ -924,7 +924,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
         `;
 
         renderLyrics(s.lyrics);
-        loadMoreFromArtist(artist, s.id);
+        loadMoreFromArtist(artist, s.id); loadCardLogo();
         loadAds();
       } catch (e) {
         console.error(e);
@@ -1035,6 +1035,23 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
       ).join('');
 
       section.style.display = 'block';
+    }
+
+    async function loadCardLogo() {
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/images?section=eq.logo&active=eq.true&select=*&order=id.desc&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const logos = await res.json();
+        if (Array.isArray(logos) && logos.length > 0 && logos[0].image_url) {
+          const svg = document.querySelector('.card-foot svg');
+          if (svg) {
+            const img = document.createElement('img');
+            img.src = logos[0].image_url;
+            img.alt = 'FlexTune';
+            img.className = 'card-logo';
+            svg.replaceWith(img);
+          }
+        }
+      } catch (e) {}
     }
 
     async function loadMoreFromArtist(artistName, currentSongId) {
