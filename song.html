@@ -166,6 +166,14 @@
   .more-from-list { display: flex; flex-direction: column; }
   .more-from-item { display: block; text-decoration: none; color: inherit; padding: 14px 0; transition: opacity 0.15s; text-align: center; }
   .more-from-item:active { opacity: 0.7; }
+  .more-from-section { text-align: center; margin: 8px 0 28px; }
+  .mf-intro { font-family: 'Poppins', sans-serif; font-size: 13px; line-height: 1.6; color: var(--text2); margin: 0 0 16px; }
+  .more-from-section h4 { justify-content: center; font-family: 'Poppins', sans-serif; font-size: 12px; letter-spacing: 2.5px; margin-bottom: 8px; }
+  .more-from-list { border-top: 1px solid rgba(128,128,128,0.3); }
+  .more-from-item { font-family: 'Poppins', sans-serif; padding: 16px 8px; border-bottom: 1px solid rgba(128,128,128,0.3); }
+  .more-from-item .mf-title { font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: 0; }
+  .more-from-item .mf-by { font-size: 12px; font-weight: 500; font-style: normal; color: #999; margin: 0 6px; }
+  .more-from-item .mf-artist { font-size: 14px; font-weight: 600; color: #c0392b; }
   .more-from-item .mf-title { font-size: 17px; font-weight: 800; color: #c0392b; letter-spacing: -0.2px; overflow-wrap: anywhere; word-break: break-word; }
   .more-from-item .mf-by { font-size: 17px; color: #c0392b; font-weight: 800; font-style: italic; margin: 0 4px; }
   .more-from-item .mf-artist { font-size: 17px; color: #c0392b; font-weight: 800; }
@@ -791,6 +799,11 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
           </div>
 
           ${(function(){ var m = (s.youtube || '').match(new RegExp('(?:youtu[.]be/|v=|embed/|shorts/)([A-Za-z0-9_-]{11})')); if (!m) return ''; return '<div style="margin:0 0 20px;"><p style="font-size:12px;color:#888;text-align:center;margin:0 0 8px;">Watch the official video</p><div style="background:#fff;border:1px solid #ddd;padding:8px;border-radius:0;"><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000;"><iframe src="https://www.youtube-nocookie.com/embed/' + m[1] + '" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" loading="lazy" allowfullscreen></iframe></div></div></div>'; })()}
+          <div class="more-from-section" id="moreFromSection" style="display:none;">
+            <p class="mf-intro">Loved this one? Keep the vibe going with more music from this artist.</p>
+            <h4 id="moreFromTitle"><i class="fas fa-music"></i> More From</h4>
+            <div class="more-from-list" id="moreFromList"></div>
+          </div>
           <div class="profile-card">
          <div class="profile-card-head"><span>Artist Profile</span><a href="index.html" class="profile-logo">FLEX<span>TUNE</span></a></div>
           <div class="profile-card-body">
@@ -810,7 +823,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
          </div>
           </div>
 
-          <div class="more-from-section" id="moreFromSection" style="display:none;">
+          <div style="display:none;" hidden>
             <h4 id="moreFromTitle"><i class="fas fa-music"></i> More From</h4>
             <div class="more-from-list" id="moreFromList"></div>
           </div>
@@ -1017,7 +1030,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
           return;
         }
 
-        titleEl.innerHTML = '<i class="fas fa-music"></i> More From ' + escapeHtml(artistName);
+        titleEl.innerHTML = '<i class="fas fa-music"></i> More songs by ' + escapeHtml(artistName);
 
         list.innerHTML = songs.map(s => `
           <a href="song.html?id=${s.id}" class="more-from-item">
