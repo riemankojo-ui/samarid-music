@@ -135,9 +135,8 @@ body:not(.light) .tabs-container { background: #141414; border-bottom: 1px solid
 .song-card .song-card-info .genre-country { font-size: 9.5px; }
 .song-card .song-card-info .date { font-size: 10.5px; }
 .section-banner-stream { font-style: normal; font-weight: 600; font-size: 14px; letter-spacing: 0.3px; line-height: 1.6; opacity: 1; color: var(--text); max-width: 330px; margin: 0 auto; }
-.section-banner { margin: 10px 0 0; }
-.section-banner-stream { border: 1px solid var(--border); padding: 14px 16px; max-width: none; margin: 0; }
-#topSongsList::before { content: 'Top Songs'; display: block; font-size: 16px; font-weight: 900; letter-spacing: -0.3px; text-transform: none; color: var(--text); padding: 14px 0 10px; }
+.section-banner { margin: 10px 0 8px; }
+.section-banner-stream { border: 1px solid var(--border); padding: 10px 16px; max-width: none; margin: 0; font-size: 16px; font-weight: 900; letter-spacing: -0.2px; line-height: 1.2; }
 body.light #topSongsList::before { color: #000; }
 .social-btn { border-radius: 0; }
 .inline-ad-block:has(.inline-ad-placeholder) { display: none; }
@@ -314,7 +313,7 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
     <div id="pageBuilderBlocks"></div>
 
     <div class="section-banner">
-      <p class="section-banner-stream">The hottest songs and freshest drops across the region. Updated every single day.</p>
+      <p class="section-banner-stream">Top Songs</p>
     </div>
 
     <div class="song-list" id="topSongsList">
@@ -324,8 +323,8 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
       <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-info"><div class="skeleton-line short"></div><div class="skeleton-line medium"></div><div class="skeleton-line long"></div></div></div>
     </div>
 
-    <div class="section-head">
-      <h3 id="latestTitle">Latest Releases</h3>
+    <div class="section-banner" style="margin-top: 24px;">
+      <p class="section-banner-stream" id="latestTitle">Latest Releases</p>
     </div>
     <div class="latest-search-wrap">
       <i class="fas fa-search search-icon-left"></i>
