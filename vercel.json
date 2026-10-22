@@ -1,4 +1,11 @@
 {
+  "images": {
+    "sizes": [384, 640],
+    "qualities": [70],
+    "formats": ["image/webp"],
+    "minimumCacheTTL": 31536000,
+    "remotePatterns": [{ "protocol": "https", "hostname": "files.catbox.moe" }]
+  },
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap" }
   ]

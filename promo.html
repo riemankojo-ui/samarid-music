@@ -415,5 +415,26 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
     loadPromoAd();
   </script>
 
+<script>
+(function () {
+  var HOST = 'files.catbox.moe';
+  function opt(img) {
+    var src = img.getAttribute('src');
+    if (!src || img.dataset.opt || src.indexOf(HOST) === -1) return;
+    img.dataset.opt = '1';
+    var w = img.clientWidth > 200 ? 640 : 384;
+    img.loading = 'lazy';
+    img.onerror = function () { img.onerror = null; img.src = src; };
+    img.src = '/_vercel/image?url=' + encodeURIComponent(src) + '&w=' + w + '&q=70';
+  }
+  function scan(root) { if (root.querySelectorAll) root.querySelectorAll('img').forEach(opt); }
+  scan(document);
+  new MutationObserver(function (list) {
+    list.forEach(function (m) {
+      m.addedNodes.forEach(function (n) { if (n.tagName === 'IMG') opt(n); else scan(n); });
+    });
+  }).observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>
 </body>
 </html>
