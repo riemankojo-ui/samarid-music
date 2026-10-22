@@ -13,13 +13,14 @@ export default async function handler(req) {
 
   const SUPABASE_URL = 'https://kamnfnukaizdglntcdvi.supabase.co';
   const SITE_URL = process.env.SITE_URL || 'https://flextune.vercel.app';
-  const key = process.env.SUPABASE_SERVICE_KEY;
+  const key = (process.env.SUPABASE_SERVICE_KEY || '').trim();
 
-  const subRes = await fetch(SUPABASE_URL + '/rest/v1/subscribers?select=email', {
-    headers: { apikey: key, Authorization: 'Bearer ' + key }
-  });
+  if (!key) return new Response('SUPABASE_SERVICE_KEY is not set on the server (check the Key name and redeploy)', { status: 500 });
+  const sbHeaders = { apikey: key };
+  if (key.indexOf('eyJ') === 0) sbHeaders.Authorization = 'Bearer ' + key;
+  const subRes = await fetch(SUPABASE_URL + '/rest/v1/subscribers?select=email', { headers: sbHeaders });
   const subs = await subRes.json();
-  if (!Array.isArray(subs)) return new Response('Supabase error: ' + JSON.stringify(subs).substring(0, 120), { status: 500 });
+  if (!Array.isArray(subs)) return new Response('Supabase error: ' + JSON.stringify(subs).substring(0, 120) + ' [key length ' + key.length + ']', { status: 500 });
   if (subs.length === 0) return new Response('No subscribers found', { status: 200 });
 
   const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
