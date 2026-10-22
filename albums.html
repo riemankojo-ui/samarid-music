@@ -40,12 +40,13 @@
     --header-bg: #0a0a0a;
   }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
-  html, body { overflow-x: hidden; max-width: 100vw; }
+   html { overflow-x: hidden; max-width: 100vw; }
+  body { overflow-x: clip; max-width: 100vw; }
   body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 40px; transition: background 0.2s, color 0.2s; }
   img { max-width: 100%; }
 
   /* ===== HEADER ===== */
-  .header { position: relative; background: #0a0a0a; border-bottom: 1px solid #222; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; min-height: 50px; }
+  .header { position: sticky; top: 0; z-index: 100; background: #0a0a0a; border-bottom: 1px solid #222; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; min-height: 50px; }
   .menu-btn { width: 36px; height: 36px; background: transparent; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; transition: all 0.2s; }
   .menu-btn .bar { display: block; width: 22px; height: 2.5px; background: #999999; border-radius: 2px; transition: all 0.3s ease; transform-origin: center; }
   .menu-btn.open .bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
@@ -98,7 +99,9 @@
   .inline-ad-placeholder { padding: 30px 20px; text-align: center; background: var(--card); border: 2px dashed var(--border); border-radius: 14px; }
   .inline-ad-placeholder i { font-size: 26px; color: #ff0033; margin-bottom: 8px; display: block; opacity: 0.7; }
   .inline-ad-placeholder p { font-size: 12px; color: var(--text2); font-weight: 600; margin: 0; }
-
+  .section-banner-title { border: 1px solid var(--border); padding: 9px 16px; margin: 0; text-align: center; font-size: 16px; font-weight: 800; letter-spacing: -0.2px; line-height: 1.2; color: var(--text); }
+  .section-banner { margin: 10px 0 8px; min-width: 0; }
+  -0.8px; line-height: 1.15; color: var(--text); }
   .albums-list { display: flex; flex-direction: column; }
   .album-card { display: flex; gap: 14px; padding: 14px 0; background: transparent; border: none; border-bottom: 1px solid var(--border); cursor: pointer; text-decoration: none; color: inherit; align-items: center; }
   .album-card:last-child { border-bottom: 1px solid var(--border); }
@@ -112,7 +115,7 @@
 
   .album-artist { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; gap: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .album-artist .artist-name { color: var(--accent); font-weight: 800; }
-  .album-artist .genre-country { color: #8fdfa8; font-weight: 700; }
+  .album-artist .genre-country { color: #e6b450; font-weight: 700; }
   .album-artist .dot { color: #8fdfa8; font-weight: 700; }
 
   .album-name { font-size: 15px; font-weight: 900; line-height: 1.35; color: var(--text); letter-spacing: -0.3px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; word-break: break-word; max-width: 100%; transition: color 0.15s ease; }
@@ -203,6 +206,10 @@
 
     <div id="pageBuilderBlocks"></div>
 
+    <div class="section-banner">
+      <h1 class="section-banner-title">Top Albums</h1>
+    </div>
+
     <div id="albumsAdTopContainer"></div>
 
     <div class="albums-list" id="albumsList">
@@ -212,6 +219,12 @@
       <div class="skeleton-album-card"><div class="skeleton-album-img"></div><div class="skeleton-album-info"><div class="skeleton-album-line short"></div><div class="skeleton-album-line medium"></div><div class="skeleton-album-line long"></div></div></div>
       <div class="skeleton-album-card"><div class="skeleton-album-img"></div><div class="skeleton-album-info"><div class="skeleton-album-line short"></div><div class="skeleton-album-line medium"></div><div class="skeleton-album-line long"></div></div></div>
     </div>
+
+    <div class="section-banner" style="margin-top: 22px;">
+      <h2 class="section-banner-title">Latest Albums</h2>
+    </div>
+
+    <div class="albums-list" id="latestAlbumsList"></div>
 
     <div id="albumsAdBottomContainer"></div>
 
@@ -403,9 +416,12 @@
           albumMap[albumName].totalPlays += (s.plays || 0);
         });
 
-        const albums = Object.values(albumMap).sort((a, b) => b.totalPlays - a.totalPlays);
+        const allAlbums = Object.values(albumMap);
+        const albums = allAlbums.slice().sort((a, b) => b.totalPlays - a.totalPlays).slice(0, 6);
+        const latestAlbums = allAlbums.slice(0, 10);
+        const latestContainer = document.getElementById('latestAlbumsList');
 
-        container.innerHTML = albums.map(album => {
+        const renderAlbumCard = album => {
           const songLabel = album.songCount === 1 ? '1 song' : album.songCount + ' songs';
           const isNew = isRecentDate(album.date);
           const newBadge = isNew ? '<span class="album-new-badge">NEW</span>' : '';
@@ -425,7 +441,10 @@
               </div>
             </a>
           `;
-        }).join('');
+        };
+
+        container.innerHTML = albums.map(renderAlbumCard).join('');
+        latestContainer.innerHTML = latestAlbums.map(renderAlbumCard).join('');
 
         endMarker.style.display = 'block';
       } catch (e) {

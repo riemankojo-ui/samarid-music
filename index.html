@@ -163,6 +163,7 @@ body.light #topSongsList::before { color: #000; }
   .top-album-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; overflow: hidden; gap: 6px; }
   .top-album-name { font-size: 15px; font-weight: 900; line-height: 1.35; color: var(--text); letter-spacing: -0.3px; overflow-wrap: anywhere; word-break: break-word; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; transition: color 0.15s ease; }
   .top-album-date { font-size: 11px; color: #888888; font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .top-album-genre { font-size: 11px; font-weight: 700; color: #e6b450; letter-spacing: 0.5px; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   @media (hover: hover) and (pointer: fine) {
     .song-card:hover .song-card-info h3,
@@ -641,8 +642,9 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
     function renderAlbumCard(album) {
   const artist = album.artist || 'Samarid';
   const date = album.date || '';
+  const genreCountry = [album.category, album.country].filter(Boolean).join(' • ');
   const linkUrl = 'album.html?name=' + encodeURIComponent(album.name);
-  return '<a href="' + linkUrl + '" class="top-album-card"><div class="top-album-cover"><img src="' + escapeHtml(album.cover) + '" alt="' + escapeHtml(album.name) + '" loading="lazy"></div><div class="top-album-info"><div class="top-album-name">' + escapeHtml(artist) + ' - ' + escapeHtml(album.name) + '</div><div class="top-album-date">' + escapeHtml(date) + '</div></div></a>';
+  return '<a href="' + linkUrl + '" class="top-album-card"><div class="top-album-cover"><img src="' + escapeHtml(album.cover) + '" alt="' + escapeHtml(album.name) + '" loading="lazy"></div><div class="top-album-info"><div class="top-album-genre">' + escapeHtml(genreCountry) + '</div><div class="top-album-name">' + escapeHtml(artist) + ' - ' + escapeHtml(album.name) + '</div><div class="top-album-date">' + escapeHtml(date) + '</div></div></a>';
 }
 
     async function loadTopSongs() {
@@ -784,7 +786,7 @@ window.closeHomePlayer = function() {
         const albumMap = {};
         songs.forEach(s => {
           const albumName = s.album_name.trim();
-          if (!albumMap[albumName]) { albumMap[albumName] = { name: albumName, cover: s.cover, artist: (s.artist_name || 'Samarid').trim(), category: s.category || 'Music', date: s.date || '', songCount: 0, totalPlays: 0 }; }
+          if (!albumMap[albumName]) { albumMap[albumName] = { name: albumName, cover: s.cover, artist: (s.artist_name || 'Samarid').trim(), category: s.category || 'Music', country: s.country || '', date: s.date || '', songCount: 0, totalPlays: 0 }; }
           albumMap[albumName].songCount++;
           albumMap[albumName].totalPlays += (s.plays || 0);
         });
