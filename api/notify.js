@@ -15,7 +15,8 @@ export default async function handler(req) {
     headers: { apikey: key, Authorization: 'Bearer ' + key }
   });
   const subs = await subRes.json();
-  if (!Array.isArray(subs) || subs.length === 0) return new Response('No subscribers', { status: 200 });
+  if (!Array.isArray(subs)) return new Response('Supabase error: ' + JSON.stringify(subs).substring(0, 120), { status: 500 });
+  if (subs.length === 0) return new Response('No subscribers found', { status: 200 });
 
   const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const html =
@@ -26,7 +27,7 @@ export default async function handler(req) {
     '<a href="' + SITE_URL + '" style="background:#ff0033;color:#fff;padding:12px 24px;border-radius:30px;text-decoration:none;font-weight:bold">Listen now</a>' +
     '</div>';
 
-  let sent = 0;
+  let sent = 0, firstErr = '';
   for (const s of subs.slice(0, 290)) {
     const r = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
@@ -38,7 +39,7 @@ export default async function handler(req) {
         htmlContent: html
       })
     });
-    if (r.ok) sent++;
+    if (r.ok) sent++; else if (!firstErr) firstErr = (await r.text()).substring(0, 120);
   }
-  return new Response(JSON.stringify({ sent: sent }), { status: 200 });
+  return new Response(JSON.stringify({ sent: sent, error: firstErr }), { status: 200 });
 }
