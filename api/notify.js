@@ -3,8 +3,12 @@ export const config = { runtime: 'edge' };
 export default async function handler(req) {
   if (req.method !== 'POST') return new Response('Method not allowed', { status: 405 });
   const body = await req.json().catch(() => ({}));
-  if (!body.secret || body.secret !== process.env.NOTIFY_SECRET) {
-    return new Response('Unauthorized', { status: 401 });
+  const serverSecret = process.env.NOTIFY_SECRET || '';
+  if (!serverSecret) {
+    return new Response('Unauthorized: NOTIFY_SECRET is not set on the server (add it and redeploy)', { status: 401 });
+  }
+  if (!body.secret || body.secret !== serverSecret) {
+    return new Response('Unauthorized: secrets differ. Studio sent ' + String(body.secret || '').length + ' characters, server has ' + serverSecret.length, { status: 401 });
   }
 
   const SUPABASE_URL = 'https://kamnfnukaizdglntcdvi.supabase.co';
