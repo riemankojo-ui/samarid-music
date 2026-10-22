@@ -23,7 +23,7 @@
 </script>
 <style>
   :root {
-    --bg: #0a0a0a;
+    --bg: #000000;
     --card: #141414;
     --border: #222;
     --text: #ffffff;
@@ -43,7 +43,7 @@
   body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, Roboto, sans-serif; min-height: 100vh; padding-bottom: 0; transition: background 0.2s, color 0.2s; }
 
   /* ===== HEADER ===== */
-  .header { position: relative; background: #0a0a0a; border-bottom: 1px solid #222; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; min-height: 50px; }
+  .header { position: relative; background: #000000; border-bottom: none; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; min-height: 50px; }
   .menu-btn { width: 36px; height: 36px; background: transparent; border: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; flex-shrink: 0; padding: 0; transition: all 0.2s; }
   .menu-btn .bar { display: block; width: 22px; height: 2.5px; background: #999999; border-radius: 2px; transition: all 0.3s ease; transform-origin: center; }
   .menu-btn.open .bar:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
@@ -116,7 +116,7 @@
   .inline-ad-placeholder i { font-size: 26px; color: #ff0033; margin-bottom: 8px; display: block; opacity: 0.7; }
   .inline-ad-placeholder p { font-size: 12px; color: var(--text2); font-weight: 600; margin: 0; }
 
-  .artists-story-section { background: #0a0a0a; color: #ffffff; padding: 60px 20px; border-top: 4px solid var(--orange); margin-top: 20px; display: flex; flex-direction: column; gap: 40px; }
+  .artists-story-section { background: #000000; color: #ffffff; padding: 60px 20px; border-top: none; margin-top: 20px; display: flex; flex-direction: column; gap: 40px; }
   .artists-story-container { max-width: 700px; margin: 0 auto; display: flex; flex-direction: column; gap: 36px; }
 
   .story-block { display: flex; flex-direction: column; gap: 14px; }
@@ -140,7 +140,7 @@
   .artists-story-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; padding-top: 20px; border-top: 1px solid #222; }
   .story-tag { background: rgba(255, 0, 51, 0.12); border: 1px solid rgba(255, 0, 51, 0.3); color: var(--orange); padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
 
-  .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: #888; border-top: 1px solid #222; margin-top: 0; background: #050505; }
+  .footer { padding: 30px 20px; text-align: center; font-size: 11px; color: #888; border-top: none; margin-top: 0; background: #000000; }
   .footer .brand { color: var(--accent); font-weight: 700; }
 
   @media(max-width: 600px) {
