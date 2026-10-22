@@ -1231,7 +1231,7 @@ try {
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
         if (!editingId) {
           await ensureAllArtistsExist(artist, featuring);
-          fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ secret: 'PUT_YOUR_NOTIFY_SECRET_HERE', title: title, artist: artist, cover: cover }) }).then(function (r) { return r.text().then(function (t) { alert('Email result: ' + r.status + ' ' + t.substring(0, 150)); }); }).catch(function (e) { alert('Email request failed: ' + e.message); });
+          fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ secret: 'flex2261drop', title: title, artist: artist, cover: cover }) }).then(function (r) { return r.text().then(function (t) { alert('Email result: ' + r.status + ' ' + t.substring(0, 150)); }); }).catch(function (e) { alert('Email request failed: ' + e.message); });
         }
         status.className = 'status success';
         status.innerText = editingId ? 'Song updated!' : 'Song published!';
