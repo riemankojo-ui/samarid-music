@@ -285,12 +285,7 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
       <div class="service-info"><h4>Artist Development</h4><p>Brand building, image consulting, social media strategy, and one-on-one coaching for emerging artists.</p></div>
     </div>
 
-    <div class="inline-ad-block" id="promoAdContainer">
-      <div class="inline-ad-placeholder">
-        <i class="fas fa-image"></i>
-        <p>Your ad could be here</p>
-      </div>
-    </div>
+    <div class="inline-ad-block" id="promoAdContainer" style="display:none;"></div>
 
     <div class="cta-box">
       <h3>Ready To Blow Up?</h3>
@@ -407,11 +402,12 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/ads?active=eq.true&or=(position.like.*promo*,position.like.*all*)&select=*&order=sort_order.asc,id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const ads = await res.json();
-        if (!Array.isArray(ads) || ads.length === 0) { container.innerHTML = '<div class="inline-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>'; return; }
+        if (!Array.isArray(ads) || ads.length === 0) { container.style.display = 'none'; return; }
         const ad = ads[0];
         const link = ad.link_url || '#';
         container.innerHTML = '<a href="' + escapeHtml(link) + '" target="_blank" rel="noopener"><img src="' + escapeHtml(ad.image_url) + '" alt="' + escapeHtml(ad.title || 'Ad') + '" loading="lazy"></a>';
-      } catch (e) { container.innerHTML = '<div class="inline-ad-placeholder"><i class="fas fa-image"></i><p>Your ad could be here</p></div>'; }
+        container.style.display = 'block';
+      } catch (e) { container.style.display = 'none'; }
     }
 
     applySettings();
