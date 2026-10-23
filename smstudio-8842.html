@@ -1266,6 +1266,21 @@ try {
         o.remove();
       };
       file.onchange = function() {
+        var pf = file.files[0]; if (!pf) return;
+        var pu = URL.createObjectURL(pf), pi = new Image();
+        pi.onload = function() {
+          if (pi.naturalWidth !== pi.naturalHeight || pi.naturalWidth < COVER_MIN) {
+            prev.src = pu; prev.style.display = 'block';
+            say('Rejected, not uploaded: ' + pi.naturalWidth + ' x ' + pi.naturalHeight + (pi.naturalWidth !== pi.naturalHeight ? ' is not square.' : ' is too small, minimum ' + COVER_MIN + ' x ' + COVER_MIN + '.'), '#dc2626');
+            file.value = '';
+            return;
+          }
+          doUpload();
+        };
+        pi.onerror = function() { say('Could not read this image.', '#dc2626'); };
+        pi.src = pu;
+      };
+      function doUpload() {
         var f = file.files[0]; if (!f) return;
         prev.src = URL.createObjectURL(f); prev.style.display = 'block';
         busy = true; ok.disabled = true; say('Uploading... 0%');
