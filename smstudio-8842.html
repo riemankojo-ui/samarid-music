@@ -268,7 +268,7 @@
         <div class="subcontent active" id="addContentSingle">
           <input type="hidden" id="editingId" value="">
           <div class="form-group"><label>Song Title</label><input type="text" id="songTitle" placeholder="e.g. Back To Sender"></div>
-          <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="https://...png"></div>
+          <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="https://...png" oninput="clearTimeout(window.coverT); window.coverT = setTimeout(checkSongCover, 600)" onchange="checkSongCover()"><div id="songCoverMsg" style="display:none;font-size:12px;margin-top:6px;line-height:1.4"></div></div>
           <div class="form-group"><label>Artist Name</label><input type="text" id="songArtist" placeholder="e.g. Jh linx"></div>
           <div class="form-group"><label>Featuring Artist(s)</label><input type="text" id="songFeaturing" placeholder="e.g. Samarid, Kofi Kinaata (optional)"></div>
           <div class="form-group"><label>Category</label><input type="text" id="songCategory" placeholder="e.g. Afrobeats"></div>
@@ -1223,6 +1223,7 @@ window.saveEditModal = async function() {
       const downloadurl = document.getElementById('songDownload').value.trim() || '#';
       const spotify = document.getElementById('songSpotify').value.trim();
 if (!title || !cover) { status.className = 'status error'; status.innerText = 'Title and Cover required!'; return; }
+if (!editingId) { const coverOk = await checkSongCover(); if (!coverOk) { status.className = 'status error'; status.innerText = 'Cover rejected - see the red message under the cover link'; return; } }
 try {
        const payload = { title, cover, category, country, date, description, lyrics: lyrics || null, downloadurl, artist_name: artist, featuring: featuring, spotify: spotify, youtube: (document.getElementById('songYoutube').value.trim() || null), status: 'live', release_at: null };
         let res;
@@ -1241,6 +1242,33 @@ try {
         setTimeout(() => { cancelEdit(); loadAdminSongs(); }, 1200);
       } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 80); }
     }
+    window.COVER_MIN = 3000;
+    window.coverState = { url: '', ok: false };
+    window.checkSongCover = function() {
+      var input = document.getElementById('songCover'), msg = document.getElementById('songCoverMsg');
+      var url = input.value.trim();
+      window.coverState = { url: url, ok: false };
+      if (!url) { msg.style.display = 'none'; return Promise.resolve(false); }
+      msg.style.display = 'block'; msg.style.color = '#999'; msg.textContent = 'Checking cover size...';
+      return new Promise(function(resolve) {
+        function done(ok, text) {
+          if (input.value.trim() !== url) return resolve(false);
+          window.coverState.ok = ok;
+          msg.style.color = ok ? '#16a34a' : '#dc2626';
+          msg.textContent = text;
+          resolve(ok);
+        }
+        var img = new Image();
+        img.onload = function() {
+          var w = img.naturalWidth, h = img.naturalHeight, size = w + ' x ' + h, min = COVER_MIN + ' x ' + COVER_MIN;
+          if (w !== h) done(false, 'Cover rejected: ' + size + ' is not square. Use a square cover, ' + min + ' or bigger.');
+          else if (w < COVER_MIN) done(false, 'Cover rejected: ' + size + ' is too small. Minimum is ' + min + '.');
+          else done(true, 'Cover OK: ' + size);
+        };
+        img.onerror = function() { done(false, 'Cover link could not be loaded. Check the link.'); };
+        img.src = url;
+      });
+    };
     window.relPop = (function() {
       var rows = {};
       function css() {
