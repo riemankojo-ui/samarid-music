@@ -268,7 +268,7 @@
         <div class="subcontent active" id="addContentSingle">
           <input type="hidden" id="editingId" value="">
           <div class="form-group"><label>Song Title</label><input type="text" id="songTitle" placeholder="e.g. Back To Sender"></div>
-          <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="https://...png" oninput="clearTimeout(window.coverT); window.coverT = setTimeout(checkSongCover, 600)" onchange="checkSongCover()"><div id="songCoverMsg" style="display:none;font-size:12px;margin-top:6px;line-height:1.4"></div></div>
+          <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="Tap to add cover art" readonly onclick="cloudPick('songCover')" oninput="clearTimeout(window.coverT); window.coverT = setTimeout(checkSongCover, 600)" onchange="checkSongCover()"><div id="songCoverMsg" style="display:none;font-size:12px;margin-top:6px;line-height:1.4"></div></div>
           <div class="form-group"><label>Artist Name</label><input type="text" id="songArtist" placeholder="e.g. Jh linx"></div>
           <div class="form-group"><label>Featuring Artist(s)</label><input type="text" id="songFeaturing" placeholder="e.g. Samarid, Kofi Kinaata (optional)"></div>
           <div class="form-group"><label>Category</label><input type="text" id="songCategory" placeholder="e.g. Afrobeats"></div>
@@ -1242,6 +1242,50 @@ try {
         setTimeout(() => { cancelEdit(); loadAdminSongs(); }, 1200);
       } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 80); }
     }
+    window.CLOUD_NAME = 't2wneryo';
+    window.CLOUD_PRESET = 'flextune_covers';
+    window.cloudPick = function(inputId) {
+      var target = document.getElementById(inputId);
+      if (!target || document.getElementById('cloudPop')) return;
+      if (!document.getElementById('cloudPopCss')) {
+        var s = document.createElement('style'); s.id = 'cloudPopCss';
+        s.textContent = '#cloudPop{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px}#cloudPop .cp-card{width:100%;max-width:320px;background:#121212;border:1px solid #2a2a2a;border-radius:4px;padding:18px;color:#fff}#cloudPop .cp-title{font-size:15px;font-weight:700;margin-bottom:12px}#cloudPop .cp-pick{display:block;text-align:center;padding:12px;border:1px dashed #555;border-radius:4px;font-size:13px;color:#d97706;font-weight:700}#cloudPop .cp-prev{width:100%;max-height:200px;object-fit:contain;margin-top:12px;background:#000}#cloudPop .cp-info{font-size:12px;margin-top:10px;min-height:16px;line-height:1.4}#cloudPop .cp-link{width:100%;box-sizing:border-box;margin-top:10px;padding:10px;background:#0b0b0b;border:1px solid #2a2a2a;border-radius:4px;color:#fff;font-size:12px}#cloudPop .cp-btns{display:flex;gap:10px;margin-top:14px}#cloudPop .cp-btns button{flex:1;padding:10px;border:0;border-radius:4px;font-weight:700;font-size:13px}#cloudPop .cp-cancel{background:#2a2a2a;color:#fff}#cloudPop .cp-ok{background:#d97706;color:#000}#cloudPop .cp-ok:disabled{opacity:.5}';
+        document.head.appendChild(s);
+      }
+      var o = document.createElement('div'); o.id = 'cloudPop';
+      o.innerHTML = '<div class="cp-card"><div class="cp-title">Cover art</div><label class="cp-pick">Choose image<input type="file" accept="image/*" style="display:none"></label><img class="cp-prev" style="display:none"><div class="cp-info"></div><input class="cp-link" type="text" placeholder="Cloudinary link appears here, or paste a link"><div class="cp-btns"><button class="cp-cancel">Cancel</button><button class="cp-ok">OK</button></div></div>';
+      document.body.appendChild(o);
+      var file = o.querySelector('input[type=file]'), prev = o.querySelector('.cp-prev'), info = o.querySelector('.cp-info'), link = o.querySelector('.cp-link'), ok = o.querySelector('.cp-ok'), busy = false;
+      link.value = target.value;
+      function say(t, c) { info.textContent = t; info.style.color = c || '#999'; }
+      o.querySelector('.cp-cancel').onclick = function() { if (!busy) o.remove(); };
+      ok.onclick = function() {
+        if (busy) return;
+        target.value = link.value.trim();
+        target.dispatchEvent(new Event('change'));
+        o.remove();
+      };
+      file.onchange = function() {
+        var f = file.files[0]; if (!f) return;
+        prev.src = URL.createObjectURL(f); prev.style.display = 'block';
+        busy = true; ok.disabled = true; say('Uploading... 0%');
+        var fd = new FormData(); fd.append('file', f); fd.append('upload_preset', CLOUD_PRESET);
+        var x = new XMLHttpRequest();
+        x.open('POST', 'https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/image/upload');
+        x.upload.onprogress = function(e) { if (e.lengthComputable) say('Uploading... ' + Math.round(e.loaded / e.total * 100) + '%'); };
+        x.onload = function() {
+          busy = false; ok.disabled = false;
+          var d = {}; try { d = JSON.parse(x.responseText); } catch (e) {}
+          if (x.status === 200 && d.secure_url) {
+            link.value = d.secure_url;
+            var w = d.width, h = d.height, bad = (w !== h || w < COVER_MIN);
+            say('Uploaded: ' + w + ' x ' + h + (w !== h ? ' - not square, will be rejected' : (w < COVER_MIN ? ' - too small, minimum ' + COVER_MIN : ' - size OK')), bad ? '#dc2626' : '#16a34a');
+          } else say('Upload failed: ' + ((d.error && d.error.message) || x.status), '#dc2626');
+        };
+        x.onerror = function() { busy = false; ok.disabled = false; say('Upload failed: no connection', '#dc2626'); };
+        x.send(fd);
+      };
+    };
     window.COVER_MIN = 3000;
     window.coverState = { url: '', ok: false };
     window.checkSongCover = function() {
