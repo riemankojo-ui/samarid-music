@@ -283,7 +283,7 @@
           <div class="form-group"><label>Release Date (Text)</label><input type="text" id="songDate" placeholder="e.g. April 13, 2026"></div>
           <div class="form-group"><label>Description</label><textarea id="songDescription" placeholder="About this song..."></textarea></div>
           <div class="form-group"><label>Lyrics</label><textarea id="songLyrics" placeholder="One line per lyric...&#10;Back to sender&#10;I no dey fear nobody"></textarea></div>
-          <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="https://...mp3"></div>
+          <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="Tap to add song audio" readonly onclick="audioPick('songDownload')"></div>
           <div class="form-group"><label>Spotify Link</label><input type="text" id="songSpotify" placeholder="https://open.spotify.com/track/..."></div>
 <div class="form-group"><label>YouTube Video Link</label><input type="text" id="songYoutube" placeholder="https://youtube.com/watch?v=..."></div>
         <button class="main-btn" id="submitBtn" onclick="saveSong()">Submit </button>
@@ -1301,7 +1301,7 @@ try {
         x.send(fd);
       };
     };
-    window.COVER_MIN = 3000;
+    window.COVER_MIN = 1200;
     window.coverState = { url: '', ok: false };
     window.checkSongCover = function() {
       var input = document.getElementById('songCover'), msg = document.getElementById('songCoverMsg');
@@ -1327,6 +1327,49 @@ try {
         img.onerror = function() { done(false, 'Cover link could not be loaded. Check the link.'); };
         img.src = url;
       });
+    };
+    window.audioPick = function(inputId) {
+      var target = document.getElementById(inputId);
+      if (!target || document.getElementById('audioPop')) return;
+      if (!document.getElementById('audioPopCss')) {
+        var s = document.createElement('style'); s.id = 'audioPopCss';
+        s.textContent = '#audioPop{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px}#audioPop .cp-card{width:100%;max-width:320px;background:#121212;border:1px solid #2a2a2a;border-radius:4px;padding:18px;color:#fff}#audioPop .cp-title{font-size:15px;font-weight:700;margin-bottom:12px}#audioPop .cp-pick{display:block;text-align:center;padding:12px;border:1px dashed #555;border-radius:4px;font-size:13px;color:#d97706;font-weight:700}#audioPop .cp-info{font-size:12px;margin-top:10px;min-height:16px;line-height:1.4}#audioPop .cp-link{width:100%;box-sizing:border-box;margin-top:10px;padding:10px;background:#0b0b0b;border:1px solid #2a2a2a;border-radius:4px;color:#fff;font-size:12px}#audioPop .cp-btns{display:flex;gap:10px;margin-top:14px}#audioPop .cp-btns button{flex:1;padding:10px;border:0;border-radius:4px;font-weight:700;font-size:13px}#audioPop .cp-cancel{background:#2a2a2a;color:#fff}#audioPop .cp-ok{background:#d97706;color:#000}#audioPop .cp-ok:disabled{opacity:.5}';
+        document.head.appendChild(s);
+      }
+      var o = document.createElement('div'); o.id = 'audioPop';
+      o.innerHTML = '<div class="cp-card"><div class="cp-title">Song audio</div><label class="cp-pick">Choose audio file<input type="file" accept="audio/*" style="display:none"></label><audio class="cp-aud" controls style="display:none;width:100%;margin-top:12px"></audio><div class="cp-info"></div><input class="cp-link" type="text" placeholder="Cloudinary audio link appears here, or paste a link"><div class="cp-btns"><button class="cp-cancel">Cancel</button><button class="cp-ok">OK</button></div></div>';
+      document.body.appendChild(o);
+      var file = o.querySelector('input[type=file]'), aud = o.querySelector('.cp-aud'), info = o.querySelector('.cp-info'), link = o.querySelector('.cp-link'), ok = o.querySelector('.cp-ok'), busy = false;
+      link.value = (target.value && target.value !== '#') ? target.value : '';
+      function say(t, c) { info.textContent = t; info.style.color = c || '#999'; }
+      o.querySelector('.cp-cancel').onclick = function() { if (!busy) o.remove(); };
+      ok.onclick = function() {
+        if (busy) return;
+        target.value = link.value.trim();
+        target.dispatchEvent(new Event('change'));
+        o.remove();
+      };
+      file.onchange = function() {
+        var f = file.files[0]; if (!f) return;
+        if (!/^audio\//.test(f.type) && !/\.(mp3|wav|m4a|aac|flac|ogg)$/i.test(f.name)) { say('Rejected, not uploaded: this is not an audio file.', '#dc2626'); file.value = ''; return; }
+        if (f.size > 100 * 1024 * 1024) { say('Rejected, not uploaded: ' + Math.round(f.size / 1048576) + ' MB is over 100 MB.', '#dc2626'); file.value = ''; return; }
+        busy = true; ok.disabled = true; say('Uploading... 0%');
+        var fd = new FormData(); fd.append('file', f); fd.append('upload_preset', CLOUD_PRESET);
+        var x = new XMLHttpRequest();
+        x.open('POST', 'https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/video/upload');
+        x.upload.onprogress = function(e) { if (e.lengthComputable) say('Uploading... ' + Math.round(e.loaded / e.total * 100) + '%'); };
+        x.onload = function() {
+          busy = false; ok.disabled = false;
+          var d = {}; try { d = JSON.parse(x.responseText); } catch (e) {}
+          if (x.status === 200 && d.secure_url) {
+            link.value = d.secure_url; aud.src = d.secure_url; aud.style.display = 'block';
+            var fmt = String(d.format || '').toUpperCase(), dur = d.duration ? Math.floor(d.duration / 60) + ':' + ('0' + Math.round(d.duration % 60)).slice(-2) : '';
+            say('Uploaded: ' + fmt + (dur ? ', ' + dur : '') + (fmt && fmt !== 'MP3' ? ' - not MP3, fans will download a ' + fmt + ' file' : ' - OK'), (fmt && fmt !== 'MP3') ? '#d97706' : '#16a34a');
+          } else say('Upload failed: ' + ((d.error && d.error.message) || x.status), '#dc2626');
+        };
+        x.onerror = function() { busy = false; ok.disabled = false; say('Upload failed: no connection', '#dc2626'); };
+        x.send(fd);
+      };
     };
     window.relPop = (function() {
       var rows = {};
