@@ -1231,13 +1231,44 @@ try {
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
         if (!editingId) {
           await ensureAllArtistsExist(artist, featuring);
-          fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ secret: 'flex2261drop', title: title, artist: artist, cover: cover }) }).then(function (r) { return r.text().then(function (t) { alert('Email result: ' + r.status + ' ' + t.substring(0, 150)); }); }).catch(function (e) { alert('Email request failed: ' + e.message); });
+          relPop.open('Release status', title + ' - ' + artist);
+          relPop.row('song', 'Song', 'ok', 'Published on FlexTune');
+          relPop.row('email', 'Email', 'wait', 'Notifying subscribers...');
+          fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ secret: 'flex2261drop', title: title, artist: artist, cover: cover }) }).then(function (r) { return r.text().then(function (t) { var d = null; try { d = JSON.parse(t); } catch (x) {} if (r.status !== 200) { relPop.row('email', 'Email', 'err', 'Failed (' + r.status + '): ' + t.substring(0, 100)); } else if (d && d.sent > 0) { relPop.row('email', 'Email', 'ok', d.sent + ' people notified' + (d.error ? ' (some failed)' : '')); } else if (d && d.error) { relPop.row('email', 'Email', 'err', '0 sent: ' + d.error.substring(0, 100)); } else { relPop.row('email', 'Email', 'err', t.substring(0, 100) || 'No subscribers yet'); } }); }).catch(function (e) { relPop.row('email', 'Email', 'err', 'Request failed: ' + e.message); });
         }
         status.className = 'status success';
         status.innerText = editingId ? 'Song updated!' : 'Song published!';
         setTimeout(() => { cancelEdit(); loadAdminSongs(); }, 1200);
       } catch (e) { status.className = 'status error'; status.innerText = 'Error: ' + e.message.substring(0, 80); }
     }
+    window.relPop = (function() {
+      var rows = {};
+      function css() {
+        if (document.getElementById('relPopCss')) return;
+        var s = document.createElement('style'); s.id = 'relPopCss';
+        s.textContent = '#relPop{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px}#relPop .rp-card{width:100%;max-width:320px;background:#121212;border:1px solid #2a2a2a;border-radius:4px;padding:18px;color:#fff}#relPop .rp-title{font-size:15px;font-weight:700}#relPop .rp-sub{font-size:12px;color:#888;margin:2px 0 12px}#relPop .rp-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid #222;font-size:13px}#relPop .rp-ic{width:18px;height:18px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-top:1px}#relPop .rp-wait{border:2px solid #444;border-top-color:#d97706;animation:rpspin .8s linear infinite}#relPop .rp-ok{background:#16a34a}#relPop .rp-err{background:#dc2626}#relPop .rp-tx{font-size:12px;color:#999;margin-top:2px;word-break:break-word}#relPop .rp-btn{margin-top:14px;width:100%;padding:10px;background:#d97706;color:#000;border:0;border-radius:4px;font-weight:700;font-size:13px}@keyframes rpspin{to{transform:rotate(360deg)}}';
+        document.head.appendChild(s);
+      }
+      function open(title, sub) {
+        css(); close(); rows = {};
+        var o = document.createElement('div'); o.id = 'relPop';
+        o.innerHTML = '<div class="rp-card"><div class="rp-title">Release status</div><div class="rp-sub"></div><div class="rp-rows"></div><button class="rp-btn" onclick="relPop.close()">OK</button></div>';
+        o.querySelector('.rp-sub').textContent = sub || title || '';
+        document.body.appendChild(o);
+      }
+      function row(key, label, state, text) {
+        var box = document.querySelector('#relPop .rp-rows'); if (!box) return;
+        var r = rows[key];
+        if (!r) { r = document.createElement('div'); r.className = 'rp-row'; r.innerHTML = '<div class="rp-ic"></div><div><b></b><div class="rp-tx"></div></div>'; box.appendChild(r); rows[key] = r; }
+        var ic = r.querySelector('.rp-ic');
+        ic.className = 'rp-ic rp-' + state;
+        ic.textContent = state === 'ok' ? '✓' : (state === 'err' ? '✕' : '');
+        r.querySelector('b').textContent = label;
+        r.querySelector('.rp-tx').textContent = text || '';
+      }
+      function close() { var o = document.getElementById('relPop'); if (o) o.remove(); }
+      return { open: open, row: row, close: close };
+    })();
     window.deleteSong = async function(id) {
       if (!confirm('Delete this song permanently?')) return;
       try {
