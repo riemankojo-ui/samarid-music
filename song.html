@@ -570,7 +570,7 @@ window.smartDownload = async function(btn) {
   try {
     let writer = new ID3Writer(mp3ArrayBuffer);
     writer.setFrame('TIT2', title)
-          .setFrame('TPE1', [artist + ((currentSongData.featuring || '').trim() ? ' ft. ' + currentSongData.featuring.trim() : '')])
+          .setFrame('TPE1', [artist])
           .setFrame('TALB', currentSongData.album_name || 'FlexTune Release');
 
     if (currentSongData.cover) {
