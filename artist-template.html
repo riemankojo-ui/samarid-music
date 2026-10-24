@@ -384,7 +384,7 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
 
     const LIVE_FILTER = '&or=(status.eq.live,status.is.null,release_at.lte.' + encodeURIComponent(new Date().toISOString()) + ')';
 
-    const seoTitle = 'Download Mp3 ' + artistName + ' 2026 Songs | Albums for Free - FlexTune';
+    const seoTitle = 'Download Mp3 ' + artistName + ' ' + new Date().getFullYear() + ' New Songs & Videos In FlexTune';
     const seoDesc = 'Download all ' + artistName + ' songs in MP3. 2026 releases from FlexTune. Free HD audio downloads on FlexTune.';
     document.title = seoTitle;
     document.querySelector('meta[name="description"]').setAttribute('content', seoDesc);
