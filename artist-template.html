@@ -120,6 +120,8 @@
     .song-card:hover .song-card-info h3 { color: var(--accent); }
   }
   .song-card:active .song-card-info h3 { color: var(--accent); }
+  .song-card:active .song-card-info h3 .feat-tag, .song-card:active .song-card-info h3 .dash { color: var(--accent); }
+  @media (hover: hover) and (pointer: fine) { .song-card:hover .song-card-info h3 .feat-tag, .song-card:hover .song-card-info h3 .dash { color: var(--accent); } }
 
   /* ===== SKELETON LOADERS ===== */
   .skeleton-card { display: flex; gap: 14px; padding: 14px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); align-items: center; }

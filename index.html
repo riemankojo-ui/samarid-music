@@ -170,6 +170,8 @@ body.light #topSongsList::before { color: #000; }
   }
   .song-card:active .song-card-info h3,
   .top-album-card:active .top-album-info .top-album-name { color: var(--accent); }
+  .song-card:active .song-card-info h3 .feat-tag, .song-card:active .song-card-info h3 .dash { color: var(--accent); }
+  @media (hover: hover) and (pointer: fine) { .song-card:hover .song-card-info h3 .feat-tag, .song-card:hover .song-card-info h3 .dash { color: var(--accent); } }
 
   /* ===== HOME VIDEOS GRID ===== */
 .home-videos-grid { display: flex; flex-direction: column; gap: 50px; padding-bottom: 6px; }

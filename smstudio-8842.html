@@ -305,7 +305,7 @@
             <div class="album-box-title"><i class="fas fa-compact-disc"></i> Album Details</div>
             <div class="form-group"><label>Album Name *</label><input type="text" id="albumName" placeholder="e.g. My First Album"></div>
             <div class="form-group"><label>Artist Name *</label><input type="text" id="albumArtist" placeholder="e.g. Jh linx"></div>
-            <div class="form-group"><label>Album Cover URL *</label><input type="text" id="albumCover" placeholder="https://...png"></div>
+            <div class="form-group"><label>Album Cover URL *</label><input type="text" id="albumCover" placeholder="Tap to add cover art" readonly onclick="cloudPick('albumCover')"></div>
             <div class="form-group"><label>Category</label><input type="text" id="albumCategory" placeholder="e.g. Hip Hop"></div>
             <!-- NEW COUNTRY DROPDOWN FOR ADD ALBUM -->
             <div class="form-group">
@@ -420,7 +420,7 @@
             <div class="album-box-title"><i class="fas fa-compact-disc"></i> Album Details</div>
             <div class="form-group"><label>Album Name *</label><input type="text" id="schAlbumName" placeholder="e.g. My First Album"></div>
             <div class="form-group"><label>Artist Name *</label><input type="text" id="schAlbumArtist" placeholder="e.g. Jh linx"></div>
-            <div class="form-group"><label>Album Cover URL *</label><input type="text" id="schAlbumCover" placeholder="https://...png"></div>
+            <div class="form-group"><label>Album Cover URL *</label><input type="text" id="schAlbumCover" placeholder="Tap to add cover art" readonly onclick="cloudPick('schAlbumCover')"></div>
             <div class="form-group"><label>Category</label><input type="text" id="schAlbumCategory" placeholder="e.g. Hip Hop"></div>
             
             <!-- NEW COUNTRY SELECTOR FOR SCHEDULE ALBUM -->
@@ -1330,6 +1330,7 @@ try {
     };
     window.audioPick = function(inputId) {
       var target = document.getElementById(inputId);
+      if (!target && typeof inputId === 'object') target = inputId;
       if (!target || document.getElementById('audioPop')) return;
       if (!document.getElementById('audioPopCss')) {
         var s = document.createElement('style'); s.id = 'audioPopCss';
@@ -1412,7 +1413,7 @@ try {
       const div = document.createElement('div');
       div.className = 'album-song-item';
       div.id = 'album-song-' + albumSongIndex;
-      div.innerHTML = '<div class="album-song-num">SONG ' + albumSongIndex + '</div><button class="album-song-remove" onclick="removeAlbumSong(' + albumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="https://...mp3"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Lyrics</label><textarea class="album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
+      div.innerHTML = '<div class="album-song-num">SONG ' + albumSongIndex + '</div><button class="album-song-remove" onclick="removeAlbumSong(' + albumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Lyrics</label><textarea class="album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
       container.appendChild(div);
       updateAlbumCount();
     }
@@ -1448,7 +1449,7 @@ songItems.forEach(item => {
       status.className = 'status'; status.innerText = '';
 const prog = startPublishProgress('album', 'Publishing album...');
       try {
-        const payload = songs.map(s => ({ title: s.title, cover, artist_name: artist, category, country, date, description: s.description, lyrics: s.lyrics || null, downloadurl: s.downloadurl, album_name: albumName, status: 'live', release_at: null }));
+        const payload = songs.map((s, i) => ({ title: s.title, cover, artist_name: artist, featuring: ((document.querySelectorAll('#albumSongsContainer .album-song-feat')[i] || {}).value || '').trim() || null, category, country, date, description: s.description, lyrics: s.lyrics || null, downloadurl: s.downloadurl, album_name: albumName, status: 'live', release_at: null }));
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
         await ensureArtistExists(artist);
@@ -1517,7 +1518,7 @@ setTimeout(() => {
       const div = document.createElement('div');
       div.className = 'album-song-item';
       div.id = 'sch-album-song-' + schAlbumSongIndex;
-      div.innerHTML = '<div class="album-song-num">SONG ' + schAlbumSongIndex + '</div><button class="album-song-remove" onclick="removeSchAlbumSong(' + schAlbumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="https://...mp3"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Lyrics</label><textarea class="sch-album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
+      div.innerHTML = '<div class="album-song-num">SONG ' + schAlbumSongIndex + '</div><button class="album-song-remove" onclick="removeSchAlbumSong(' + schAlbumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="sch-album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Lyrics</label><textarea class="sch-album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
       container.appendChild(div);
       updateSchAlbumCount();
     }
@@ -1554,7 +1555,7 @@ setTimeout(() => {
       status.className = 'status info'; status.innerText = 'Scheduling album...';
       try {
         const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
-        const payload = songs.map(s => ({ title: s.title, cover, artist_name: artist, category, country, description: s.description, lyrics: s.lyrics || null, downloadurl: s.downloadurl, album_name: albumName, date: displayDate, status: 'scheduled', release_at: iso }));
+        const payload = songs.map((s, i) => ({ title: s.title, cover, artist_name: artist, featuring: ((document.querySelectorAll('#schAlbumSongsContainer .sch-album-song-feat')[i] || {}).value || '').trim() || null, category, country, description: s.description, lyrics: s.lyrics || null, downloadurl: s.downloadurl, album_name: albumName, date: displayDate, status: 'scheduled', release_at: iso }));
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
         await ensureArtistExists(artist);
