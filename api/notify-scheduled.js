@@ -13,7 +13,7 @@ export default async function handler(req) {
   if (key.indexOf('eyJ') === 0) sb.Authorization = 'Bearer ' + key;
 
   const now = new Date().toISOString();
-  const dueRes = await fetch(SUPABASE_URL + '/rest/v1/songs?status=eq.scheduled&notified=eq.false&release_at=lte.' + encodeURIComponent(now) + '&select=id,title,cover,artist_name,album_name&order=release_at.asc&limit=50', { headers: sb });
+  const dueRes = await fetch(SUPABASE_URL + '/rest/v1/songs?status=eq.scheduled&notified=eq.false&release_at=lte.' + encodeURIComponent(now) + '&select=id,title,cover,artist_name,featuring,album_name&order=release_at.asc&limit=50', { headers: sb });
   const due = await dueRes.json();
   if (!Array.isArray(due)) return new Response('Supabase error: ' + JSON.stringify(due).substring(0, 150), { status: 500 });
   if (due.length === 0) return new Response(JSON.stringify({ due: 0 }), { status: 200 });
@@ -33,13 +33,13 @@ export default async function handler(req) {
 
   for (const k of Object.keys(groups).slice(0, 3)) {
     const items = groups[k], first = items[0];
-    const title = first.album_name || first.title, artist = first.artist_name || 'Samarid';
+    const title = first.album_name || first.title, artist = (first.artist_name || 'Samarid') + (!first.album_name && first.featuring ? ' ft. ' + first.featuring : '');
     const html =
       '<div style="font-family:Arial,sans-serif;max-width:420px;margin:auto;text-align:center">' +
       (first.cover ? '<img src="' + esc(first.cover) + '" width="300" style="border-radius:12px">' : '') +
       '<h2>' + esc(artist) + ' - ' + esc(title) + '</h2>' +
       '<p>New music just dropped on FlexTune.</p>' +
-      '<a href="' + SITE_URL + '" style="background:#ff0033;color:#fff;padding:12px 24px;border-radius:30px;text-decoration:none;font-weight:bold">Listen now</a>' +
+      '<p style="margin:20px 0 28px"><a href="' + (first.album_name ? SITE_URL + '/album.html?name=' + encodeURIComponent(first.album_name) : SITE_URL + '/song.html?id=' + first.id) + '" style="display:inline-block;background:#ff0033;color:#ffffff;padding:14px 32px;border-radius:30px;text-decoration:none;font-weight:bold;font-size:16px;line-height:20px">Listen now</a></p>' +
       '</div>';
 
     let sent = 0, firstErr = '';

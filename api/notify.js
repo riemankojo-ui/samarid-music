@@ -24,12 +24,18 @@ export default async function handler(req) {
   if (subs.length === 0) return new Response('No subscribers found', { status: 200 });
 
   const esc = s => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  let songUrl = SITE_URL;
+  try {
+    const lr = await fetch(SUPABASE_URL + '/rest/v1/songs?select=id&title=eq.' + encodeURIComponent(body.title || '') + '&artist_name=eq.' + encodeURIComponent(body.artist || '') + '&order=id.desc&limit=1', { headers: sbHeaders });
+    const lj = await lr.json();
+    if (Array.isArray(lj) && lj[0] && lj[0].id) songUrl = SITE_URL + '/song.html?id=' + lj[0].id;
+  } catch (e) {}
   const html =
     '<div style="font-family:Arial,sans-serif;max-width:420px;margin:auto;text-align:center">' +
     (body.cover ? '<img src="' + esc(body.cover) + '" width="300" style="border-radius:12px">' : '') +
-    '<h2>' + esc(body.artist) + ' - ' + esc(body.title) + '</h2>' +
+    '<h2>' + esc(body.artist) + (body.featuring ? ' ft. ' + esc(body.featuring) : '') + ' - ' + esc(body.title) + '</h2>' +
     '<p>New music just dropped on FlexTune.</p>' +
-    '<a href="' + SITE_URL + '" style="background:#ff0033;color:#fff;padding:12px 24px;border-radius:30px;text-decoration:none;font-weight:bold">Listen now</a>' +
+    '<p style="margin:20px 0 28px"><a href="' + songUrl + '" style="display:inline-block;background:#ff0033;color:#ffffff;padding:14px 32px;border-radius:30px;text-decoration:none;font-weight:bold;font-size:16px;line-height:20px">Listen now</a></p>' +
     '</div>';
 
   let sent = 0, firstErr = '';
@@ -40,7 +46,7 @@ export default async function handler(req) {
       body: JSON.stringify({
         sender: { name: 'FlexTune', email: process.env.BREVO_SENDER_EMAIL },
         to: [{ email: s.email }],
-        subject: 'New drop: ' + body.artist + ' - ' + body.title,
+        subject: 'New drop: ' + body.artist + (body.featuring ? ' ft. ' + body.featuring : '') + ' - ' + body.title,
         htmlContent: html
       })
     });

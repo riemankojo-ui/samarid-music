@@ -89,6 +89,7 @@
   .detail-meta .artist,
   .detail-title .artist { color: var(--text); font-weight: 900; display: inline-flex; align-items: center; gap: 4px; text-decoration: none !important; border: none !important; }
   .detail-meta .feat-link { color: #1d9bf0; font-weight: 700; text-decoration: none; }
+  .detail-title .feat-link { color: var(--text); font-weight: 900; text-decoration: none; }
   .detail-label { text-align: center; font-size: 11px; color: #999; margin-bottom: 25px; letter-spacing: 1px; font-weight: 600; text-transform: uppercase; }
   .detail-label i { color: var(--accent); margin-right: 4px; }
  .follow-row-compact { display: flex; align-items: center; gap: 10px; padding: 0; margin: 0; }
@@ -524,7 +525,7 @@ window.smartDownload = async function(btn) {
 
   const cleanArtist = artist.replace(/[^\w\s\-\.]/g, '').trim();
   const cleanTitle = title.replace(/[^\w\s\-\.]/g, '').trim();
-  const filename = cleanArtist + ' - ' + cleanTitle + ' | FlexTune.mp3';
+  const filename = cleanArtist + ((currentSongData.featuring || '').trim() ? ' ft. ' + (currentSongData.featuring || '').replace(/[^\w\s\-\.,]/g, '').replace(/\s*,\s*/g, ', ').trim() : '') + ' - ' + cleanTitle + ' | FlexTune.mp3';
   
   const originalHTML = btn.innerHTML;
   btn.disabled = true;
@@ -569,7 +570,7 @@ window.smartDownload = async function(btn) {
   try {
     let writer = new ID3Writer(mp3ArrayBuffer);
     writer.setFrame('TIT2', title)
-          .setFrame('TPE1', [artist])
+          .setFrame('TPE1', [artist + ((currentSongData.featuring || '').trim() ? ' ft. ' + currentSongData.featuring.trim() : '')])
           .setFrame('TALB', currentSongData.album_name || 'FlexTune Release');
 
     if (currentSongData.cover) {
@@ -614,7 +615,7 @@ window.smartDownload = async function(btn) {
       let html = '<a href="artist-template.html?name=' + encodeURIComponent(artist) + '" class="artist">' + escapeHtml(artist) + badge + '</a>';
       if (featuring && featuring.trim()) {
         const featList = featuring.split(',').map(x => x.trim()).filter(x => x);
-        html += '<span>Feat</span>';
+        html += ' <span>Feat</span> ';
         html += featList.map(f => '<a href="artist-template.html?name=' + encodeURIComponent(f) + '" class="feat-link">' + escapeHtml(f) + '</a>').join(', ');
       }
       return html;
