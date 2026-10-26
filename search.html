@@ -551,7 +551,7 @@ function showInitialState() {
           const vid = getYouTubeId(v.video_url);
           const thumb = vid ? 'https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg' : '';
           return `
-            <a href="${escapeHtml(v.video_url || '#')}" target="_blank" rel="noopener" class="result-card">
+            <a href="${vid ? '#' : escapeHtml(v.video_url || '#')}" ${vid ? `onclick="openPlayer('${vid}'); return false;"` : 'target="_blank" rel="noopener"'} class="result-card">
               <div class="result-video-img">${thumb ? '<img src="' + thumb + '" loading="lazy">' : ''}<div class="result-video-play"></div></div>
               <div class="result-info">
                 <div class="result-cat">Video</div>
@@ -600,6 +600,29 @@ function showInitialState() {
       }
 
       document.getElementById('content').innerHTML = html;
+    }
+
+    window.openPlayer = function(videoId) {
+      var m = document.getElementById('playerModal');
+      if (!m) {
+        var st = document.createElement('style');
+        st.textContent = '.player-modal{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}.player-modal.open{display:flex}.player-inner{width:100%;max-width:900px;background:#000;border-radius:12px;position:relative}.player-video{width:100%;aspect-ratio:16/9;border:none;display:block;border-radius:12px}.player-close{position:absolute;top:-50px;right:0;background:rgba(255,255,255,0.15);color:#fff;border:none;width:40px;height:40px;border-radius:50%;font-size:22px;cursor:pointer;font-weight:700}';
+        document.head.appendChild(st);
+        m = document.createElement('div');
+        m.id = 'playerModal';
+        m.className = 'player-modal';
+        m.onclick = window.closePlayer;
+        m.innerHTML = '<div class="player-inner" onclick="event.stopPropagation()"><button class="player-close" onclick="closePlayer()">✕</button><iframe class="player-video" id="playerFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe></div>';
+        document.body.appendChild(m);
+      }
+      document.getElementById('playerFrame').src = 'https://www.youtube.com/embed/' + videoId + '?autoplay=1&rel=0';
+      m.classList.add('open');
+    }
+    window.closePlayer = function() {
+      var f = document.getElementById('playerFrame');
+      if (f) f.src = '';
+      var m = document.getElementById('playerModal');
+      if (m) m.classList.remove('open');
     }
 
     window.switchTab = function(tab) {
