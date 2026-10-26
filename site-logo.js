@@ -6,7 +6,7 @@
       img.src = '/logo-wide.png';
       img.alt = 'FlexTune';
       img.className = 'site-logo-img';
-      img.style.cssText = 'height:32px;width:auto;max-width:100%;border-radius:8px;display:block;flex-shrink:0';
+      img.style.cssText = 'height:24px;width:auto;max-width:100%;border-radius:8px;display:block;flex-shrink:0';
       a.textContent = '';
       a.appendChild(img);
       a.setAttribute('aria-label', 'FlexTune home');
