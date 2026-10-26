@@ -701,7 +701,7 @@ window.smartDownload = async function(btn) {
   document.getElementById('songEmailFormArea').style.display = 'none';
   const success = document.getElementById('songEmailSuccess');
   success.style.display = 'block';
-  success.querySelector('.text').innerText = 'You\'re subscribed as ' + email + '. We\'ll notify you when new songs drop!';
+  success.querySelector('.text').innerText = 'You\'re subscribed as ' + email + '. We\'ll notify you when new songs drop!'; setTimeout(function () { const sb2 = document.querySelector('.email-compact-box'); if (sb2) sb2.style.display = 'none'; }, 2500);
 } else { throw new Error('Save failed'); }
       } catch (e) {
         btn.disabled = false;
@@ -972,7 +972,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
         `;
 
         renderLyrics(s.lyrics);
-        loadMoreFromArtist(artist, s.id); loadCardLogo();
+        loadMoreFromArtist(artist, s.id); loadCardLogo(); if (localStorage.getItem('samarid_subscribed') === 'true') { const sb = document.querySelector('.email-compact-box'); if (sb) sb.style.display = 'none'; }
         loadAds();
       } catch (e) {
         console.error(e);
