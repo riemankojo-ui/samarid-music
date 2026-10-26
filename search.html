@@ -130,6 +130,16 @@
   .result-name { font-size: 13.5px; font-weight: 800; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color 0.15s ease; }
   .result-meta { font-size: 11px; color: var(--text2); font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+  .album-card { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--border); text-decoration: none; color: inherit; align-items: center; }
+  .album-cover { width: 115px; height: 115px; flex-shrink: 0; overflow: hidden; background: #000; border-radius: 14px; }
+  .album-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .album-info { flex: 1; display: flex; flex-direction: column; justify-content: center; min-width: 0; gap: 6px; }
+  .album-artist { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .album-artist .genre-country { color: #e6b450; font-weight: 700; }
+  .album-name { font-size: 15px; font-weight: 900; line-height: 1.35; color: var(--text); letter-spacing: -0.3px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; transition: color 0.15s ease; }
+  .album-date { font-size: 11px; color: #888888; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .album-songs { font-size: 12px; color: var(--accent); font-weight: 800; display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+  .album-card:active .album-name { color: var(--accent); }
   .verify-badge { display: inline-block; width: 13px; height: 13px; vertical-align: middle; flex-shrink: 0; margin-left: 2px; }
 
   @media (hover: hover) and (pointer: fine) {
@@ -474,11 +484,12 @@ function showInitialState() {
           if (s.album_name && s.album_name.trim()) {
             const name = s.album_name.trim();
             if (!albumMap[name]) {
-              albumMap[name] = { name: name, cover: s.cover, artist: (s.artist_name || 'Samarid').trim(), date: s.date, verified: s.verified };
+              albumMap[name] = { name: name, cover: s.cover, artist: (s.artist_name || 'Samarid').trim(), date: s.date, verified: s.verified, category: s.category || 'Music', country: s.country || 'Ghana' };
             }
           }
         });
         allAlbums = Object.values(albumMap);
+        allAlbums.forEach(a => { a.songCount = allSongs.filter(x => (x.album_name || '').trim() === a.name).length; });
 
         showInitialState();
       } catch (e) {
@@ -567,12 +578,13 @@ function showInitialState() {
       if ((currentTab === 'all' || currentTab === 'albums') && albums.length > 0) {
         html += `<div class="section-title">Albums <span class="count">${albums.length}</span></div><div class="result-list">`;
         html += albums.map(al => `
-          <a href="album.html?name=${encodeURIComponent(al.name)}" class="result-card">
-            <div class="result-img"><img src="${escapeHtml(al.cover)}" loading="lazy"></div>
-            <div class="result-info">
-              <div class="result-cat">Album</div>
-              <div class="result-name">${escapeHtml(al.name)}</div>
-              <div class="result-meta">${escapeHtml(al.artist)} • ${escapeHtml(al.date || '')}</div>
+          <a href="album.html?name=${encodeURIComponent(al.name)}" class="album-card">
+            <div class="album-cover"><img src="${escapeHtml(al.cover)}" alt="${escapeHtml(al.name)}" loading="lazy"></div>
+            <div class="album-info">
+              <div class="album-artist"><span class="genre-country">${escapeHtml(al.category || 'Music')} • ${escapeHtml(al.country || 'Ghana')}</span></div>
+              <div class="album-name">${escapeHtml(al.artist)} - ${escapeHtml(al.name)}</div>
+              <div class="album-date">${escapeHtml(al.date || '')}</div>
+              <div class="album-songs"><i class="fas fa-music"></i> ${al.songCount === 1 ? '1 song' : al.songCount + ' songs'}</div>
             </div>
           </a>
         `).join('');
