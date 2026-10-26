@@ -861,7 +861,7 @@ window.closeHomePlayer = function() {
 
     (function() {
       const alreadySubscribed = localStorage.getItem('samarid_subscribed') === 'true';
-      if (alreadySubscribed) {
+      if (alreadySubscribed) { var eb0 = document.querySelector('.email-signup-box'); if (eb0) { eb0.style.display = 'none'; if (eb0.previousElementSibling) eb0.previousElementSibling.style.display = 'none'; }
         const savedEmail = localStorage.getItem('samarid_subscriber_email');
         document.getElementById('emailFormArea').style.display = 'none';
         const success = document.getElementById('emailSuccessArea');
@@ -893,7 +893,7 @@ window.closeHomePlayer = function() {
           document.getElementById('emailFormArea').style.display = 'none';
           const success = document.getElementById('emailSuccessArea');
           success.style.display = 'block';
-          success.querySelector('.text').innerText = 'You\'re subscribed as ' + email + '. We\'ll notify you when new songs drop!';
+          success.querySelector('.text').innerText = 'You\'re subscribed as ' + email + '. We\'ll notify you when new songs drop!'; setTimeout(function () { var eb = document.querySelector('.email-signup-box'); if (eb) { eb.style.display = 'none'; if (eb.previousElementSibling) eb.previousElementSibling.style.display = 'none'; } }, 2500);
         } else { throw new Error('Save failed'); }
       } catch (e) {
         btn.disabled = false;
