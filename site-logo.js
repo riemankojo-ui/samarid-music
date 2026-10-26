@@ -10,6 +10,9 @@
       a.textContent = '';
       a.appendChild(img);
       a.setAttribute('aria-label', 'FlexTune home');
+      a.style.display = 'flex';
+      a.style.justifyContent = 'center';
+      a.style.alignItems = 'center';
     }
     if (!document.querySelector('link[rel~="icon"]')) {
       var l = document.createElement('link');
