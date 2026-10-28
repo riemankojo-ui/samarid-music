@@ -48,14 +48,15 @@ body { overflow-x: clip; max-width: 100vw; }
   .header-spacer { width: 36px; flex-shrink: 0; }
 
   /* ===== TABS ===== */
-.tabs-container { display: flex; gap: 28px; padding: 14px 18px; background: #f5f5f5; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; border-bottom: 1px solid #ececec; white-space: nowrap; }
-body:not(.light) .tabs-container { background: #141414; border-bottom: 1px solid #222; }
+.tabs-container { display: flex; gap: 6px; padding: 12px 14px; background: #ffffff; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; border-bottom: 1px solid #ececec; white-space: nowrap; }
+body:not(.light) .tabs-container { background: #ffffff; border-bottom: 1px solid #ececec; }
+body:not(.light) .text-tab:not(.active) { color: #888; }
   .tabs-container::-webkit-scrollbar { display: none; }
-.text-tab { flex-shrink: 0; padding: 6px 0; color: var(--text2); font-weight: 700; font-size: 15px; text-decoration: none; transition: color 0.2s ease; white-space: nowrap; letter-spacing: 0.3px; }
+.text-tab { flex-shrink: 0; padding: 7px 14px; border-radius: 10px; color: var(--text2); font-weight: 600; font-size: 15px; text-decoration: none; transition: color 0.2s ease, background 0.2s ease; white-space: nowrap; letter-spacing: 0.3px; }
   .text-tab:active { color: var(--accent); }
   .text-tab.active { color: var(--text); font-weight: 900; }
   body.light .text-tab { color: #888; }
- body.light .text-tab.active { color: #888; }
+ body.light .text-tab.active { color: #b8325a; }
   .page-content { padding: 8px 16px 0; max-width: 700px; margin: 0 auto; }
 
   /* ===== MENU OVERLAY ===== */
