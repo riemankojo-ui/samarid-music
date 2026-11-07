@@ -66,6 +66,7 @@
   .artists-story-container { max-width: 800px; }
   .pb-wrap { max-width: 1200px; padding-left: 32px; padding-right: 32px; }
   .trend-list { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trend-item:nth-last-child(2):nth-child(odd) { border-bottom: 0; }
   .content { max-width: 1000px; }
 }
 
