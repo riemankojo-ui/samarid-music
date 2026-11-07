@@ -53,3 +53,22 @@
   .top-albums-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .home-videos-grid, .video-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
+
+@media (min-width: 900px) {
+  .container { max-width: 1200px; padding-left: 32px; padding-right: 32px; }
+  .result-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 36px; }
+  .result-list .result-card, .result-list .result-card:first-child, .result-list .result-card + .result-card { border-top: 0; }
+  .filters { max-width: 1200px; padding-left: 32px; padding-right: 32px; }
+  .distro-section { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 20px; }
+  .distro-section > :not(.distro-card) { grid-column: 1 / -1; }
+  .page-header { max-width: 1200px; padding-left: 32px; padding-right: 32px; }
+  .search-wrap { max-width: 560px; }
+  .artists-story-container { max-width: 800px; }
+  .pb-wrap { max-width: 1200px; padding-left: 32px; padding-right: 32px; }
+  .trend-list { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .content { max-width: 1000px; }
+}
+
+@media (min-width: 1300px) {
+  .result-list, .trend-list, .distro-section { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
