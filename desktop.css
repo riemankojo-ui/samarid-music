@@ -20,7 +20,6 @@
   .latest-search-wrap { max-width: 560px; }
   .email-signup-box { max-width: 640px; }
 
-  .top-albums-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
   .top-album-card { border-bottom: 0; padding: 0; }
   .top-album-cover { width: 140px; height: 140px; }
   .top-album-name { font-size: 17px; }
