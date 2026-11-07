@@ -1,0 +1,56 @@
+/* FlexTune - laptop / desktop layout (phones keep the normal layout) */
+@media (min-width: 900px) {
+  .header { padding: 12px 32px; min-height: 60px; }
+  .logo-icon { width: 30px; height: 30px; }
+  .logo-text { font-size: 19px; }
+  .tabs-container { justify-content: center; gap: 44px; padding: 16px 32px; }
+  .text-tab { font-size: 16px; }
+
+  .page-content { max-width: 1200px; padding: 24px 32px 0; }
+  .section-banner-stream { font-size: 18px; padding: 12px 20px; }
+
+  .song-list, .albums-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 36px; }
+  .song-card { padding: 10px 0; transition: background .15s; }
+  .song-card:hover { background: rgba(127, 127, 127, .08); }
+  .song-card .song-card-img { width: 120px; height: 108px; }
+  .song-card .song-card-info h3 { font-size: 15px; }
+  .song-card .song-card-info .genre-country { font-size: 10.5px; }
+  .song-card .song-card-info .date { font-size: 11.5px; }
+
+  .latest-search-wrap { max-width: 560px; }
+  .email-signup-box { max-width: 640px; }
+
+  .top-albums-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+  .top-album-card { border-bottom: 0; padding: 0; }
+  .top-album-cover { width: 140px; height: 140px; }
+  .top-album-name { font-size: 17px; }
+
+  .social-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+  .home-videos-grid, .video-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 24px; }
+  .home-videos-sub, .home-videos-outro { max-width: 800px; }
+
+  .hot-artists-section, .dark-tagline, .footer-wrapper { margin-left: 0; margin-right: 0; }
+  .hot-artists-header, .hot-artists-track {
+    padding-left: max(32px, calc((100vw - 1200px) / 2 + 32px));
+    padding-right: max(32px, calc((100vw - 1200px) / 2 + 32px));
+  }
+  .hot-artists-title { font-size: 34px; }
+  .hot-artist { width: 96px; }
+  .hot-artist-avatar { width: 96px; height: 96px; }
+  .hot-artist-name { max-width: 96px; font-size: 13px; }
+
+  .dark-tagline { padding: 70px 32px 60px; }
+  .dark-tagline-inner { max-width: 880px; }
+  .dark-tagline h2 { font-size: 34px; }
+  .dark-tagline h3 { font-size: 19px; }
+  .dark-tagline p { font-size: 16px; }
+
+  .artist-grid { max-width: 1200px; padding: 0 32px 40px; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 28px 16px; }
+}
+
+@media (min-width: 1300px) {
+  .song-list, .albums-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .top-albums-list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .home-videos-grid, .video-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
