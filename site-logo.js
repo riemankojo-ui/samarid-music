@@ -1,34 +1,13 @@
 (function () {
-  var LOGO_KEY = 'ft-logo-ready';
-
-  var style = document.createElement('style');
-  style.textContent = '.logo-text { visibility:hidden; }';
-  document.head.appendChild(style);
-
   function apply() {
     var a = document.querySelector('a.logo');
-    if (a && !a.querySelector('img.site-logo-img')) {
-      var img = new Image();
-      img.src = '/logo-wide.png';
-      img.alt = 'FlexTune';
-      img.className = 'site-logo-img';
-      img.style.cssText = 'height:24px;width:auto;max-width:100%;border-radius:8px;display:block;flex-shrink:0;opacity:0;transition:opacity 0.15s';
-img.onload = function(){ this.style.opacity='1'; };
-      a.style.minWidth = '120px';
-      a.style.minHeight = '24px';
-      a.textContent = '';
-      a.appendChild(img);
-      a.setAttribute('aria-label', 'FlexTune home');
-      a.style.display = 'flex';
-      a.style.justifyContent = 'center';
-      a.style.alignItems = 'center';
-      try { localStorage.setItem(LOGO_KEY, '1'); } catch(e) {}
-    }
+    if (!a) return;
+    a.innerHTML = '<img src="/logo-wide.png" alt="FlexTune" class="site-logo-img" style="height:24px;width:auto;max-width:100%;border-radius:8px;display:block;flex-shrink:0">';
+    a.setAttribute('aria-label', 'FlexTune home');
+    a.style.cssText = 'display:flex;justify-content:center;align-items:center;min-width:120px;min-height:24px';
     if (!document.querySelector('link[rel~="icon"]')) {
       var l = document.createElement('link');
-      l.rel = 'icon';
-      l.type = 'image/png';
-      l.href = '/favicon.png';
+      l.rel = 'icon'; l.type = 'image/png'; l.href = '/favicon.png';
       document.head.appendChild(l);
     }
   }
