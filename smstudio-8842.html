@@ -24,7 +24,7 @@
   .top-bar .avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; color: #fff; overflow: hidden; }
   .top-bar h1 { font-size: 14px; font-weight: 700; flex: 1; }
   .top-bar .brand { color: var(--accent); font-size: 11px; letter-spacing: 1px; font-weight: 700; }
-  .manager-quick-btn { background: linear-gradient(135deg, #ff0033 0%, #ff3366 100%); color: #fff; border: none; padding: 9px 14px; border-radius: 20px; font-size: 12px; font-weight: 900; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+  .manager-quick-btn { background: #f9a8b8; color: #1a1a1a; border: none; padding: 9px 14px; border-radius: 20px; font-size: 12px; font-weight: 900; cursor: pointer; text-decoration: none; display: flex; align-items: center; gap: 6px; }
   .content { padding: 20px; max-width: 700px; margin: 0 auto; }
   .page { display: none; }
   .page.active { display: block; animation: fadeIn 0.3s ease; }
@@ -1925,7 +1925,7 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
       list.innerHTML = '<p class="empty-songs">Loading artists...</p>';
       try {
         const [songsRes, profilesRes] = await Promise.all([
-          fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=artist_name,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=artist_name,verified,cover&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
           fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?select=name,profile_pic,bio,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
         ]);
         const songs = await songsRes.json();
@@ -1937,7 +1937,7 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
           const name = (s.artist_name || 'Samarid').trim();
           const key = name.toLowerCase();
           if (!artistMap[key]) artistMap[key] = { name: name, verified: false, profile_pic: null, bio: null };
-          if (s.verified) artistMap[key].verified = true;
+          if (s.verified) artistMap[key].verified = true; if (s.cover && !artistMap[key].cover_pic) artistMap[key].cover_pic = s.cover;
           const p = profileMap[key];
           if (p) { if (p.verified) artistMap[key].verified = true; if (p.profile_pic) artistMap[key].profile_pic = p.profile_pic; if (p.bio) artistMap[key].bio = p.bio; if (p.name) artistMap[key].name = p.name; }
         });
@@ -1952,7 +1952,7 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
       if (filtered.length === 0) { list.innerHTML = '<p class="empty-songs">' + (query ? 'No matches.' : 'No artists yet.') + '</p>'; return; }
       list.innerHTML = filtered.map(a => {
         const hasBio = a.bio && a.bio.trim();
-        const avatar = a.profile_pic ? '<img src="' + escapeHtml(a.profile_pic) + '">' : '<div style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#ff8800,#cc6600);display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;flex-shrink:0;">' + escapeHtml(a.name.charAt(0).toUpperCase()) + '</div>';
+        const avatar = (a.profile_pic || a.cover_pic) ? '<img src="' + escapeHtml(a.profile_pic || a.cover_pic) + '">' : '<div style="width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#ff8800,#cc6600);display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;flex-shrink:0;">' + escapeHtml(a.name.charAt(0).toUpperCase()) + '</div>';
         return '<div class="seo-list-item" onclick=\'openSeoArtistEditor(' + JSON.stringify(a).replace(/'/g, "&#39;") + ')\'>' + avatar + '<div class="info"><h4>' + escapeHtml(a.name) + '</h4><p>' + (hasBio ? 'Has bio' : 'No bio yet') + '</p></div><span class="status-tag ' + (hasBio ? 'done' : 'missing') + '">' + (hasBio ? 'DONE' : 'MISSING') + '</span></div>';
       }).join('');
     }
