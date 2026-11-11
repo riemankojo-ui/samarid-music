@@ -216,7 +216,7 @@
   details summary::-webkit-details-marker { display: none; }
 </style>
 <link rel="stylesheet" href="/desktop.css">
-</head><body>
+<script>try{if(localStorage.getItem('ft-studio-pw'))document.write('<style id="fastLogin">#loginScreen{display:none!important}</style>');}catch(e){}</script></head><body>
 
   <div id="loginScreen">
     <div class="login-box">
@@ -954,7 +954,7 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
         loadScheduled();
         loadStudioLogo();
       } else {
-        status.innerText = 'Wrong password. Try again.';
+        status.innerText = 'Wrong password. Try again.'; var fl = document.getElementById('fastLogin'); if (fl) fl.remove();
       }
     }
     window.addEventListener('load', function() {

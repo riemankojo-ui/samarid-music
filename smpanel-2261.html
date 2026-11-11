@@ -234,7 +234,7 @@
   .cropper-point { width: 10px; height: 10px; opacity: 1; }
 </style>
 <link rel="stylesheet" href="/desktop.css">
-</head><body>
+<script>try{if(localStorage.getItem('ft-studio-pw'))document.write('<style id="fastLogin">#loginScreen{display:none!important}</style>');}catch(e){}</script></head><body>
 
   <div id="loginScreen">
     <div class="login-box">
@@ -798,7 +798,7 @@
         try { localStorage.setItem('ft-manager-pw', input); } catch(e) {}
         bootApp();
       } else {
-        status.innerText = 'Wrong password.';
+        status.innerText = 'Wrong password.'; var fl = document.getElementById('fastLogin'); if (fl) fl.remove();
         document.getElementById('passwordInput').value = '';
       }
     }
