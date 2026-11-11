@@ -459,8 +459,8 @@ function showInitialState() {
         allSongs.forEach(s => {
           const name = (s.artist_name || 'Samarid').trim();
           const key = name.toLowerCase();
-          if (!artistMap[key]) artistMap[key] = { name: name, profile_pic: null, verified: s.verified };
-          else if (s.verified) artistMap[key].verified = true;
+          if (!artistMap[key]) artistMap[key] = { name: name, profile_pic: null, cover_pic: s.cover || null, verified: s.verified };
+          else { if (s.verified) artistMap[key].verified = true; if (s.cover && !artistMap[key].cover_pic) artistMap[key].cover_pic = s.cover; }
 
           if (s.featuring && s.featuring.trim()) {
             s.featuring.split(',').map(x => x.trim()).filter(x => x).forEach(featName => {
@@ -546,7 +546,7 @@ function showInitialState() {
         html += `<div class="section-title">Artists <span class="count">${artists.length}</span></div><div class="result-list">`;
         html += artists.map(a => `
           <a href="artist-template.html?name=${encodeURIComponent(a.name)}" class="result-card">
-            <div class="result-img artist">${a.profile_pic ? '<img src="' + escapeHtml(a.profile_pic) + '">' : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#ff0033,#b3002d);color:#fff;font-weight:900;font-size:22px;">' + escapeHtml(a.name.charAt(0).toUpperCase()) + '</div>'}</div>
+            <div class="result-img artist">${(a.profile_pic || a.cover_pic) ? '<img src="' + escapeHtml(a.profile_pic || a.cover_pic) + '">' : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#ff0033,#b3002d);color:#fff;font-weight:900;font-size:22px;">' + escapeHtml(a.name.charAt(0).toUpperCase()) + '</div>'}</div>
             <div class="result-info">
               <div class="result-cat">Artist</div>
               <div class="result-name">${escapeHtml(a.name)}${a.verified ? VERIFY_BADGE : ''}</div>

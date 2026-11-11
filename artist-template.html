@@ -736,7 +736,7 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
       const songsVerified = allArtistSongs.some(s => s.verified === true);
       const isVerified = (artistProfile && artistProfile.verified) || songsVerified;
       isVerifiedArtist = isVerified;
-      const profilePic = artistProfile && artistProfile.profile_pic ? artistProfile.profile_pic : null;
+      const profilePic = artistProfile && artistProfile.profile_pic ? artistProfile.profile_pic : (firstSong.cover || null);
       const bio = artistProfile && artistProfile.bio ? artistProfile.bio : null;
       const tiktok = safeUrl((artistProfile && artistProfile.tiktok) || firstSong.tiktok);
       const instagram = safeUrl((artistProfile && artistProfile.instagram) || firstSong.instagram);

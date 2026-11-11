@@ -778,7 +778,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
 
         isFollowingArtist = myFollow;
 
-        const profilePic = artistProfile && artistProfile.profile_pic ? artistProfile.profile_pic : null;
+        const profilePic = artistProfile && artistProfile.profile_pic ? artistProfile.profile_pic : (s.cover || null);
         const avatarHTML = profilePic ? '<img src="' + escapeHtml(profilePic) + '" alt="' + escapeHtml(artist) + '">' : escapeHtml(artist.charAt(0).toUpperCase());
 
         let artistsList = [];
