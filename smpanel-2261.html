@@ -10,7 +10,8 @@
 <style>
   :root { --accent: #ff0033; --bg: #0a0a0a; --card: #141414; --border: #222; --text2: #888; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
-  html, body { overflow-x: hidden; max-width: 100vw; }
+  html { overflow-x: hidden; max-width: 100vw; }
+  body { overflow-x: clip; max-width: 100vw; }
   body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; padding-bottom: 90px; }
   img { max-width: 100%; }
 
@@ -237,21 +238,24 @@
 
   <div id="loginScreen">
     <div class="login-box">
-      <div style="font-size: 40px; margin-bottom: 10px; text-align: center;">🔐</div>
+      <div style="display:flex;justify-content:center;margin-bottom:12px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ff0033" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1.2" fill="#ff0033" stroke="none"/></svg></div>
       <h1 style="font-size: 22px; margin-bottom: 6px; font-weight: 900; text-align: center;">Manager Login</h1>
       <p style="color: #888; font-size: 13px; text-align: center; margin-bottom: 25px;">Enter password to continue</p>
-      <div class="password-wrapper">
-        <input type="password" id="passwordInput" placeholder="Enter Password" onkeypress="if(event.key==='Enter')checkPassword()">
-        <button class="eye-btn" onclick="togglePassword()" id="eyeIcon">👁️</button>
-      </div>
-      <button class="login-btn" onclick="checkPassword()">Unlock</button>
+      <form id="loginForm" onsubmit="event.preventDefault(); checkPassword();" autocomplete="on">
+        <input type="text" name="username" value="manager" autocomplete="username" tabindex="-1" aria-hidden="true" style="position:absolute;opacity:0;height:0;width:0;pointer-events:none;">
+        <div class="password-wrapper">
+          <input type="password" id="passwordInput" name="password" placeholder="Enter Password" autocomplete="current-password">
+          <button type="button" class="eye-btn" onclick="togglePassword()" id="eyeIcon">👁️</button>
+        </div>
+        <button type="submit" class="login-btn">Unlock</button>
+      </form>
       <p id="loginStatus" style="font-size:12px; margin-top:12px; font-weight:bold; text-align:center; color:#ff0033;"></p>
     </div>
   </div>
 
   <div id="dashboard">
     <div class="top-bar">
-      <div class="avatar">F</div>
+      <div class="avatar" id="studioLogo" style="overflow:hidden;">F</div>
       <div class="title-block">
         <h1>FlexTune</h1>
         <div class="brand">MANAGER</div>
@@ -791,15 +795,40 @@
       if (input === SECRET_PASSWORD) {
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
+        try { localStorage.setItem('ft-manager-pw', input); } catch(e) {}
         bootApp();
       } else {
         status.innerText = 'Wrong password.';
         document.getElementById('passwordInput').value = '';
       }
     }
-    window.logout = function() { if (confirm('Log out?')) location.reload(); }
+    window.addEventListener('load', function() {
+      try {
+        var p = localStorage.getItem('ft-manager-pw');
+        if (p) { document.getElementById('passwordInput').value = p; checkPassword(); }
+      } catch(e) {}
+    });
+    window.logout = function() {
+      if (confirm('Log out?')) {
+        try { localStorage.removeItem('ft-manager-pw'); } catch(e) {}
+        location.reload();
+      }
+    }
+
+    async function loadManagerLogo() {
+      const box = document.getElementById('studioLogo');
+      if (!box) return;
+      try {
+        const res = await fetch(SUPABASE_URL + '/rest/v1/images?section=eq.logo&active=eq.true&select=*&order=id.desc&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const logos = await res.json();
+        if (Array.isArray(logos) && logos.length > 0 && logos[0].image_url) {
+          box.innerHTML = '<img src="' + logos[0].image_url + '" alt="FlexTune" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+        }
+      } catch (e) {}
+    }
 
     async function bootApp() {
+      loadManagerLogo();
       loadArtists();
       loadVerifyList();
       loadManualVideos();

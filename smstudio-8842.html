@@ -9,7 +9,8 @@
 <style>
   :root { --accent: #ff8800; --login-red: #ff0033; --bg: #0a0a0a; --card: #141414; --border: #222; --text2: #888; }
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
-  html, body { overflow-x: hidden; max-width: 100vw; }
+  html { overflow-x: hidden; max-width: 100vw; }
+  body { overflow-x: clip; max-width: 100vw; }
   body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; min-height: 100vh; padding-bottom: 80px; }
   img { max-width: 100%; }
   #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
@@ -219,14 +220,17 @@
 
   <div id="loginScreen">
     <div class="login-box">
-      <div style="font-size: 40px; margin-bottom: 10px; text-align: center;">🔐</div>
+      <div style="display:flex;justify-content:center;margin-bottom:12px;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#ff0033" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1.2" fill="#ff0033" stroke="none"/></svg></div>
       <h1 style="font-size: 22px; margin-bottom: 6px; font-weight: 900; text-align: center;">Studio Login</h1>
       <p style="color: #888; font-size: 13px; text-align: center; margin-bottom: 25px;">Enter password to continue</p>
-      <div class="password-wrapper">
-        <input type="password" id="passwordInput" placeholder="Enter Password" onkeypress="if(event.key==='Enter')checkPassword()">
-        <button class="eye-btn" onclick="togglePassword()" id="eyeIcon">👁️</button>
-      </div>
-      <button class="main-btn" onclick="checkPassword()">Unlock</button>
+      <form id="loginForm" onsubmit="event.preventDefault(); checkPassword();" autocomplete="on">
+        <input type="text" name="username" value="studio" autocomplete="username" tabindex="-1" aria-hidden="true" style="position:absolute;opacity:0;height:0;width:0;pointer-events:none;">
+        <div class="password-wrapper">
+          <input type="password" id="passwordInput" name="password" placeholder="Enter Password" autocomplete="current-password">
+          <button type="button" class="eye-btn" onclick="togglePassword()" id="eyeIcon">👁️</button>
+        </div>
+        <button type="submit" class="main-btn">Unlock</button>
+      </form>
       <p id="loginStatus" class="status error"></p>
     </div>
   </div>
@@ -941,6 +945,7 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
       if (input === SECRET_PASSWORD) {
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('dashboard').style.display = 'block';
+        try { localStorage.setItem('ft-studio-pw', input); } catch(e) {}
         initDatePickers();
         loadAdminSongs();
         loadChannelLink();
@@ -952,6 +957,12 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
         status.innerText = 'Wrong password. Try again.';
       }
     }
+    window.addEventListener('load', function() {
+      try {
+        var p = localStorage.getItem('ft-studio-pw');
+        if (p) { document.getElementById('passwordInput').value = p; checkPassword(); }
+      } catch(e) {}
+    });
     window.goToPage = function(page) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
