@@ -1,4 +1,9 @@
 (function () {
+  // Hide text logo immediately to prevent flash
+  var style = document.createElement('style');
+  style.textContent = '.logo-text { visibility: hidden; }';
+  document.head.appendChild(style);
+
   function apply() {
     var a = document.querySelector('a.logo');
     if (a && !a.querySelector('img.site-logo-img')) {
