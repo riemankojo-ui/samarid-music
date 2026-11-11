@@ -12,7 +12,10 @@
       img.src = '/logo-wide.png';
       img.alt = 'FlexTune';
       img.className = 'site-logo-img';
-      img.style.cssText = 'height:24px;width:auto;max-width:100%;border-radius:8px;display:block;flex-shrink:0';
+      img.style.cssText = 'height:24px;width:auto;max-width:100%;border-radius:8px;display:block;flex-shrink:0;opacity:0;transition:opacity 0.15s';
+img.onload = function(){ this.style.opacity='1'; };
+      a.style.minWidth = '120px';
+      a.style.minHeight = '24px';
       a.textContent = '';
       a.appendChild(img);
       a.setAttribute('aria-label', 'FlexTune home');
