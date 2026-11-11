@@ -1,8 +1,15 @@
 (function () {
-  // Hide text logo immediately to prevent flash
-  var style = document.createElement('style');
-  style.textContent = '.logo-text { visibility: hidden; }';
-  document.head.appendChild(style);
+  var LOGO_KEY = 'ft-logo-ready';
+
+  if (localStorage.getItem(LOGO_KEY)) {
+    var style = document.createElement('style');
+    style.textContent = 'a.logo { display:flex!important; justify-content:center; align-items:center; } .logo-text { display:none!important; } a.logo::before { content:""; display:block; height:24px; width:120px; background:url(/logo-wide.png) no-repeat center/contain; }';
+    document.head.appendChild(style);
+  } else {
+    var style = document.createElement('style');
+    style.textContent = '.logo-text { visibility:hidden; }';
+    document.head.appendChild(style);
+  }
 
   function apply() {
     var a = document.querySelector('a.logo');
@@ -18,6 +25,7 @@
       a.style.display = 'flex';
       a.style.justifyContent = 'center';
       a.style.alignItems = 'center';
+      try { localStorage.setItem(LOGO_KEY, '1'); } catch(e) {}
     }
     if (!document.querySelector('link[rel~="icon"]')) {
       var l = document.createElement('link');
