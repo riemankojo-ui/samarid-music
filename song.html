@@ -187,9 +187,10 @@ body .email-compact-box { padding: 10px 0 0; margin-bottom: 16px; }
   .detail-section h4 { font-size: 11px; color: var(--text2); letter-spacing: 2px; text-transform: uppercase; font-weight: 800; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
   .detail-section h4 i { color: var(--accent); font-size: 11px; }
   .audio-player-box { background: transparent; border: none; border-radius: 0; padding: 4px 0; margin-bottom: 16px; }
-  .play-pause-btn { width: 34px; height: 28px; border-radius: 4px; background: var(--accent); color: #fff; border: none; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 6px rgba(255, 0, 51, 0.25); transition: transform 0.15s; }
+  .play-pause-btn { width: 26px; height: 22px; border-radius: 3px; background: var(--accent); color: #fff; border: none; font-size: 9px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 2px 5px rgba(255, 0, 51, 0.2); transition: transform 0.15s; }
   .play-pause-btn:active { transform: scale(0.9); }
-  .player-row { display: flex; align-items: center; gap: 10px; max-width: 280px; margin: 0 0 0 80px; }
+  .player-row { display: flex; align-items: center; gap: 8px; max-width: 270px; margin: 0 auto; padding: 8px 12px; background: var(--card); border: 1px solid var(--border); border-radius: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+  #seekSlider { flex: 1; min-width: 0; }
   .player-time { font-size: 11px; color: var(--text2); font-weight: 600; flex-shrink: 0; min-width: 32px; text-align: center; }
 
   /* ===== LYRICS SECTION — FIXED ===== */
@@ -869,7 +870,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
             </div>
           </div>
 
-          ${(function(){ var m = (s.youtube || '').match(new RegExp('(?:youtu[.]be/|v=|embed/|shorts/)([A-Za-z0-9_-]{11})')); if (!m) return '<div id="autoVideoBox"></div>'; return '<div style="margin:0 0 20px;"><p style="font-size:12px;color:#888;text-align:center;margin:0 0 8px;">Watch the official video</p><div style="background:#fff;border:1px solid #ddd;padding:8px;border-radius:0;"><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000;"><iframe src="https://www.youtube-nocookie.com/embed/' + m[1] + '" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" loading="lazy" allowfullscreen></iframe></div></div></div>'; })()}
+          ${(function(){ var m = (s.youtube || '').match(new RegExp('(?:youtu[.]be/|v=|embed/|shorts/)([A-Za-z0-9_-]{11})')); if (!m) return '<div id="autoVideoBox"></div>'; return '<div style="margin:0 0 20px;"><p style="font-size:12px;color:#888;text-align:center;margin:0 0 8px;">Watch the official video</p><div style="background:#fff;border:1px solid #ddd;padding:8px;border-radius:0;">' + ytFacade(m[1]) + '</div></div>'; })()}
           <div class="more-from-section" id="moreFromSection" style="display:none;">
             <p class="mf-intro">Loved this one? Keep the vibe going with more music from this artist.</p>
             <h4 id="moreFromTitle"><i class="fas fa-music"></i> More From</h4>
@@ -1044,6 +1045,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
     document.addEventListener('input', function(e) {
       if (e.target.id === 'seekSlider') {
         const audio = document.getElementById('audioPlayer');
+        if (!audio || !isFinite(audio.duration) || audio.duration <= 0) { e.target.value = 0; return; }
         audio.currentTime = (e.target.value / 100) * audio.duration;
       }
     });
@@ -1105,6 +1107,17 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
       } catch (e) {}
     }
 
+    function ytFacade(id) {
+      return '<div onclick="playYt(this,\'' + id + '\')" style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#111 url(https://i.ytimg.com/vi/' + id + '/hqdefault.jpg) center/cover no-repeat;cursor:pointer;"><div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;background:rgba(0,0,0,0.55);border:2px solid #fff;display:flex;align-items:center;justify-content:center;"><i class="fas fa-play" style="color:#fff;font-size:18px;margin-left:3px;"></i></div></div>';
+    }
+
+    function playYt(el, id) {
+      el.onclick = null;
+      el.style.cursor = 'default';
+      el.style.background = '#000';
+      el.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+    }
+
     async function loadAutoVideo(songId) {
       const box = document.getElementById('autoVideoBox');
       if (!box) return;
@@ -1115,7 +1128,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
         const m = String(d.url).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([A-Za-z0-9_-]{11})/);
         if (!m) return;
         const label = d.type === 'video' ? 'Watch the official video' : 'Listen on YouTube';
-        box.innerHTML = '<div style="margin:0 0 20px;"><p style="font-size:12px;color:#888;text-align:center;margin:0 0 8px;">' + label + '</p><div style="background:#fff;border:1px solid #ddd;padding:8px;border-radius:0;"><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000;"><iframe src="https://www.youtube-nocookie.com/embed/' + m[1] + '" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" loading="lazy" allowfullscreen></iframe></div></div></div>';
+        box.innerHTML = '<div style="margin:0 0 20px;"><p style="font-size:12px;color:#888;text-align:center;margin:0 0 8px;">' + label + '</p><div style="background:#fff;border:1px solid #ddd;padding:8px;border-radius:0;">' + ytFacade(m[1]) + '</div></div>';
       } catch (e) {}
     }
 
