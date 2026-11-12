@@ -196,6 +196,7 @@ body .email-compact-box { padding: 10px 0 0; margin-bottom: 16px; }
  .lyrics-section { margin: 24px auto 40px; padding: 22px 16px 16px; position: relative; overflow: hidden; width: 100%; max-width: 320px; background: #fffaf8; border: 1px solid #f0d9d9; border-radius: 6px; box-shadow: 0 10px 30px rgba(139,0,0,0.10); }
   .lyrics-section h4 { font-size: 11px; color: #8b0000; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 900; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid #f0d9d9; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .lyrics-section h4 i { color: #8b0000; font-size: 11px; }
+  .lyrics-section { display: none !important; }
   .lyrics-scroll { background: transparent; border: none; border-radius: 0; padding: 0 8px 6px 0; max-height: 300px; overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
   .lyrics-scroll::-webkit-scrollbar { width: 4px; }
   
@@ -868,7 +869,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
             </div>
           </div>
 
-          ${(function(){ var m = (s.youtube || '').match(new RegExp('(?:youtu[.]be/|v=|embed/|shorts/)([A-Za-z0-9_-]{11})')); if (!m) return ''; return '<div style="margin:0 0 20px;"><p style="font-size:12px;color:#888;text-align:center;margin:0 0 8px;">Watch the official video</p><div style="background:#fff;border:1px solid #ddd;padding:8px;border-radius:0;"><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000;"><iframe src="https://www.youtube-nocookie.com/embed/' + m[1] + '" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" loading="lazy" allowfullscreen></iframe></div></div></div>'; })()}
+          ${(function(){ var m = (s.youtube || '').match(new RegExp('(?:youtu[.]be/|v=|embed/|shorts/)([A-Za-z0-9_-]{11})')); if (!m) return '<div id="autoVideoBox"></div>'; return '<div style="margin:0 0 20px;"><p style="font-size:12px;color:#888;text-align:center;margin:0 0 8px;">Watch the official video</p><div style="background:#fff;border:1px solid #ddd;padding:8px;border-radius:0;"><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000;"><iframe src="https://www.youtube-nocookie.com/embed/' + m[1] + '" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" loading="lazy" allowfullscreen></iframe></div></div></div>'; })()}
           <div class="more-from-section" id="moreFromSection" style="display:none;">
             <p class="mf-intro">Loved this one? Keep the vibe going with more music from this artist.</p>
             <h4 id="moreFromTitle"><i class="fas fa-music"></i> More From</h4>
@@ -1104,7 +1105,22 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
       } catch (e) {}
     }
 
+    async function loadAutoVideo(songId) {
+      const box = document.getElementById('autoVideoBox');
+      if (!box) return;
+      try {
+        const r = await fetch('/api/find-video?id=' + encodeURIComponent(songId));
+        const d = await r.json();
+        if (!d || !d.url) return;
+        const m = String(d.url).match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([A-Za-z0-9_-]{11})/);
+        if (!m) return;
+        const label = d.type === 'video' ? 'Watch the official video' : 'Listen on YouTube';
+        box.innerHTML = '<div style="margin:0 0 20px;"><p style="font-size:12px;color:#888;text-align:center;margin:0 0 8px;">' + label + '</p><div style="background:#fff;border:1px solid #ddd;padding:8px;border-radius:0;"><div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;background:#000;"><iframe src="https://www.youtube-nocookie.com/embed/' + m[1] + '" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" loading="lazy" allowfullscreen></iframe></div></div></div>';
+      } catch (e) {}
+    }
+
     async function loadMoreFromArtist(artistName, currentSongId) {
+      loadAutoVideo(currentSongId);
       const section = document.getElementById('moreFromSection');
       const list = document.getElementById('moreFromList');
       const titleEl = document.getElementById('moreFromTitle');

@@ -192,6 +192,9 @@
   .skeleton-video-meta { width: 40%; height: 12px; background: var(--border); border-radius: 4px; animation: skeleton-pulse 1.4s ease-in-out infinite; }
   @keyframes skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
 
+  .welcome-section { background: transparent !important; border: none !important; border-radius: 0 !important; padding: 8px 4px !important; text-align: left !important; }
+  .welcome-section::before { display: none !important; }
+  .welcome-section h2 { color: #1f1f1f !important; } .welcome-section p { color: #2b2b2b !important; max-width: none !important; margin: 0 0 16px !important; }
   .welcome-section {
     margin-top: 28px;
     padding: 32px 22px;
@@ -292,8 +295,10 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
 
     <div id="videosAdTopContainer"></div>
 
-    <h1 class="page-title">Videos</h1>
-    <p class="page-subtitle">Latest music videos, visualizers and behind-the-scenes from FlexTune.</p>
+    <div style="border: 1px solid var(--border); padding: 12px 16px; margin: 10px 0 22px; text-align: center;">
+    <h1 class="page-title" style="font-size: 18px; letter-spacing: -0.2px; margin-bottom: 4px;">Videos</h1>
+    <p class="page-subtitle" style="margin-bottom: 0;">Latest music videos, visualizers and behind-the-scenes from FlexTune.</p>
+    </div>
 
     <div class="video-grid" id="videoGrid">
       <div class="skeleton-video"><div class="skeleton-video-thumb"></div><div class="skeleton-video-title"></div><div class="skeleton-video-meta"></div></div>
@@ -305,7 +310,11 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
 
     <div class="welcome-section">
       <h2>Welcome to <span>FlexTune</span></h2>
-      <p>Africa's Music Hub. Discover fresh sounds, support underground artists, and stream exclusive releases. Follow us for weekly drops.</p>
+      <p>Africa's Music Hub. Discover fresh sounds, support underground artists, and stream exclusive releases. Follow us for weekly drops. FlexTune was built for people who love African music and want one simple place to find it, play it, and share it, without noise and without confusion.</p>
+      <p>On this page you will find official music videos, visualizers, lyric videos, and behind-the-scenes clips from artists across Ghana, Nigeria, and the rest of West Africa. A visualizer gives a song a face and a feeling, with moving art, bold colors, and carefully chosen scenes that match the beat. A music video goes even further and tells a full story, so every time you press play you see a new side of the artist and the culture behind the sound.</p>
+      <p>Many of the artists on FlexTune are independent. They write, record, and film with limited budgets, often in their hometowns, using phones, borrowed cameras, and big creativity. That is the reason these videos feel so real. When you watch, like, and share a video, you are directly helping an artist reach more people and take the next step in their journey.</p>
+      <p>Each video has its own page with the title, the release date, and a smooth player that works well on your phone. You can watch the latest release first, then scroll down to explore older videos you may have missed. New videos are added regularly, so come back often, follow us for weekly drops, and tell your friends about the music you discover here.</p>
+      <p>Thank you for being part of the FlexTune family. Every view, every share, and every kind word keeps African music growing, loud and proud, for everyone to enjoy.</p>
     </div>
   </div>
 
