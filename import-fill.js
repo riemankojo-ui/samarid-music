@@ -208,9 +208,9 @@ function run(text, force) {
   }
   if (p.isAlbum && force) { while (p.tracks.length < (force.count || 1)) p.tracks.push({}); }
   
-  // If it's a single song and not forced by the "Import" button popup, show the choice card
-  if (!p.isAlbum && !force) {
-    showPublishChoice(function(isScheduled) {
+  // Show the choice card for both singles and albums
+  if (!force) {
+    showPublishChoice(p.isAlbum, function(isScheduled) {
       p.isScheduled = isScheduled;
       processParsedData(p);
     });
@@ -232,7 +232,7 @@ function processParsedData(p) {
   if (hasContent) setTimeout(function () { autoTestVideos(p); }, 400);
 }
 
-function showPublishChoice(callback) {
+function showPublishChoice(isAlbum, callback) {
   var old = document.getElementById('importChoiceModal'); if (old) old.remove();
   var o = document.createElement('div'); o.id = 'importChoiceModal';
   o.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);';
@@ -242,8 +242,8 @@ function showPublishChoice(callback) {
   
   o.innerHTML =
     '<div style="' + cardStyle + '">' +
-      '<div style="font-size:40px;margin-bottom:10px;">🎵</div>' +
-      '<h3 style="color:#fff;font-size:20px;margin-bottom:6px;font-weight:900;">Single Song Detected</h3>' +
+      '<div style="font-size:40px;margin-bottom:10px;">' + (isAlbum ? '💿' : '🎵') + '</div>' +
+      '<h3 style="color:#fff;font-size:20px;margin-bottom:6px;font-weight:900;">' + (isAlbum ? 'Album Detected' : 'Single Song Detected') + '</h3>' +
       '<p style="color:#888;font-size:13px;margin-bottom:20px;">Choose how to publish this release</p>' +
       
       '<div id="optAdd" style="' + optBase + '">' +
