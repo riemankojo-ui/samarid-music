@@ -60,6 +60,7 @@ function rate(item, title, artist, featuring) {
 export default async function handler(req) {
   const url = new URL(req.url);
   const id = (url.searchParams.get('id') || '').trim();
+  const force = url.searchParams.get('force') === '1';
   if (!/^[0-9a-zA-Z-]+$/.test(id)) return json({ error: 'bad id' }, 400);
 
   const ytKey = (process.env.YOUTUBE_API_KEY || '').trim();
@@ -79,9 +80,11 @@ export default async function handler(req) {
   // 2) cache: official video re-checked every 7 days, audio/topic every 30min, nothing found every 15min
   const have = song.auto_youtube ? { url: song.auto_youtube, type: song.auto_youtube_type } : null;
   const age = song.auto_youtube_checked ? Date.now() - new Date(song.auto_youtube_checked).getTime() : Infinity;
-  if (have && have.type === 'video' && age < 7 * 24 * HOUR) return json(have);
-  if (have && have.type !== 'video' && age < 30 * 60 * 1000) return json(have);
-  if (!have && age < 15 * 60 * 1000) return json({ url: null });
+  if (!force) {
+    if (have && have.type === 'video' && age < 7 * 24 * HOUR) return json(have);
+    if (have && have.type !== 'video' && age < 30 * 60 * 1000) return json(have);
+    if (!have && age < 15 * 60 * 1000) return json({ url: null });
+  }
 
   if (!ytKey) return json(have || { url: null, error: 'YOUTUBE_API_KEY is not set' });
 

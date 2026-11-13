@@ -1188,8 +1188,7 @@ window.saveEditModal = async function() {
 
     await ensureAllArtistsExist(artist, featuring);
 
-    // clear auto_youtube_checked so find-video does a fresh search
-    fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + id, { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ auto_youtube_checked: null }) });
+    // force=1 bypasses cache in find-video directly — no extra PATCH needed
 
     // Success — finish the progress bar
     clearInterval(timer);
@@ -1207,7 +1206,7 @@ window.saveEditModal = async function() {
       relPop.open('Release status', title + ' - ' + artist);
       relPop.row('song', 'Song', 'ok', 'Updated on FlexTune');
       relPop.row('youtube', 'YouTube', 'wait', 'Searching for video...');
-      fetch('/api/find-video?id=' + id).then(r => r.json()).then(d => {
+      fetch('/api/find-video?id=' + id + '&force=1').then(r => r.json()).then(d => {
         if (!d) return;
         if (d.url) {
           const type = d.type === 'video' ? '🎬 Official video found' : '🎵 Audio found';
@@ -1265,16 +1264,12 @@ try {
         relPop.row('song', 'Song', 'ok', editingId ? 'Updated on FlexTune' : 'Published on FlexTune');
         relPop.row('youtube', 'YouTube', 'wait', 'Searching for video...');
         if (!editingId) relPop.row('email', 'Email', 'wait', 'Notifying subscribers...');
-        // clear auto_youtube_checked so find-video does a fresh search
-        if (editingId) {
-          fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + editingId, { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ auto_youtube_checked: null }) });
-        }
         const songIdForYt = editingId
           ? Promise.resolve(editingId)
           : fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?title=eq.' + encodeURIComponent(title) + '&artist_name=eq.' + encodeURIComponent(artist) + '&select=id&order=id.desc&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }).then(r => r.json()).then(rows => rows && rows[0] && rows[0].id);
         songIdForYt.then(songId => {
           if (!songId) { relPop.row('youtube', 'YouTube', 'err', 'Could not get song ID'); return; }
-          return fetch('/api/find-video?id=' + songId);
+          return fetch('/api/find-video?id=' + songId + (editingId ? '&force=1' : ''));
         }).then(r => r && r.json()).then(d => {
           if (!d) return;
           if (d.url) {
