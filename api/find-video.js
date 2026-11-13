@@ -47,7 +47,7 @@ function rate(item, title, artist, featuring) {
   // artist match: check title, channel, and featuring
   const artistInTitle = aWords.length ? aWords.filter(w => tWords.includes(w)).length / aWords.length : 0;
   const featInTitle = fWords.length ? fWords.filter(w => tWords.includes(w)).length / fWords.length : 0;
-  const artistMatch = artistInTitle > 0.4 || artistInCh > 0.4 || featInTitle > 0.4;
+  const artistMatch = artistInTitle > 0.5 || artistInCh > 0.5 || featInTitle > 0.5;
 
   // artist match is ALWAYS required — never accept a video from a different artist
   if (!artistMatch) return null;
@@ -90,10 +90,10 @@ export default async function handler(req) {
   if (!ytKey) return json(have || { url: null, error: 'YOUTUBE_API_KEY is not set' });
 
   // 4) search YouTube — try up to 2 queries for best coverage
-  const queries = [
-    (song.artist_name || '') + ' ' + (song.title || ''),
-    (song.title || '') + (song.featuring ? ' ft ' + song.featuring : '')
-  ].filter(Boolean);
+    const queries = [
+    (song.artist_name || '') + ' ' + (song.title || '') + ' official',
+    (song.artist_name || '') + ' ' + (song.title || '')
+  ].filter(q => q.trim());
 
   let best = null, bestScore = 0, yd = null;
 
