@@ -544,9 +544,10 @@
   </div>
   <input type="file" id="importFolderInput" webkitdirectory directory multiple style="display: none;" onchange="handleFolderImport(event)">
   <div id="folderScanResults" style="display:none; margin-top:20px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px;">
-    <h4 style="color:var(--accent); margin-bottom:10px; font-size:14px;"><i class="fas fa-magic"></i> Folder Scanned</h4>
-    <p id="folderScanSummary" style="font-size:12px; color:#ccc; margin-bottom:12px;"></p>
-    <textarea id="folderTxtOutput" class="import-textarea" readonly style="height:150px; font-size:11px; margin-bottom:12px;"></textarea>
+  <h4 style="color:var(--accent); margin-bottom:10px; font-size:14px;"><i class="fas fa-magic"></i> Folder Scanned</h4>
+  <p id="folderScanSummary" style="font-size:12px; color:#ccc; margin-bottom:12px;"></p>
+  <div id="folderUploadLog" style="display:none; background:#050505; border:1px solid #222; border-radius:8px; padding:12px; height:150px; overflow-y:auto; font-family:monospace; font-size:11px; line-height:1.6; margin-bottom:12px; box-shadow:inset 0 0 10px rgba(0,0,0,0.8);"></div>
+  <textarea id="folderTxtOutput" class="import-textarea" readonly style="height:150px; font-size:11px; margin-bottom:12px; display:none;"></textarea>
     <button class="main-btn" onclick="applyFolderTxt()"><i class="fas fa-check"></i> Use This Data</button>
     <button class="main-btn" onclick="downloadFolderTxt()" style="margin-top:10px; background:#222; box-shadow:none;"><i class="fas fa-download"></i> Download .txt</button>
   </div>
@@ -562,9 +563,10 @@
   <input type="file" id="importSinglesInput" accept="audio/*, image/*" multiple style="display: none;" onchange="handleSinglesImport(event)">
   
   <div id="singlesScanResults" style="display:none; margin-top:20px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px;">
-    <h4 style="color:var(--accent); margin-bottom:10px; font-size:14px;"><i class="fas fa-magic"></i> Songs Ready</h4>
-    <p id="singlesScanSummary" style="font-size:12px; color:#ccc; margin-bottom:12px;"></p>
-    <textarea id="singlesTxtOutput" class="import-textarea" readonly style="height:150px; font-size:11px; margin-bottom:12px;"></textarea>
+  <h4 style="color:var(--accent); margin-bottom:10px; font-size:14px;"><i class="fas fa-magic"></i> Songs Ready</h4>
+  <p id="singlesScanSummary" style="font-size:12px; color:#ccc; margin-bottom:12px;"></p>
+  <div id="singlesUploadLog" style="display:none; background:#050505; border:1px solid #222; border-radius:8px; padding:12px; height:150px; overflow-y:auto; font-family:monospace; font-size:11px; line-height:1.6; margin-bottom:12px; box-shadow:inset 0 0 10px rgba(0,0,0,0.8);"></div>
+  <textarea id="singlesTxtOutput" class="import-textarea" readonly style="height:150px; font-size:11px; margin-bottom:12px; display:none;"></textarea>
     <button class="main-btn" onclick="applySinglesTxt()"><i class="fas fa-check"></i> Use This Data</button>
     <button class="main-btn" onclick="downloadSinglesTxt()" style="margin-top:10px; background:#222; box-shadow:none;"><i class="fas fa-download"></i> Download .txt</button>
   </div>
@@ -1910,6 +1912,17 @@ status.className = 'status success';
   reader.readAsText(file);
 }
 
+function addLog(logId, text, color) {
+  const box = document.getElementById(logId);
+  if (!box) return;
+  box.style.display = 'block';
+  const line = document.createElement('div');
+  line.style.color = color || '#ccc';
+  line.innerText = text;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight; // Auto-scroll to bottom
+}
+
 async function uploadToCloudinary(file, isAudio) {
   const fd = new FormData();
   fd.append('file', file);
@@ -2012,28 +2025,52 @@ for (let k in possibleArtists) {
 }
 
 const scanSummary = document.getElementById('folderScanSummary');
-  document.getElementById('folderScanResults').style.display = 'block';
-  
-  scanSummary.innerHTML = 'Uploading cover... <i class="fas fa-spinner fa-spin"></i>';
-  let coverUrl = '';
-  if (coverFile) {
-    try { coverUrl = await uploadToCloudinary(coverFile, false); } catch (e) { console.error(e); }
+const logId = 'folderUploadLog';
+const txtOutput = document.getElementById('folderTxtOutput');
+
+document.getElementById('folderScanResults').style.display = 'block';
+document.getElementById(logId).innerHTML = ''; // Clear old logs
+txtOutput.style.display = 'none'; // Hide the giant textarea while working
+
+scanSummary.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing files...';
+
+addLog(logId, '> Initializing folder scan...', '#00cc44');
+
+let coverUrl = '';
+if (coverFile) {
+  addLog(logId, '> Uploading Cover: ' + coverFile.name, '#ffcc00');
+  try { 
+    coverUrl = await uploadToCloudinary(coverFile, false); 
+    addLog(logId, '✅ Cover uploaded successfully.', '#00cc44');
+  } catch (e) { 
+    addLog(logId, '❌ Cover upload failed.', '#ff0033');
   }
+} else {
+  addLog(logId, '⚠️ No cover image found.', '#ff8800');
+}
 
-  let parsedTracks = [];
-  let defaultArtist = '';
-  audioFiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+let parsedTracks = [];
+let defaultArtist = '';
+audioFiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
 
-  for (let i = 0; i < audioFiles.length; i++) {
-  scanSummary.innerHTML = 'Uploading song ' + (i + 1) + ' of ' + audioFiles.length + '... <i class="fas fa-spinner fa-spin"></i>';
+addLog(logId, '> Starting audio uploads (' + audioFiles.length + ' files)...', '#1d9bf0');
+
+for (let i = 0; i < audioFiles.length; i++) {
   const file = audioFiles[i];
   const meta = parseFileName(file.name, detectedArtist);
   if (meta.artist && !defaultArtist) defaultArtist = meta.artist;
-    
-    let mp3Url = '#';
-    try { mp3Url = await uploadToCloudinary(file, true); } catch (e) { console.error('Audio upload failed:', file.name, e); }
+  
+  addLog(logId, '[' + (i + 1) + '/' + audioFiles.length + '] 🎵 ' + meta.title + ' - ' + meta.artist, '#fff');
+  
+  let mp3Url = '#';
+  try { 
+    mp3Url = await uploadToCloudinary(file, true); 
+    addLog(logId, '    ✅ Uploaded successfully.', '#00cc44');
+  } catch (e) { 
+    addLog(logId, '    ❌ Upload failed.', '#ff0033');
+  }
 
-      parsedTracks.push({ index: i + 1, title: meta.title, artist: meta.artist || 'Unknown Artist', feat: meta.feat, url: mp3Url, originalName: file.name });
+  parsedTracks.push({ index: i + 1, title: meta.title, artist: meta.artist || 'Unknown Artist', feat: meta.feat, url: mp3Url, originalName: file.name });
 }
 
 if (!defaultArtist) defaultArtist = 'Unknown Artist';
@@ -2054,8 +2091,10 @@ let txt = 'Type: Album\n';
   txt += '# Source File: ' + t.originalName + '\n\n';
 });
 
-document.getElementById('folderTxtOutput').value = txt;
-  scanSummary.innerHTML = 'Found and uploaded <strong>' + audioFiles.length + ' songs</strong> and ' + (coverFile ? '1 cover' : 'no cover') + '.<br>Review the generated TXT below and click "Use This Data".';
+  txtOutput.value = txt;
+  txtOutput.style.display = 'block';
+  addLog(logId, '> All done! TXT generated below.', '#00cc44');
+  scanSummary.innerHTML = '<span style="color:#00cc44; font-weight:bold;">✅ Success!</span> Found ' + audioFiles.length + ' songs. Review the generated TXT below.';
 };
 
 window.handleSinglesImport = async function(event) {
@@ -2103,28 +2142,52 @@ for (let k in possibleArtists) {
 }
 
 const scanSummary = document.getElementById('singlesScanSummary');
-  document.getElementById('singlesScanResults').style.display = 'block';
-  
-  scanSummary.innerHTML = 'Uploading cover... <i class="fas fa-spinner fa-spin"></i>';
-  let coverUrl = '';
-  if (coverFile) {
-    try { coverUrl = await uploadToCloudinary(coverFile, false); } catch (e) { console.error(e); }
+const logId = 'singlesUploadLog';
+const txtOutput = document.getElementById('singlesTxtOutput');
+
+document.getElementById('singlesScanResults').style.display = 'block';
+document.getElementById(logId).innerHTML = ''; 
+txtOutput.style.display = 'none';
+
+scanSummary.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing files...';
+
+addLog(logId, '> Initializing singles scan...', '#00cc44');
+
+let coverUrl = '';
+if (coverFile) {
+  addLog(logId, '> Uploading Cover: ' + coverFile.name, '#ffcc00');
+  try { 
+    coverUrl = await uploadToCloudinary(coverFile, false); 
+    addLog(logId, '✅ Cover uploaded successfully.', '#00cc44');
+  } catch (e) { 
+    addLog(logId, '❌ Cover upload failed.', '#ff0033');
   }
+} else {
+  addLog(logId, '⚠️ No cover image found.', '#ff8800');
+}
 
-  let parsedTracks = [];
-  let defaultArtist = '';
-  audioFiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+let parsedTracks = [];
+let defaultArtist = '';
+audioFiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
 
-  for (let i = 0; i < audioFiles.length; i++) {
-  scanSummary.innerHTML = 'Uploading song ' + (i + 1) + ' of ' + audioFiles.length + '... <i class="fas fa-spinner fa-spin"></i>';
+addLog(logId, '> Starting audio uploads (' + audioFiles.length + ' files)...', '#1d9bf0');
+
+for (let i = 0; i < audioFiles.length; i++) {
   const file = audioFiles[i];
   const meta = parseFileName(file.name, detectedArtist);
   if (meta.artist && !defaultArtist) defaultArtist = meta.artist;
-    
-    let mp3Url = '#';
-    try { mp3Url = await uploadToCloudinary(file, true); } catch (e) { console.error('Audio upload failed:', file.name, e); }
+  
+  addLog(logId, '[' + (i + 1) + '/' + audioFiles.length + '] 🎵 ' + meta.title + ' - ' + meta.artist, '#fff');
+  
+  let mp3Url = '#';
+  try { 
+    mp3Url = await uploadToCloudinary(file, true); 
+    addLog(logId, '    ✅ Uploaded successfully.', '#00cc44');
+  } catch (e) { 
+    addLog(logId, '    ❌ Upload failed.', '#ff0033');
+  }
 
-      parsedTracks.push({ index: i + 1, title: meta.title, artist: meta.artist || 'Unknown Artist', feat: meta.feat, url: mp3Url, originalName: file.name });
+  parsedTracks.push({ index: i + 1, title: meta.title, artist: meta.artist || 'Unknown Artist', feat: meta.feat, url: mp3Url, originalName: file.name });
 }
 
 if (!defaultArtist) defaultArtist = 'Unknown Artist';
@@ -2160,8 +2223,10 @@ let txt = '';
   });
 }
 
-  document.getElementById('singlesTxtOutput').value = txt;
-  scanSummary.innerHTML = 'Found and uploaded <strong>' + audioFiles.length + ' songs</strong> and ' + (coverFile ? '1 cover' : 'no cover') + '.<br>Review the generated TXT below and click "Use This Data".';
+  txtOutput.value = txt;
+  txtOutput.style.display = 'block';
+  addLog(logId, '> All done! TXT generated below.', '#00cc44');
+  scanSummary.innerHTML = '<span style="color:#00cc44; font-weight:bold;">✅ Success!</span> Found ' + audioFiles.length + ' songs. Review the generated TXT below.';
 };
 
 window.applySinglesTxt = function() {
