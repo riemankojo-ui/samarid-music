@@ -11,7 +11,7 @@ export default async function handler(req) {
   let body;
   try { body = await req.json(); } catch (e) { return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: { 'Content-Type': 'application/json' } }); }
 
-  const { public_id } = body;
+  const { public_id, resource_type } = body;
   if (!public_id) return new Response(JSON.stringify({ error: 'public_id required' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
 
   const timestamp = Math.floor(Date.now() / 1000);
@@ -28,7 +28,9 @@ export default async function handler(req) {
   form.append('api_key', API_KEY);
   form.append('signature', signature);
 
-  const res = await fetch('https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/image/destroy', { method: 'POST', body: form });
+  // Use 'video/destroy' for MP3s, 'image/destroy' for covers
+  const endpoint = resource_type === 'video' ? 'video/destroy' : 'image/destroy';
+  const res = await fetch('https://api.cloudinary.com/v1_1/' + CLOUD_NAME + '/' + endpoint, { method: 'POST', body: form });
   const data = await res.json();
   return new Response(JSON.stringify(data), { status: res.ok ? 200 : 500, headers: { 'Content-Type': 'application/json' } });
 }
