@@ -48,6 +48,9 @@ function rate(item, title, artist, featuring) {
   const featInTitle = fWords.length ? fWords.filter(w => tWords.includes(w)).length / fWords.length : 0;
   const artistMatch = artistInTitle > 0.4 || artistInCh > 0.4 || featInTitle > 0.4;
 
+  // if song title is only 1 word, artist match is REQUIRED to avoid picking wrong artist's song
+  if (sw.length <= 1 && !artistMatch) return null;
+
   if (!isAudioWord && isOfficialVideo) return artistMatch ? 5 : 3;
   if (isTopic) return artistMatch ? 4 : 2;
   if (artistMatch) return 2;

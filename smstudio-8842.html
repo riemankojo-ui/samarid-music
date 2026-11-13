@@ -1424,7 +1424,7 @@ try {
         ic.className = 'rp-ic rp-' + state;
         ic.textContent = state === 'ok' ? '✓' : (state === 'err' ? '✕' : '');
         r.querySelector('b').textContent = label;
-        r.querySelector('.rp-tx').textContent = text || '';
+        r.querySelector('.rp-tx').innerHTML = text || '';
       }
       function close() { var o = document.getElementById('relPop'); if (o) o.remove(); }
       return { open: open, row: row, close: close };
