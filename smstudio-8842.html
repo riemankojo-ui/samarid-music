@@ -1906,21 +1906,47 @@ async function uploadToCloudinary(file, isAudio) {
   throw new Error(data.error ? data.error.message : 'Upload failed');
 }
 
-function parseFileName(fileName) {
-  let name = fileName.replace(/\.[^/.]+$/, "");
-  let artist = '';
-  let title = name;
+function parseFileName(fileName, detectedArtist = '') {
+  let name = fileName.replace(/\.[^/.]+$/, ""); 
+  // Decode URL-encoded characters (like %20, %25E2 etc.)
+  try { name = decodeURIComponent(name); } catch(e) {}
+  try { name = decodeURIComponent(name); } catch(e) {}
+  
+  // Normalize dashes and underscores
+  name = name.replace(/_/g, ' ').replace(/[–—]/g, '-').replace(/-{2,}/g, '-');
+  
   let feat = '';
-  const featMatch = name.match(/(?:ft\.|feat\.|featuring)\s*([^)]+)/i);
+  const featMatch = name.match(/(?:ft\.?|feat\.?|featuring)\s*([^)]+)/i);
   if (featMatch) {
     feat = featMatch[1].trim();
     name = name.replace(featMatch[0], '').trim();
   }
-  const parts = name.split(/\s*-\s*/);
-  if (parts.length >= 2) {
+
+  let artist = '';
+  let title = name;
+
+  // If we detected a common artist across the files, strip it from the title
+  if (detectedArtist && name.toLowerCase().startsWith(detectedArtist.toLowerCase())) {
+    title = name.substring(detectedArtist.length);
+    title = title.replace(/^[\s-]+/, ''); // remove leading spaces/hyphens
+    artist = detectedArtist;
+  } else if (name.includes(' - ')) {
+    const parts = name.split(' - ');
     artist = parts[0].trim();
     title = parts.slice(1).join(' - ').trim();
+  } else {
+    const parts = name.split('-');
+    if (parts.length >= 2) {
+      artist = parts[0].trim();
+      title = parts.slice(1).join(' ').trim();
+    }
   }
+
+  // Clean up hyphens in names (e.g. Baba-Tundey -> Baba Tundey)
+  artist = artist.replace(/-/g, ' ');
+  title = title.replace(/-/g, ' ');
+  title = title.replace(/\s+/g, ' ').trim();
+
   return { artist, title, feat };
 }
 
@@ -1945,7 +1971,32 @@ window.handleFolderImport = async function(event) {
 
   if (audioFiles.length === 0) { alert('No MP3 files found in this folder!'); return; }
 
-  const scanSummary = document.getElementById('folderScanSummary');
+// Detect the most common artist prefix across all files
+let possibleArtists = {};
+audioFiles.forEach(f => {
+  let n = f.name.replace(/\.[^/.]+$/, "");
+  try { n = decodeURIComponent(n); } catch(e) {}
+  n = n.replace(/_/g, ' ').replace(/[–—]/g, '-');
+  const words = n.split(/[\s-]+/).filter(w => w.length > 0);
+  if (words.length > 0) {
+    let w1 = words[0];
+    possibleArtists[w1] = (possibleArtists[w1] || 0) + 1;
+    if (words.length > 1) {
+      let w2 = words[0] + ' ' + words[1];
+      possibleArtists[w2] = (possibleArtists[w2] || 0) + 1;
+    }
+  }
+});
+let detectedArtist = '';
+let maxCount = 0;
+for (let k in possibleArtists) {
+  if (possibleArtists[k] > maxCount || (possibleArtists[k] === maxCount && k.length > detectedArtist.length)) {
+    maxCount = possibleArtists[k];
+    detectedArtist = k;
+  }
+}
+
+const scanSummary = document.getElementById('folderScanSummary');
   document.getElementById('folderScanResults').style.display = 'block';
   
   scanSummary.innerHTML = 'Uploading cover... <i class="fas fa-spinner fa-spin"></i>';
@@ -1959,10 +2010,10 @@ window.handleFolderImport = async function(event) {
   audioFiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
 
   for (let i = 0; i < audioFiles.length; i++) {
-    scanSummary.innerHTML = 'Uploading song ' + (i + 1) + ' of ' + audioFiles.length + '... <i class="fas fa-spinner fa-spin"></i>';
-    const file = audioFiles[i];
-    const meta = parseFileName(file.name);
-    if (meta.artist && !defaultArtist) defaultArtist = meta.artist;
+  scanSummary.innerHTML = 'Uploading song ' + (i + 1) + ' of ' + audioFiles.length + '... <i class="fas fa-spinner fa-spin"></i>';
+  const file = audioFiles[i];
+  const meta = parseFileName(file.name, detectedArtist);
+  if (meta.artist && !defaultArtist) defaultArtist = meta.artist;
     
     let mp3Url = '#';
     try { mp3Url = await uploadToCloudinary(file, true); } catch (e) { console.error('Audio upload failed:', file.name, e); }
@@ -2011,7 +2062,32 @@ window.handleSinglesImport = async function(event) {
 
   if (audioFiles.length === 0) { alert('No MP3 files found!'); return; }
 
-  const scanSummary = document.getElementById('singlesScanSummary');
+// Detect the most common artist prefix across all files
+let possibleArtists = {};
+audioFiles.forEach(f => {
+  let n = f.name.replace(/\.[^/.]+$/, "");
+  try { n = decodeURIComponent(n); } catch(e) {}
+  n = n.replace(/_/g, ' ').replace(/[–—]/g, '-');
+  const words = n.split(/[\s-]+/).filter(w => w.length > 0);
+  if (words.length > 0) {
+    let w1 = words[0];
+    possibleArtists[w1] = (possibleArtists[w1] || 0) + 1;
+    if (words.length > 1) {
+      let w2 = words[0] + ' ' + words[1];
+      possibleArtists[w2] = (possibleArtists[w2] || 0) + 1;
+    }
+  }
+});
+let detectedArtist = '';
+let maxCount = 0;
+for (let k in possibleArtists) {
+  if (possibleArtists[k] > maxCount || (possibleArtists[k] === maxCount && k.length > detectedArtist.length)) {
+    maxCount = possibleArtists[k];
+    detectedArtist = k;
+  }
+}
+
+const scanSummary = document.getElementById('singlesScanSummary');
   document.getElementById('singlesScanResults').style.display = 'block';
   
   scanSummary.innerHTML = 'Uploading cover... <i class="fas fa-spinner fa-spin"></i>';
@@ -2025,10 +2101,10 @@ window.handleSinglesImport = async function(event) {
   audioFiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
 
   for (let i = 0; i < audioFiles.length; i++) {
-    scanSummary.innerHTML = 'Uploading song ' + (i + 1) + ' of ' + audioFiles.length + '... <i class="fas fa-spinner fa-spin"></i>';
-    const file = audioFiles[i];
-    const meta = parseFileName(file.name);
-    if (meta.artist && !defaultArtist) defaultArtist = meta.artist;
+  scanSummary.innerHTML = 'Uploading song ' + (i + 1) + ' of ' + audioFiles.length + '... <i class="fas fa-spinner fa-spin"></i>';
+  const file = audioFiles[i];
+  const meta = parseFileName(file.name, detectedArtist);
+  if (meta.artist && !defaultArtist) defaultArtist = meta.artist;
     
     let mp3Url = '#';
     try { mp3Url = await uploadToCloudinary(file, true); } catch (e) { console.error('Audio upload failed:', file.name, e); }
