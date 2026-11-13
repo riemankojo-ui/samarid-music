@@ -76,14 +76,12 @@ export default async function handler(req) {
   // 1) a link pasted in the studio always wins
   if (song.youtube && String(song.youtube).trim()) return json({ url: song.youtube, type: 'manual' });
 
-  // 2) already found an official video: done, never search again
+  // 2) cache: official video re-checked every 7 days, audio/topic every 30min, nothing found every 15min
   const have = song.auto_youtube ? { url: song.auto_youtube, type: song.auto_youtube_type } : null;
-  if (have && have.type === 'video') return json(have);
-
-  // 3) recently checked: reuse the result (audio re-checked every 24h, nothing found every 6h)
   const age = song.auto_youtube_checked ? Date.now() - new Date(song.auto_youtube_checked).getTime() : Infinity;
-  if (have && age < 24 * HOUR) return json(have);
-  if (!have && age < 6 * HOUR) return json({ url: null });
+  if (have && have.type === 'video' && age < 7 * 24 * HOUR) return json(have);
+  if (have && have.type !== 'video' && age < 30 * 60 * 1000) return json(have);
+  if (!have && age < 15 * 60 * 1000) return json({ url: null });
 
   if (!ytKey) return json(have || { url: null, error: 'YOUTUBE_API_KEY is not set' });
 
@@ -112,11 +110,16 @@ export default async function handler(req) {
   const patch = { auto_youtube_checked: new Date().toISOString() };
   let result = have || { url: null };
   if (best) {
-    // never replace a saved video with a worse one
-    const newType = bestScore === 3 ? 'video' : 'audio';
-    result = { url: 'https://www.youtube.com/watch?v=' + best, type: newType };
-    patch.auto_youtube = result.url;
-    patch.auto_youtube_type = newType;
+    const newType = bestScore >= 3 ? 'video' : 'audio';
+    // always upgrade: audio → video, or better video score
+    const shouldUpdate = !have || newType === 'video' || have.type !== 'video';
+    if (shouldUpdate) {
+      result = { url: 'https://www.youtube.com/watch?v=' + best, type: newType };
+      patch.auto_youtube = result.url;
+      patch.auto_youtube_type = newType;
+    } else {
+      result = have;
+    }
   }
   await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id, { method: 'PATCH', headers: Object.assign({ Prefer: 'return=minimal' }, sb), body: JSON.stringify(patch) });
   return json(result);
