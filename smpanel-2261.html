@@ -897,23 +897,33 @@ window.deleteSelectedHoster = function() {
     btn.innerText = 'Deleting...';
     btn.disabled = true;
 
-    let deleted = 0;
-    for (const id of selectedHosterFiles) {
-      try {
-        const res = await fetch('/api/delete-image', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ public_id: id, resource_type: currentHosterTab === 'audio' ? 'video' : 'image' })
-        });
-        if (res.ok) deleted++;
-      } catch (e) {}
+    // Build the array of files to send to the API
+    const filesToDelete = selectedHosterFiles.map(id => ({
+      public_id: id,
+      resource_type: currentHosterTab === 'audio' ? 'video' : 'image'
+    }));
+
+    try {
+      const res = await fetch('/api/delete-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ files: filesToDelete })
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        showToast('Successfully deleted ' + data.deleted + ' files!', 'success');
+      } else {
+        showToast('Error deleting files', 'error');
+      }
+    } catch (e) {
+      showToast('Network error while deleting.', 'error');
     }
 
-    showToast('Successfully deleted ' + deleted + ' files!', 'success');
     selectedHosterFiles = [];
     btn.innerText = 'Delete Selected';
     btn.disabled = false;
-    loadHosterFiles();
+    loadHosterFiles(); // Reload list
   });
 };
 
