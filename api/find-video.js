@@ -85,7 +85,7 @@ export default async function handler(req) {
   const sb = { apikey: key, 'Content-Type': 'application/json' };
   if (key.indexOf('eyJ') === 0) sb.Authorization = 'Bearer ' + key;
 
-  const r = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id + '&select=id,title,artist_name,featuring,youtube,auto_youtube,auto_youtube_type,auto_youtube_checked&limit=1', { headers: sb });
+  const r = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id + '&select=id,title,artist_name,featuring,youtube,auto_youtube,auto_youtube_type,auto_youtube_checked,auto_youtube_score&limit=1', { headers: sb });
   const rows = await r.json();
   if (!Array.isArray(rows) || !rows[0]) return json({ url: null, why: 'song not found', detail: Array.isArray(rows) ? 'no row' : JSON.stringify(rows).substring(0, 160) });
   const song = rows[0];
@@ -130,12 +130,14 @@ export default async function handler(req) {
   let result = have || { url: null };
   if (best) {
     const newType = bestScore >= 3 ? 'video' : 'audio';
-    // always upgrade: audio → video, or better video score
-    const shouldUpdate = !have || newType === 'video' || have.type !== 'video';
+    // always upgrade if new score is better than what we have saved
+    const haveScore = song.auto_youtube_score || 0;
+    const shouldUpdate = !have || bestScore > haveScore;
     if (shouldUpdate) {
       result = { url: 'https://www.youtube.com/watch?v=' + best, type: newType };
       patch.auto_youtube = result.url;
       patch.auto_youtube_type = newType;
+      patch.auto_youtube_score = bestScore;
     } else {
       result = have;
     }
