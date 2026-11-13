@@ -615,11 +615,11 @@
   <p class="page-subtitle">Manage Cloudinary Audio & Images</p>
   
   <div class="sub-tabs" style="margin-bottom:16px;">
-    <button class="sub-tab active" onclick="hosterTab('audio', this)"><i class="fas fa-music"></i> Audio Files</button>
-    <button class="sub-tab" onclick="hosterTab('image', this)"><i class="fas fa-image"></i> Images</button>
-  </div>
+  <button class="sub-tab active" onclick="hosterTab('audio', this)"><i class="fas fa-music"></i> Audio (<span id="hosterAudioCount">0</span>)</button>
+  <button class="sub-tab" onclick="hosterTab('image', this)"><i class="fas fa-image"></i> Images (<span id="hosterImageCount">0</span>)</button>
+</div>
 
-  <div id="hosterLoading" style="text-align:center; padding:40px; color:#888;">Loading files from Cloudinary...</div>
+  <div id="hosterSkeleton" style="display:flex; flex-direction:column; gap:10px; width:100%;"></div>
   
   <div id="hosterContent" style="display:none;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; background:#1f1f1f; padding:12px; border-radius:12px; border:1px solid #333;">
@@ -775,30 +775,75 @@ window.hosterTab = function(type, btn) {
   document.querySelectorAll('[data-page="hoster"] .sub-tab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   selectedHosterFiles = [];
-  renderHosterList();
+  
+  // Show skeleton if we don't have data loaded yet for this specific tab
+  if (hosterFiles[type].length === 0 && document.getElementById('hosterSkeleton').style.display === 'none') {
+    document.getElementById('hosterSkeleton').style.display = 'flex';
+    document.getElementById('hosterContent').style.display = 'none';
+    renderHosterSkeletons(6);
+    setTimeout(() => {
+      document.getElementById('hosterSkeleton').style.display = 'none';
+      document.getElementById('hosterContent').style.display = 'block';
+      renderHosterList();
+    }, 400);
+  } else {
+    renderHosterList();
+  }
 };
 
+function renderHosterSkeletons(count) {
+  const skeletonBox = document.getElementById('hosterSkeleton');
+  let html = '';
+  // Cap at 15 to prevent freezing the phone if there are 100+ files
+  const limit = Math.min(count || 4, 15); 
+  for (let i = 0; i < limit; i++) {
+    html += `
+      <div style="display:flex; align-items:center; gap:12px; background:#1a1a1a; border:1px solid #2a2a2a; padding:12px; border-radius:12px;">
+        <div style="width:20px; height:20px; border-radius:4px; background:#2a2a2a; animation:skeleton-pulse 1.4s ease-in-out infinite; flex-shrink:0;"></div>
+        <div style="width:40px; height:40px; border-radius:6px; background:#2a2a2a; animation:skeleton-pulse 1.4s ease-in-out infinite; flex-shrink:0;"></div>
+        <div style="flex:1; display:flex; flex-direction:column; gap:8px;">
+          <div style="width:${60 + Math.floor(Math.random() * 30)}%; height:14px; background:#2a2a2a; border-radius:4px; animation:skeleton-pulse 1.4s ease-in-out infinite;"></div>
+          <div style="width:${20 + Math.floor(Math.random() * 20)}%; height:10px; background:#2a2a2a; border-radius:4px; animation:skeleton-pulse 1.4s ease-in-out infinite;"></div>
+        </div>
+      </div>
+    `;
+  }
+  skeletonBox.innerHTML = html;
+}
+
 async function loadHosterFiles() {
-  document.getElementById('hosterLoading').style.display = 'block';
+  document.getElementById('hosterSkeleton').style.display = 'flex';
   document.getElementById('hosterContent').style.display = 'none';
+  
+  // Show the previous count of skeletons while loading, or 6 if it's the first load
+  const currentCount = hosterFiles.audio.length + hosterFiles.image.length;
+  renderHosterSkeletons(currentCount > 0 ? currentCount : 6);
+
   try {
     const res = await fetch('/api/cloudinary-files');
     const data = await res.json();
     if (data.error) throw new Error(data.error);
     hosterFiles.audio = data.audios || [];
     hosterFiles.image = data.images || [];
+    
+    // Update the counts in the tabs
+    document.getElementById('hosterAudioCount').innerText = hosterFiles.audio.length;
+    document.getElementById('hosterImageCount').innerText = hosterFiles.image.length;
+    
     renderHosterList();
-    document.getElementById('hosterLoading').style.display = 'none';
+    document.getElementById('hosterSkeleton').style.display = 'none';
     document.getElementById('hosterContent').style.display = 'block';
   } catch (e) {
-    document.getElementById('hosterLoading').innerText = 'Error loading files: ' + e.message;
+    document.getElementById('hosterSkeleton').style.display = 'none';
+    alert('Error loading files: ' + e.message);
   }
 }
 
 function renderHosterList() {
   const list = document.getElementById('hosterList');
   const files = hosterFiles[currentHosterTab];
-  document.getElementById('hosterCountText').innerText = files.length + ' files found';
+  const typeLabel = currentHosterTab === 'audio' ? 'Audio files' : 'Images';
+  document.getElementById('hosterCountText').innerText = 'Total ' + typeLabel + ': ' + files.length;
   
   if (files.length === 0) {
     list.innerHTML = '<div style="text-align:center; color:#666; padding:20px;">No files found.</div>';
