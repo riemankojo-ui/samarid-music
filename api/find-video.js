@@ -73,10 +73,49 @@ function rate(item, title, artist, featuring) {
   return null;
 }
 
+async function findCandidates(song, ytKey) {
+  if (!ytKey) return { candidates: [], error: 'YOUTUBE_API_KEY is not set' };
+  const cq = [
+    (song.artist_name || '') + ' ' + (song.title || '') + ' official video',
+    (song.artist_name || '') + ' ' + (song.title || '') + ' visualizer',
+    (song.artist_name || '') + ' ' + (song.title || '')
+  ];
+  const bestBy = {};
+  for (const q of cq) {
+    const cr = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=10&q=' + encodeURIComponent(q) + '&key=' + ytKey);
+    const cd = await cr.json();
+    if (!cr.ok || !Array.isArray(cd.items)) return { candidates: [], error: (cd && cd.error && cd.error.message || 'YouTube error').substring(0, 120) };
+    cd.items.forEach(function (it) {
+      if (!it.id || !it.id.videoId) return;
+      const sc = rate(it, song.title, song.artist_name, song.featuring);
+      if (!sc) return;
+      const kind = sc >= 4 ? 'video' : (sc === 3 ? 'visualizer' : 'audio');
+      if (!bestBy[kind] || sc > bestBy[kind].score) {
+        const th = it.snippet.thumbnails || {};
+        bestBy[kind] = {
+          score: sc,
+          kind: kind,
+          label: kind === 'video' ? 'Official video' : (kind === 'visualizer' ? 'Visualizer' : 'Audio'),
+          url: 'https://www.youtube.com/watch?v=' + it.id.videoId,
+          title: it.snippet.title,
+          channel: it.snippet.channelTitle,
+          thumb: (th.medium || th.default || {}).url || ''
+        };
+      }
+    });
+  }
+  return { candidates: ['video', 'visualizer', 'audio'].filter(function (k) { return bestBy[k]; }).map(function (k) { return bestBy[k]; }) };
+}
+
 export default async function handler(req) {
   const url = new URL(req.url);
   const id = (url.searchParams.get('id') || '').trim();
   const force = url.searchParams.get('force') === '1';
+  // TEST VIDEO before publishing: search by the title / artist typed in the form (no song id yet)
+  const qTitle = (url.searchParams.get('title') || '').trim();
+  if (url.searchParams.get('candidates') === '1' && qTitle) {
+    return json(await findCandidates({ title: qTitle, artist_name: (url.searchParams.get('artist') || '').trim(), featuring: (url.searchParams.get('featuring') || '').trim() }, (process.env.YOUTUBE_API_KEY || '').trim()));
+  }
   if (!/^[0-9a-zA-Z-]+$/.test(id)) return json({ error: 'bad id' }, 400);
 
   const ytKey = (process.env.YOUTUBE_API_KEY || '').trim();

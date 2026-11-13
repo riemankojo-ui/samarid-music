@@ -93,6 +93,7 @@
   .admin-song .edit-btn { color: #00cc44; }
   .admin-song .delete-btn { color: #ff0033; }
   .admin-song .link-btn { color: #1d9bf0; }
+  .admin-song .test-btn { color: #d97706; }
   .empty-songs { text-align: center; padding: 30px 20px; color: #666; font-size: 13px; }
   /* ===== SKELETON LOADERS ===== */
 .skeleton-song { display: flex; gap: 6px; align-items: center; background: var(--card); border: 1px solid var(--border); padding: 10px; border-radius: 4px; margin-bottom: 10px; }
@@ -292,6 +293,7 @@
           <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="Tap to add song audio" readonly onclick="audioPick('songDownload')"></div>
           <div class="form-group"><label>Spotify Link</label><input type="text" id="songSpotify" placeholder="https://open.spotify.com/track/..."></div>
 <div class="form-group"><label>YouTube Video Link</label><input type="text" id="songYoutube" placeholder="https://youtube.com/watch?v=..."></div>
+<div id="songYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('songTitle','songArtist','songFeaturing','songYoutube','songYtTest')"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div>
         <button class="main-btn" id="submitBtn" onclick="saveSong()">Submit </button>
 <button class="secondary-btn" id="cancelBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
 
@@ -748,6 +750,7 @@ Download: https://example.com/cry-baby.mp3</div>
     <div class="form-group"><label>Download MP3 Link</label><input type="text" id="editDownload" placeholder="https://...mp3"></div>
     <div class="form-group"><label>Spotify Link</label><input type="text" id="editSpotify" placeholder="https://open.spotify.com/track/..."></div>
     <div class="form-group"><label>YouTube Video Link</label><input type="text" id="editYoutube" placeholder="https://youtube.com/watch?v=..."></div>
+<div id="editYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('editTitle','editArtist','editFeaturing','editYoutube','editYtTest')"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div>
 
  <div class="publish-progress" id="editProgress">
   <div class="publish-progress-bar"><div class="publish-progress-fill" id="editProgressFill"></div></div>
@@ -1045,7 +1048,7 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
         const spotifyTag = s.spotify ? ' • <span style="color:#1DB954;">Spotify</span>' : '';
         const scheduledTag = s.status === 'scheduled' ? ' • <span style="color:#ffcc00;">SCHEDULED</span>' : '';
         const countryTag = s.country ? ' • ' + s.country : ''; // NEW
-        return '<div class="admin-song"><img src="' + s.cover + '" alt="' + s.title + '"><div class="info"><h4>' + s.title + '</h4><p>' + (s.artist_name || 'Samarid') + featTag + ' • ' + s.category + countryTag + ' • ' + s.date + albumTag + spotifyTag + scheduledTag + '</p></div><div class="actions"><button class="action-btn link-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link"></i></button><button class="action-btn edit-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash"></i></button></div></div>';
+        return '<div class="admin-song"><img src="' + s.cover + '" alt="' + s.title + '"><div class="info"><h4>' + s.title + '</h4><p>' + (s.artist_name || 'Samarid') + featTag + ' • ' + s.category + countryTag + ' • ' + s.date + albumTag + spotifyTag + scheduledTag + '</p></div><div class="actions"><button class="action-btn test-btn" onclick="location.href=\'smvideo-8842.html?id=' + s.id + '\'"><i class="fas fa-play-circle"></i></button><button class="action-btn link-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link"></i></button><button class="action-btn edit-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash"></i></button></div></div>';
       }).join('');
       if (hasMore) html += '<button class="show-all-btn" onclick="showAllSongs()"><i class="fas fa-chevron-down"></i> Show All ' + allAdminSongs.length + ' Songs</button>';
       if (!isSearching && homeShowAll && allAdminSongs.length > HOME_SONGS_LIMIT) html += '<button class="show-all-btn muted" onclick="hideExtraSongs()"><i class="fas fa-chevron-up"></i> Show Only Latest ' + HOME_SONGS_LIMIT + '</button>';
@@ -1206,6 +1209,7 @@ window.saveEditModal = async function() {
       relPop.open('Release status', title + ' - ' + artist);
       relPop.row('song', 'Song', 'ok', 'Updated on FlexTune');
       relPop.row('youtube', 'YouTube', 'wait', 'Searching for video...');
+      relPop.testBtn(id);
       fetch('/api/find-video?id=' + id + '&force=1').then(r => r.json()).then(d => {
         if (!d) return;
         if (d.url) {
@@ -1269,6 +1273,7 @@ try {
           : fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?title=eq.' + encodeURIComponent(title) + '&artist_name=eq.' + encodeURIComponent(artist) + '&select=id&order=id.desc&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }).then(r => r.json()).then(rows => rows && rows[0] && rows[0].id);
         songIdForYt.then(songId => {
           if (!songId) { relPop.row('youtube', 'YouTube', 'err', 'Could not get song ID'); return; }
+          relPop.testBtn(songId);
           return fetch('/api/find-video?id=' + songId + (editingId ? '&force=1' : ''));
         }).then(r => r && r.json()).then(d => {
           if (!d) return;
@@ -1428,7 +1433,7 @@ try {
       function open(title, sub) {
         css(); close(); rows = {};
         var o = document.createElement('div'); o.id = 'relPop';
-        o.innerHTML = '<div class="rp-card"><div class="rp-title">Release status</div><div class="rp-sub"></div><div class="rp-rows"></div><button class="rp-btn" onclick="relPop.close()">OK</button></div>';
+        o.innerHTML = '<div class="rp-card"><div class="rp-title">Release status</div><div class="rp-sub"></div><div class="rp-rows"></div><button class="rp-btn rp-test" style="display:none;background:#222;color:#fff;border:1px solid #444">Test video</button><button class="rp-btn" onclick="relPop.close()">OK</button></div>';
         o.querySelector('.rp-sub').textContent = sub || title || '';
         document.body.appendChild(o);
       }
@@ -1443,8 +1448,45 @@ try {
         r.querySelector('.rp-tx').innerHTML = text || '';
       }
       function close() { var o = document.getElementById('relPop'); if (o) o.remove(); }
-      return { open: open, row: row, close: close };
+      function testBtn(id) {
+        var b = document.querySelector('#relPop .rp-test'); if (!b) return;
+        b.style.display = 'block';
+        b.onclick = function () { location.href = 'smvideo-8842.html?id=' + encodeURIComponent(id); };
+      }
+      return { open: open, row: row, close: close, testBtn: testBtn };
     })();
+    window.testVideoFor = function (titleId, artistId, featId, inputId, boxId) {
+      var g = function (i) { var e = document.getElementById(i); return e ? e.value.trim() : ''; };
+      var title = g(titleId), artist = g(artistId), feat = g(featId);
+      var list = document.getElementById(boxId).querySelector('.yt-test-list');
+      var note = function (txt, color) { list.innerHTML = ''; var d = document.createElement('div'); d.style.cssText = 'font-size:12px;padding:8px 0;color:' + (color || '#999'); d.textContent = txt; list.appendChild(d); };
+      var dec = function (s) { var t = document.createElement('textarea'); t.innerHTML = s || ''; return t.value; };
+      if (!title || !artist) { note('Fill the song title and artist first.'); return; }
+      note('Searching YouTube...');
+      fetch('/api/find-video?candidates=1&title=' + encodeURIComponent(title) + '&artist=' + encodeURIComponent(artist) + '&featuring=' + encodeURIComponent(feat))
+        .then(function (r) { return r.json(); })
+        .then(function (d) {
+          var c = (d && d.candidates) || [];
+          if (!c.length) { note((d && d.error) ? d.error : 'No matches yet. Leave the link empty and the finder keeps checking after you publish.'); return; }
+          list.innerHTML = '';
+          c.forEach(function (v) {
+            var row = document.createElement('div'); row.style.cssText = 'display:flex;gap:10px;padding:10px 0;border-top:1px solid #222';
+            row.innerHTML = '<img style="width:96px;height:54px;object-fit:cover;background:#222;flex:none"><div style="min-width:0"><b style="font-size:13px;color:#d97706"></b><div class="vt1" style="font-size:12px;color:#ddd;word-break:break-word"></div><div class="vt2" style="font-size:11px;color:#888"></div><a class="vtp" target="_blank" style="font-size:12px;color:#ff0033;margin-right:14px">Preview</a><a href="#" class="vtu" style="font-size:12px;color:#22c55e;font-weight:700">Use this</a></div>';
+            row.querySelector('img').src = v.thumb || '';
+            row.querySelector('b').textContent = v.label;
+            row.querySelector('.vt1').textContent = dec(v.title);
+            row.querySelector('.vt2').textContent = dec(v.channel);
+            row.querySelector('.vtp').href = v.url;
+            row.querySelector('.vtu').onclick = function (e) {
+              e.preventDefault();
+              document.getElementById(inputId).value = v.url;
+              note(v.label + ' chosen. It is saved when you publish.', '#22c55e');
+            };
+            list.appendChild(row);
+          });
+        })
+        .catch(function (e) { note('Search failed: ' + e.message); });
+    };
     window.deleteSong = async function(id) {
       if (!confirm('Delete this song permanently?')) return;
       try {
