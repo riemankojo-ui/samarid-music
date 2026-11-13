@@ -1514,10 +1514,14 @@ try {
       if (!title || !artist) { note('Fill the song title and artist first.'); return; }
       note('Searching YouTube...');
       fetch('/api/find-video?candidates=1&title=' + encodeURIComponent(title) + '&artist=' + encodeURIComponent(artist) + '&featuring=' + encodeURIComponent(feat))
-        .then(function (r) { return r.json(); })
-        .then(function (d) {
-          var c = (d && d.candidates) || [];
-          if (!c.length) { note((d && d.error) ? d.error : 'No matches yet. Leave the link empty and the finder keeps checking after you publish.'); return; }
+  .then(function (r) { return r.json(); })
+  .then(function (d) {
+    var c = (d && d.candidates) || [];
+    if (d && d.error && (d.error.includes('Quota exceeded') || d.error.includes('quota'))) {
+      note('YouTube search limit reached for today. You can paste the YouTube link manually, or try again tomorrow.', '#ff8800');
+      return;
+    }
+    if (!c.length) { note((d && d.error) ? d.error : 'No matches yet. Leave the link empty and the finder keeps checking after you publish.'); return; }
           list.innerHTML = '';
           c.forEach(function (v) {
             var row = document.createElement('div'); row.style.cssText = 'display:flex;flex-wrap:wrap;gap:10px;padding:10px 0;border-top:1px solid #222';
@@ -1972,14 +1976,22 @@ async function uploadToCloudinary(file, isAudio) {
   throw new Error(data.error ? data.error.message : 'Upload failed');
 }
 
-function parseFileName(fileName, detectedArtist = '') {
+function cleanFileName(fileName) {
   let name = fileName.replace(/\.[^/.]+$/, ""); 
-  // Decode URL-encoded characters (like %20, %25E2 etc.)
   try { name = decodeURIComponent(name); } catch(e) {}
   try { name = decodeURIComponent(name); } catch(e) {}
-  
-  // Normalize dashes and underscores
   name = name.replace(/_/g, ' ').replace(/[–—]/g, '-').replace(/-{2,}/g, '-');
+  
+  // Ignore common junk words at the start of the filename
+  const junkRegex = /^(download|mp3|audio|music|song|track|www|flextune|flex tune|com)\s*[\-\s]*/i;
+  while (junkRegex.test(name)) {
+    name = name.replace(junkRegex, '').trim();
+  }
+  return name;
+}
+
+function parseFileName(fileName, detectedArtist = '') {
+  let name = cleanFileName(fileName);
   
   let feat = '';
   const featMatch = name.match(/(?:ft\.?|feat\.?|featuring)\s*([^)]+)/i);
@@ -2037,19 +2049,21 @@ window.handleFolderImport = async function(event) {
 
   if (audioFiles.length === 0) { showToast('No MP3 files found in this folder!', 'error'); return; }
 
-// Detect the most common artist prefix across all files
+// Detect the most common artist prefix across all files (using cleaned names)
 let possibleArtists = {};
 audioFiles.forEach(f => {
-  let n = f.name.replace(/\.[^/.]+$/, "");
-  try { n = decodeURIComponent(n); } catch(e) {}
-  n = n.replace(/_/g, ' ').replace(/[–—]/g, '-');
-  const words = n.split(/[\s-]+/).filter(w => w.length > 0);
-  if (words.length > 0) {
-    let w1 = words[0];
-    possibleArtists[w1] = (possibleArtists[w1] || 0) + 1;
-    if (words.length > 1) {
-      let w2 = words[0] + ' ' + words[1];
-      possibleArtists[w2] = (possibleArtists[w2] || 0) + 1;
+  let n = cleanFileName(f.name);
+  if (n.includes(' - ')) {
+    let a = n.split(' - ')[0].trim();
+    if (a) possibleArtists[a] = (possibleArtists[a] || 0) + 1;
+  } else {
+    const words = n.split(/[\s-]+/).filter(w => w.length > 0);
+    if (words.length > 0) {
+      possibleArtists[words[0]] = (possibleArtists[words[0]] || 0) + 1;
+      if (words.length > 1) {
+        let w2 = words[0] + ' ' + words[1];
+        possibleArtists[w2] = (possibleArtists[w2] || 0) + 1;
+      }
     }
   }
 });
@@ -2154,19 +2168,21 @@ window.handleSinglesImport = async function(event) {
 
   if (audioFiles.length === 0) { showToast('No MP3 files found!', 'error'); return; }
 
-// Detect the most common artist prefix across all files
+// Detect the most common artist prefix across all files (using cleaned names)
 let possibleArtists = {};
 audioFiles.forEach(f => {
-  let n = f.name.replace(/\.[^/.]+$/, "");
-  try { n = decodeURIComponent(n); } catch(e) {}
-  n = n.replace(/_/g, ' ').replace(/[–—]/g, '-');
-  const words = n.split(/[\s-]+/).filter(w => w.length > 0);
-  if (words.length > 0) {
-    let w1 = words[0];
-    possibleArtists[w1] = (possibleArtists[w1] || 0) + 1;
-    if (words.length > 1) {
-      let w2 = words[0] + ' ' + words[1];
-      possibleArtists[w2] = (possibleArtists[w2] || 0) + 1;
+  let n = cleanFileName(f.name);
+  if (n.includes(' - ')) {
+    let a = n.split(' - ')[0].trim();
+    if (a) possibleArtists[a] = (possibleArtists[a] || 0) + 1;
+  } else {
+    const words = n.split(/[\s-]+/).filter(w => w.length > 0);
+    if (words.length > 0) {
+      possibleArtists[words[0]] = (possibleArtists[words[0]] || 0) + 1;
+      if (words.length > 1) {
+        let w2 = words[0] + ' ' + words[1];
+        possibleArtists[w2] = (possibleArtists[w2] || 0) + 1;
+      }
     }
   }
 });

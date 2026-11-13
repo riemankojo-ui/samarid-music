@@ -309,18 +309,21 @@ function autoTestVideos(p) {
       var container = document.getElementById(containerId);
       if (!container || typeof window.testVideoFor !== 'function') return;
       var items = container.querySelectorAll('.album-song-item');
-      items.forEach(function (item, i) {
-        setTimeout(function () {
+// Limit to first 5 songs to save YouTube API quota
+var limit = Math.min(items.length, 5);
+for (var i = 0; i < limit; i++) {
+  var item = items[i];
+  setTimeout(function () {
           var titleEl = item.querySelector('.' + prefix + 'title');
           var featEl = item.querySelector('.' + prefix + 'feat');
           var ytEl = item.querySelector('.' + prefix + 'youtube');
           var box = item.querySelector('.album-yt-test');
-          if (titleEl && ytEl && box) {
-            window.testVideoFor(titleEl, artistId, featEl, ytEl, box);
-          }
-        }, i * 400);
-      });
-    } else if (typeof window.testVideoFor === 'function') {
+                if (titleEl && ytEl && box) {
+        window.testVideoFor(titleEl, artistId, featEl, ytEl, box);
+      }
+    }, i * 3000); // Wait 3 seconds between searches
+  }
+} else if (typeof window.testVideoFor === 'function') {
       if (p.isScheduled) {
         window.testVideoFor('schTitle', 'schArtist', 'schFeaturing', 'schYoutube', 'schYtTest');
       } else {
