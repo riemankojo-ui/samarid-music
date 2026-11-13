@@ -25,13 +25,15 @@ function wordScore(ytTitle, songTitle, artistName) {
 }
 
 // score: 3 = official video, 2 = distributor "Topic" audio, 1 = other audio / plain upload, null = not a match
-function rate(item, title, artist) {
+function rate(item, title, artist, featuring) {
   const t = norm(item.snippet.title), ch = norm(item.snippet.channelTitle);
   const { titleRatio, titleHits } = wordScore(t, title, artist);
   const chWords = words(ch), aWords = words(artist);
+  const fWords = words(featuring || '');
   const artistInCh = aWords.length ? aWords.filter(w => chWords.includes(w)).length / aWords.length : 0;
+  const tWords = words(t);
 
-  // need at least 60% of song title words to match, or at least 2 words if title is long
+  // need at least 60% of song title words to match, or at least 2 words
   if (titleRatio < 0.6 && titleHits < 2) return null;
 
   // block covers/remixes/etc
@@ -41,8 +43,10 @@ function rate(item, title, artist) {
   const isTopic = / topic$/.test(ch);
   const isAudioWord = /\b(audio|visuali[sz]er|lyrics?)\b/.test(t);
 
-  // boost score if artist also matches
-  const artistMatch = wordScore(t, title, artist).artistInTitle > 0.4 || artistInCh > 0.4;
+  // artist match: check title, channel, and featuring
+  const artistInTitle = aWords.length ? aWords.filter(w => tWords.includes(w)).length / aWords.length : 0;
+  const featInTitle = fWords.length ? fWords.filter(w => tWords.includes(w)).length / fWords.length : 0;
+  const artistMatch = artistInTitle > 0.4 || artistInCh > 0.4 || featInTitle > 0.4;
 
   if (!isAudioWord && isOfficialVideo) return artistMatch ? 5 : 3;
   if (isTopic) return artistMatch ? 4 : 2;
@@ -61,7 +65,7 @@ export default async function handler(req) {
   const sb = { apikey: key, 'Content-Type': 'application/json' };
   if (key.indexOf('eyJ') === 0) sb.Authorization = 'Bearer ' + key;
 
-  const r = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id + '&select=id,title,artist_name,youtube,auto_youtube,auto_youtube_type,auto_youtube_checked&limit=1', { headers: sb });
+  const r = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id + '&select=id,title,artist_name,featuring,youtube,auto_youtube,auto_youtube_type,auto_youtube_checked&limit=1', { headers: sb });
   const rows = await r.json();
   if (!Array.isArray(rows) || !rows[0]) return json({ url: null, why: 'song not found', detail: Array.isArray(rows) ? 'no row' : JSON.stringify(rows).substring(0, 160) });
   const song = rows[0];
@@ -80,21 +84,27 @@ export default async function handler(req) {
 
   if (!ytKey) return json(have || { url: null, error: 'YOUTUBE_API_KEY is not set' });
 
-  // 4) search YouTube
-  const q = (song.artist_name || '') + ' ' + (song.title || '');
-  const yr = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=10&q=' + encodeURIComponent(q) + '&key=' + ytKey);
-  const yd = await yr.json();
-  if (!yr.ok || !Array.isArray(yd.items)) {
-    // quota or key problem: do not mark as checked, try again later
-    return json(have || { url: null, error: (yd && yd.error && yd.error.message || 'YouTube error').substring(0, 120) });
-  }
+  // 4) search YouTube — try up to 2 queries for best coverage
+  const queries = [
+    (song.artist_name || '') + ' ' + (song.title || ''),
+    (song.title || '') + (song.featuring ? ' ft ' + song.featuring : '')
+  ].filter(Boolean);
 
-  let best = null, bestScore = 0;
-  yd.items.forEach(function (it) {
-    if (!it.id || !it.id.videoId) return;
-    const sc = rate(it, song.title, song.artist_name);
-    if (sc && sc > bestScore) { best = it.id.videoId; bestScore = sc; }
-  });
+  let best = null, bestScore = 0, yd = null;
+
+  for (const q of queries) {
+    const yr = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=10&q=' + encodeURIComponent(q) + '&key=' + ytKey);
+    yd = await yr.json();
+    if (!yr.ok || !Array.isArray(yd.items)) {
+      return json(have || { url: null, error: (yd && yd.error && yd.error.message || 'YouTube error').substring(0, 120) });
+    }
+    yd.items.forEach(function (it) {
+      if (!it.id || !it.id.videoId) return;
+      const sc = rate(it, song.title, song.artist_name, song.featuring);
+      if (sc && sc > bestScore) { best = it.id.videoId; bestScore = sc; }
+    });
+    if (best && bestScore >= 3) break; // found official video, stop
+  }
 
   const patch = { auto_youtube_checked: new Date().toISOString() };
   let result = have || { url: null };
