@@ -52,6 +52,18 @@ function rate(item, title, artist, featuring) {
   // artist match is ALWAYS required — never accept a video from a different artist
   if (!artistMatch) return null;
 
+  // extra check: if a different artist name dominates the title, reject
+  // e.g. "Ah Nice - Back To Sender" — "ah nice" takes up most of the title
+  // so the first word(s) before the dash should match our artist
+  const dashParts = t.split(/\s*-\s*/);
+  if (dashParts.length >= 2) {
+    const titleArtistPart = words(dashParts[0]);
+    const ourArtistWords = [...aWords, ...fWords];
+    const titleArtistMatchesOurs = ourArtistWords.some(w => titleArtistPart.includes(w));
+    const titleArtistMatchesOther = titleArtistPart.length > 0 && !titleArtistMatchesOurs;
+    if (titleArtistMatchesOther) return null;
+  }
+
   if (!isAudioWord && isOfficialVideo) return artistMatch ? 5 : 3;
   if (isTopic) return artistMatch ? 4 : 2;
   if (artistMatch) return 2;
