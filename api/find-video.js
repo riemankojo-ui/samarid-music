@@ -16,9 +16,13 @@ function rate(item, title, artist) {
   const t = norm(item.snippet.title), ch = norm(item.snippet.channelTitle);
   const nt = norm(title), na = norm(artist);
   if (!nt || t.indexOf(nt) === -1) return null;
-  if (na && t.indexOf(na) === -1 && ch.indexOf(na) === -1) return null;
   const rest = t.replace(nt, ' ');
   if (/\b(cover|remix|reaction|karaoke|instrumental|slowed|sped up|live|tutorial)\b/.test(rest)) return null;
+  // artist must match title or channel — but if no artist given, still accept title match
+  if (na && t.indexOf(na) === -1 && ch.indexOf(na) === -1) {
+    // soft fallback: accept if it's an official video or Topic channel with strong title match
+    if (!/ topic$/.test(ch) && !/official (music )?video|music video/.test(rest)) return null;
+  }
   const isAudioWord = /\b(audio|visuali[sz]er|lyrics?)\b/.test(rest);
   if (!isAudioWord && /official (music )?video|music video/.test(rest)) return 3;
   if (/ topic$/.test(ch)) return 2;
@@ -38,7 +42,7 @@ export default async function handler(req) {
 
   const r = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id + '&select=id,title,artist_name,youtube,auto_youtube,auto_youtube_type,auto_youtube_checked&limit=1', { headers: sb });
   const rows = await r.json();
-  if (!Array.isArray(rows) || !rows[0]) return json({ url: null });
+  if (!Array.isArray(rows) || !rows[0]) return json({ url: null, why: 'song not found', detail: Array.isArray(rows) ? 'no row' : JSON.stringify(rows).substring(0, 160) });
   const song = rows[0];
 
   // 1) a link pasted in the studio always wins

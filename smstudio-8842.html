@@ -1247,7 +1247,23 @@ try {
           await ensureAllArtistsExist(artist, featuring);
           relPop.open('Release status', title + ' - ' + artist);
           relPop.row('song', 'Song', 'ok', 'Published on FlexTune');
+          relPop.row('youtube', 'YouTube', 'wait', 'Searching for video...');
           relPop.row('email', 'Email', 'wait', 'Notifying subscribers...');
+          // fetch new song id then check YouTube
+          fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?title=eq.' + encodeURIComponent(title) + '&artist_name=eq.' + encodeURIComponent(artist) + '&select=id&order=id.desc&limit=1', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
+            .then(r => r.json()).then(rows => {
+              const newId = rows && rows[0] && rows[0].id;
+              if (!newId) { relPop.row('youtube', 'YouTube', 'err', 'Could not get song ID'); return; }
+              return fetch('/api/find-video?id=' + newId);
+            }).then(r => r && r.json()).then(d => {
+              if (!d) return;
+              if (d.url) {
+                const type = d.type === 'video' ? '🎬 Official video found' : '🎵 Audio found';
+                relPop.row('youtube', 'YouTube', 'ok', type + ': <a href="' + d.url + '" target="_blank" style="color:#ff0033;">Watch</a>');
+              } else {
+                relPop.row('youtube', 'YouTube', 'err', 'No YouTube video found' + (d.error ? ': ' + d.error : ''));
+              }
+            }).catch(e => { relPop.row('youtube', 'YouTube', 'err', 'Search failed: ' + e.message); });
           fetch('/api/notify', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ secret: 'flex2261drop', title: title, artist: artist, featuring: featuring, cover: cover }) }).then(function (r) { return r.text().then(function (t) { var d = null; try { d = JSON.parse(t); } catch (x) {} if (r.status !== 200) { relPop.row('email', 'Email', 'err', 'Failed (' + r.status + '): ' + t.substring(0, 100)); } else if (d && d.sent > 0) { relPop.row('email', 'Email', 'ok', d.sent + ' people notified' + (d.error ? ' (some failed)' : '')); } else if (d && d.error) { relPop.row('email', 'Email', 'err', '0 sent: ' + d.error.substring(0, 100)); } else { relPop.row('email', 'Email', 'err', t.substring(0, 100) || 'No subscribers yet'); } }); }).catch(function (e) { relPop.row('email', 'Email', 'err', 'Request failed: ' + e.message); });
         }
         status.className = 'status success';
