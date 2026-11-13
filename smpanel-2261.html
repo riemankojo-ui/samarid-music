@@ -609,7 +609,32 @@
 
       </div>
 
-      <div class="page" data-page="settings">
+      <!-- HOSTER PAGE -->
+<div class="page" data-page="hoster">
+  <h1 class="page-title">Hoster Manager</h1>
+  <p class="page-subtitle">Manage Cloudinary Audio & Images</p>
+  
+  <div class="sub-tabs" style="margin-bottom:16px;">
+    <button class="sub-tab active" onclick="hosterTab('audio', this)"><i class="fas fa-music"></i> Audio Files</button>
+    <button class="sub-tab" onclick="hosterTab('image', this)"><i class="fas fa-image"></i> Images</button>
+  </div>
+
+  <div id="hosterLoading" style="text-align:center; padding:40px; color:#888;">Loading files from Cloudinary...</div>
+  
+  <div id="hosterContent" style="display:none;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; background:#1f1f1f; padding:12px; border-radius:12px; border:1px solid #333;">
+      <div style="font-size:12px; color:#ccc;" id="hosterCountText">0 Files</div>
+      <div style="display:flex; gap:8px;">
+        <button onclick="toggleSelectAllHoster()" id="selectAllBtn" style="background:transparent; border:1px solid #555; color:#fff; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">Select All Unused</button>
+        <button onclick="deleteSelectedHoster()" id="deleteHosterBtn" style="background:#ff0033; border:none; color:#fff; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">Delete Selected</button>
+      </div>
+    </div>
+
+    <div id="hosterList" style="display:flex; flex-direction:column; gap:10px;"></div>
+  </div>
+</div>
+
+<div class="page" data-page="settings">
         <h1 class="page-title">Site Settings</h1>
         <p class="page-subtitle">Control how your site looks and works</p>
         <div id="settingsList"><div class="artist-card"><div style="font-size:10px;color:var(--text2);font-weight:800;letter-spacing:1px;">TOTAL SONGS ON SITE</div><div id="siteTotalSongs" style="font-size:28px;font-weight:900;margin-top:4px;">...</div></div></div>
@@ -631,7 +656,8 @@
       <button class="nav-item active" data-nav="artists" onclick="goTab('artists')"><div class="icon"><i class="fas fa-user"></i></div><div class="label">ARTISTS</div></button>
       <button class="nav-item" data-nav="videos" onclick="goTab('videos')"><div class="icon"><i class="fas fa-video"></i></div><div class="label">VIDEOS</div></button>
       <button class="nav-item" data-nav="ads" onclick="goTab('ads')"><div class="icon"><i class="fas fa-image"></i></div><div class="label">ADS</div></button>
-      <button class="nav-item" data-nav="verify" onclick="goTab('verify')"><div class="icon"><i class="fas fa-check-circle"></i></div><div class="label">VERIFY</div></button>
+      <button class="nav-item" data-nav="hoster" onclick="goTab('hoster')"><div class="icon"><i class="fas fa-server"></i></div><div class="label">HOSTER</div></button>
+<button class="nav-item" data-nav="verify" onclick="goTab('verify')"><div class="icon"><i class="fas fa-check-circle"></i></div><div class="label">VERIFY</div></button>
       <button class="nav-item" data-nav="settings" onclick="goTab('settings')"><div class="icon"><i class="fas fa-gear"></i></div><div class="label">SETTINGS</div></button>
     </div>
   </div>
@@ -739,7 +765,113 @@
     };
     function slotLabel(p) { return SLOT_LABELS[p] || p || ''; }
 
-    function escapeHtml(s) {
+    // ===== HOSTER MANAGER LOGIC =====
+let hosterFiles = { audio: [], image: [] };
+let currentHosterTab = 'audio';
+let selectedHosterFiles = [];
+
+window.hosterTab = function(type, btn) {
+  currentHosterTab = type;
+  document.querySelectorAll('[data-page="hoster"] .sub-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedHosterFiles = [];
+  renderHosterList();
+};
+
+async function loadHosterFiles() {
+  document.getElementById('hosterLoading').style.display = 'block';
+  document.getElementById('hosterContent').style.display = 'none';
+  try {
+    const res = await fetch('/api/cloudinary-files');
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+    hosterFiles.audio = data.audios || [];
+    hosterFiles.image = data.images || [];
+    renderHosterList();
+    document.getElementById('hosterLoading').style.display = 'none';
+    document.getElementById('hosterContent').style.display = 'block';
+  } catch (e) {
+    document.getElementById('hosterLoading').innerText = 'Error loading files: ' + e.message;
+  }
+}
+
+function renderHosterList() {
+  const list = document.getElementById('hosterList');
+  const files = hosterFiles[currentHosterTab];
+  document.getElementById('hosterCountText').innerText = files.length + ' files found';
+  
+  if (files.length === 0) {
+    list.innerHTML = '<div style="text-align:center; color:#666; padding:20px;">No files found.</div>';
+    return;
+  }
+
+  list.innerHTML = files.map(f => {
+    const isChecked = selectedHosterFiles.includes(f.public_id) ? 'checked' : '';
+    const badge = f.inUse 
+      ? '<span style="font-size:9px; background:rgba(0,204,68,0.15); color:#00cc44; padding:3px 6px; border-radius:4px; font-weight:800;">IN USE</span>'
+      : '<span style="font-size:9px; background:rgba(255,0,51,0.15); color:#ff0033; padding:3px 6px; border-radius:4px; font-weight:800;">UNUSED</span>';
+    
+    const icon = currentHosterTab === 'audio' ? '<i class="fas fa-music" style="color:#ff8800; font-size:20px;"></i>' : '<img src="'+f.url+'" style="width:40px; height:40px; object-fit:cover; border-radius:6px;">';
+
+    return `
+      <div style="display:flex; align-items:center; gap:12px; background:#1a1a1a; border:1px solid #2a2a2a; padding:10px 12px; border-radius:12px;">
+        <input type="checkbox" onchange="toggleHosterFile('${f.public_id}')" ${isChecked} style="width:20px; height:20px; accent-color:#ff0033;">
+        <div style="width:40px; height:40px; display:flex; align-items:center; justify-content:center; background:#0a0a0a; border-radius:6px; flex-shrink:0;">${icon}</div>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:12px; color:#fff; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${f.public_id}</div>
+          <div style="margin-top:4px;">${badge}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+window.toggleHosterFile = function(id) {
+  if (selectedHosterFiles.includes(id)) {
+    selectedHosterFiles = selectedHosterFiles.filter(x => x !== id);
+  } else {
+    selectedHosterFiles.push(id);
+  }
+};
+
+window.toggleSelectAllHoster = function() {
+  const unusedFiles = hosterFiles[currentHosterTab].filter(f => !f.inUse).map(f => f.public_id);
+  if (selectedHosterFiles.length === unusedFiles.length && unusedFiles.length > 0) {
+    selectedHosterFiles = []; // Deselect all
+  } else {
+    selectedHosterFiles = unusedFiles; // Select all unused
+  }
+  renderHosterList();
+};
+
+window.deleteSelectedHoster = async function() {
+  if (selectedHosterFiles.length === 0) { alert('Please select files to delete.'); return; }
+  if (!confirm('Delete ' + selectedHosterFiles.length + ' files permanently from Cloudinary?')) return;
+  
+  const btn = document.getElementById('deleteHosterBtn');
+  btn.innerText = 'Deleting...';
+  btn.disabled = true;
+
+  let deleted = 0;
+  for (const id of selectedHosterFiles) {
+    try {
+      const res = await fetch('/api/delete-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ public_id: id, resource_type: currentHosterTab === 'audio' ? 'video' : 'image' })
+      });
+      if (res.ok) deleted++;
+    } catch (e) {}
+  }
+
+  alert('Successfully deleted ' + deleted + ' files!');
+  selectedHosterFiles = [];
+  btn.innerText = 'Delete Selected';
+  btn.disabled = false;
+  loadHosterFiles(); // Reload list
+};
+
+function escapeHtml(s) {
       if (s === null || s === undefined) return '';
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
@@ -868,6 +1000,7 @@
       if (tab === 'verify') loadVerifyList();
       if (tab === 'settings') loadSiteSettings();
       if (tab === 'ads') { loadAds(); updateAdPreview(); }
+if (tab === 'hoster') loadHosterFiles();
       window.scrollTo(0, 0);
     }
 
