@@ -384,6 +384,8 @@
           <div class="form-group"><label>Lyrics</label><textarea id="schLyrics" placeholder="One line per lyric...&#10;Back to sender&#10;I no dey fear nobody"></textarea></div>
           <div class="form-group"><label>Download MP3 Link *</label><input type="text" id="schDownload" placeholder="Tap to add song audio" readonly onclick="audioPick('schDownload')"></div>
           <div class="form-group"><label>Spotify Link</label><input type="text" id="schSpotify" placeholder="https://open.spotify.com/track/..."></div>
+          <div class="form-group"><label>YouTube Video Link</label><input type="text" id="schYoutube" placeholder="https://youtube.com/watch?v=..."></div>
+          <div id="schYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('schTitle','schArtist','schFeaturing','schYoutube','schYtTest')"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div>
 
           <div class="datetime-section">
             <div class="datetime-section-title"><i class="fas fa-calendar-alt"></i> Release Date & Time (Ghana Time)</div>
@@ -1067,6 +1069,7 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
     }
    window.editSong = function(song) {
   document.getElementById('editSongId').value = song.id;
+  var ytl = document.querySelector('#editYtTest .yt-test-list'); if (ytl) ytl.innerHTML = '';
   document.getElementById('editModalCover').src = song.cover || '';
   document.getElementById('editModalTitle').innerText = song.title || 'Song';
   document.getElementById('editModalArtist').innerText = (song.artist_name || 'Samarid') + (song.album_name ? ' • ' + song.album_name : '');
@@ -1236,6 +1239,7 @@ window.saveEditModal = async function() {
       document.getElementById('editingId').value = '';
       ['songTitle','songCover','songArtist','songFeaturing','songCategory','songDate','songDescription','songLyrics','songDownload','songSpotify','songYoutube'].forEach(id => { document.getElementById(id).value = ''; });
       document.getElementById('songCountry').value = 'Ghana'; // NEW
+      var ytl2 = document.querySelector('#songYtTest .yt-test-list'); if (ytl2) ytl2.innerHTML = '';
       document.getElementById('submitBtn').innerText = 'Publish Song';
       document.getElementById('cancelBtn').style.display = 'none';
       goToPage('home');
@@ -1456,9 +1460,10 @@ try {
       return { open: open, row: row, close: close, testBtn: testBtn };
     })();
     window.testVideoFor = function (titleId, artistId, featId, inputId, boxId) {
-      var g = function (i) { var e = document.getElementById(i); return e ? e.value.trim() : ''; };
+      var el = function (x) { return (typeof x === 'string') ? document.getElementById(x) : x; };
+      var g = function (i) { var e = el(i); return e ? e.value.trim() : ''; };
       var title = g(titleId), artist = g(artistId), feat = g(featId);
-      var list = document.getElementById(boxId).querySelector('.yt-test-list');
+      var list = el(boxId).querySelector('.yt-test-list');
       var note = function (txt, color) { list.innerHTML = ''; var d = document.createElement('div'); d.style.cssText = 'font-size:12px;padding:8px 0;color:' + (color || '#999'); d.textContent = txt; list.appendChild(d); };
       var dec = function (s) { var t = document.createElement('textarea'); t.innerHTML = s || ''; return t.value; };
       if (!title || !artist) { note('Fill the song title and artist first.'); return; }
@@ -1499,13 +1504,19 @@ try {
             };
             row.querySelector('.vtu').onclick = function (e) {
               e.preventDefault();
-              document.getElementById(inputId).value = v.url;
+              el(inputId).value = v.url;
               note(v.label + ' chosen. It is saved when you publish.', '#22c55e');
             };
             list.appendChild(row);
           });
         })
         .catch(function (e) { note('Search failed: ' + e.message); });
+    };
+    window.albumTestVideo = function (btn, sch) {
+      var item = btn.closest('.album-song-item');
+      var p = sch ? 'sch-album-song-' : 'album-song-';
+      var artistEl = document.getElementById(sch ? 'schAlbumArtist' : 'albumArtist');
+      testVideoFor(item.querySelector('.' + p + 'title'), artistEl, item.querySelector('.' + p + 'feat'), item.querySelector('.' + p + 'youtube'), btn.parentNode);
     };
     window.deleteSong = async function(id) {
       if (!confirm('Delete this song permanently?')) return;
@@ -1535,7 +1546,7 @@ try {
       const div = document.createElement('div');
       div.className = 'album-song-item';
       div.id = 'album-song-' + albumSongIndex;
-      div.innerHTML = '<div class="album-song-num">SONG ' + albumSongIndex + '</div><button class="album-song-remove" onclick="removeAlbumSong(' + albumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="form-group"><label>Lyrics</label><textarea class="album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
+      div.innerHTML = '<div class="album-song-num">SONG ' + albumSongIndex + '</div><button class="album-song-remove" onclick="removeAlbumSong(' + albumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,false)"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
       container.appendChild(div);
       updateAlbumCount();
     }
@@ -1607,6 +1618,7 @@ setTimeout(() => {
       const lyrics = document.getElementById('schLyrics').value.trim();
       const downloadurl = document.getElementById('schDownload').value.trim() || '#';
       const spotify = document.getElementById('schSpotify').value.trim();
+      const ytLink = (document.getElementById('schYoutube').value || '').trim();
       if (!title) { status.className = 'status error'; status.innerText = 'Title required!'; return; }
       if (!cover) { status.className = 'status error'; status.innerText = 'Cover URL required!'; return; }
       if (!downloadurl || downloadurl === '#') { status.className = 'status error'; status.innerText = 'Download MP3 required!'; return; }
@@ -1616,12 +1628,13 @@ setTimeout(() => {
 const prog = startPublishProgress('scheduleSingle', 'Scheduling...');
       try {
         const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
-        const payload = { title, cover, artist_name: artist, featuring: featuring, category, country, description, lyrics: lyrics || null, downloadurl, spotify: spotify || null, date: displayDate, status: 'scheduled', release_at: iso };
+        const payload = { title, cover, artist_name: artist, featuring: featuring, category, country, description, lyrics: lyrics || null, downloadurl, spotify: spotify || null, youtube: ytLink || null, date: displayDate, status: 'scheduled', release_at: iso };
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!res.ok) { const err = await res.text(); throw new Error(err); }
         await ensureAllArtistsExist(artist, featuring);
         if (prog) prog.finish('Scheduled for ' + formatPreviewText(date).split(' · ')[0]);
-['schTitle','schCover','schArtist','schFeaturing','schCategory','schDescription','schDownload','schSpotify'].forEach(id => { document.getElementById(id).value = ''; });
+['schTitle','schCover','schArtist','schFeaturing','schCategory','schDescription','schDownload','schSpotify','schYoutube'].forEach(id => { document.getElementById(id).value = ''; });
+var ytl3 = document.querySelector('#schYtTest .yt-test-list'); if (ytl3) ytl3.innerHTML = '';
 document.getElementById('schCountry').value = 'Ghana';
 setTimeout(() => {
   const box = document.getElementById('scheduleSingleProgress');
@@ -1641,7 +1654,7 @@ setTimeout(() => {
       const div = document.createElement('div');
       div.className = 'album-song-item';
       div.id = 'sch-album-song-' + schAlbumSongIndex;
-      div.innerHTML = '<div class="album-song-num">SONG ' + schAlbumSongIndex + '</div><button class="album-song-remove" onclick="removeSchAlbumSong(' + schAlbumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="sch-album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="sch-album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="form-group"><label>Lyrics</label><textarea class="sch-album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
+      div.innerHTML = '<div class="album-song-num">SONG ' + schAlbumSongIndex + '</div><button class="album-song-remove" onclick="removeSchAlbumSong(' + schAlbumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="sch-album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="sch-album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,true)"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="sch-album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
       container.appendChild(div);
       updateSchAlbumCount();
     }
