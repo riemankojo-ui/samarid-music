@@ -27,6 +27,7 @@ function wordScore(ytTitle, songTitle, artistName) {
 // score: 3 = official video, 2 = distributor "Topic" audio, 1 = other audio / plain upload, null = not a match
 function rate(item, title, artist, featuring) {
   const t = norm(item.snippet.title), ch = norm(item.snippet.channelTitle);
+  const sw = words(title);
   const { titleRatio, titleHits } = wordScore(t, title, artist);
   const chWords = words(ch), aWords = words(artist);
   const fWords = words(featuring || '');
