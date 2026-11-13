@@ -612,19 +612,21 @@
       <!-- HOSTER PAGE -->
 <div class="page" data-page="hoster">
   <h1 class="page-title">Hoster Manager</h1>
-  <p class="page-subtitle">Manage Cloudinary Audio & Images</p>
   
   <div class="sub-tabs" style="margin-bottom:16px;">
-  <button class="sub-tab active" onclick="hosterTab('audio', this)"><i class="fas fa-music"></i> Audio (<span id="hosterAudioCount">0</span>)</button>
-  <button class="sub-tab" onclick="hosterTab('image', this)"><i class="fas fa-image"></i> Images (<span id="hosterImageCount">0</span>)</button>
+  <button class="sub-tab active" onclick="hosterTab('audio', this)"><i class="fas fa-music"></i> Audio Files</button>
+  <button class="sub-tab" onclick="hosterTab('image', this)"><i class="fas fa-image"></i> Images</button>
 </div>
 
   <div id="hosterSkeleton" style="display:flex; flex-direction:column; gap:10px; width:100%;"></div>
   
   <div id="hosterContent" style="display:none;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; background:#1f1f1f; padding:12px; border-radius:12px; border:1px solid #333;">
-      <div style="font-size:12px; color:#ccc;" id="hosterCountText">0 Files</div>
-      <div style="display:flex; gap:8px;">
+  <div style="display:flex; flex-direction:column; gap:4px;">
+    <div style="font-size:12px; color:#ccc;" id="hosterCountText">0 Files</div>
+    <div style="font-size:11px; color:#ff8800; font-weight:800; letter-spacing:0.5px;" id="hosterStorageText">Storage: 0 MB</div>
+  </div>
+  <div style="display:flex; gap:8px;">
         <button onclick="toggleSelectAllHoster()" id="selectAllBtn" style="background:transparent; border:1px solid #555; color:#fff; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">Select All Unused</button>
         <button onclick="deleteSelectedHoster()" id="deleteHosterBtn" style="background:#ff0033; border:none; color:#fff; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;">Delete Selected</button>
       </div>
@@ -826,11 +828,18 @@ async function loadHosterFiles() {
     hosterFiles.audio = data.audios || [];
     hosterFiles.image = data.images || [];
     
-    // Update the counts in the tabs
-    document.getElementById('hosterAudioCount').innerText = hosterFiles.audio.length;
-    document.getElementById('hosterImageCount').innerText = hosterFiles.image.length;
-    
-    renderHosterList();
+    // Update Total Storage Display
+if (data.storageBytes !== undefined) {
+  const totalMb = (data.storageBytes / (1024 * 1024)).toFixed(2);
+  // If it's over 1024 MB, show as GB
+  if (totalMb > 1024) {
+    document.getElementById('hosterStorageText').innerText = 'Storage: ' + (totalMb / 1024).toFixed(2) + ' GB';
+  } else {
+    document.getElementById('hosterStorageText').innerText = 'Storage: ' + totalMb + ' MB';
+  }
+}
+
+renderHosterList();
     document.getElementById('hosterSkeleton').style.display = 'none';
     document.getElementById('hosterContent').style.display = 'block';
   } catch (e) {

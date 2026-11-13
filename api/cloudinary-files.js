@@ -44,12 +44,22 @@ export default async function handler(req) {
     }));
   };
 
+  // 3. Fetch Cloudinary Usage (Total Storage)
+  let storageBytes = 0;
+  try {
+    const usageRes = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/usage`, { headers: { Authorization: `Basic ${auth}` } });
+    const usageData = await usageRes.json();
+    if (usageData.storage && usageData.storage.usage) {
+      storageBytes = usageData.storage.usage;
+    }
+  } catch (e) {}
+
   const [images, audios] = await Promise.all([
     fetchCloudinary('image'),
     fetchCloudinary('video')
   ]);
 
-  return new Response(JSON.stringify({ images, audios }), { 
+  return new Response(JSON.stringify({ images, audios, storageBytes }), { 
     status: 200, 
     headers: { 'Content-Type': 'application/json' } 
   });
