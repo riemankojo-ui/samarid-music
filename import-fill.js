@@ -197,25 +197,107 @@
     return { ok: true, msg: (s ? 'Schedule single' : 'Add single') + ' filled.' + (miss.length ? ' Still needed: ' + miss.join(', ') + '.' : ' Check it, then tap the button.') };
   }
 
-  function run(text, force) {
-    var p, r;
-    if (force && text === null) {
-      p = { head: {}, tracks: [], isAlbum: force.type === 'album', isScheduled: force.scheduled };
-    } else {
-      if (!String(text || '').trim()) { say('The file is empty.', true); return; }
-      p = parse(text);
-      if (force) { p.isAlbum = force.type === 'album'; p.isScheduled = force.scheduled; }
-    }
-    if (p.isAlbum && force) { while (p.tracks.length < (force.count || 1)) p.tracks.push({}); }
-    if (p.isAlbum && !p.tracks.length) { say('Album found but no "Track 1: ..." lines.', true); return; }
-    try { r = p.isAlbum ? fillAlbum(p) : fillSingle(p); } catch (e) { say('Import error: ' + e.message, true); return; }
-    if (typeof r === 'string') { say(r, true); return; }
-      window.scrollTo(0, 0);
+function run(text, force) {
+  var p;
+  if (force && text === null) {
+    p = { head: {}, tracks: [], isAlbum: force.type === 'album', isScheduled: force.scheduled };
+  } else {
+    if (!String(text || '').trim()) { say('The file is empty.', true); return; }
+    p = parse(text);
+    if (force) { p.isAlbum = force.type === 'album'; p.isScheduled = force.scheduled; }
+  }
+  if (p.isAlbum && force) { while (p.tracks.length < (force.count || 1)) p.tracks.push({}); }
+  
+  // If it's a single song and not forced by the "Import" button popup, show the choice card
+  if (!p.isAlbum && !force) {
+    showPublishChoice(function(isScheduled) {
+      p.isScheduled = isScheduled;
+      processParsedData(p);
+    });
+  } else {
+    processParsedData(p);
+  }
+}
+
+function processParsedData(p) {
+  var r;
+  if (p.isAlbum && !p.tracks.length) { say('Album found but no "Track 1: ..." lines.', true); return; }
+  try { r = p.isAlbum ? fillAlbum(p) : fillSingle(p); } catch (e) { say('Import error: ' + e.message, true); return; }
+  if (typeof r === 'string') { say(r, true); return; }
+  window.scrollTo(0, 0);
   say(r.msg);
   var hasContent = p.isAlbum
     ? p.tracks.some(function (t) { return t && t.title; })
     : !!(p.head.title || p.head.album);
   if (hasContent) setTimeout(function () { autoTestVideos(p); }, 400);
+}
+
+function showPublishChoice(callback) {
+  var old = document.getElementById('importChoiceModal'); if (old) old.remove();
+  var o = document.createElement('div'); o.id = 'importChoiceModal';
+  o.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);';
+  
+  var cardStyle = 'background:#1f1f1f;border:1px solid #333;border-radius:20px;padding:24px;width:100%;max-width:340px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.5);';
+  var optBase = 'display:flex;align-items:center;gap:12px;padding:16px;border-radius:12px;border:2px solid #333;background:#0a0a0a;cursor:pointer;margin-bottom:10px;transition:all 0.15s;text-align:left;';
+  
+  o.innerHTML =
+    '<div style="' + cardStyle + '">' +
+      '<div style="font-size:40px;margin-bottom:10px;">🎵</div>' +
+      '<h3 style="color:#fff;font-size:20px;margin-bottom:6px;font-weight:900;">Single Song Detected</h3>' +
+      '<p style="color:#888;font-size:13px;margin-bottom:20px;">Choose how to publish this release</p>' +
+      
+      '<div id="optAdd" style="' + optBase + '">' +
+        '<div style="width:20px;height:20px;border-radius:50%;border:2px solid #555;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><div id="dotAdd" style="width:10px;height:10px;border-radius:50%;background:transparent;transition:0.15s;"></div></div>' +
+        '<div><div style="color:#fff;font-weight:800;font-size:14px;">Add Now</div><div style="color:#888;font-size:11px;">Publish immediately</div></div>' +
+      '</div>' +
+      
+      '<div id="optSchedule" style="' + optBase + '">' +
+        '<div style="width:20px;height:20px;border-radius:50%;border:2px solid #555;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><div id="dotSchedule" style="width:10px;height:10px;border-radius:50%;background:transparent;transition:0.15s;"></div></div>' +
+        '<div><div style="color:#fff;font-weight:800;font-size:14px;">Schedule Release</div><div style="color:#888;font-size:11px;">Pick a future date and time</div></div>' +
+      '</div>' +
+      
+      '<button id="choiceFillBtn" style="width:100%;padding:14px;margin-top:10px;background:#ff8800;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:900;font-family:inherit;cursor:pointer;">Fill Form</button>' +
+      '<button id="choiceCancelBtn" style="width:100%;padding:14px;margin-top:8px;background:transparent;color:#999;border:none;border-radius:12px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;">Cancel</button>' +
+    '</div>';
+    
+  document.body.appendChild(o);
+  
+  var selectedValue = false; // false = Add Now, true = Schedule
+  
+  var optAdd = document.getElementById('optAdd');
+  var optSchedule = document.getElementById('optSchedule');
+  var dotAdd = document.getElementById('dotAdd');
+  var dotSchedule = document.getElementById('dotSchedule');
+  
+  function updateUI() {
+    if (selectedValue === false) {
+      optAdd.style.borderColor = '#ff8800';
+      optAdd.style.background = 'rgba(255,136,0,0.08)';
+      dotAdd.style.background = '#ff8800';
+      
+      optSchedule.style.borderColor = '#333';
+      optSchedule.style.background = '#0a0a0a';
+      dotSchedule.style.background = 'transparent';
+    } else {
+      optSchedule.style.borderColor = '#1d9bf0';
+      optSchedule.style.background = 'rgba(29,155,240,0.08)';
+      dotSchedule.style.background = '#1d9bf0';
+      
+      optAdd.style.borderColor = '#333';
+      optAdd.style.background = '#0a0a0a';
+      dotAdd.style.background = 'transparent';
+    }
+  }
+  
+  updateUI();
+  
+  optAdd.onclick = function() { selectedValue = false; updateUI(); };
+  optSchedule.onclick = function() { selectedValue = true; updateUI(); };
+  
+  function close() { o.remove(); }
+  
+  document.getElementById('choiceFillBtn').onclick = function() { close(); callback(selectedValue); };
+  document.getElementById('choiceCancelBtn').onclick = function() { close(); };
 }
 
 function autoTestVideos(p) {
