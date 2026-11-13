@@ -17,7 +17,6 @@ export default async function handler(req) {
   const timestamp = Math.floor(Date.now() / 1000);
   const str = 'public_id=' + public_id + '&timestamp=' + timestamp + API_SECRET;
 
-  // SHA-1 signature using Web Crypto
   const enc = new TextEncoder();
   const hashBuf = await crypto.subtle.digest('SHA-1', enc.encode(str));
   const signature = Array.from(new Uint8Array(hashBuf)).map(b => b.toString(16).padStart(2, '0')).join('');
