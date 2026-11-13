@@ -1844,14 +1844,52 @@ status.className = 'status success';
         const songs = await res.json();
         if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<p class="empty-songs">No scheduled releases yet.</p>'; return; }
         list.innerHTML = songs.map(s => {
-          const releaseDate = s.release_at ? new Date(s.release_at) : null;
-          const when = releaseDate ? formatPreviewText(releaseDate) : 'Unknown time';
-          const albumTag = s.album_name ? ' • ' + s.album_name : '';
-          return '<div class="scheduled-card"><img src="' + s.cover + '" alt="' + s.title + '"><div class="info"><h4>' + s.title + '</h4><p>' + (s.artist_name || 'Samarid') + albumTag + '</p></div><div class="when">' + when.split(' · ')[0] + '</div></div>';
-        }).join('');
-      } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load.</p>'; }
+  const releaseDate = s.release_at ? new Date(s.release_at) : null;
+  const when = releaseDate ? formatPreviewText(releaseDate) : 'Unknown time';
+  const albumTag = s.album_name ? ' • ' + s.album_name : '';
+  return '<div class="scheduled-card"><img src="' + s.cover + '" alt="' + s.title + '"><div class="info"><h4>' + s.title + '</h4><p>' + (s.artist_name || 'Samarid') + albumTag + '</p></div><div class="when" style="display:flex; align-items:center; gap:8px;">' + when.split(' · ')[0] + '<button onclick="deleteScheduledSong(' + s.id + ')" style="background:transparent; border:none; color:#ff0033; font-size:15px; cursor:pointer; padding:4px;" title="Cancel Release"><i class="fas fa-trash"></i></button></div></div>';
+}).join('');
+        } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load.</p>'; }
+}
+
+window.deleteScheduledSong = function(id) {
+  showConfirm('Cancel Release', 'Are you sure you want to cancel this scheduled release? This will permanently delete the song and its files from Cloudinary.', true, async function() {
+    try {
+      // 1. Get URLs to delete from Cloudinary
+      const sr = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + id + '&select=cover,downloadurl', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+      const rows = await sr.json();
+      const song = rows && rows[0];
+      const cover = song ? song.cover : null;
+      const mp3 = song ? song.downloadurl : null;
+
+      // 2. Delete from Supabase
+      await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + id, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+      
+      // 3. Delete Image from Cloudinary
+      if (cover && cover.includes('res.cloudinary.com/t2wneryo/')) {
+        const match = cover.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.[a-z]+)?$/i);
+        if (match) {
+          await fetch('/api/delete-image', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ public_id: match[1], resource_type: 'image' }) });
+        }
+      }
+
+      // 4. Delete MP3 from Cloudinary
+      if (mp3 && mp3.includes('res.cloudinary.com/t2wneryo/')) {
+        const match = mp3.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.[a-z0-9]+)?$/i);
+        if (match) {
+          await fetch('/api/delete-image', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ public_id: match[1], resource_type: 'video' }) });
+        }
+      }
+
+      showToast('Release cancelled and files deleted.', 'success');
+      loadScheduled(); // Refresh the list
+    } catch (e) {
+      showToast('Could not cancel release.', 'error');
     }
-    window.loadChannelLink = function() {
+  });
+};
+
+window.loadChannelLink = function() {
       const saved = localStorage.getItem('samarid_channel_link');
       if (saved) document.getElementById('channelLinkInput').value = saved;
     }
