@@ -11,21 +11,42 @@ function norm(s) {
   return String(s || '').toLowerCase().replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
+function words(s) { return norm(s).split(' ').filter(Boolean); }
+
+function wordScore(ytTitle, songTitle, artistName) {
+  const tw = words(ytTitle);
+  const sw = words(songTitle);
+  const aw = words(artistName);
+  // how many song title words appear in yt title
+  const titleHits = sw.filter(w => tw.includes(w)).length;
+  const titleRatio = sw.length ? titleHits / sw.length : 0;
+  // how many artist words appear in yt title or channel
+  return { titleRatio, titleHits, artistInTitle: aw.length ? aw.filter(w => tw.includes(w)).length / aw.length : 0 };
+}
+
 // score: 3 = official video, 2 = distributor "Topic" audio, 1 = other audio / plain upload, null = not a match
 function rate(item, title, artist) {
   const t = norm(item.snippet.title), ch = norm(item.snippet.channelTitle);
-  const nt = norm(title), na = norm(artist);
-  if (!nt || t.indexOf(nt) === -1) return null;
-  const rest = t.replace(nt, ' ');
-  if (/\b(cover|remix|reaction|karaoke|instrumental|slowed|sped up|live|tutorial)\b/.test(rest)) return null;
-  // artist must match title or channel — but if no artist given, still accept title match
-  if (na && t.indexOf(na) === -1 && ch.indexOf(na) === -1) {
-    // soft fallback: accept if it's an official video or Topic channel with strong title match
-    if (!/ topic$/.test(ch) && !/official (music )?video|music video/.test(rest)) return null;
-  }
-  const isAudioWord = /\b(audio|visuali[sz]er|lyrics?)\b/.test(rest);
-  if (!isAudioWord && /official (music )?video|music video/.test(rest)) return 3;
-  if (/ topic$/.test(ch)) return 2;
+  const { titleRatio, titleHits } = wordScore(t, title, artist);
+  const chWords = words(ch), aWords = words(artist);
+  const artistInCh = aWords.length ? aWords.filter(w => chWords.includes(w)).length / aWords.length : 0;
+
+  // need at least 60% of song title words to match, or at least 2 words if title is long
+  if (titleRatio < 0.6 && titleHits < 2) return null;
+
+  // block covers/remixes/etc
+  if (/\b(cover|remix|reaction|karaoke|instrumental|slowed|sped up|live session|tutorial)\b/.test(t)) return null;
+
+  const isOfficialVideo = /official (music )?video|music video/.test(t);
+  const isTopic = / topic$/.test(ch);
+  const isAudioWord = /\b(audio|visuali[sz]er|lyrics?)\b/.test(t);
+
+  // boost score if artist also matches
+  const artistMatch = wordScore(t, title, artist).artistInTitle > 0.4 || artistInCh > 0.4;
+
+  if (!isAudioWord && isOfficialVideo) return artistMatch ? 5 : 3;
+  if (isTopic) return artistMatch ? 4 : 2;
+  if (artistMatch) return 2;
   return 1;
 }
 
