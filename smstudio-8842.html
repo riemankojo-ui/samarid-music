@@ -509,13 +509,16 @@
         </div>
 
         <div class="import-methods">
-          <button class="import-method active" id="importBtnUpload" onclick="switchImportMethod('upload', this)">
-            <i class="fas fa-file-upload"></i> Upload File
-          </button>
-          <button class="import-method" id="importBtnPaste" onclick="switchImportMethod('paste', this)">
-            <i class="fas fa-paste"></i> Paste Text
-          </button>
-        </div>
+  <button class="import-method active" id="importBtnUpload" onclick="switchImportMethod('upload', this)">
+    <i class="fas fa-file-upload"></i> Upload File
+  </button>
+  <button class="import-method" id="importBtnFolder" onclick="switchImportMethod('folder', this)">
+    <i class="fas fa-folder-open"></i> Album Folder
+  </button>
+  <button class="import-method" id="importBtnPaste" onclick="switchImportMethod('paste', this)">
+    <i class="fas fa-paste"></i> Paste Text
+  </button>
+</div>
 
         <div class="import-method-panel active" id="importPanelUpload">
           <div class="upload-zone" onclick="document.getElementById('importFileInput').click()">
@@ -527,9 +530,26 @@
           <input type="file" id="importFileInput" accept=".txt,text/plain" style="display: none;" onchange="handleImportFile(event)">
         </div>
 
-        <div class="import-method-panel" id="importPanelPaste">
-          <textarea class="import-textarea" id="importPasteArea" placeholder="Paste song details here..."></textarea>
-        </div>
+        <div class="import-method-panel" id="importPanelFolder">
+  <div class="upload-zone" onclick="document.getElementById('importFolderInput').click()">
+    <div class="icon"><i class="fas fa-folder-tree"></i></div>
+    <h3>Tap to choose Album Folder</h3>
+    <p>Select a folder with MP3s and a cover image</p>
+    <div class="filename" id="importFolderName"></div>
+  </div>
+  <input type="file" id="importFolderInput" webkitdirectory directory multiple style="display: none;" onchange="handleFolderImport(event)">
+  <div id="folderScanResults" style="display:none; margin-top:20px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px;">
+    <h4 style="color:var(--accent); margin-bottom:10px; font-size:14px;"><i class="fas fa-magic"></i> Folder Scanned</h4>
+    <p id="folderScanSummary" style="font-size:12px; color:#ccc; margin-bottom:12px;"></p>
+    <textarea id="folderTxtOutput" class="import-textarea" readonly style="height:150px; font-size:11px; margin-bottom:12px;"></textarea>
+    <button class="main-btn" onclick="applyFolderTxt()"><i class="fas fa-check"></i> Use This Data</button>
+    <button class="main-btn" onclick="downloadFolderTxt()" style="margin-top:10px; background:#222; box-shadow:none;"><i class="fas fa-download"></i> Download .txt</button>
+  </div>
+</div>
+
+<div class="import-method-panel" id="importPanelPaste">
+  <textarea class="import-textarea" id="importPasteArea" placeholder="Paste song details here..."></textarea>
+</div>
 
         <details style="margin-bottom: 14px;">
           <summary style="font-size: 12px; color: var(--accent); font-weight: 800; padding: 10px 0; display: flex; align-items: center; gap: 6px;">
@@ -1584,10 +1604,33 @@ songItems.forEach(item => {
 const prog = startPublishProgress('album', 'Publishing album...');
       try {
         const payload = songs.map((s, i) => ({ title: s.title, cover, artist_name: artist, featuring: ((document.querySelectorAll('#albumSongsContainer .album-song-feat')[i] || {}).value || '').trim() || null, category, country, date, description: s.description, lyrics: s.lyrics || null, youtube: s.youtube || null, downloadurl: s.downloadurl, album_name: albumName, status: 'live', release_at: null }));
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        if (!res.ok) { const err = await res.text(); throw new Error(err); }
-        await ensureArtistExists(artist);
-        if (prog) prog.finish('Album submitted! ' + songs.length + ' songs');
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' }, body: JSON.stringify(payload) });
+if (!res.ok) { const err = await res.text(); throw new Error(err); }
+let createdSongs = [];
+try { const p = await res.json(); if (Array.isArray(p)) createdSongs = p; } catch (e) {}
+await ensureArtistExists(artist);
+if (prog) prog.finish('Album submitted! ' + songs.length + ' songs');
+if (createdSongs.length > 0) {
+  relPop.open('Release status', albumName + ' - ' + artist);
+  relPop.row('song', 'Album', 'ok', songs.length + ' songs published on FlexTune');
+  createdSongs.forEach(function (s, i) {
+    var key = 'yt-' + s.id;
+    var label = 'Song ' + (i + 1) + ': ' + (s.title || '');
+    relPop.row(key, label, 'wait', 'Searching for video...');
+    fetch('/api/find-video?id=' + s.id)
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d) return;
+        if (d.url) {
+          var type = d.type === 'video' ? '🎬 Official video found' : '🎵 Audio found';
+          relPop.row(key, label, 'ok', type + ': <a href="' + d.url + '" target="_blank" style="color:#ff0033;">Watch</a>');
+        } else {
+          relPop.row(key, label, 'err', 'No video found' + (d.error ? ': ' + d.error : ''));
+        }
+      })
+      .catch(function () { relPop.row(key, label, 'err', 'Search failed'); });
+  });
+}
 setTimeout(() => {
   const box = document.getElementById('albumProgress');
   if (box) { box.classList.remove('active'); box.classList.remove('done'); }
@@ -1629,10 +1672,29 @@ const prog = startPublishProgress('scheduleSingle', 'Scheduling...');
       try {
         const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
         const payload = { title, cover, artist_name: artist, featuring: featuring, category, country, description, lyrics: lyrics || null, downloadurl, spotify: spotify || null, youtube: ytLink || null, date: displayDate, status: 'scheduled', release_at: iso };
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        if (!res.ok) { const err = await res.text(); throw new Error(err); }
-        await ensureAllArtistsExist(artist, featuring);
-        if (prog) prog.finish('Scheduled for ' + formatPreviewText(date).split(' · ')[0]);
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' }, body: JSON.stringify(payload) });
+if (!res.ok) { const err = await res.text(); throw new Error(err); }
+let created = [];
+try { const p = await res.json(); if (Array.isArray(p)) created = p; } catch (e) {}
+await ensureAllArtistsExist(artist, featuring);
+if (prog) prog.finish('Scheduled for ' + formatPreviewText(date).split(' · ')[0]);
+if (created[0] && created[0].id) {
+  var sid = created[0].id;
+  relPop.open('Release status', title + ' - ' + artist);
+  relPop.row('song', 'Song', 'ok', 'Scheduled on FlexTune');
+  relPop.row('yt-' + sid, 'YouTube', 'wait', 'Searching for video...');
+  fetch('/api/find-video?id=' + sid)
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      if (!d) return;
+      if (d.url) {
+        var type = d.type === 'video' ? '🎬 Official video found' : '🎵 Audio found';
+        relPop.row('yt-' + sid, 'YouTube', 'ok', type + ': <a href="' + d.url + '" target="_blank" style="color:#ff0033;">Watch</a>');
+      } else {
+        relPop.row('yt-' + sid, 'YouTube', 'err', 'No video found' + (d.error ? ': ' + d.error : ''));
+      }
+    }).catch(function () { relPop.row('yt-' + sid, 'YouTube', 'err', 'Search failed'); });
+}
 ['schTitle','schCover','schArtist','schFeaturing','schCategory','schDescription','schDownload','schSpotify','schYoutube'].forEach(id => { document.getElementById(id).value = ''; });
 var ytl3 = document.querySelector('#schYtTest .yt-test-list'); if (ytl3) ytl3.innerHTML = '';
 document.getElementById('schCountry').value = 'Ghana';
@@ -1693,10 +1755,33 @@ setTimeout(() => {
       try {
         const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
         const payload = songs.map((s, i) => ({ title: s.title, cover, artist_name: artist, featuring: ((document.querySelectorAll('#schAlbumSongsContainer .sch-album-song-feat')[i] || {}).value || '').trim() || null, category, country, description: s.description, lyrics: s.lyrics || null, youtube: s.youtube || null, downloadurl: s.downloadurl, album_name: albumName, date: displayDate, status: 'scheduled', release_at: iso }));
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        if (!res.ok) { const err = await res.text(); throw new Error(err); }
-        await ensureArtistExists(artist);
-        status.className = 'status success';
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' }, body: JSON.stringify(payload) });
+if (!res.ok) { const err = await res.text(); throw new Error(err); }
+let createdSongs = [];
+try { const p = await res.json(); if (Array.isArray(p)) createdSongs = p; } catch (e) {}
+await ensureArtistExists(artist);
+if (createdSongs.length > 0) {
+  relPop.open('Release status', albumName + ' - ' + artist);
+  relPop.row('song', 'Album', 'ok', songs.length + ' songs scheduled on FlexTune');
+  createdSongs.forEach(function (s, i) {
+    var key = 'yt-' + s.id;
+    var label = 'Song ' + (i + 1) + ': ' + (s.title || '');
+    relPop.row(key, label, 'wait', 'Searching for video...');
+    fetch('/api/find-video?id=' + s.id)
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d) return;
+        if (d.url) {
+          var type = d.type === 'video' ? '🎬 Official video found' : '🎵 Audio found';
+          relPop.row(key, label, 'ok', type + ': <a href="' + d.url + '" target="_blank" style="color:#ff0033;">Watch</a>');
+        } else {
+          relPop.row(key, label, 'err', 'No video found' + (d.error ? ': ' + d.error : ''));
+        }
+      })
+      .catch(function () { relPop.row(key, label, 'err', 'Search failed'); });
+  });
+}
+status.className = 'status success';
         status.innerText = 'Album "' + albumName + '" scheduled for ' + formatPreviewText(date);
         ['schAlbumName','schAlbumArtist','schAlbumCover','schAlbumCategory'].forEach(id => { document.getElementById(id).value = ''; });
         document.getElementById('schAlbumCountry').value = 'Ghana'; // NEW
@@ -1770,21 +1855,141 @@ setTimeout(() => {
     let parsedImport = null;
     let importMethod = 'upload';
     window.switchImportMethod = function(method, btn) {
-      importMethod = method;
-      document.querySelectorAll('#pageImport .import-method').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelectorAll('#pageImport .import-method-panel').forEach(p => p.classList.remove('active'));
-      document.getElementById('importPanel' + (method === 'upload' ? 'Upload' : 'Paste')).classList.add('active');
-    }
+  importMethod = method;
+  document.querySelectorAll('#pageImport .import-method').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#pageImport .import-method-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('importPanel' + (method === 'upload' ? 'Upload' : method === 'folder' ? 'Folder' : 'Paste')).classList.add('active');
+}
     window.handleImportFile = function(event) {
-      const file = event.target.files && event.target.files[0];
-      if (!file) return;
-      document.getElementById('importFilename').innerText = file.name;
-      const reader = new FileReader();
-      reader.onload = function(e) { parseImportText(e.target.result || ''); };
-      reader.onerror = function() { alert('Could not read file.'); };
-      reader.readAsText(file);
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  document.getElementById('importFilename').innerText = file.name;
+  const reader = new FileReader();
+  reader.onload = function(e) { parseImportText(e.target.result || ''); };
+  reader.onerror = function() { alert('Could not read file.'); };
+  reader.readAsText(file);
+}
+
+window.handleFolderImport = async function(event) {
+  const files = event.target.files;
+  if (!files || files.length === 0) return;
+
+  const folderName = files[0].webkitRelativePath.split('/')[0] || 'Imported Album';
+  document.getElementById('importFolderName').innerText = folderName;
+
+  let coverFile = null;
+  let audioFiles = [];
+
+  for (let i = 0; i < files.length; i++) {
+    const f = files[i];
+    if (f.type.startsWith('image/')) {
+      if (!coverFile || f.name.toLowerCase().includes('cover')) coverFile = f;
+    } else if (f.type.startsWith('audio/') || f.name.toLowerCase().endsWith('.mp3')) {
+      audioFiles.push(f);
     }
+  }
+
+  if (audioFiles.length === 0) {
+    alert('No MP3 files found in this folder!');
+    return;
+  }
+
+  const scanSummary = document.getElementById('folderScanSummary');
+  scanSummary.innerHTML = 'Uploading cover to Cloudinary... <i class="fas fa-spinner fa-spin"></i>';
+  document.getElementById('folderScanResults').style.display = 'block';
+
+  let coverUrl = '';
+  if (coverFile) {
+    try {
+      const fd = new FormData();
+      fd.append('file', coverFile);
+      fd.append('upload_preset', window.CLOUD_PRESET || 'flextune_covers');
+      const res = await fetch('https://api.cloudinary.com/v1_1/' + (window.CLOUD_NAME || 't2wneryo') + '/image/upload', {
+        method: 'POST',
+        body: fd
+      });
+      const data = await res.json();
+      if (data.secure_url) coverUrl = data.secure_url;
+    } catch (e) {
+      console.error('Cover upload error:', e);
+    }
+  }
+
+  let parsedTracks = [];
+  let defaultArtist = '';
+
+  audioFiles.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' }));
+
+  audioFiles.forEach((file, index) => {
+    let name = file.name.replace(/\.[^/.]+$/, "");
+    let artist = '';
+    let title = name;
+    let feat = '';
+
+    const featMatch = name.match(/(?:ft\.|feat\.|featuring)\s*([^)]+)/i);
+    if (featMatch) {
+      feat = featMatch[1].trim();
+      name = name.replace(featMatch[0], '').trim();
+    }
+
+    const parts = name.split(/\s*-\s*/);
+    if (parts.length >= 2) {
+      artist = parts[0].trim();
+      title = parts.slice(1).join(' - ').trim();
+      if (!defaultArtist) defaultArtist = artist;
+    }
+
+    parsedTracks.push({
+      index: index + 1,
+      title: title,
+      artist: artist || 'Unknown Artist',
+      feat: feat
+    });
+  });
+
+  if (!defaultArtist) defaultArtist = 'Unknown Artist';
+
+  let txt = 'Type: Album\n';
+  txt += 'Release: Now\n';
+  txt += 'Album: ' + folderName + '\n';
+  txt += 'Artist: ' + defaultArtist + '\n';
+  if (coverUrl) txt += 'Cover: ' + coverUrl + '\n';
+  txt += 'Category: Music\n';
+  txt += 'Country: Ghana\n';
+  txt += 'Description: Album imported from folder.\n\n';
+
+  parsedTracks.forEach(t => {
+    txt += 'Track ' + t.index + ': ' + t.title + '\n';
+    if (t.feat) txt += 'Featuring: ' + t.feat + '\n';
+    txt += 'Download: #\n\n';
+  });
+
+  document.getElementById('folderTxtOutput').value = txt;
+  scanSummary.innerHTML = 'Found ' + audioFiles.length + ' songs and ' + (coverFile ? '1 cover' : 'no cover') + '.<br>Review the generated TXT below and click "Use This Data".';
+};
+
+window.applyFolderTxt = function() {
+  const txt = document.getElementById('folderTxtOutput').value;
+  document.getElementById('importPasteArea').value = txt;
+  switchImportMethod('paste', document.getElementById('importBtnPaste'));
+  if (typeof window.parseImport === 'function') {
+    window.parseImport();
+  }
+};
+
+window.downloadFolderTxt = function() {
+  const txt = document.getElementById('folderTxtOutput').value;
+  const blob = new Blob([txt], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (document.getElementById('importFolderName').innerText || 'album') + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
     window.copyImportTemplate = async function() {
       const txt = document.getElementById('importTemplate').innerText;
       try {

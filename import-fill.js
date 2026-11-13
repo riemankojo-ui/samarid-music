@@ -210,9 +210,43 @@
     if (p.isAlbum && !p.tracks.length) { say('Album found but no "Track 1: ..." lines.', true); return; }
     try { r = p.isAlbum ? fillAlbum(p) : fillSingle(p); } catch (e) { say('Import error: ' + e.message, true); return; }
     if (typeof r === 'string') { say(r, true); return; }
-    window.scrollTo(0, 0);
-    say(r.msg);
-  }
+      window.scrollTo(0, 0);
+  say(r.msg);
+  var hasContent = p.isAlbum
+    ? p.tracks.some(function (t) { return t && t.title; })
+    : !!(p.head.title || p.head.album);
+  if (hasContent) setTimeout(function () { autoTestVideos(p); }, 400);
+}
+
+function autoTestVideos(p) {
+  try {
+    if (p.isAlbum) {
+      var containerId = p.isScheduled ? 'schAlbumSongsContainer' : 'albumSongsContainer';
+      var prefix = p.isScheduled ? 'sch-album-song-' : 'album-song-';
+      var artistId = p.isScheduled ? 'schAlbumArtist' : 'albumArtist';
+      var container = document.getElementById(containerId);
+      if (!container || typeof window.testVideoFor !== 'function') return;
+      var items = container.querySelectorAll('.album-song-item');
+      items.forEach(function (item, i) {
+        setTimeout(function () {
+          var titleEl = item.querySelector('.' + prefix + 'title');
+          var featEl = item.querySelector('.' + prefix + 'feat');
+          var ytEl = item.querySelector('.' + prefix + 'youtube');
+          var box = item.querySelector('.album-yt-test');
+          if (titleEl && ytEl && box) {
+            window.testVideoFor(titleEl, artistId, featEl, ytEl, box);
+          }
+        }, i * 400);
+      });
+    } else if (typeof window.testVideoFor === 'function') {
+      if (p.isScheduled) {
+        window.testVideoFor('schTitle', 'schArtist', 'schFeaturing', 'schYoutube', 'schYtTest');
+      } else {
+        window.testVideoFor('songTitle', 'songArtist', 'songFeaturing', 'songYoutube', 'songYtTest');
+      }
+    }
+  } catch (e) { console.warn('Auto test video failed:', e); }
+}
 
   /* ---------- HOOKS (replace the old import behaviour) ---------- */
   window.handleImportFile = function (event) {
