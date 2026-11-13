@@ -1048,7 +1048,7 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
         const spotifyTag = s.spotify ? ' • <span style="color:#1DB954;">Spotify</span>' : '';
         const scheduledTag = s.status === 'scheduled' ? ' • <span style="color:#ffcc00;">SCHEDULED</span>' : '';
         const countryTag = s.country ? ' • ' + s.country : ''; // NEW
-        return '<div class="admin-song"><img src="' + s.cover + '" alt="' + s.title + '"><div class="info"><h4>' + s.title + '</h4><p>' + (s.artist_name || 'Samarid') + featTag + ' • ' + s.category + countryTag + ' • ' + s.date + albumTag + spotifyTag + scheduledTag + '</p></div><div class="actions"><button class="action-btn test-btn" onclick="location.href=\'smvideo-8842.html?id=' + s.id + '\'"><i class="fas fa-play-circle"></i></button><button class="action-btn link-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link"></i></button><button class="action-btn edit-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash"></i></button></div></div>';
+        return '<div class="admin-song"><img src="' + s.cover + '" alt="' + s.title + '"><div class="info"><h4>' + s.title + '</h4><p>' + (s.artist_name || 'Samarid') + featTag + ' • ' + s.category + countryTag + ' • ' + s.date + albumTag + spotifyTag + scheduledTag + '</p></div><div class="actions"><button class="action-btn link-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link"></i></button><button class="action-btn edit-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash"></i></button></div></div>';
       }).join('');
       if (hasMore) html += '<button class="show-all-btn" onclick="showAllSongs()"><i class="fas fa-chevron-down"></i> Show All ' + allAdminSongs.length + ' Songs</button>';
       if (!isSearching && homeShowAll && allAdminSongs.length > HOME_SONGS_LIMIT) html += '<button class="show-all-btn muted" onclick="hideExtraSongs()"><i class="fas fa-chevron-up"></i> Show Only Latest ' + HOME_SONGS_LIMIT + '</button>';
@@ -1470,13 +1470,26 @@ try {
           if (!c.length) { note((d && d.error) ? d.error : 'No matches yet. Leave the link empty and the finder keeps checking after you publish.'); return; }
           list.innerHTML = '';
           c.forEach(function (v) {
-            var row = document.createElement('div'); row.style.cssText = 'display:flex;gap:10px;padding:10px 0;border-top:1px solid #222';
+            var row = document.createElement('div'); row.style.cssText = 'display:flex;flex-wrap:wrap;gap:10px;padding:10px 0;border-top:1px solid #222';
             row.innerHTML = '<img style="width:96px;height:54px;object-fit:cover;background:#222;flex:none"><div style="min-width:0"><b style="font-size:13px;color:#d97706"></b><div class="vt1" style="font-size:12px;color:#ddd;word-break:break-word"></div><div class="vt2" style="font-size:11px;color:#888"></div><a class="vtp" target="_blank" style="font-size:12px;color:#ff0033;margin-right:14px">Preview</a><a href="#" class="vtu" style="font-size:12px;color:#22c55e;font-weight:700">Use this</a></div>';
             row.querySelector('img').src = v.thumb || '';
             row.querySelector('b').textContent = v.label;
             row.querySelector('.vt1').textContent = dec(v.title);
             row.querySelector('.vt2').textContent = dec(v.channel);
-            row.querySelector('.vtp').href = v.url;
+            var pv = row.querySelector('.vtp'); pv.href = v.url;
+            pv.onclick = function (e) {
+              e.preventDefault();
+              var old = row.querySelector('.vt-player');
+              if (old) { old.remove(); pv.textContent = 'Preview'; return; }
+              var vid = ''; try { vid = new URL(v.url).searchParams.get('v') || ''; } catch (x) {}
+              var box = document.createElement('div'); box.className = 'vt-player';
+              box.style.cssText = 'flex:0 0 100%;aspect-ratio:16/9;background:#000;margin-top:4px';
+              var f = document.createElement('iframe');
+              f.src = 'https://www.youtube.com/embed/' + encodeURIComponent(vid) + '?autoplay=1&playsinline=1';
+              f.allow = 'autoplay; encrypted-media; fullscreen'; f.allowFullscreen = true;
+              f.style.cssText = 'width:100%;height:100%;border:0';
+              box.appendChild(f); row.appendChild(box); pv.textContent = 'Close';
+            };
             row.querySelector('.vtu').onclick = function (e) {
               e.preventDefault();
               document.getElementById(inputId).value = v.url;
