@@ -889,31 +889,57 @@ window.toggleSelectAllHoster = function() {
   renderHosterList();
 };
 
-window.deleteSelectedHoster = async function() {
-  if (selectedHosterFiles.length === 0) { alert('Please select files to delete.'); return; }
-  if (!confirm('Delete ' + selectedHosterFiles.length + ' files permanently from Cloudinary?')) return;
+window.deleteSelectedHoster = function() {
+  if (selectedHosterFiles.length === 0) { showToast('Please select files to delete.', 'error'); return; }
   
-  const btn = document.getElementById('deleteHosterBtn');
-  btn.innerText = 'Deleting...';
-  btn.disabled = true;
+  showConfirm('Delete Files', 'Delete ' + selectedHosterFiles.length + ' files permanently from Cloudinary?', true, async function() {
+    const btn = document.getElementById('deleteHosterBtn');
+    btn.innerText = 'Deleting...';
+    btn.disabled = true;
 
-  let deleted = 0;
-  for (const id of selectedHosterFiles) {
-    try {
-      const res = await fetch('/api/delete-image', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ public_id: id, resource_type: currentHosterTab === 'audio' ? 'video' : 'image' })
-      });
-      if (res.ok) deleted++;
-    } catch (e) {}
-  }
+    let deleted = 0;
+    for (const id of selectedHosterFiles) {
+      try {
+        const res = await fetch('/api/delete-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ public_id: id, resource_type: currentHosterTab === 'audio' ? 'video' : 'image' })
+        });
+        if (res.ok) deleted++;
+      } catch (e) {}
+    }
 
-  alert('Successfully deleted ' + deleted + ' files!');
-  selectedHosterFiles = [];
-  btn.innerText = 'Delete Selected';
-  btn.disabled = false;
-  loadHosterFiles(); // Reload list
+    showToast('Successfully deleted ' + deleted + ' files!', 'success');
+    selectedHosterFiles = [];
+    btn.innerText = 'Delete Selected';
+    btn.disabled = false;
+    loadHosterFiles();
+  });
+};
+
+window.showToast = function(msg, type) {
+  const old = document.getElementById('globalToast'); if (old) old.remove();
+  const bg = type === 'error' ? '#ff0033' : (type === 'success' ? '#00cc44' : '#1d9bf0');
+  const toast = document.createElement('div');
+  toast.id = 'globalToast'; toast.innerText = msg;
+  toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:'+bg+';color:#fff;padding:14px 24px;border-radius:30px;font-size:14px;font-weight:800;z-index:999999;box-shadow:0 10px 30px rgba(0,0,0,0.3);max-width:calc(100vw - 40px);text-align:center;transition:opacity 0.3s ease;opacity:1;';
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; }, 2500);
+  setTimeout(() => { toast.remove(); }, 2800);
+};
+
+window.showConfirm = function(title, message, isDanger, onConfirm) {
+  const old = document.getElementById('globalConfirmCard'); if (old) old.remove();
+  const card = document.createElement('div');
+  card.id = 'globalConfirmCard';
+  card.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);';
+  const iconColor = isDanger ? '#ff0033' : '#1d9bf0';
+  const iconClass = isDanger ? 'fa-exclamation-triangle' : 'fa-check-circle';
+  const btnClass = isDanger ? 'background:#ff0033;color:#fff;' : 'background:#1d9bf0;color:#fff;';
+  card.innerHTML = '<div style="background:#1f1f1f;border:1px solid #333;border-radius:20px;padding:24px;width:100%;max-width:340px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.5);"><div style="font-size:40px;color:'+iconColor+';margin-bottom:12px;"><i class="fas '+iconClass+'"></i></div><h3 style="color:#fff;font-size:20px;margin-bottom:8px;font-weight:900;">'+title+'</h3><p style="color:#999;font-size:14px;margin-bottom:24px;line-height:1.5;">'+message+'</p><div style="display:flex;gap:10px;"><button id="gcCancel" style="flex:1;padding:14px;background:#222;color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:inherit;cursor:pointer;">Cancel</button><button id="gcConfirm" style="'+btnClass+' flex:1;padding:14px;border:none;border-radius:12px;font-size:14px;font-weight:800;font-family:inherit;cursor:pointer;">Confirm</button></div></div>';
+  document.body.appendChild(card);
+  document.getElementById('gcCancel').onclick = () => card.remove();
+  document.getElementById('gcConfirm').onclick = () => { card.remove(); onConfirm(); };
 };
 
 function escapeHtml(s) {
@@ -993,11 +1019,11 @@ function escapeHtml(s) {
       } catch(e) {}
     });
     window.logout = function() {
-      if (confirm('Log out?')) {
-        try { localStorage.removeItem('ft-manager-pw'); } catch(e) {}
-        location.reload();
-      }
-    }
+  showConfirm('Log Out', 'Are you sure you want to log out of the Manager?', false, function() {
+    try { localStorage.removeItem('ft-manager-pw'); } catch(e) {}
+    location.reload();
+  });
+}
 
     async function loadManagerLogo() {
       const box = document.getElementById('studioLogo');
@@ -1374,13 +1400,14 @@ if (tab === 'hoster') loadHosterFiles();
       document.getElementById('adStatus').innerText = '';
       updateAdPreview();
     }
-    window.deleteAd = async function(id) {
-      if (!confirm('Delete this ad permanently?')) return;
-      try {
-        await fetch(SUPABASE_URL + '/rest/v1/ads?id=eq.' + id, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        loadAds();
-      } catch (e) { alert('Could not delete.'); }
-    };
+    window.deleteAd = function(id) {
+  showConfirm('Delete Ad', 'Delete this ad permanently?', true, async function() {
+    try {
+      await fetch(SUPABASE_URL + '/rest/v1/ads?id=eq.' + id, { method: 'DELETE', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+      loadAds();
+    } catch (e) { showToast('Could not delete.', 'error'); }
+  });
+};
 
     async function loadTexts() {
       const list = document.getElementById('textsList');
