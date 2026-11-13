@@ -64,10 +64,13 @@ function rate(item, title, artist, featuring) {
     if (titleArtistMatchesOther) return null;
   }
 
-  if (!isAudioWord && isOfficialVideo) return artistMatch ? 5 : 3;
-  if (isTopic) return artistMatch ? 4 : 2;
-  if (artistMatch) return 2;
-  return 1;
+  const isVisualizer = /\bvisualiz?er\b/.test(t);
+  if (!isAudioWord && !isVisualizer && isOfficialVideo) return artistMatch ? 6 : 4;
+  if (!isAudioWord && !isVisualizer && artistMatch) return 5; // plain upload with artist match = treat as video
+  if (isVisualizer && artistMatch) return 3; // visualizer = second priority
+  if (isTopic && artistMatch) return 2; // topic/audio = third
+  if (artistMatch) return 1;
+  return null;
 }
 
 export default async function handler(req) {
