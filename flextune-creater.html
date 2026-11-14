@@ -54,14 +54,44 @@
   .menu-item .label { flex: 1; color: #0a0a0a; font-weight: 800; font-size: 16px; }
   .menu-item .arrow { color: #bbb; font-size: 12px; flex-shrink: 0; }
 
-  /* ===== CONTENT ===== */
-  .page-content { padding: 20px 18px 40px; max-width: 440px; width: 100%; margin: 0 auto; min-height: calc(100vh - 140px); display: flex; flex-direction: column; justify-content: center; }
+/* ===== CONTENT ===== */
+.page-content { padding: 20px 18px 40px; max-width: 440px; width: 100%; margin: 0 auto; }
 .back-btn { align-self: flex-start; }
-.form-group input::placeholder, .form-group textarea::placeholder { color: #8a8a8a; font-weight: 600; }
-  .page-label { font-size: 10px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; text-align: center; }
-  .page-title { font-size: 24px; font-weight: 900; line-height: 1.15; letter-spacing: -0.7px; color: var(--text); margin-bottom: 10px; text-align: center; }
-  .page-title span { color: var(--accent); }
-  .intro { font-size: 13px; line-height: 1.6; color: #e5e5e5; margin-bottom: 16px; font-weight: 700; text-align: center; max-width: 540px; margin-left: auto; margin-right: auto; }
+.form-group input::placeholder, .form-group textarea::placeholder { color: #8a8a8a; font-weight: 500; font-size: 13px; }
+.page-label { font-size: 10px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; text-align: center; }
+.page-title { font-size: 22px; font-weight: 900; line-height: 1.15; letter-spacing: -0.5px; color: var(--text); margin-bottom: 8px; text-align: center; }
+.page-title span { color: var(--accent); }
+.intro { font-size: 12px; line-height: 1.6; color: var(--text2); margin-bottom: 20px; font-weight: 500; text-align: center; }
+
+/* New Beautiful Text Sections */
+.benefits { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; }
+.benefit-item { display: flex; align-items: flex-start; gap: 12px; }
+.benefit-item i { color: var(--accent); font-size: 16px; margin-top: 2px; flex-shrink: 0; }
+.benefit-text h4 { font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 2px; }
+.benefit-text p { font-size: 11px; color: #b3b3b3; line-height: 1.5; }
+
+.req-section { margin-top: 24px; text-align: left; border-top: 1px solid var(--border); padding-top: 20px; }
+.req-section h4 { font-size: 12px; font-weight: 900; color: var(--text); margin-bottom: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
+.req-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.req-list li { font-size: 12px; color: var(--text2); display: flex; align-items: center; gap: 8px; }
+.req-list li i { color: #00cc44; font-size: 12px; }
+
+/* Timeline & FAQ */
+.process-section { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); }
+.process-title { font-size: 14px; font-weight: 900; color: var(--text); margin-bottom: 16px; text-align: center; letter-spacing: 0.5px; }
+.process-step { display: flex; gap: 12px; margin-bottom: 16px; position: relative; }
+.process-step::before { content: ''; position: absolute; left: 14px; top: 28px; bottom: -16px; width: 2px; background: var(--border); }
+.process-step:last-child::before { display: none; }
+.step-icon { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 900; flex-shrink: 0; z-index: 1; }
+.step-content h4 { font-size: 13px; font-weight: 800; color: #fff; margin-bottom: 2px; }
+.step-content p { font-size: 11.5px; color: #b3b3b3; line-height: 1.5; }
+
+.faq-section { margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--border); padding-bottom: 20px; }
+.faq-title { font-size: 14px; font-weight: 900; color: var(--text); margin-bottom: 16px; text-align: center; letter-spacing: 0.5px; }
+.faq-item { margin-bottom: 12px; }
+.faq-item h4 { font-size: 12.5px; font-weight: 800; color: #fff; margin-bottom: 4px; display: flex; align-items: flex-start; gap: 6px; }
+.faq-item h4 i { color: var(--accent); font-size: 11px; margin-top: 3px; }
+.faq-item p { font-size: 11.5px; color: #b3b3b3; line-height: 1.5; padding-left: 17px; }
 
   /* ===== TABS ===== */
   .tabs-container { display: flex; gap: 8px; margin-bottom: 30px; background: var(--card); padding: 6px; border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0,0,0,0.2); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
@@ -73,9 +103,9 @@
   .form-section.active { display: block; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-  .form-group { margin-bottom: 12px; }
-  .form-group label { display: block; font-size: 11.5px; font-weight: 900; color: #fff; margin-bottom: 6px; letter-spacing: 0.4px; }
-  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 14px; background: rgba(10, 10, 10, 0.6); border: 1.5px solid var(--border); border-radius: 10px; color: #fff; font-weight: 600; font-size: 14px; font-family: inherit; outline: none; transition: border-color 0.2s; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .form-group { margin-bottom: 10px; }
+.form-group label { display: block; font-size: 10.5px; font-weight: 800; color: #fff; margin-bottom: 5px; letter-spacing: 0.4px; }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; background: rgba(10, 10, 10, 0.6); border: 1.5px solid var(--border); border-radius: 10px; color: #fff; font-weight: 600; font-size: 13px; font-family: inherit; outline: none; transition: border-color 0.2s; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
   .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
   .form-group textarea { min-height: 76px; resize: vertical; }
 
@@ -118,18 +148,41 @@
   </div>
 
   <div class="page-content">
-    <a href="joining.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+    <a href="joining.html" class="back-btn" style="margin-bottom: 0;"><i class="fas fa-arrow-left"></i> Back</a>
+    <a href="artist-login.html" style="font-size: 12px; font-weight: 800; color: var(--accent); text-decoration: none;">Already have an account? Log In</a>
+  </div>
 
-    <div class="page-label">Join The Movement</div>
+<div class="page-label">Join The Movement</div>
 <h1 class="page-title" id="pageHeading">Apply To <span>FlexTune</span></h1>
+<p class="intro" id="pageIntro">Loading...</p>
 
-<p class="intro" id="pageIntro">
-  Loading...
-</p>
+<!-- WHY JOIN SECTION -->
+<div class="benefits">
+  <div class="benefit-item">
+    <i class="fas fa-globe-africa"></i>
+    <div class="benefit-text">
+      <h4>Global Distribution</h4>
+      <p>Get your music on Spotify, Apple Music, Boomplay, and 150+ other platforms instantly.</p>
+    </div>
+  </div>
+  <div class="benefit-item">
+    <i class="fas fa-crown"></i>
+    <div class="benefit-text">
+      <h4>Own Your Masters</h4>
+      <p>You keep 100% of your rights and earn transparent royalties from every stream.</p>
+    </div>
+  </div>
+  <div class="benefit-item">
+    <i class="fas fa-bullhorn"></i>
+    <div class="benefit-text">
+      <h4>Real Promotion</h4>
+      <p>We don't just host your music. We pitch to playlists and push your sound to real listeners.</p>
+    </div>
+  </div>
+</div>
 
-    <!-- TABS REMOVED -->
-
-    <div id="formContainer">
+<div id="formContainer">
       
       <!-- ARTIST FORM -->
       <div class="form-section active" id="sectionArtist">
@@ -206,7 +259,69 @@
 
     </div>
 
-    <div class="success-msg" id="successMsg">
+<!-- REQUIREMENTS SECTION -->
+<div class="req-section">
+  <h4>What You Need To Apply</h4>
+  <ul class="req-list">
+    <li><i class="fas fa-check-circle"></i> Original music you created or own the rights to.</li>
+    <li><i class="fas fa-check-circle"></i> A high-quality square cover art (1200x1200px).</li>
+    <li><i class="fas fa-check-circle"></i> A consistent release schedule to grow your fanbase.</li>
+    <li><i class="fas fa-check-circle"></i> A valid email address and WhatsApp number.</li>
+  </ul>
+</div>
+
+<!-- PROCESS SECTION -->
+<div class="process-section">
+  <div class="process-title">What Happens After You Apply?</div>
+  <div class="process-step">
+    <div class="step-icon">1</div>
+    <div class="step-content">
+      <h4>Application Review</h4>
+      <p>Our team reviews your music, links, and details to ensure it matches the FlexTune quality standards. This takes 24-48 hours.</p>
+    </div>
+  </div>
+  <div class="process-step">
+    <div class="step-icon">2</div>
+    <div class="step-content">
+      <h4>Profile & Studio Setup</h4>
+      <p>Once approved, we create your artist profile and send you your secure login credentials for the FlexTune Studio.</p>
+    </div>
+  </div>
+  <div class="process-step">
+    <div class="step-icon">3</div>
+    <div class="step-content">
+      <h4>First Release</h4>
+      <p>Upload your first single or album, pick a release date, and we push it to the world across all platforms.</p>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ SECTION -->
+<div class="faq-section">
+  <div class="faq-title">Frequently Asked Questions</div>
+  <div class="faq-item">
+    <h4><i class="fas fa-question-circle"></i> Does it cost money to join?</h4>
+    <p>No. Applying and creating a profile on FlexTune is 100% free. We only take a small percentage of royalties once you start earning.</p>
+  </div>
+  <div class="faq-item">
+    <h4><i class="fas fa-question-circle"></i> Can I upload music I bought online?</h4>
+    <p>No. You must own the rights to the music you upload. Uploading beats or songs you do not own will result in account termination.</p>
+  </div>
+  <div class="faq-item">
+    <h4><i class="fas fa-question-circle"></i> How long does it take to go live?</h4>
+    <p>Once you schedule a release in the Studio, it takes about 2-7 days for the major platforms (Spotify, Apple) to process it. FlexTune goes live instantly.</p>
+  </div>
+</div>
+
+<!-- BOTTOM LOGIN BUTTON -->
+<div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
+  <p style="font-size: 13px; color: var(--text2); margin-bottom: 12px;">Already registered and approved?</p>
+  <a href="artist-login.html" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 24px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; color: #fff; font-size: 14px; font-weight: 800; text-decoration: none;">
+    <i class="fas fa-right-to-bracket"></i> Log In to Artist Studio
+  </a>
+</div>
+
+<div class="success-msg" id="successMsg">
       <i class="fas fa-check-circle"></i>
       <h3>Application Received!</h3>
       <p>Thank you for your interest in joining FlexTune. Our team will review your application and get back to you within 48 hours.</p>
