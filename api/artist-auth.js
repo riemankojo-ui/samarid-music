@@ -99,6 +99,9 @@ function esc(s) {
   return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 async function sendMail(to, artistName, code, purpose) {
+  if (!process.env.BREVO_API_KEY) throw new Error('brevo_key_missing');
+  if (!process.env.BREVO_SENDER_EMAIL) throw new Error('brevo_sender_missing');
+  
   const what = purpose === 'login' ? 'log in to' : purpose === 'reset' ? 'reset the password for' : 'claim';
   const html = '<div style="font-family:Arial,sans-serif;max-width:400px;margin:auto;padding:20px;border:1px solid #eee;border-radius:10px;text-align:center;">' +
     '<h2 style="color:#ff0033;margin-bottom:10px;">FlexTune Security</h2>' +

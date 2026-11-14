@@ -231,17 +231,26 @@
 
     window.openForgot = function () { document.getElementById('fName').value = document.getElementById('lName').value; say('fMsg', ''); showView('vForgot'); };
     window.doForgot = async function () {
-      const name = document.getElementById('fName').value.trim();
-      if (!name) { say('fMsg', 'Enter your artist name.', 'err'); return; }
-      const btn = document.getElementById('fBtn'); const orig = btn.innerHTML;
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...'; btn.disabled = true;
-      try {
-        const r = await api({ action: 'reset-code', name: name });
-        if (!r.ok) { say('fMsg', r.data.error === 'wait_a_bit' ? 'A code was just sent. Wait a few seconds.' : 'Could not send the code. Try again.', 'err'); return; }
-        mode = 'reset'; who = name; goCode();
-      } catch (e) { say('fMsg', 'Connection problem. Please try again.', 'err'); }
-      finally { btn.innerHTML = orig; btn.disabled = false; }
-    };
+  const name = document.getElementById('fName').value.trim();
+  if (!name) { say('fMsg', 'Enter your artist name.', 'err'); return; }
+  const btn = document.getElementById('fBtn'); const orig = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...'; btn.disabled = true;
+  try {
+    const r = await api({ action: 'reset-code', name: name });
+    if (!r.ok) { 
+      const errCode = r.data.error || 'unknown';
+      say('fMsg', 
+        errCode === 'wait_a_bit' ? 'A code was just sent. Wait a few seconds.' : 
+        errCode === 'brevo_key_missing' ? 'Error: Brevo API key is missing in Vercel.' :
+        errCode === 'brevo_sender_missing' ? 'Error: Brevo Sender Email is missing in Vercel.' :
+        errCode === 'mail_failed' ? 'Error: Brevo rejected the email. Check if the sender is verified.' :
+        'Error: ' + errCode, 'err'); 
+      return; 
+    }
+    mode = 'reset'; who = name; goCode();
+  } catch (e) { say('fMsg', 'Connection problem. Please try again.', 'err'); }
+  finally { btn.innerHTML = orig; btn.disabled = false; }
+};
 
     window.resend = async function () {
       try {
