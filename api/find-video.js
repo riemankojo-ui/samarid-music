@@ -32,7 +32,8 @@ function rate(item, title, artist, featuring) {
   const tWords = words(t);
 
   if (titleRatio < 0.6 && titleHits < 2) return null;
-  if (/\b(cover|remix|reaction|karaoke|instrumental|slowed|sped up|live session|tutorial)\b/.test(t)) return null;
+// BAN junk, but allow lyrics videos now
+if (/\b(cover|remix|reaction|karaoke|instrumental|slowed|sped up|live session|tutorial)\b/.test(t)) return null;
 
   const isOfficialVideo = /\b(official (music )?video|music video)\b/.test(t);
   const isVisualizer = /\bvisuali[sz]er\b/.test(t);
@@ -139,11 +140,11 @@ async function findCandidates(song, ytKey) {
 
   if (ytKey) {
     const cq = [
-      (song.artist_name || '') + ' ' + (song.title || '') + ' official video',
-      (song.artist_name || '') + ' ' + (song.title || '') + ' visualizer',
-      (song.artist_name || '') + ' ' + (song.title || '') + ' lyrics',
-      (song.artist_name || '') + ' ' + (song.title || '')
-    ];
+  (song.artist_name || '') + ' ' + (song.title || '') + ' official video',
+  (song.artist_name || '') + ' ' + (song.title || '') + ' visualizer',
+  (song.artist_name || '') + ' ' + (song.title || '') + ' lyrics',
+  (song.artist_name || '') + ' ' + (song.title || '')
+];
     
     for (const q of cq) {
       try {
@@ -239,11 +240,11 @@ export default async function handler(req) {
 
   if (ytKey) {
     const queries = [
-      (song.artist_name || '') + ' ' + (song.title || '') + ' official',
-      (song.artist_name || '') + ' ' + (song.title || '') + ' visualizer',
-      (song.artist_name || '') + ' ' + (song.title || '') + ' lyrics',
-      (song.artist_name || '') + ' ' + (song.title || '')
-    ].filter(q => q.trim());
+  (song.artist_name || '') + ' ' + (song.title || '') + ' official',
+  (song.artist_name || '') + ' ' + (song.title || '') + ' visualizer',
+  (song.artist_name || '') + ' ' + (song.title || '') + ' lyrics',
+  (song.artist_name || '') + ' ' + (song.title || '')
+].filter(q => q.trim());
 
     let best = null, bestScore = 0, quotaHit = false;
 
