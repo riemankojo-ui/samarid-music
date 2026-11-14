@@ -755,7 +755,15 @@ window.smartDownload = async function(btn) {
         const downloadTitle = artist + (featuring ? ' Feat ' + featuring : '') + ' - ' + s.title;
         document.title = downloadTitle + ' - FlexTune';
 
-        const rawAudioSrc = s.audio_url || s.downloadurl || '';
+let rawAudioSrc = s.audio_url || s.downloadurl || '';
+
+// Force Cloudinary to serve an MP3 version for perfect mobile playback
+if (rawAudioSrc.includes('res.cloudinary.com') && rawAudioSrc.includes('/video/upload/')) {
+    if (rawAudioSrc.includes('/video/upload/') && !rawAudioSrc.includes('/video/upload/f_mp3/')) {
+        rawAudioSrc = rawAudioSrc.replace('/video/upload/', '/video/upload/f_mp3/');
+    }
+}
+
 const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('youtu.be');
 
         let artistProfile = null;
