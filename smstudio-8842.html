@@ -3166,6 +3166,37 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
       if (s === null || s === undefined) return '';
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
+
+    // ===== ARTIST CLAIM FILTER LOGIC =====
+    window.addEventListener('load', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const claimedArtist = urlParams.get('artist');
+      
+      if (claimedArtist) {
+        const managerBtn = document.querySelector('.manager-quick-btn');
+        if (managerBtn) managerBtn.style.display = 'none';
+        
+        const navImport = document.getElementById('navImport');
+        const navSeo = document.getElementById('navSeo');
+        const navChannel = document.getElementById('navChannel');
+        if (navImport) navImport.style.display = 'none';
+        if (navSeo) navSeo.style.display = 'none';
+        if (navChannel) navChannel.style.display = 'none';
+        
+        document.querySelector('.top-bar h1').innerText = claimedArtist + ' Studio';
+        document.querySelector('.top-bar .brand').innerText = 'CLAIMED ARTIST';
+        
+        document.querySelector('.page-subtitle').innerText = 'Manage your releases, ' + claimedArtist;
+        
+        setTimeout(() => {
+          const searchInput = document.getElementById('songSearchInput');
+          if (searchInput) {
+            searchInput.value = claimedArtist;
+            handleSongSearch();
+          }
+        }, 1000);
+      }
+    });
   </script>
 <script src="/import-fill.js?v=3"></script>
 <script src="/site-logo.js" defer></script>

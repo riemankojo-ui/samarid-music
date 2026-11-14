@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claim Account - FlexTune</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root { --accent: #ff0033; --bg: #050505; --card: rgba(20,20,20,0.8); --border: rgba(255,255,255,0.1); --text: #fff; --text2: #999; }
+  * { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', sans-serif; }
+  body { background-color: var(--bg); background-image: radial-gradient(circle at 50% 50%, rgba(255,0,51,0.1), transparent 50%); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  
+  .claim-box { background: var(--card); border: 1px solid var(--border); border-radius: 20px; padding: 30px 24px; width: 100%; max-width: 400px; text-align: center; backdrop-filter: blur(12px); box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+  .icon-top { font-size: 40px; color: var(--accent); margin-bottom: 16px; }
+  h1 { font-size: 22px; font-weight: 900; margin-bottom: 8px; letter-spacing: -0.5px; }
+  p { font-size: 14px; color: var(--text2); line-height: 1.6; margin-bottom: 20px; }
+  strong { color: #fff; font-weight: 800; }
+  
+  input { width: 100%; padding: 16px; background: rgba(0,0,0,0.5); border: 1.5px solid var(--border); border-radius: 12px; color: #fff; font-size: 24px; text-align: center; letter-spacing: 8px; font-weight: 900; margin-bottom: 16px; outline: none; }
+  input:focus { border-color: var(--accent); }
+  
+  .btn { width: 100%; padding: 16px; background: var(--accent); color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; transition: 0.15s; }
+  .btn:active { transform: scale(0.97); }
+  .btn-ghost { background: transparent; border: 1px solid var(--border); color: #fff; }
+  
+  .step { display: none; animation: fadeIn 0.3s ease; }
+  .step.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+
+  <div class="claim-box">
+    
+    <!-- STEP 1: Confirm Identity -->
+    <div id="step1" class="step active">
+      <i class="fas fa-user-check icon-top"></i>
+      <h1>Artist Found!</h1>
+      <p>We found an existing FlexTune account for <strong id="displayName">Artist</strong>. Is this you?</p>
+      <button class="btn" onclick="sendCode()"><i class="fas fa-envelope"></i> Send 6-Digit Code</button>
+    </div>
+
+    <!-- STEP 2: Enter Code -->
+    <div id="step2" class="step">
+      <i class="fas fa-shield-halved icon-top"></i>
+      <h1>Enter Code</h1>
+      <p>We sent a code to your email.<br>(For testing, the code is in a popup)</p>
+      <input type="text" id="codeInput" placeholder="000000" maxlength="6">
+      <button class="btn" onclick="verifyCode()">Verify Code</button>
+    </div>
+
+    <!-- STEP 3: Release Choice -->
+    <div id="step3" class="step">
+      <i class="fas fa-compact-disc icon-top"></i>
+      <h1>How will you release?</h1>
+      <p>Do you want to manage your own releases from now on, or let FlexTune creators handle it?</p>
+      <button class="btn" onclick="chooseSelfRelease()"><i class="fas fa-user-tie"></i> I'll Release Myself</button>
+      <button class="btn btn-ghost" onclick="chooseCreatorRelease()"><i class="fas fa-users"></i> Release by Creators</button>
+    </div>
+
+    <!-- STEP 4: Success (Creator Release) -->
+    <div id="step4" class="step">
+      <i class="fas fa-check-circle" style="font-size: 50px; color: #00cc44; margin-bottom: 16px;"></i>
+      <h1>Request Sent!</h1>
+      <p>Your account has been claimed. The FlexTune creators will contact you shortly to manage your next release.</p>
+      <a href="index.html" class="btn btn-ghost">Go to Homepage</a>
+    </div>
+
+  </div>
+
+  <script>
+    // Get artist details from the URL
+    const params = new URLSearchParams(window.location.search);
+    const artistName = params.get('name') || 'Artist';
+    const artistEmail = params.get('email') || 'your email';
+    
+    document.getElementById('displayName').innerText = artistName;
+    let generatedCode = '';
+
+    // STEP 1: Generate and Send Code
+    window.sendCode = function() {
+      // Generate a random 6 digit code
+      generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+      
+      // --- THIS IS WHERE YOU WOULD CALL YOUR EMAIL API ---
+      // fetch('/api/send-email', { method: 'POST', body: JSON.stringify({ email: artistEmail, code: generatedCode })})
+      
+      // For now, show it in a popup so you can test
+      alert('[TEST MODE]\nYour 6-digit verification code is: ' + generatedCode + '\n\n(This would normally be sent to ' + artistEmail + ')');
+      
+      document.getElementById('step1').classList.remove('active');
+      document.getElementById('step2').classList.add('active');
+    }
+
+    // STEP 2: Verify Code
+    window.verifyCode = function() {
+      const input = document.getElementById('codeInput').value.trim();
+      if (input === generatedCode) {
+        document.getElementById('step2').classList.remove('active');
+        document.getElementById('step3').classList.add('active');
+      } else {
+        alert('Incorrect code. Please try again.');
+      }
+    }
+
+    // STEP 3: Choices
+    window.chooseSelfRelease = function() {
+      // Pass the artist name to the Studio URL
+      window.location.href = 'smstudio-8842.html?artist=' + encodeURIComponent(artistName);
+    }
+
+    window.chooseCreatorRelease = function() {
+      document.getElementById('step3').classList.remove('active');
+      document.getElementById('step4').classList.add('active');
+    }
+  </script>
+</body>
+</html>

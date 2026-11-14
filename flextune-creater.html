@@ -260,13 +260,49 @@ if (typeParam === 'label') {
   document.getElementById('pageIntro').innerText = 'Take your music global. We distribute, promote, and help you own your masters. Fill out the form below to join the movement.';
 }
 
-    window.submitForm = function(e, roleType) {
+    window.submitForm = async function(e, roleType) {
   e.preventDefault();
-  document.getElementById('formContainer').style.display = 'none';
-  document.getElementById('pageIntro').style.display = 'none';
-  document.getElementById('pageHeading').style.display = 'none';
-  document.getElementById('successMsg').style.display = 'block';
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const btn = e.target.querySelector('button[type="submit"]');
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+  btn.disabled = true;
+
+  const nameInput = e.target.querySelector('input[type="text"]').value.trim();
+  const emailInput = e.target.querySelector('input[type="email"]').value.trim();
+  
+  const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
+  const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+
+  try {
+    if (roleType === 'Artist') {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/artists?name=ilike.' + encodeURIComponent(nameInput) + '&select=id', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      const data = await res.json();
+
+      const songRes = await fetch(SUPABASE_URL + '/rest/v1/songs?artist_name=ilike.' + encodeURIComponent(nameInput) + '&select=id&limit=1', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      const songData = await songRes.json();
+
+      if ((Array.isArray(data) && data.length > 0) || (Array.isArray(songData) && songData.length > 0)) {
+        window.location.href = 'claim.html?name=' + encodeURIComponent(nameInput) + '&email=' + encodeURIComponent(emailInput);
+        return;
+      }
+    }
+
+    document.getElementById('formContainer').style.display = 'none';
+    document.getElementById('pageIntro').style.display = 'none';
+    document.getElementById('pageHeading').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } catch (err) {
+    alert('Connection error. Please try again.');
+  } finally {
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
 }
   </script>
 </body>
