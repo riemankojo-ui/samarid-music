@@ -1129,7 +1129,7 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
   document.getElementById('editLyrics').value = song.lyrics || '';
   document.getElementById('editDownload').value = song.downloadurl || '';
   document.getElementById('editSpotify').value = song.spotify || '';
-  document.getElementById('editYoutube').value = song.youtube || '';
+  document.getElementById('editYoutube').value = song.youtube || song.auto_youtube || '';
   document.getElementById('editModalStatus').innerText = '';
   document.getElementById('editModalStatus').className = 'status';
 
@@ -1261,7 +1261,7 @@ window.saveEditModal = async function() {
       fetch('/api/find-video?id=' + id + '&force=1').then(r => r.json()).then(d => {
         if (!d) return;
         if (d.url) {
-          const type = d.type === 'video' ? '🎬 Official video found' : '🎵 Audio found';
+          const type = d.type === 'video' ? '🎬 Official video found' : (d.type === 'visualizer' ? '🎥 Visualizer found' : (d.type === 'lyrics' ? '📝 Lyrics Video found' : '🎵 Audio found'));
           relPop.row('youtube', 'YouTube', 'ok', type + ': <a href="' + d.url + '" target="_blank" style="color:#ff0033;">Watch</a>');
         } else {
           relPop.row('youtube', 'YouTube', 'err', 'No YouTube video found' + (d.error ? ': ' + d.error : ''));
@@ -1327,7 +1327,7 @@ try {
         }).then(r => r && r.json()).then(d => {
           if (!d) return;
           if (d.url) {
-            const type = d.type === 'video' ? '🎬 Official video found' : '🎵 Audio found';
+            const type = d.type === 'video' ? '🎬 Official video found' : (d.type === 'visualizer' ? '🎥 Visualizer found' : (d.type === 'lyrics' ? '📝 Lyrics Video found' : '🎵 Audio found'));
             relPop.row('youtube', 'YouTube', 'ok', type + ': <a href="' + d.url + '" target="_blank" style="color:#ff0033;">Watch</a>');
           } else {
             relPop.row('youtube', 'YouTube', 'err', 'No YouTube video found' + (d.error ? ': ' + d.error : ''));
@@ -1520,7 +1520,7 @@ try {
     
     if (!c.length) { note((d && d.error) ? d.error : 'No matches yet. Leave the link empty and the finder keeps checking after you publish.'); return; }
           list.innerHTML = '';
-          c.forEach(function (v) {
+c.forEach(function (v) {
             var row = document.createElement('div'); row.style.cssText = 'display:flex;flex-wrap:wrap;gap:10px;padding:10px 0;border-top:1px solid #222';
             row.innerHTML = '<img style="width:96px;height:54px;object-fit:cover;background:#222;flex:none"><div style="min-width:0;flex:1 1 0"><b style="font-size:13px;color:#d97706"></b><div class="vt1" style="font-size:12px;color:#ddd;word-break:break-word"></div><div class="vt2" style="font-size:11px;color:#888"></div><a class="vtp" target="_blank" style="font-size:12px;color:#ff0033;margin-right:14px">Preview</a><a href="#" class="vtu" style="font-size:12px;color:#22c55e;font-weight:700">Use this</a></div>';
             row.querySelector('img').src = v.thumb || '';

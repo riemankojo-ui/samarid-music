@@ -34,9 +34,11 @@ function rate(item, title, artist, featuring) {
   if (titleRatio < 0.6 && titleHits < 2) return null;
   if (/\b(cover|remix|reaction|karaoke|instrumental|slowed|sped up|live session|tutorial)\b/.test(t)) return null;
 
-  const isOfficialVideo = /official (music )?video|music video/.test(t);
+  const isOfficialVideo = /\b(official (music )?video|music video)\b/.test(t);
+  const isVisualizer = /\bvisuali[sz]er\b/.test(t);
+  const isLyricsVideo = /\b(lyrics?|lyric video)\b/.test(t);
   const isTopic = / topic$/.test(ch);
-  const isAudioWord = /\b(audio|visuali[sz]er|lyrics?)\b/.test(t);
+  const isAudioWord = /\b(audio)\b/.test(t);
 
   const artistInTitle = aWords.length ? aWords.filter(w => tWords.includes(w)).length / aWords.length : 0;
   const featInTitle = fWords.length ? fWords.filter(w => tWords.includes(w)).length / fWords.length : 0;
@@ -53,13 +55,13 @@ function rate(item, title, artist, featuring) {
     if (titleArtistMatchesOther) return null;
   }
 
-  const isVisualizer = /\bvisualiz?er\b/.test(t);
-  if (!isAudioWord && !isVisualizer && isOfficialVideo) return artistMatch ? 6 : 4;
-  if (!isAudioWord && !isVisualizer && artistMatch) return 5;
-  if (isVisualizer && artistMatch) return 3;
-  if (isTopic && artistMatch) return 2;
-  if (artistMatch) return 1;
-  return null;
+  // STRICT HIERARCHY SCORING
+  if (isOfficialVideo) return 6;
+  if (isVisualizer) return 5;
+  if (isLyricsVideo) return 4;
+  if (isTopic) return 3;
+  if (isAudioWord) return 2;
+  return 2.5; // Plain uploaded audio
 }
 
 async function fetchWithTimeout(url, options = {}, timeout = 3000) {
@@ -139,6 +141,7 @@ async function findCandidates(song, ytKey) {
     const cq = [
       (song.artist_name || '') + ' ' + (song.title || '') + ' official video',
       (song.artist_name || '') + ' ' + (song.title || '') + ' visualizer',
+      (song.artist_name || '') + ' ' + (song.title || '') + ' lyrics',
       (song.artist_name || '') + ' ' + (song.title || '')
     ];
     
@@ -157,14 +160,16 @@ async function findCandidates(song, ytKey) {
           if (!it.id || !it.id.videoId) return;
           const sc = rate(it, song.title, song.artist_name, song.featuring);
           if (!sc) return;
-          const kind = sc >= 4 ? 'video' : (sc === 3 ? 'visualizer' : 'audio');
+          const kind = sc >= 6 ? 'video' : (sc === 5 ? 'visualizer' : (sc === 4 ? 'lyrics' : 'audio'));
           if (!bestBy[kind] || sc > bestBy[kind].score) {
             const th = it.snippet.thumbnails || {};
             bestBy[kind] = {
-              score: sc, kind: kind,
-              label: kind === 'video' ? 'Official video' : (kind === 'visualizer' ? 'Visualizer' : 'Audio'),
+              score: sc,
+              kind: kind,
+              label: kind === 'video' ? 'Official video' : (kind === 'visualizer' ? 'Visualizer' : (kind === 'lyrics' ? 'Lyrics Video' : 'Audio')),
               url: 'https://www.youtube.com/watch?v=' + it.id.videoId,
-              title: it.snippet.title, channel: it.snippet.channelTitle,
+              title: it.snippet.title,
+              channel: it.snippet.channelTitle,
               thumb: (th.medium || th.default || {}).url || ''
             };
           }
@@ -184,10 +189,10 @@ async function findCandidates(song, ytKey) {
      }
      
      if (fallbackResult) {
-        const kind = fallbackResult.score >= 4 ? 'video' : (fallbackResult.score === 3 ? 'visualizer' : 'audio');
+        const kind = fallbackResult.score >= 6 ? 'video' : (fallbackResult.score === 5 ? 'visualizer' : (fallbackResult.score === 4 ? 'lyrics' : 'audio'));
         bestBy[kind] = {
           score: fallbackResult.score, kind: kind,
-          label: (kind === 'video' ? 'Official video' : (kind === 'visualizer' ? 'Visualizer' : 'Audio')) + ' (Free)',
+          label: (kind === 'video' ? 'Official video' : (kind === 'visualizer' ? 'Visualizer' : (kind === 'lyrics' ? 'Lyrics Video' : 'Audio'))) + ' (Free)',
           url: 'https://www.youtube.com/watch?v=' + fallbackResult.videoId,
           title: fallbackResult.title, channel: fallbackResult.channel, thumb: fallbackResult.thumb
         };
@@ -195,7 +200,7 @@ async function findCandidates(song, ytKey) {
   }
 
   return { 
-    candidates: ['video', 'visualizer', 'audio'].filter(function (k) { return bestBy[k]; }).map(function (k) { return bestBy[k]; }),
+    candidates: ['video', 'visualizer', 'lyrics', 'audio'].filter(function (k) { return bestBy[k]; }).map(function (k) { return bestBy[k]; }),
     error: quotaHit && Object.keys(bestBy).length === 0 ? 'No matches found.' : null
   };
 }
@@ -235,6 +240,8 @@ export default async function handler(req) {
   if (ytKey) {
     const queries = [
       (song.artist_name || '') + ' ' + (song.title || '') + ' official',
+      (song.artist_name || '') + ' ' + (song.title || '') + ' visualizer',
+      (song.artist_name || '') + ' ' + (song.title || '') + ' lyrics',
       (song.artist_name || '') + ' ' + (song.title || '')
     ].filter(q => q.trim());
 
@@ -255,15 +262,16 @@ export default async function handler(req) {
         const sc = rate(it, song.title, song.artist_name, song.featuring);
         if (sc && sc > bestScore) { best = it.id.videoId; bestScore = sc; }
       });
-      if (best && bestScore >= 3) break;
+      if (best && bestScore >= 6) break;
     }
 
     if (best) {
       const patch = { auto_youtube_checked: new Date().toISOString() };
-      const newType = bestScore >= 3 ? 'video' : 'audio';
+      const newType = bestScore >= 6 ? 'video' : (bestScore === 5 ? 'visualizer' : (bestScore === 4 ? 'lyrics' : 'audio'));
       const haveScore = song.auto_youtube_score || 0;
       let result = have || { url: null };
-      if (!have || bestScore > haveScore) {
+      
+      if (!have || bestScore > haveScore || (bestScore >= 4 && bestScore === haveScore)) {
         result = { url: 'https://www.youtube.com/watch?v=' + best, type: newType };
         patch.auto_youtube = result.url;
         patch.auto_youtube_type = newType;
@@ -288,7 +296,7 @@ export default async function handler(req) {
 
   const patch = { auto_youtube_checked: new Date().toISOString() };
   if (invResult) {
-    const newType = invResult.score >= 3 ? 'video' : 'audio';
+    const newType = invResult.score >= 6 ? 'video' : (invResult.score === 5 ? 'visualizer' : (invResult.score === 4 ? 'lyrics' : 'audio'));
     const result = { url: 'https://www.youtube.com/watch?v=' + invResult.videoId, type: newType };
     patch.auto_youtube = result.url;
     patch.auto_youtube_type = newType;
