@@ -1176,17 +1176,78 @@ window.openAlbumDetail = function(albumName) {
   const first = albumSongs[0];
   
   // Render Header
-  document.getElementById('albumDetailHeader').innerHTML = 
-    '<img src="' + first.cover + '" style="width:80px; height:80px; border-radius:12px; object-fit:cover; box-shadow:0 4px 15px rgba(0,0,0,0.3);">' +
-    '<div style="flex:1; min-width:0;">' +
-      '<h2 style="font-size:18px; font-weight:900; color:#fff; margin-bottom:4px; overflow-wrap:anywhere;">' + albumName + '</h2>' +
-      '<p style="font-size:13px; color:var(--text2); font-weight:600;">' + (first.artist_name || 'Samarid') + '</p>' +
-      '<p style="font-size:11px; color:#ff8800; font-weight:800; margin-top:4px;">' + albumSongs.length + ' SONGS</p>' +
-    '</div>';
+document.getElementById('albumDetailHeader').innerHTML = 
+  '<img src="' + first.cover + '" style="width:80px; height:80px; border-radius:12px; object-fit:cover; box-shadow:0 4px 15px rgba(0,0,0,0.3);">' +
+  '<div style="flex:1; min-width:0;">' +
+    '<h2 style="font-size:18px; font-weight:900; color:#fff; margin-bottom:4px; overflow-wrap:anywhere;">' + albumName + '</h2>' +
+    '<p style="font-size:13px; color:var(--text2); font-weight:600;">' + (first.artist_name || 'Samarid') + '</p>' +
+    '<p style="font-size:11px; color:#ff8800; font-weight:800; margin-top:4px;">' + albumSongs.length + ' SONGS</p>' +
+  '</div>' +
+  '<button onclick="deleteFullAlbum(\'' + albumName.replace(/'/g, "\\'") + '\')" style="background:#ff0033; color:#fff; border:none; padding:10px 14px; border-radius:10px; font-weight:800; cursor:pointer; font-size:12px; display:flex; align-items:center; gap:6px; box-shadow: 0 4px 12px rgba(255,0,51,0.3);"><i class="fas fa-trash"></i> Delete Album</button>';
 
   document.getElementById('albumSongSearchInput').value = '';
   renderAlbumSongsList(albumName, '');
   goToPage('albumDetail');
+}
+
+window.deleteFullAlbum = function(albumName) {
+  if (!albumName) return;
+  const albumSongs = allAdminSongs.filter(s => s.album_name && s.album_name.trim() === albumName.trim());
+  
+  if (albumSongs.length === 0) { 
+    showToast('No songs found in this album.', 'error'); 
+    return; 
+  }
+
+  showConfirm('Delete Album', 'Are you sure you want to permanently delete ALL ' + albumSongs.length + ' songs in this album? This will also delete their MP3s and covers from Cloudinary.', true, async function() {
+    const btn = event && event.target ? event.target.closest('button') : null;
+    if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...'; btn.disabled = true; }
+
+    const ids = albumSongs.map(s => s.id);
+    const idString = '(' + ids.join(',') + ')';
+
+    try {
+      // 1. Delete all songs from Supabase in one go
+      await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=in.' + idString, {
+          method: 'DELETE',
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+
+      // 2. Delete all files from Cloudinary
+      for (let i = 0; i < albumSongs.length; i++) {
+          const s = albumSongs[i];
+          const cover = s.cover;
+          const mp3 = s.downloadurl;
+
+          // Delete Image
+          if (cover && cover.includes('res.cloudinary.com/t2wneryo/')) {
+            try {
+              const match = cover.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.[a-z]+)?$/i);
+              if (match) {
+                await fetch('/api/delete-image', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ public_id: match[1], resource_type: 'image' }) });
+              }
+            } catch (e) {}
+          }
+
+          // Delete MP3
+          if (mp3 && mp3.includes('res.cloudinary.com/t2wneryo/')) {
+            try {
+              const match = mp3.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.[a-z0-9]+)?$/i);
+              if (match) {
+                await fetch('/api/delete-image', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ public_id: match[1], resource_type: 'video' }) });
+              }
+            } catch (e) {}
+          }
+      }
+
+      showToast('Album and all files deleted successfully!', 'success');
+      await loadAdminSongs();
+      goToPage('home'); // Go back to dashboard after deletion
+    } catch (err) {
+      showToast('Error deleting album.', 'error');
+      if (btn) { btn.innerHTML = '<i class="fas fa-trash"></i> Delete Album'; btn.disabled = false; }
+    }
+  });
 }
 
 window.handleAlbumSongSearch = function() {
