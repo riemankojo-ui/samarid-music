@@ -119,17 +119,13 @@
     <a href="joining.html" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
 
     <div class="page-label">Join The Movement</div>
-    <h1 class="page-title">Apply To <span>FlexTune</span></h1>
-    
-    <p class="intro">
-      Whether you are an independent artist ready to go global, or a label looking to expand your roster, select your path below and fill out the form.
-    </p>
+<h1 class="page-title" id="pageHeading">Apply To <span>FlexTune</span></h1>
 
-    <!-- TABS -->
-    <div class="tabs-container">
-      <button class="tab-btn active" id="tabArtist" onclick="switchTab('artist')"><i class="fas fa-microphone"></i> Artist</button>
-      <button class="tab-btn" id="tabLabel" onclick="switchTab('label')"><i class="fas fa-building"></i> Label</button>
-    </div>
+<p class="intro" id="pageIntro">
+  Loading...
+</p>
+
+    <!-- TABS REMOVED -->
 
     <div id="formContainer">
       
@@ -239,30 +235,39 @@
       btn.classList.remove('open'); btn.classList.remove('menu-open');
     }
 
-    window.switchTab = function(type) {
-      document.getElementById('tabArtist').classList.toggle('active', type === 'artist');
-      document.getElementById('tabLabel').classList.toggle('active', type === 'label');
-      document.getElementById('sectionArtist').classList.toggle('active', type === 'artist');
-      document.getElementById('sectionLabel').classList.toggle('active', type === 'label');
-    }
+    // Automatically load the correct form based on the URL
+const urlParams = new URLSearchParams(window.location.search);
+const typeParam = urlParams.get('type');
 
-    // Read URL parameter to open the right tab automatically
-    const urlParams = new URLSearchParams(window.location.search);
-    const typeParam = urlParams.get('type');
-    if (typeParam === 'label') {
-      switchTab('label');
-    } else {
-      switchTab('artist');
-    }
+if (typeParam === 'label') {
+  // Show only Label Form
+  document.getElementById('sectionArtist').style.display = 'none';
+  document.getElementById('sectionLabel').style.display = 'block';
+  document.getElementById('sectionLabel').classList.add('active');
+  
+  // Update Text
+  document.getElementById('pageHeading').innerHTML = 'Apply As <span>Label</span>';
+  document.getElementById('pageIntro').innerText = 'Expand your roster and get your label\'s music distributed to over 150+ major streaming platforms worldwide.';
+  
+} else {
+  // Show only Artist Form
+  document.getElementById('sectionArtist').style.display = 'block';
+  document.getElementById('sectionArtist').classList.add('active');
+  document.getElementById('sectionLabel').style.display = 'none';
+  
+  // Update Text
+  document.getElementById('pageHeading').innerHTML = 'Apply As <span>Artist</span>';
+  document.getElementById('pageIntro').innerText = 'Take your music global. We distribute, promote, and help you own your masters. Fill out the form below to join the movement.';
+}
 
     window.submitForm = function(e, roleType) {
-      e.preventDefault();
-      document.getElementById('formContainer').style.display = 'none';
-      document.querySelector('.tabs-container').style.display = 'none';
-      document.querySelector('.intro').style.display = 'none';
-      document.getElementById('successMsg').style.display = 'block';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+  e.preventDefault();
+  document.getElementById('formContainer').style.display = 'none';
+  document.getElementById('pageIntro').style.display = 'none';
+  document.getElementById('pageHeading').style.display = 'none';
+  document.getElementById('successMsg').style.display = 'block';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
   </script>
 </body>
 </html>
