@@ -83,18 +83,38 @@ async function searchInvidious(query, title, artist, featuring) {
       let best = null, bestScore = 0;
       items.forEach(it => {
         const sc = rate(it, title, artist, featuring);
-        if (sc && sc > bestScore) {
-          bestScore = sc;
-          best = it;
-        }
+        if (sc && sc > bestScore) { bestScore = sc; best = it; }
       });
-      if (best) return { 
-        videoId: best.id.videoId, 
-        score: bestScore,
-        title: best.snippet.title,
-        channel: best.snippet.channelTitle,
-        thumb: best.snippet.thumbnails.medium.url || best.snippet.thumbnails.default.url
-      };
+      if (best) return { videoId: best.id.videoId, score: bestScore, title: best.snippet.title, channel: best.snippet.channelTitle, thumb: best.snippet.thumbnails.medium.url };
+    } catch (e) {}
+  }
+  return null;
+}
+
+async function searchPiped(query, title, artist, featuring) {
+  const instances = ['https://pipedapi.kavin.rocks', 'https://pipedapi.adminforge.de', 'https://api.piped.private.coffee'];
+  for (const instance of instances) {
+    try {
+      const res = await fetch(instance + '/search?q=' + encodeURIComponent(query) + '&filter=videos');
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (!data.items) continue;
+      
+      const items = data.items.map(item => ({
+        id: { videoId: item.url.split('?v=')[1] },
+        snippet: {
+          title: item.title,
+          channelTitle: item.uploaderName,
+          thumbnails: { medium: { url: item.thumbnail }, default: { url: item.thumbnail } }
+        }
+      }));
+
+      let best = null, bestScore = 0;
+      items.forEach(it => {
+        const sc = rate(it, title, artist, featuring);
+        if (sc && sc > bestScore) { bestScore = sc; best = it; }
+      });
+      if (best) return { videoId: best.id.videoId, score: bestScore, title: best.snippet.title, channel: best.snippet.channelTitle, thumb: best.snippet.thumbnails.medium.url };
     } catch (e) {}
   }
   return null;
@@ -130,12 +150,10 @@ async function findCandidates(song, ytKey) {
           if (!bestBy[kind] || sc > bestBy[kind].score) {
             const th = it.snippet.thumbnails || {};
             bestBy[kind] = {
-              score: sc,
-              kind: kind,
+              score: sc, kind: kind,
               label: kind === 'video' ? 'Official video' : (kind === 'visualizer' ? 'Visualizer' : 'Audio'),
               url: 'https://www.youtube.com/watch?v=' + it.id.videoId,
-              title: it.snippet.title,
-              channel: it.snippet.channelTitle,
+              title: it.snippet.title, channel: it.snippet.channelTitle,
               thumb: (th.medium || th.default || {}).url || ''
             };
           }
@@ -148,25 +166,26 @@ async function findCandidates(song, ytKey) {
 
   if (quotaHit || Object.keys(bestBy).length === 0) {
      const query = (song.artist_name || '') + ' ' + (song.title || '') + ' official';
-     const invResult = await searchInvidious(query, song.title, song.artist_name, song.featuring);
+     let fallbackResult = await searchInvidious(query, song.title, song.artist_name, song.featuring);
      
-     if (invResult) {
-        const kind = invResult.score >= 4 ? 'video' : (invResult.score === 3 ? 'visualizer' : 'audio');
+     if (!fallbackResult) {
+         fallbackResult = await searchPiped(query, song.title, song.artist_name, song.featuring);
+     }
+     
+     if (fallbackResult) {
+        const kind = fallbackResult.score >= 4 ? 'video' : (fallbackResult.score === 3 ? 'visualizer' : 'audio');
         bestBy[kind] = {
-          score: invResult.score,
-          kind: kind,
+          score: fallbackResult.score, kind: kind,
           label: (kind === 'video' ? 'Official video' : (kind === 'visualizer' ? 'Visualizer' : 'Audio')) + ' (Free)',
-          url: 'https://www.youtube.com/watch?v=' + invResult.videoId,
-          title: invResult.title,
-          channel: invResult.channel,
-          thumb: invResult.thumb
+          url: 'https://www.youtube.com/watch?v=' + fallbackResult.videoId,
+          title: fallbackResult.title, channel: fallbackResult.channel, thumb: fallbackResult.thumb
         };
      }
   }
 
   return { 
     candidates: ['video', 'visualizer', 'audio'].filter(function (k) { return bestBy[k]; }).map(function (k) { return bestBy[k]; }),
-    error: quotaHit && Object.keys(bestBy).length === 0 ? 'Quota exceeded, and fallback found nothing.' : null
+    error: quotaHit && Object.keys(bestBy).length === 0 ? 'No matches found.' : null
   };
 }
 
@@ -251,7 +270,10 @@ export default async function handler(req) {
   }
 
   const query = (song.artist_name || '') + ' ' + (song.title || '') + ' official';
-  const invResult = await searchInvidious(query, song.title, song.artist_name, song.featuring);
+  let invResult = await searchInvidious(query, song.title, song.artist_name, song.featuring);
+  if (!invResult) {
+      invResult = await searchPiped(query, song.title, song.artist_name, song.featuring);
+  }
 
   const patch = { auto_youtube_checked: new Date().toISOString() };
   if (invResult) {
@@ -260,10 +282,10 @@ export default async function handler(req) {
     patch.auto_youtube = result.url;
     patch.auto_youtube_type = newType;
     patch.auto_youtube_score = invResult.score;
-    await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id, { method: 'PATCH', headers: Object.assign({ Prefer: 'return:minimal' }, sb), body: JSON.stringify(patch) });
+    await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id, { method: 'PATCH', headers: Object.assign({ Prefer: 'return=minimal' }, sb), body: JSON.stringify(patch) });
     return json(result);
   }
 
   await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id, { method: 'PATCH', headers: Object.assign({ Prefer: 'return=minimal' }, sb), body: JSON.stringify(patch) });
-  return json({ url: null, error: 'Quota exceeded, and fallback search found nothing.' });
+  return json({ url: null, error: 'No matches found.' });
 }
