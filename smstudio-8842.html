@@ -229,7 +229,7 @@
   details summary::-webkit-details-marker { display: none; }
   #pageAdd, #pageRelease { position: relative; }</style>
 <link rel="stylesheet" href="/desktop.css">
-<script>try{if(localStorage.getItem('ft-studio-pw'))document.write('<style id="fastLogin">#loginScreen{display:none!important}</style>');}catch(e){}</script></head><body>
+<script>try{if(localStorage.getItem('ft-studio-pw')||localStorage.getItem('ft-artist-session'))document.write('<style id="fastLogin">#loginScreen{display:none!important}</style>');}catch(e){}</script></head><body>
 
   <div id="loginScreen">
     <div class="login-box">
@@ -244,7 +244,7 @@
         </div>
         <button type="submit" class="main-btn">Unlock</button>
       </form>
-      <p id="loginStatus" class="status error"></p>
+      <p style="text-align:center;margin-top:14px;font-size:12px;"><a href="artist-login.html" style="color:#ff8800;font-weight:700;text-decoration:none;">Artist? Log in here</a></p>
     </div>
   </div>
 
@@ -3272,7 +3272,25 @@ window.addEventListener('load', function() {
   }
 });
   </script>
-<script src="/import-fill.js?v=3"></script>
+<script>
+(function(){
+  var s = null;
+  try { s = JSON.parse(localStorage.getItem('ft-artist-session') || 'null'); } catch(e) {}
+  if (!s || !s.token) return;
+  function bad() { try { localStorage.removeItem('ft-artist-session'); } catch(e) {} var fl = document.getElementById('fastLogin'); if (fl) fl.remove(); }
+  fetch('/api/artist-auth', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'check', token: s.token }) })
+    .then(function(r){ return r.json().then(function(d){ return { ok:r.ok, d:d }; }); })
+    .then(function(x){
+      if (!x.ok || !x.d.artist) { bad(); return; }
+      var cur = new URLSearchParams(location.search).get('artist');
+      if (cur !== x.d.artist) { location.replace('smstudio-8842.html?artist=' + encodeURIComponent(x.d.artist)); return; }
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      initDatePickers(); loadAdminSongs(); loadChannelLink(); addAlbumSong(); addSchAlbumSong(); loadScheduled(); loadStudioLogo();
+    })
+    .catch(function(){ bad(); });
+})();
+</script>
 <script src="/site-logo.js" defer></script>
 </body>
 </html>
