@@ -1554,11 +1554,13 @@ try {
               note(v.label + ' chosen. It is saved when you publish.', '#22c55e');
             };
             list.appendChild(row);
-          });
-        })
-        .catch(function (e) { note('Search failed: ' + e.message); });
-    };
-    window.albumTestVideo = function (btn, sch) {
+                });
+    })
+    .catch(function (e) { 
+      note('Search failed or timed out. Try again, or paste the YouTube link manually.', '#ff8800'); 
+    });
+};
+window.albumTestVideo = function (btn, sch) {
       var item = btn.closest('.album-song-item');
       var p = sch ? 'sch-album-song-' : 'album-song-';
       var artistEl = document.getElementById(sch ? 'schAlbumArtist' : 'albumArtist');

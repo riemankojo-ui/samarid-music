@@ -62,11 +62,18 @@ function rate(item, title, artist, featuring) {
   return null;
 }
 
+async function fetchWithTimeout(url, options = {}, timeout = 3000) {
+  return Promise.race([
+    fetch(url, options),
+    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout))
+  ]);
+}
+
 async function searchInvidious(query, title, artist, featuring) {
   const instances = ['https://inv.nadeko.net', 'https://invidious.nerdvpn.de', 'https://yewtu.be'];
   for (const instance of instances) {
     try {
-      const res = await fetch(instance + '/api/v1/search?q=' + encodeURIComponent(query) + '&type=video');
+      const res = await fetchWithTimeout(instance + '/api/v1/search?q=' + encodeURIComponent(query) + '&type=video');
       if (!res.ok) continue;
       const data = await res.json();
       if (!Array.isArray(data)) continue;
@@ -95,19 +102,23 @@ async function searchPiped(query, title, artist, featuring) {
   const instances = ['https://pipedapi.kavin.rocks', 'https://pipedapi.adminforge.de', 'https://api.piped.private.coffee'];
   for (const instance of instances) {
     try {
-      const res = await fetch(instance + '/search?q=' + encodeURIComponent(query) + '&filter=videos');
+      const res = await fetchWithTimeout(instance + '/search?q=' + encodeURIComponent(query) + '&filter=videos');
       if (!res.ok) continue;
       const data = await res.json();
       if (!data.items) continue;
       
-      const items = data.items.map(item => ({
-        id: { videoId: item.url.split('?v=')[1] },
-        snippet: {
-          title: item.title,
-          channelTitle: item.uploaderName,
-          thumbnails: { medium: { url: item.thumbnail }, default: { url: item.thumbnail } }
-        }
-      }));
+      const items = data.items.map(item => {
+        const vid = item.url.includes('v=') ? item.url.split('v=')[1].split('&')[0] : '';
+        if (!vid) return null;
+        return {
+          id: { videoId: vid },
+          snippet: {
+            title: item.title,
+            channelTitle: item.uploaderName,
+            thumbnails: { medium: { url: item.thumbnail }, default: { url: item.thumbnail } }
+          }
+        };
+      }).filter(i => i !== null);
 
       let best = null, bestScore = 0;
       items.forEach(it => {
