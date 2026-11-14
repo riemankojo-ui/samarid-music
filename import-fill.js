@@ -150,11 +150,13 @@ producer: 'producer', producers: 'producer', 'produced by': 'producer',
       var item = box.lastElementChild, c = s ? 'sch-album-song-' : 'album-song-';
       function f(cls, v) { var el = item.querySelector('.' + c + cls); if (el && v) el.value = v; }
       f('title', t.title);
-      f('feat', t.feat || h.feat);
-      f('download', t.download);
-      f('desc', t.desc || h.desc);
-      f('youtube', t.youtube);
-      f('lyrics', t.lyrics);
+f('feat', t.feat || h.feat);
+f('download', t.download);
+f('desc', t.desc || h.desc);
+f('youtube', t.youtube);
+f('lyrics', t.lyrics);
+f('producer', t.producer || h.producer);
+f('category', t.category || h.category);
     });
 
     if (s) {

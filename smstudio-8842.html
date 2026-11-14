@@ -1793,8 +1793,18 @@ c.forEach(function (v) {
     });
 };
 window.findMetadata = function(titleId, artistId, genreId, producerId, btn) {
-  var title = document.getElementById(titleId).value.trim();
-  var artist = document.getElementById(artistId).value.trim();
+  const getVal = (id) => {
+    if (typeof id === 'string') { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+    if (typeof id === 'object' && id !== null) return id.value.trim();
+    return '';
+  };
+  const setVal = (id, val) => {
+    if (typeof id === 'string') { const el = document.getElementById(id); if (el) el.value = val; }
+    if (typeof id === 'object' && id !== null) { id.value = val; }
+  };
+
+  var title = getVal(titleId);
+  var artist = getVal(artistId);
   
   if (!title || !artist) {
     showToast('Enter Song Title and Artist first.', 'error');
@@ -1812,19 +1822,19 @@ window.findMetadata = function(titleId, artistId, genreId, producerId, btn) {
       
       var found = false;
       if (d.genre) {
-        var genreBox = document.getElementById(genreId);
-        if (!genreBox.value || genreBox.value.toLowerCase() === 'music') {
-          genreBox.value = d.genre;
-          found = true;
-        }
-      }
-      if (d.producer) {
-        var producerBox = document.getElementById(producerId);
-        if (!producerBox.value) {
-          producerBox.value = d.producer;
-          found = true;
-        }
-      }
+  var genreVal = getVal(genreId);
+  if (!genreVal || genreVal.toLowerCase() === 'music') {
+    setVal(genreId, d.genre);
+    found = true;
+  }
+}
+if (d.producer) {
+  var prodVal = getVal(producerId);
+  if (!prodVal) {
+    setVal(producerId, d.producer);
+    found = true;
+  }
+}
       
       if (found) {
         showToast('Genre & Producer found!', 'success');
@@ -1839,6 +1849,17 @@ window.findMetadata = function(titleId, artistId, genreId, producerId, btn) {
       btn.innerHTML = originalHTML;
       btn.disabled = false;
     });
+};
+
+window.albumFindMeta = function(btn) {
+  var item = btn.closest('.album-song-item');
+  var isSch = item.id.includes('sch-');
+  var titleEl = item.querySelector(isSch ? '.sch-album-song-title' : '.album-song-title');
+  var artistEl = document.getElementById(isSch ? 'schAlbumArtist' : 'albumArtist');
+  var genreEl = item.querySelector(isSch ? '.sch-album-song-category' : '.album-song-category');
+  var prodEl = item.querySelector(isSch ? '.sch-album-song-producer' : '.album-song-producer');
+  
+  findMetadata(titleEl, artistEl, genreEl, prodEl, btn);
 };
 
 window.albumTestVideo = function (btn, sch) {
@@ -1915,7 +1936,7 @@ window.deleteSong = function(id) {
       const div = document.createElement('div');
       div.className = 'album-song-item';
       div.id = 'album-song-' + albumSongIndex;
-      div.innerHTML = '<div class="album-song-num">SONG ' + albumSongIndex + '</div><button class="album-song-remove" onclick="removeAlbumSong(' + albumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,false)"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
+      div.innerHTML = '<div class="album-song-num">SONG ' + albumSongIndex + '</div><button class="album-song-remove" onclick="removeAlbumSong(' + albumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Producer(s)</label><div style="display:flex; gap:8px;"><input type="text" class="album-song-producer" placeholder="e.g. DJ Khaled" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>Category</label><div style="display:flex; gap:8px;"><input type="text" class="album-song-category" placeholder="e.g. Afrobeats" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,false)"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
       container.appendChild(div);
       updateAlbumCount();
     }
@@ -1945,14 +1966,16 @@ songItems.forEach(item => {
   const desc = item.querySelector('.album-song-desc').value.trim() || 'No description yet.';
   const lyrics = item.querySelector('.album-song-lyrics').value.trim();
   const youtube = ((item.querySelector('.album-song-youtube') || {}).value || '').trim();
+  const trackCategory = (item.querySelector('.album-song-category').value || '').trim() || category;
+  const trackProducer = (item.querySelector('.album-song-producer').value || '').trim() || null;
   if (!title) valid = false;
-  songs.push({ title, downloadurl: download, description: desc, lyrics, youtube });
+  songs.push({ title, downloadurl: download, description: desc, lyrics, youtube, category: trackCategory, producer: trackProducer });
 });
       if (!valid) { status.className = 'status error'; status.innerText = 'All songs need a title!'; return; }
       status.className = 'status'; status.innerText = '';
 const prog = startPublishProgress('album', 'Publishing album...');
       try {
-        const payload = songs.map((s, i) => ({ title: s.title, cover, artist_name: artist, featuring: ((document.querySelectorAll('#albumSongsContainer .album-song-feat')[i] || {}).value || '').trim() || null, category, country, date, description: s.description, lyrics: s.lyrics || null, youtube: s.youtube || null, downloadurl: s.downloadurl, album_name: albumName, status: 'live', release_at: null }));
+        const payload = songs.map((s, i) => ({ title: s.title, cover, artist_name: artist, featuring: ((document.querySelectorAll('#albumSongsContainer .album-song-feat')[i] || {}).value || '').trim() || null, category: s.category, producer: s.producer, country, date, description: s.description, lyrics: s.lyrics || null, youtube: s.youtube || null, downloadurl: s.downloadurl, album_name: albumName, status: 'live', release_at: null }));
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' }, body: JSON.stringify(payload) });
 if (!res.ok) { const err = await res.text(); throw new Error(err); }
 let createdSongs = [];
@@ -2066,7 +2089,7 @@ setTimeout(() => {
       const div = document.createElement('div');
       div.className = 'album-song-item';
       div.id = 'sch-album-song-' + schAlbumSongIndex;
-      div.innerHTML = '<div class="album-song-num">SONG ' + schAlbumSongIndex + '</div><button class="album-song-remove" onclick="removeSchAlbumSong(' + schAlbumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="sch-album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="sch-album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,true)"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="sch-album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
+      div.innerHTML = '<div class="album-song-num">SONG ' + schAlbumSongIndex + '</div><button class="album-song-remove" onclick="removeSchAlbumSong(' + schAlbumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="sch-album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Producer(s)</label><div style="display:flex; gap:8px;"><input type="text" class="sch-album-song-producer" placeholder="e.g. DJ Khaled" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>Category</label><div style="display:flex; gap:8px;"><input type="text" class="sch-album-song-category" placeholder="e.g. Afrobeats" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="sch-album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,true)"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="sch-album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
       container.appendChild(div);
       updateSchAlbumCount();
     }
@@ -2095,8 +2118,10 @@ setTimeout(() => {
   const lyricsEl = item.querySelector('.sch-album-song-lyrics');
   const lyrics = lyricsEl ? lyricsEl.value.trim() : '';
   const youtube = ((item.querySelector('.sch-album-song-youtube') || {}).value || '').trim();
+  const trackCategory = (item.querySelector('.sch-album-song-category').value || '').trim() || category;
+  const trackProducer = (item.querySelector('.sch-album-song-producer').value || '').trim() || null;
   if (!title) valid = false;
-  songs.push({ title, downloadurl: download, description: desc, lyrics, youtube });
+  songs.push({ title, downloadurl: download, description: desc, lyrics, youtube, category: trackCategory, producer: trackProducer });
 });
       if (!valid) { status.className = 'status error'; status.innerText = 'All songs need a title!'; return; }
       const { date, iso } = getSelectedDateTime('schAMonth','schADay','schAYear','schAHour','schAMinute', currentAAmPm);
@@ -2104,7 +2129,7 @@ setTimeout(() => {
       status.className = 'status info'; status.innerText = 'Scheduling album...';
       try {
         const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
-        const payload = songs.map((s, i) => ({ title: s.title, cover, artist_name: artist, featuring: ((document.querySelectorAll('#schAlbumSongsContainer .sch-album-song-feat')[i] || {}).value || '').trim() || null, category, country, description: s.description, lyrics: s.lyrics || null, youtube: s.youtube || null, downloadurl: s.downloadurl, album_name: albumName, date: displayDate, status: 'scheduled', release_at: iso }));
+        const payload = songs.map((s, i) => ({ title: s.title, cover, artist_name: artist, featuring: ((document.querySelectorAll('#schAlbumSongsContainer .sch-album-song-feat')[i] || {}).value || '').trim() || null, category: s.category, producer: s.producer, country, description: s.description, lyrics: s.lyrics || null, youtube: s.youtube || null, downloadurl: s.downloadurl, album_name: albumName, date: displayDate, status: 'scheduled', release_at: iso }));
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' }, body: JSON.stringify(payload) });
 if (!res.ok) { const err = await res.text(); throw new Error(err); }
 let createdSongs = [];
