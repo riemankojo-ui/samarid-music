@@ -62,40 +62,6 @@ function rate(item, title, artist, featuring) {
   return null;
 }
 
-async function findCandidates(song, ytKey) {
-  if (!ytKey) return { candidates: [], error: 'YOUTUBE_API_KEY is not set' };
-  const cq = [
-    (song.artist_name || '') + ' ' + (song.title || '') + ' official video',
-    (song.artist_name || '') + ' ' + (song.title || '') + ' visualizer',
-    (song.artist_name || '') + ' ' + (song.title || '')
-  ];
-  const bestBy = {};
-  for (const q of cq) {
-    const cr = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=10&q=' + encodeURIComponent(q) + '&key=' + ytKey);
-    const cd = await cr.json();
-    if (!cr.ok || !Array.isArray(cd.items)) return { candidates: [], error: (cd && cd.error && cd.error.message || 'YouTube error').substring(0, 120) };
-    cd.items.forEach(function (it) {
-      if (!it.id || !it.id.videoId) return;
-      const sc = rate(it, song.title, song.artist_name, song.featuring);
-      if (!sc) return;
-      const kind = sc >= 4 ? 'video' : (sc === 3 ? 'visualizer' : 'audio');
-      if (!bestBy[kind] || sc > bestBy[kind].score) {
-        const th = it.snippet.thumbnails || {};
-        bestBy[kind] = {
-          score: sc,
-          kind: kind,
-          label: kind === 'video' ? 'Official video' : (kind === 'visualizer' ? 'Visualizer' : 'Audio'),
-          url: 'https://www.youtube.com/watch?v=' + it.id.videoId,
-          title: it.snippet.title,
-          channel: it.snippet.channelTitle,
-          thumb: (th.medium || th.default || {}).url || ''
-        };
-      }
-    });
-  }
-  return { candidates: ['video', 'visualizer', 'audio'].filter(function (k) { return bestBy[k]; }).map(function (k) { return bestBy[k]; }) };
-}
-
 async function searchInvidious(query, title, artist, featuring) {
   const instances = ['https://inv.nadeko.net', 'https://invidious.nerdvpn.de', 'https://yewtu.be'];
   for (const instance of instances) {
@@ -122,10 +88,86 @@ async function searchInvidious(query, title, artist, featuring) {
           best = it;
         }
       });
-      if (best) return { videoId: best.id.videoId, score: bestScore };
+      if (best) return { 
+        videoId: best.id.videoId, 
+        score: bestScore,
+        title: best.snippet.title,
+        channel: best.snippet.channelTitle,
+        thumb: best.snippet.thumbnails.medium.url || best.snippet.thumbnails.default.url
+      };
     } catch (e) {}
   }
   return null;
+}
+
+async function findCandidates(song, ytKey) {
+  const bestBy = {};
+  let quotaHit = false;
+
+  if (ytKey) {
+    const cq = [
+      (song.artist_name || '') + ' ' + (song.title || '') + ' official video',
+      (song.artist_name || '') + ' ' + (song.title || '') + ' visualizer',
+      (song.artist_name || '') + ' ' + (song.title || '')
+    ];
+    
+    for (const q of cq) {
+      try {
+        const cr = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=10&q=' + encodeURIComponent(q) + '&key=' + ytKey);
+        const cd = await cr.json();
+        if (!cr.ok || !Array.isArray(cd.items)) {
+          if (cd && cd.error && cd.error.message && (cd.error.message.includes('quota') || cd.error.message.includes('limit'))) {
+             quotaHit = true;
+             break;
+          }
+          continue;
+        }
+        cd.items.forEach(function (it) {
+          if (!it.id || !it.id.videoId) return;
+          const sc = rate(it, song.title, song.artist_name, song.featuring);
+          if (!sc) return;
+          const kind = sc >= 4 ? 'video' : (sc === 3 ? 'visualizer' : 'audio');
+          if (!bestBy[kind] || sc > bestBy[kind].score) {
+            const th = it.snippet.thumbnails || {};
+            bestBy[kind] = {
+              score: sc,
+              kind: kind,
+              label: kind === 'video' ? 'Official video' : (kind === 'visualizer' ? 'Visualizer' : 'Audio'),
+              url: 'https://www.youtube.com/watch?v=' + it.id.videoId,
+              title: it.snippet.title,
+              channel: it.snippet.channelTitle,
+              thumb: (th.medium || th.default || {}).url || ''
+            };
+          }
+        });
+      } catch(e) {}
+    }
+  } else {
+     quotaHit = true;
+  }
+
+  if (quotaHit || Object.keys(bestBy).length === 0) {
+     const query = (song.artist_name || '') + ' ' + (song.title || '') + ' official';
+     const invResult = await searchInvidious(query, song.title, song.artist_name, song.featuring);
+     
+     if (invResult) {
+        const kind = invResult.score >= 4 ? 'video' : (invResult.score === 3 ? 'visualizer' : 'audio');
+        bestBy[kind] = {
+          score: invResult.score,
+          kind: kind,
+          label: (kind === 'video' ? 'Official video' : (kind === 'visualizer' ? 'Visualizer' : 'Audio')) + ' (Free)',
+          url: 'https://www.youtube.com/watch?v=' + invResult.videoId,
+          title: invResult.title,
+          channel: invResult.channel,
+          thumb: invResult.thumb
+        };
+     }
+  }
+
+  return { 
+    candidates: ['video', 'visualizer', 'audio'].filter(function (k) { return bestBy[k]; }).map(function (k) { return bestBy[k]; }),
+    error: quotaHit && Object.keys(bestBy).length === 0 ? 'Quota exceeded, and fallback found nothing.' : null
+  };
 }
 
 export default async function handler(req) {
@@ -208,7 +250,6 @@ export default async function handler(req) {
     }
   }
 
-  // FALLBACK TO INVIDIOUS (FREE UNLIMITED API)
   const query = (song.artist_name || '') + ' ' + (song.title || '') + ' official';
   const invResult = await searchInvidious(query, song.title, song.artist_name, song.featuring);
 
@@ -219,7 +260,7 @@ export default async function handler(req) {
     patch.auto_youtube = result.url;
     patch.auto_youtube_type = newType;
     patch.auto_youtube_score = invResult.score;
-    await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id, { method: 'PATCH', headers: Object.assign({ Prefer: 'return=minimal' }, sb), body: JSON.stringify(patch) });
+    await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id, { method: 'PATCH', headers: Object.assign({ Prefer: 'return:minimal' }, sb), body: JSON.stringify(patch) });
     return json(result);
   }
 
