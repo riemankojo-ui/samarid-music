@@ -309,21 +309,21 @@ function autoTestVideos(p) {
       var container = document.getElementById(containerId);
       if (!container || typeof window.testVideoFor !== 'function') return;
       var items = container.querySelectorAll('.album-song-item');
-// Limit to first 5 songs to save YouTube API quota
-var limit = Math.min(items.length, 5);
-for (var i = 0; i < limit; i++) {
-  var item = items[i];
-  setTimeout(function () {
+      
+      // Search EVERY song, but stagger them by 1.5 seconds
+      for (let i = 0; i < items.length; i++) {
+        let item = items[i]; // Using 'let' fixes the bug where it searched the same song twice
+        setTimeout(function () {
           var titleEl = item.querySelector('.' + prefix + 'title');
           var featEl = item.querySelector('.' + prefix + 'feat');
           var ytEl = item.querySelector('.' + prefix + 'youtube');
           var box = item.querySelector('.album-yt-test');
-                if (titleEl && ytEl && box) {
-        window.testVideoFor(titleEl, artistId, featEl, ytEl, box);
+          if (titleEl && ytEl && box) {
+            window.testVideoFor(titleEl, artistId, featEl, ytEl, box);
+          }
+        }, i * 1500); // Wait 1.5 seconds between each song
       }
-    }, i * 3000); // Wait 3 seconds between searches
-  }
-} else if (typeof window.testVideoFor === 'function') {
+    } else if (typeof window.testVideoFor === 'function') {
       if (p.isScheduled) {
         window.testVideoFor('schTitle', 'schArtist', 'schFeaturing', 'schYoutube', 'schYtTest');
       } else {
