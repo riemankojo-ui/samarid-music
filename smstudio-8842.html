@@ -298,11 +298,20 @@
           <div class="form-group"><label>Song Title</label><input type="text" id="songTitle" placeholder="e.g. Back To Sender"></div>
           <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="Tap to add cover art" readonly onclick="cloudPick('songCover')" oninput="clearTimeout(window.coverT); window.coverT = setTimeout(checkSongCover, 600)" onchange="checkSongCover()"><div id="songCoverMsg" style="display:none;font-size:12px;margin-top:6px;line-height:1.4"></div></div>
           <div class="form-group"><label>Artist Name</label><input type="text" id="songArtist" placeholder="e.g. Jh linx"></div>
-          <div class="form-group"><label>Featuring Artist(s)</label><input type="text" id="songFeaturing" placeholder="e.g. Samarid, Kofi Kinaata (optional)"></div>
-<div class="form-group"><label>Producer(s)</label><input type="text" id="songProducer" placeholder="e.g. DJ Khaled, Killbeatz (optional)"></div>
-          <div class="form-group">
+<div class="form-group"><label>Featuring Artist(s)</label><input type="text" id="songFeaturing" placeholder="e.g. Samarid, Kofi Kinaata (optional)"></div>
+<div class="form-group">
+  <label>Producer(s)</label>
+  <div style="display:flex; gap:8px;">
+    <input type="text" id="songProducer" placeholder="e.g. DJ Khaled, Killbeatz (optional)" style="flex:1;">
+    <button type="button" class="secondary-btn" onclick="findMetadata('songTitle','songArtist','songCategory','songProducer', this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button>
+  </div>
+</div>
+<div class="form-group">
   <label>Category</label>
-  <input type="text" id="songCategory" list="genreList" placeholder="e.g. Afrobeats, Amapiano">
+  <div style="display:flex; gap:8px;">
+    <input type="text" id="songCategory" list="genreList" placeholder="e.g. Afrobeats, Amapiano" style="flex:1;">
+    <button type="button" class="secondary-btn" onclick="findMetadata('songTitle','songArtist','songCategory','songProducer', this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button>
+  </div>
   <datalist id="genreList">
     <option value="Afrobeats">
     <option value="Afro Drill">
@@ -405,9 +414,21 @@
           <div class="form-group"><label>Song Title *</label><input type="text" id="schTitle" placeholder="e.g. Back To Sender"></div>
           <div class="form-group"><label>Cover Art Image URL *</label><input type="text" id="schCover" placeholder="Tap to add cover art" readonly onclick="cloudPick('schCover')"></div>
           <div class="form-group"><label>Artist Name *</label><input type="text" id="schArtist" placeholder="e.g. Jh linx"></div>
-          <div class="form-group"><label>Featuring Artist(s)</label><input type="text" id="schFeaturing" placeholder="e.g. Samarid (optional)"></div>
-<div class="form-group"><label>Producer(s)</label><input type="text" id="schProducer" placeholder="e.g. DJ Khaled (optional)"></div>
-          <div class="form-group"><label>Category</label><input type="text" id="schCategory" placeholder="e.g. Afrobeats"></div>
+<div class="form-group"><label>Featuring Artist(s)</label><input type="text" id="schFeaturing" placeholder="e.g. Samarid (optional)"></div>
+<div class="form-group">
+  <label>Producer(s)</label>
+  <div style="display:flex; gap:8px;">
+    <input type="text" id="schProducer" placeholder="e.g. DJ Khaled (optional)" style="flex:1;">
+    <button type="button" class="secondary-btn" onclick="findMetadata('schTitle','schArtist','schCategory','schProducer', this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button>
+  </div>
+</div>
+<div class="form-group">
+  <label>Category</label>
+  <div style="display:flex; gap:8px;">
+    <input type="text" id="schCategory" placeholder="e.g. Afrobeats" style="flex:1;">
+    <button type="button" class="secondary-btn" onclick="findMetadata('schTitle','schArtist','schCategory','schProducer', this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button>
+  </div>
+</div>
           
           <!-- NEW COUNTRY SELECTOR FOR SCHEDULE SINGLE -->
           <div class="form-group">
@@ -818,9 +839,21 @@ Download: https://example.com/cry-baby.mp3</div>
     <div class="form-group"><label>Song Title</label><input type="text" id="editTitle" placeholder="Song title"></div>
     <div class="form-group"><label>Cover Art URL</label><input type="text" id="editCover" placeholder="https://...png"></div>
     <div class="form-group"><label>Artist Name</label><input type="text" id="editArtist" placeholder="Artist"></div>
-    <div class="form-group"><label>Featuring</label><input type="text" id="editFeaturing" placeholder="Feat (optional)"></div>
-<div class="form-group"><label>Producer(s)</label><input type="text" id="editProducer" placeholder="Producer (optional)"></div>
-    <div class="form-group"><label>Category</label><input type="text" id="editCategory" placeholder="Genre"></div>
+<div class="form-group"><label>Featuring</label><input type="text" id="editFeaturing" placeholder="Feat (optional)"></div>
+<div class="form-group">
+  <label>Producer(s)</label>
+  <div style="display:flex; gap:8px;">
+    <input type="text" id="editProducer" placeholder="Producer (optional)" style="flex:1;">
+    <button type="button" class="secondary-btn" onclick="findMetadata('editTitle','editArtist','editCategory','editProducer', this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button>
+  </div>
+</div>
+<div class="form-group">
+  <label>Category</label>
+  <div style="display:flex; gap:8px;">
+    <input type="text" id="editCategory" placeholder="Genre" style="flex:1;">
+    <button type="button" class="secondary-btn" onclick="findMetadata('editTitle','editArtist','editCategory','editProducer', this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button>
+  </div>
+</div>
     <div class="form-group">
       <label>Country</label>
       <select id="editCountry">
@@ -1314,7 +1347,8 @@ window.showAllSongs = function() { homeShowAll = true; renderAdminSongs(''); }
   document.getElementById('editCover').value = song.cover || '';
   document.getElementById('editArtist').value = song.artist_name || '';
   document.getElementById('editFeaturing').value = song.featuring || '';
-  document.getElementById('editCategory').value = song.category || '';
+document.getElementById('editProducer').value = song.producer || '';
+document.getElementById('editCategory').value = song.category || '';
   document.getElementById('editCountry').value = song.country || 'Ghana';
   document.getElementById('editDate').value = song.date || '';
   document.getElementById('editDescription').value = song.description || '';
@@ -1758,6 +1792,55 @@ c.forEach(function (v) {
       note('Search failed or timed out. Try again, or paste the YouTube link manually.', '#ff8800'); 
     });
 };
+window.findMetadata = function(titleId, artistId, genreId, producerId, btn) {
+  var title = document.getElementById(titleId).value.trim();
+  var artist = document.getElementById(artistId).value.trim();
+  
+  if (!title || !artist) {
+    showToast('Enter Song Title and Artist first.', 'error');
+    return;
+  }
+
+  var originalHTML = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  btn.disabled = true;
+
+  fetch('/api/find-video?metadata=1&title=' + encodeURIComponent(title) + '&artist=' + encodeURIComponent(artist))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.error) throw new Error(d.error);
+      
+      var found = false;
+      if (d.genre) {
+        var genreBox = document.getElementById(genreId);
+        if (!genreBox.value || genreBox.value.toLowerCase() === 'music') {
+          genreBox.value = d.genre;
+          found = true;
+        }
+      }
+      if (d.producer) {
+        var producerBox = document.getElementById(producerId);
+        if (!producerBox.value) {
+          producerBox.value = d.producer;
+          found = true;
+        }
+      }
+      
+      if (found) {
+        showToast('Genre & Producer found!', 'success');
+      } else {
+        showToast('No data found in video description.', 'info');
+      }
+    })
+    .catch(function(e) { 
+      showToast('Search failed: ' + e.message, 'error'); 
+    })
+    .finally(function() {
+      btn.innerHTML = originalHTML;
+      btn.disabled = false;
+    });
+};
+
 window.albumTestVideo = function (btn, sch) {
       var item = btn.closest('.album-song-item');
       var p = sch ? 'sch-album-song-' : 'album-song-';

@@ -211,6 +211,43 @@ export default async function handler(req) {
   const id = (url.searchParams.get('id') || '').trim();
   const force = url.searchParams.get('force') === '1';
   const qTitle = (url.searchParams.get('title') || '').trim();
+  const isMeta = url.searchParams.get('metadata') === '1';
+  const mArtist = (url.searchParams.get('artist') || '').trim();
+  
+  // NEW: Metadata Scraper for Genre and Producer
+  if (isMeta && qTitle && mArtist) {
+    const ytKey = (process.env.YOUTUBE_API_KEY || '').trim();
+    if (!ytKey) return json({ error: 'API key missing' }, 500);
+    const query = mArtist + ' ' + qTitle + ' official';
+    try {
+      const res = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&q=' + encodeURIComponent(query) + '&type=video&maxResults=1&key=' + ytKey);
+      const data = await res.json();
+      if (data.items && data.items.length > 0) {
+        const snip = data.items[0].snippet;
+        const textToScan = snip.title + " " + snip.description;
+        
+        let genre = "";
+        const genreKeywords = ['Afrobeats', 'Afro Drill', 'Hip Hop', 'Highlife', 'Amapiano', 'R&B', 'Gospel', 'Afropop', 'Dancehall', 'Reggae', 'Drill', 'Trap'];
+        for (const g of genreKeywords) {
+          if (new RegExp('\\b' + g.replace(' ', '\\s*') + '\\b', 'i').test(textToScan)) {
+            genre = g; break;
+          }
+        }
+        
+        let producer = "";
+        const prodRegex = /(?:prod(?:uced)?\.?\s*(?:by)?\s*:?)\s*([A-Za-z0-9_\-\s\.]+)/i;
+        const match = textToScan.match(prodRegex);
+        if (match && match[1]) {
+          producer = match[1].split('\n')[0].substring(0, 30).trim();
+        }
+        
+        return json({ genre: genre, producer: producer });
+      }
+      return json({ genre: '', producer: '' });
+    } catch (e) {
+      return json({ error: e.message }, 500);
+    }
+  }
 
   if (url.searchParams.get('candidates') === '1' && qTitle) {
     return json(await findCandidates({ title: qTitle, artist_name: (url.searchParams.get('artist') || '').trim(), featuring: (url.searchParams.get('featuring') || '').trim() }, (process.env.YOUTUBE_API_KEY || '').trim()));
@@ -246,7 +283,7 @@ export default async function handler(req) {
   (song.artist_name || '') + ' ' + (song.title || '')
 ].filter(q => q.trim());
 
-    let best = null, bestScore = 0, quotaHit = false, bestTitle = "";
+    let best = null, bestScore = 0, quotaHit = false, bestTitle = "", bestDesc = "";
 
     for (const q of queries) {
       const yr = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=10&q=' + encodeURIComponent(q) + '&key=' + ytKey);
@@ -261,7 +298,7 @@ export default async function handler(req) {
       yd.items.forEach(function (it) {
         if (!it.id || !it.id.videoId) return;
         const sc = rate(it, song.title, song.artist_name, song.featuring);
-        if (sc && sc > bestScore) { best = it.id.videoId; bestScore = sc; bestTitle = it.snippet.title; }
+        if (sc && sc > bestScore) { best = it.id.videoId; bestScore = sc; bestTitle = it.snippet.title; bestDesc = it.snippet.description || ""; }
       });
       if (best && bestScore >= 6) break;
     }
@@ -278,7 +315,7 @@ export default async function handler(req) {
   patch.auto_youtube_type = newType;
   patch.auto_youtube_score = bestScore;
   
-  // NEW: Auto-detect Genre from YouTube Title
+  // Auto-detect Genre
   if (bestTitle) {
     const genreKeywords = ['Afrobeats', 'Afro Drill', 'Hip Hop', 'Highlife', 'Amapiano', 'R&B', 'Gospel', 'Afropop', 'Dancehall', 'Reggae', 'Drill', 'Trap'];
     for (const g of genreKeywords) {
@@ -287,6 +324,22 @@ export default async function handler(req) {
           patch.category = g;
         }
         break;
+      }
+    }
+  }
+
+  // NEW: Auto-detect Producer from Title or Description
+  if (!song.producer) {
+    const textToScan = bestTitle + " " + bestDesc;
+    // Looks for "Prod by Name", "Produced by Name", "Prod: Name"
+    const prodRegex = /(?:prod(?:uced)?\.?\s*(?:by)?\s*:?)\s*([A-Za-z0-9_\-\s\.]+)/i;
+    const match = textToScan.match(prodRegex);
+    if (match && match[1]) {
+      let pName = match[1].trim();
+      // Clean up if it grabbed too much text
+      pName = pName.split('\n')[0].substring(0, 30).trim();
+      if (pName.length > 2) {
+        patch.producer = pName;
       }
     }
   }
