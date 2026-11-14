@@ -261,6 +261,16 @@
       if (e.key === 'Enter') verifyCode();
     });
 
+    // Auto-verify as soon as 6 digits are typed or pasted
+    document.getElementById('codeInput').addEventListener('input', function (e) {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
+      if (e.target.value.length === 6) {
+        document.getElementById('codeMsg').className = 'msg';
+        document.getElementById('codeMsg').innerText = 'Checking...';
+        setTimeout(verifyCode, 250);
+      }
+    });
+
     window.chooseSelfRelease = function () {
       window.location.href = 'smstudio-8842.html?artist=' + encodeURIComponent(artistName);
     };
