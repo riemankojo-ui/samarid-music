@@ -1517,10 +1517,7 @@ try {
   .then(function (r) { return r.json(); })
   .then(function (d) {
     var c = (d && d.candidates) || [];
-    if (d && d.error && (d.error.includes('Quota exceeded') || d.error.includes('quota'))) {
-      note('YouTube search limit reached for today. You can paste the YouTube link manually, or try again tomorrow.', '#ff8800');
-      return;
-    }
+    
     if (!c.length) { note((d && d.error) ? d.error : 'No matches yet. Leave the link empty and the finder keeps checking after you publish.'); return; }
           list.innerHTML = '';
           c.forEach(function (v) {
