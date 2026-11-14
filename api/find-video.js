@@ -192,7 +192,7 @@ async function findCandidates(song, ytKey) {
         const kind = fallbackResult.score >= 6 ? 'video' : (fallbackResult.score === 5 ? 'visualizer' : (fallbackResult.score === 4 ? 'lyrics' : 'audio'));
         bestBy[kind] = {
           score: fallbackResult.score, kind: kind,
-          label: (kind === 'video' ? 'Official video' : (kind === 'visualizer' ? 'Visualizer' : (kind === 'lyrics' ? 'Lyrics Video' : 'Audio'))) + ' (Free)',
+          label: (kind === 'video' ? 'Official video' : (kind === 'visualizer' ? 'Visualizer' : (kind === 'lyrics' ? 'Lyrics Video' : 'Audio'))) + ' ',
           url: 'https://www.youtube.com/watch?v=' + fallbackResult.videoId,
           title: fallbackResult.title, channel: fallbackResult.channel, thumb: fallbackResult.thumb
         };
