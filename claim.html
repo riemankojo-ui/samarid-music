@@ -79,19 +79,44 @@
     let generatedCode = '';
 
     // STEP 1: Generate and Send Code
-    window.sendCode = function() {
-      // Generate a random 6 digit code
-      generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
-      
-      // --- THIS IS WHERE YOU WOULD CALL YOUR EMAIL API ---
-      // fetch('/api/send-email', { method: 'POST', body: JSON.stringify({ email: artistEmail, code: generatedCode })})
-      
-      // For now, show it in a popup so you can test
-      alert('[TEST MODE]\nYour 6-digit verification code is: ' + generatedCode + '\n\n(This would normally be sent to ' + artistEmail + ')');
-      
-      document.getElementById('step1').classList.remove('active');
-      document.getElementById('step2').classList.add('active');
+    window.sendCode = async function(e) {
+  // Generate a random 6 digit code
+  generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
+  
+  const btn = e.target;
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/send-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        email: artistEmail, 
+        code: generatedCode, 
+        artistName: artistName 
+      })
+    });
+
+    if (!res.ok) {
+      throw new Error('Could not send email. Please try again.');
     }
+
+    // Move to the next step
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step2').classList.add('active');
+    
+    // Alert the user that it was sent
+    alert('Verification code sent to ' + artistEmail + '. Please check your inbox (and spam folder).');
+    
+  } catch (err) {
+    alert(err.message);
+  } finally {
+    btn.innerHTML = originalText;
+    btn.disabled = false;
+  }
+}
 
     // STEP 2: Verify Code
     window.verifyCode = function() {
