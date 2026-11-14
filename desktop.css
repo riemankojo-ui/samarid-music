@@ -1,3 +1,6 @@
+/* FlexTune - menu: lines between buttons */
+.menu-dropdown .menu-item + .menu-item { border-top: 1px solid #e6e6e6; }
+
 /* FlexTune - shared: trim the empty space at the bottom of every page */
 body:not(:has(.bottom-nav)) { padding-bottom: 0 !important; }
 .footer { padding-top: 20px !important; padding-bottom: 20px !important; margin-bottom: 0 !important; }

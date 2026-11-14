@@ -23,35 +23,31 @@
 </script>
 <style>
   :root {
-  --bg: #050505;
-  --card: rgba(20, 20, 20, 0.65);
-  --border: rgba(255, 255, 255, 0.08);
-  --text: #ffffff;
-  --text2: #a3a3a3;
-  --accent: #ff0033;
-}
-/* Force Dark Blur Theme for this page */
-html[data-theme="light"], html[data-theme="dark"] {
-  --bg: #050505;
-  --card: rgba(20, 20, 20, 0.65);
-  --border: rgba(255, 255, 255, 0.08);
-  --text: #ffffff;
-  --text2: #a3a3a3;
-}
-* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
-html, body { overflow-x: hidden; max-width: 100vw; }
-body { 
-  background-color: #050505;
-  background-image: 
-    radial-gradient(circle at 15% 50%, rgba(255, 0, 51, 0.12), transparent 40%),
-    radial-gradient(circle at 85% 30%, rgba(255, 136, 0, 0.08), transparent 40%);
-  background-attachment: fixed;
-  color: var(--text); 
-  font-family: 'Inter', -apple-system, Roboto, sans-serif; 
-  min-height: 100vh; 
-  padding-bottom: 0; 
-  transition: background 0.2s, color 0.2s; 
-}
+    --bg: #050505;
+    --border: rgba(255, 255, 255, 0.09);
+    --text: #ffffff;
+    --text2: #a3a3a3;
+    --accent: #ff0033;
+  }
+  html[data-theme="light"], html[data-theme="dark"] {
+    --bg: #050505;
+    --border: rgba(255, 255, 255, 0.09);
+    --text: #ffffff;
+    --text2: #a3a3a3;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; min-width: 0; }
+  html, body { overflow-x: hidden; max-width: 100vw; }
+  body {
+    background-color: #050505;
+    background-image:
+      radial-gradient(circle at 15% 20%, rgba(255, 0, 51, 0.12), transparent 40%),
+      radial-gradient(circle at 85% 60%, rgba(255, 136, 0, 0.07), transparent 40%);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: 'Inter', -apple-system, Roboto, sans-serif;
+    min-height: 100vh;
+    padding-bottom: 0;
+  }
 
   /* ===== HEADER ===== */
   .header { position: relative; background: #0a0a0a; border-bottom: 1px solid #222; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; min-height: 50px; }
@@ -74,6 +70,7 @@ body {
   .menu-title { padding: 20px 26px 10px; font-size: 10px; color: #999; letter-spacing: 2.5px; font-weight: 800; text-transform: uppercase; border-top: 1px solid #e8e8e8; margin-top: 6px; }
   .menu-title:first-child { border-top: none; margin-top: 0; padding-top: 6px; }
   .menu-item { padding: 16px 26px; font-size: 16px; color: #0a0a0a; cursor: pointer; display: flex; align-items: center; gap: 14px; text-decoration: none; transition: background 0.15s; background: transparent; border: none; width: 100%; font-family: inherit; text-align: left; font-weight: 700; letter-spacing: -0.2px; }
+  .menu-dropdown .menu-item + .menu-item { border-top: 1px solid #e6e6e6; }
   .menu-item:active { background: #ececec; }
   .menu-item .label { flex: 1; color: #0a0a0a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 800; font-size: 16px; }
   .menu-item .arrow { color: #bbb; font-size: 12px; flex-shrink: 0; }
@@ -83,49 +80,75 @@ body {
   .theme-btn { padding: 8px 14px; background: #ffffff; border: 1px solid #ddd; border-radius: 8px; color: #666; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; font-family: inherit; }
   .theme-btn.active { border-color: var(--accent); color: var(--accent); }
 
-  /* ===== CONTENT ===== */
-  .page-content { padding: 40px 24px 60px; max-width: 680px; margin: 0 auto; }
-  .page-label { font-size: 11px; font-weight: 900; letter-spacing: 4px; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; text-align: center; }
-  .page-title { font-size: 34px; font-weight: 900; line-height: 1.1; letter-spacing: -1.2px; color: var(--text); margin-bottom: 22px; text-align: center; }
+  /* ===== COMPACT CONTENT ===== */
+  .page-content { padding: 22px 18px 10px; max-width: 680px; margin: 0 auto; }
+
+  .page-label { font-size: 10px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; text-align: center; }
+  .page-title { font-size: 24px; font-weight: 900; line-height: 1.15; letter-spacing: -0.7px; color: var(--text); margin-bottom: 10px; text-align: center; }
   .page-title span { color: var(--accent); }
-  .intro { font-size: 16px; line-height: 1.75; color: var(--text2); margin-bottom: 32px; font-weight: 500; text-align: center; max-width: 540px; margin-left: auto; margin-right: auto; }
+  .intro { font-size: 13px; line-height: 1.6; color: var(--text2); margin-bottom: 14px; font-weight: 500; text-align: center; }
+  .intro strong { color: #fff; font-weight: 700; }
 
-  /* ===== INFO SECTIONS ===== */
-  .info-grid { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 40px; }
-  .info-card { background: transparent; border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.1); border-radius: 0; padding: 24px 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
-  .info-card i { font-size: 24px; color: var(--accent); margin-bottom: 14px; display: block; }
-  .info-card h3 { font-size: 18px; font-weight: 900; margin-bottom: 8px; color: var(--text); }
-  .info-card p { font-size: 14px; line-height: 1.6; color: var(--text2); }
+  /* stats */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+  .stat { padding: 12px 4px; text-align: center; border-right: 1px solid var(--border); }
+  .stat:last-child { border-right: none; }
+  .stat b { display: block; font-size: 17px; font-weight: 900; color: var(--accent); letter-spacing: -0.4px; }
+  .stat span { display: block; font-size: 9.5px; font-weight: 700; color: var(--text2); letter-spacing: 0.8px; text-transform: uppercase; margin-top: 2px; }
 
-  .pre-form-text { text-align: center; margin-bottom: 24px; }
-  .pre-form-text h2 { font-size: 24px; font-weight: 900; color: var(--text); letter-spacing: -0.5px; margin-bottom: 8px; }
-  .pre-form-text p { font-size: 15px; color: var(--text2); line-height: 1.6; }
+  /* section heading */
+  .sec-head { font-size: 10px; font-weight: 900; letter-spacing: 2.5px; text-transform: uppercase; color: var(--accent); padding: 16px 0 6px; }
+  .sec-head.center { text-align: center; }
 
-  /* ===== TABS ===== */
-  .tabs-container { display: flex; gap: 8px; margin-bottom: 30px; background: var(--card); padding: 6px; border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 8px 32px rgba(0,0,0,0.2); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-  .tab-btn { flex: 1; padding: 16px; background: transparent; border: none; color: var(--text2); font-size: 15px; font-weight: 800; cursor: pointer; border-radius: 10px; font-family: inherit; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-  .tab-btn.active { background: var(--accent); color: #fff; box-shadow: 0 4px 12px rgba(255,0,51,0.3); }
+  /* info rows */
+  .info-grid { display: block; }
+  .info-card { display: flex; gap: 12px; align-items: flex-start; padding: 11px 0; border-bottom: 1px solid var(--border); }
+  .info-card:last-child { border-bottom: none; }
+  .info-card i { font-size: 14px; color: var(--accent); width: 20px; text-align: center; margin-top: 2px; flex-shrink: 0; }
+  .info-card h3 { font-size: 13px; font-weight: 800; margin-bottom: 2px; color: var(--text); letter-spacing: -0.1px; }
+  .info-card p { font-size: 12px; line-height: 1.55; color: var(--text2); }
 
-  /* ===== FORM ===== */
-  .form-section { display: none; animation: fadeIn 0.3s ease; }
-  .form-section.active { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  /* MIDDLE: sign buttons */
+  .sign-zone { margin: 18px -18px; padding: 20px 18px; background: rgba(255,255,255,0.035); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .sign-zone h2 { font-size: 18px; font-weight: 900; letter-spacing: -0.4px; text-align: center; margin-bottom: 4px; }
+  .sign-zone > p { font-size: 12px; line-height: 1.55; color: var(--text2); text-align: center; margin-bottom: 14px; }
+  .sign-btns { display: flex; flex-direction: column; gap: 9px; max-width: 420px; margin: 0 auto; }
+  .sign-btn { width: 100%; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 900; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 9px; transition: transform 0.15s; border: none; }
+  .sign-btn:active { transform: scale(0.97); }
+  .sign-btn.primary { background: var(--accent); color: #fff; box-shadow: 0 8px 22px rgba(255,0,51,0.3); }
+  .sign-btn.ghost { background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.15); }
+  .sign-note { text-align: center; font-size: 10.5px; color: #777; margin-top: 10px; font-weight: 600; }
+  .sign-note i { color: #00cc44; margin-right: 4px; }
 
-  .form-group { margin-bottom: 20px; }
-  .form-group label { display: block; font-size: 12px; font-weight: 800; color: var(--text); margin-bottom: 8px; letter-spacing: 0.5px; }
-  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 16px; background: rgba(10, 10, 10, 0.6); border: 1.5px solid var(--border); border-radius: 12px; color: var(--text); font-size: 15px; font-family: inherit; outline: none; transition: border-color 0.2s; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--accent); }
-  .form-group textarea { min-height: 100px; resize: vertical; }
+  /* steps */
+  .steps { counter-reset: s; }
+  .step { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); align-items: flex-start; }
+  .step:last-child { border-bottom: none; }
+  .step .n { width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 11px; font-weight: 900; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+  .step h4 { font-size: 12.5px; font-weight: 800; margin-bottom: 2px; }
+  .step p { font-size: 11.5px; line-height: 1.55; color: var(--text2); }
 
-  .submit-btn { width: 100%; padding: 18px; background: var(--accent); color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 900; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 10px 25px rgba(255,0,51,0.3); margin-top: 10px; transition: transform 0.15s; }
-  .submit-btn:active { transform: scale(0.97); }
+  /* two columns: artist vs label */
+  .who { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-top: 4px; }
+  .who > div { padding: 12px 10px 12px 0; }
+  .who > div + div { padding: 12px 0 12px 12px; border-left: 1px solid var(--border); }
+  .who h4 { font-size: 12.5px; font-weight: 900; margin-bottom: 6px; color: var(--accent); }
+  .who ul { list-style: none; }
+  .who li { font-size: 11.5px; line-height: 1.5; color: var(--text2); padding: 3px 0 3px 14px; position: relative; }
+  .who li::before { content: ''; position: absolute; left: 0; top: 9px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
 
-  .success-msg { display: none; text-align: center; padding: 40px 20px; background: var(--card); border: 1px solid var(--border); border-radius: 20px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-  .success-msg i { font-size: 50px; color: #00cc44; margin-bottom: 16px; }
-  .success-msg h3 { font-size: 22px; font-weight: 900; margin-bottom: 8px; color: var(--text); }
-  .success-msg p { font-size: 14px; color: var(--text2); line-height: 1.6; }
+  /* faq */
+  .faq-item { padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-item b { display: block; font-size: 12.5px; font-weight: 800; margin-bottom: 3px; }
+  .faq-item span { display: block; font-size: 11.5px; line-height: 1.55; color: var(--text2); }
 
-  .footer { background: #0a0a0a; padding: 20px 20px 30px; text-align: center; font-size: 11px; color: #555; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; border-top: 1px solid #1a1a1a; margin-top: 40px; }
+  .tagline { text-align: center; padding: 20px 10px 6px; font-size: 15px; font-weight: 900; letter-spacing: -0.4px; line-height: 1.35; }
+  .tagline span { color: var(--accent); }
+  .contact { text-align: center; font-size: 11.5px; color: var(--text2); padding: 4px 0 14px; }
+  .contact a { color: #fff; font-weight: 700; text-decoration: none; }
+
+  .footer { background: #0a0a0a; padding: 16px 20px 20px; text-align: center; font-size: 10px; color: #555; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; border-top: 1px solid #1a1a1a; margin-top: 6px; }
   .footer .brand { color: var(--accent); font-weight: 900; }
 html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.header{position:sticky!important;top:0;z-index:100}</style>
 <link rel="stylesheet" href="/desktop.css">
@@ -170,56 +193,123 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
   </div>
 
   <div class="page-content">
-    
+
     <div class="page-label">Join The Movement</div>
     <h1 class="page-title">Become Part Of <span>FlexTune</span></h1>
-    
-    <!-- MORE TEXTS ADDED HERE -->
     <p class="intro">
-      FlexTune is more than just a music platform — it is Africa's complete music ecosystem. We are dedicated to discovering raw talent, distributing premium sounds to the world, and ensuring creators get the recognition and revenue they deserve. 
+      FlexTune is more than a music platform. It is <strong>Africa's complete music ecosystem</strong>. We discover raw talent, distribute premium sounds to the world, and make sure creators get the recognition and revenue they deserve.
     </p>
 
+    <div class="stats">
+      <div class="stat"><b>150+</b><span>Platforms</span></div>
+      <div class="stat"><b>Free</b><span>To Apply</span></div>
+      <div class="stat"><b>48hrs</b><span>Reply Time</span></div>
+    </div>
+
+    <div class="sec-head">Why Join</div>
     <div class="info-grid">
       <div class="info-card">
         <i class="fas fa-globe-africa"></i>
-        <h3>Global Distribution</h3>
-        <p>We push your music to over 150+ major streaming platforms including Spotify, Apple Music, Boomplay, Audiomack, and YouTube Music, ensuring your sound reaches every corner of the globe.</p>
+        <div><h3>Global Distribution</h3><p>Your music goes to over 150+ streaming platforms including Spotify, Apple Music, Boomplay, Audiomack and YouTube Music, so your sound reaches every corner of the globe.</p></div>
       </div>
       <div class="info-card">
         <i class="fas fa-bullhorn"></i>
-        <h3>Real Promotion</h3>
-        <p>We don't just host your music; we push it. From playlist pitching to social media campaigns and exclusive FlexTune features, we put your brand in front of real listeners.</p>
+        <div><h3>Real Promotion</h3><p>We do not just host your music, we push it. Playlist pitching, social media campaigns and exclusive FlexTune features put your brand in front of real listeners.</p></div>
       </div>
       <div class="info-card">
         <i class="fas fa-chart-line"></i>
-        <h3>Transparent Royalties</h3>
-        <p>Own your masters and earn what you deserve. Our system ensures you keep track of your streams and receive clear, transparent payouts for your hard work.</p>
+        <div><h3>Transparent Royalties</h3><p>Own your masters and earn what you deserve. Track your streams and get clear, honest payouts for your hard work.</p></div>
+      </div>
+      <div class="info-card">
+        <i class="fas fa-user-shield"></i>
+        <div><h3>You Stay In Control</h3><p>Your songs, your name, your rights. Manage your own releases or let our team handle uploads. You decide.</p></div>
+      </div>
+      <div class="info-card">
+        <i class="fas fa-calendar-check"></i>
+        <div><h3>Schedule Your Drops</h3><p>Plan releases ahead of time. Pick the date and hour and your song goes live on FlexTune automatically, with fans notified by email.</p></div>
+      </div>
+      <div class="info-card">
+        <i class="fas fa-users"></i>
+        <div><h3>A Real Community</h3><p>Fans follow you, share your songs and come back for every release. Build a loyal audience from Accra to Lagos and beyond.</p></div>
       </div>
     </div>
 
-    <!-- BRIDGING TEXT BEFORE THE FORM -->
-<div class="pre-form-text" style="margin-bottom: 30px;">
-  <h2>Ready to take the stage?</h2>
-  <p>Whether you're an independent artist ready to go global, or a label looking to expand your roster, select your path below to apply.</p>
-</div>
+    <!-- MIDDLE: SIGN BUTTONS -->
+    <div class="sign-zone">
+      <h2>Ready to take the stage?</h2>
+      <p>Independent artist ready to go global, or a label growing a roster? Pick your path to apply. It takes about a minute.</p>
+      <div class="sign-btns">
+        <button class="sign-btn primary" onclick="window.location.href='flextune-creater.html?type=artist'"><i class="fas fa-microphone"></i> Sign As Artist</button>
+        <button class="sign-btn ghost" onclick="window.location.href='flextune-creater.html?type=label'"><i class="fas fa-building"></i> Sign As Label</button>
+      </div>
+      <div class="sign-note"><i class="fas fa-circle-check"></i> Free to apply. No hidden fees.</div>
+    </div>
 
-<!-- CLEAN BUTTONS -->
-<div style="display: flex; flex-direction: column; gap: 14px;">
-  <button onclick="window.location.href='flextune-creater.html?type=artist'" style="width: 100%; padding: 22px; background: var(--accent); color: #fff; border: none; border-radius: 14px; font-size: 18px; font-weight: 900; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 10px 30px rgba(255,0,51,0.3); transition: transform 0.15s;">
-    <i class="fas fa-microphone"></i> Sign As Artist
-  </button>
-  
-  <button onclick="window.location.href='flextune-creater.html?type=label'" style="width: 100%; padding: 22px; background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 14px; font-size: 18px; font-weight: 900; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; backdrop-filter: blur(10px); transition: transform 0.15s;">
-    <i class="fas fa-building"></i> Sign As Label
-  </button>
-</div>
+    <div class="sec-head">How It Works</div>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><div><h4>Apply</h4><p>Choose Artist or Label and fill the short form with your name, contact and a link to your music.</p></div></div>
+      <div class="step"><div class="n">2</div><div><h4>We review</h4><p>Our team listens to your music and checks your details. You hear back within 48 hours.</p></div></div>
+      <div class="step"><div class="n">3</div><div><h4>Get your profile</h4><p>Your artist page goes live with your songs, covers, bio, socials and a follow button for fans.</p></div></div>
+      <div class="step"><div class="n">4</div><div><h4>Release and grow</h4><p>Upload new music, schedule drops and watch your plays, followers and reach climb.</p></div></div>
+    </div>
+
+    <div class="sec-head">Who Can Join</div>
+    <div class="who">
+      <div>
+        <h4>Artists</h4>
+        <ul>
+          <li>Singers and rappers</li>
+          <li>Producers and beatmakers</li>
+          <li>Bands and duos</li>
+          <li>Gospel and highlife acts</li>
+          <li>Rising underground talent</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Labels</h4>
+        <ul>
+          <li>Independent labels</li>
+          <li>Artist managers</li>
+          <li>Music collectives</li>
+          <li>Church and gospel labels</li>
+          <li>Teams with 1 to 20+ artists</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sec-head">What We Look For</div>
+    <div class="info-grid">
+      <div class="info-card">
+        <i class="fas fa-music"></i>
+        <div><h3>Original music</h3><p>Songs you made or have the rights to release. No copied or stolen tracks.</p></div>
+      </div>
+      <div class="info-card">
+        <i class="fas fa-image"></i>
+        <div><h3>Clean cover art</h3><p>A square cover, 1200 x 1200 or bigger, so your release looks sharp on every screen.</p></div>
+      </div>
+      <div class="info-card">
+        <i class="fas fa-fire"></i>
+        <div><h3>Passion and consistency</h3><p>Artists who keep creating and releasing, and who want to build something long term.</p></div>
+      </div>
+    </div>
+
+    <div class="sec-head">Common Questions</div>
+    <div class="faq">
+      <div class="faq-item"><b>Does it cost anything to apply?</b><span>No. Applying is free.</span></div>
+      <div class="faq-item"><b>Can I already have songs on FlexTune?</b><span>Yes. If your name is already on the site, you will be asked to verify with a 6-digit code to claim your profile.</span></div>
+      <div class="faq-item"><b>Who owns my music?</b><span>You do. FlexTune helps you share and promote it, and your rights stay with you.</span></div>
+      <div class="faq-item"><b>How long until I hear back?</b><span>Within 48 hours after you submit your application.</span></div>
+      <div class="faq-item"><b>Can I release songs myself?</b><span>Yes. Once approved, you can open your studio to upload and schedule releases, or choose to let the FlexTune team do it for you.</span></div>
+    </div>
+
+    <div class="tagline">From Africa to the world. <span>One song at a time.</span></div>
+    <div class="contact">Questions? Email <a href="mailto:wunatehk@gmail.com">wunatehk@gmail.com</a></div>
 
   </div>
 
   <div class="footer"><span class="brand">FLEXTUNE</span> © 2026</div>
 
   <script>
-    // Theme & Menu Logic
     window.applySettings = function() {
       const theme = localStorage.getItem('samarid-theme') || 'light';
       const accent = localStorage.getItem('samarid-accent') || '#ff0033';
@@ -250,8 +340,13 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
       const btn = document.getElementById('menuBtn');
       btn.classList.remove('open'); btn.classList.remove('menu-open');
     }
-
-    // Forms have been moved to separate files (submit-artist.html & submit-label.html)
+    window.fakeSubscribe = function(e) {
+      e.preventDefault();
+      const channelId = localStorage.getItem('samarid_channel_id');
+      window.open(channelId
+        ? 'https://www.youtube.com/channel/' + channelId + '?sub_confirmation=1'
+        : 'https://youtube.com/@realsamarid?sub_confirmation=1', '_blank');
+    }
 
     applySettings();
   </script>
