@@ -225,7 +225,12 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: artistEmail, code: generatedCode, artistName: artistName })
         });
-        if (!res.ok) throw new Error('Could not send the email. Please try again.');
+        if (!res.ok) {
+          let d = {}; try { d = await res.json(); } catch (x) {}
+          if (d.error === 'name_taken') throw new Error('The artist name "' + artistName + '" is already taken. The email you entered does not match the email on file for this artist, so it cannot be claimed. Use the email this artist registered with, or pick another name.');
+          if (d.error === 'no_email') throw new Error('The artist name "' + artistName + '" is already taken and has no email on file yet. Contact FlexTune to verify you are the artist.');
+          throw new Error('Could not send the email. Please try again.');
+        }
 
         showStep(2);
         startResendTimer();

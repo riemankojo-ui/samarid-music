@@ -316,7 +316,7 @@
           <input type="hidden" id="editingId" value="">
           <div class="form-group"><label>Song Title</label><input type="text" id="songTitle" placeholder="e.g. Back To Sender"></div>
           <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="Tap to add cover art" readonly onclick="cloudPick('songCover')" oninput="clearTimeout(window.coverT); window.coverT = setTimeout(checkSongCover, 600)" onchange="checkSongCover()"><div id="songCoverMsg" style="display:none;font-size:12px;margin-top:6px;line-height:1.4"></div></div>
-          <div class="form-group"><label>Artist Name</label><input type="text" id="songArtist" placeholder="e.g. Jh linx"></div>
+          <div class="form-group" id="songArtistEmailBox" style="display:none;"><label>Artist Email *</label><input type="email" id="songArtistEmail" placeholder="artist@email.com"><small style="color:var(--text2);font-size:11px;">New artist. Only this email can claim the profile.</small></div>
 <div class="form-group"><label>Featuring Artist(s)</label><input type="text" id="songFeaturing" placeholder="e.g. Samarid, Kofi Kinaata (optional)"></div>
 <div class="form-group">
   <label>Producer(s)</label>
@@ -378,6 +378,7 @@
             <div class="album-box-title"><i class="fas fa-compact-disc"></i> Album Details</div>
             <div class="form-group"><label>Album Name *</label><input type="text" id="albumName" placeholder="e.g. My First Album"></div>
             <div class="form-group"><label>Artist Name *</label><input type="text" id="albumArtist" placeholder="e.g. Jh linx"></div>
+<div class="form-group" id="albumArtistEmailBox" style="display:none;"><label>Artist Email *</label><input type="email" id="albumArtistEmail" placeholder="artist@email.com"><small style="color:var(--text2);font-size:11px;">New artist. Only this email can claim the profile.</small></div>
             <div class="form-group"><label>Album Cover URL *</label><input type="text" id="albumCover" placeholder="Tap to add cover art" readonly onclick="cloudPick('albumCover')"></div>
             <div class="form-group"><label>Category</label><input type="text" id="albumCategory" placeholder="e.g. Hip Hop"></div>
             <!-- NEW COUNTRY DROPDOWN FOR ADD ALBUM -->
@@ -433,6 +434,7 @@
           <div class="form-group"><label>Song Title *</label><input type="text" id="schTitle" placeholder="e.g. Back To Sender"></div>
           <div class="form-group"><label>Cover Art Image URL *</label><input type="text" id="schCover" placeholder="Tap to add cover art" readonly onclick="cloudPick('schCover')"></div>
           <div class="form-group"><label>Artist Name *</label><input type="text" id="schArtist" placeholder="e.g. Jh linx"></div>
+<div class="form-group" id="schArtistEmailBox" style="display:none;"><label>Artist Email *</label><input type="email" id="schArtistEmail" placeholder="artist@email.com"><small style="color:var(--text2);font-size:11px;">New artist. Only this email can claim the profile.</small></div>
 <div class="form-group"><label>Featuring Artist(s)</label><input type="text" id="schFeaturing" placeholder="e.g. Samarid (optional)"></div>
 <div class="form-group">
   <label>Producer(s)</label>
@@ -508,6 +510,7 @@
             <div class="album-box-title"><i class="fas fa-compact-disc"></i> Album Details</div>
             <div class="form-group"><label>Album Name *</label><input type="text" id="schAlbumName" placeholder="e.g. My First Album"></div>
             <div class="form-group"><label>Artist Name *</label><input type="text" id="schAlbumArtist" placeholder="e.g. Jh linx"></div>
+<div class="form-group" id="schAlbumArtistEmailBox" style="display:none;"><label>Artist Email *</label><input type="email" id="schAlbumArtistEmail" placeholder="artist@email.com"><small style="color:var(--text2);font-size:11px;">New artist. Only this email can claim the profile.</small></div>
             <div class="form-group"><label>Album Cover URL *</label><input type="text" id="schAlbumCover" placeholder="Tap to add cover art" readonly onclick="cloudPick('schAlbumCover')"></div>
             <div class="form-group"><label>Category</label><input type="text" id="schAlbumCategory" placeholder="e.g. Hip Hop"></div>
             
@@ -1624,6 +1627,72 @@ const category = document.getElementById('editCategory').value.trim() || 'Music'
       document.getElementById('cancelBtn').style.display = 'none';
       goToPage('home');
     }
+    window.artistExists = async function(name) {
+      const h = { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } };
+      const q = encodeURIComponent(name);
+      const a = await (await fetch(SUPABASE_URL + '/rest/v1/artists?name=ilike.' + q + '&select=id&limit=1', h)).json();
+      if (Array.isArray(a) && a.length) return true;
+      const s = await (await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?artist_name=ilike.' + q + '&select=id&limit=1', h)).json();
+      return Array.isArray(s) && s.length > 0;
+    };
+    window.wireArtistEmail = function(inputId, boxId) {
+      const inp = document.getElementById(inputId), box = document.getElementById(boxId);
+      if (!inp || !box) return;
+      inp.addEventListener('blur', async function() {
+        const n = inp.value.trim();
+        if (!n || n.toLowerCase() === 'samarid') { box.style.display = 'none'; return; }
+        try { box.style.display = (await artistExists(n)) ? 'none' : 'block'; } catch (e) {}
+      });
+    };
+    window.ensureArtistEmail = async function(artist, inputId, boxId, status) {
+      if (!artist || artist.toLowerCase() === 'samarid') return true;
+      try { if (await artistExists(artist)) return true; }
+      catch (e) { status.className = 'status error'; status.innerText = 'Could not check the artist. Try again.'; return false; }
+      const box = document.getElementById(boxId), inp = document.getElementById(inputId);
+      box.style.display = 'block';
+      const email = inp.value.trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { status.className = 'status error'; status.innerText = 'New artist: enter the artist email.'; inp.focus(); return false; }
+      const r = await fetch(SUPABASE_URL + '/rest/v1/artists', { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify({ name: artist, email: email }) });
+      if (!r.ok) { status.className = 'status error'; status.innerText = 'Could not save the artist email.'; return false; }
+      return true;
+    };
+    wireArtistEmail('songArtist', 'songArtistEmailBox');
+    wireArtistEmail('albumArtist', 'albumArtistEmailBox');
+    wireArtistEmail('schArtist', 'schArtistEmailBox');
+    wireArtistEmail('schAlbumArtist', 'schAlbumArtistEmailBox');
+    window.artistExists = async function(name) {
+      const h = { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } };
+      const q = encodeURIComponent(name);
+      const a = await (await fetch(SUPABASE_URL + '/rest/v1/artists?name=ilike.' + q + '&select=id&limit=1', h)).json();
+      if (Array.isArray(a) && a.length) return true;
+      const s = await (await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?artist_name=ilike.' + q + '&select=id&limit=1', h)).json();
+      return Array.isArray(s) && s.length > 0;
+    };
+    window.wireArtistEmail = function(inputId, boxId) {
+      const inp = document.getElementById(inputId), box = document.getElementById(boxId);
+      if (!inp || !box) return;
+      inp.addEventListener('blur', async function() {
+        const n = inp.value.trim();
+        if (!n || n.toLowerCase() === 'samarid') { box.style.display = 'none'; return; }
+        try { box.style.display = (await artistExists(n)) ? 'none' : 'block'; } catch (e) {}
+      });
+    };
+    window.ensureArtistEmail = async function(artist, inputId, boxId, status) {
+      if (!artist || artist.toLowerCase() === 'samarid') return true;
+      try { if (await artistExists(artist)) return true; }
+      catch (e) { status.className = 'status error'; status.innerText = 'Could not check the artist. Try again.'; return false; }
+      const box = document.getElementById(boxId), inp = document.getElementById(inputId);
+      box.style.display = 'block';
+      const email = inp.value.trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { status.className = 'status error'; status.innerText = 'New artist: enter the artist email.'; inp.focus(); return false; }
+      const r = await fetch(SUPABASE_URL + '/rest/v1/artists', { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify({ name: artist, email: email }) });
+      if (!r.ok) { status.className = 'status error'; status.innerText = 'Could not save the artist email.'; return false; }
+      return true;
+    };
+    wireArtistEmail('songArtist', 'songArtistEmailBox');
+    wireArtistEmail('albumArtist', 'albumArtistEmailBox');
+    wireArtistEmail('schArtist', 'schArtistEmailBox');
+    wireArtistEmail('schAlbumArtist', 'schAlbumArtistEmailBox');
     window.saveSong = async function() {
       const status = document.getElementById('songStatus');
       const editingId = document.getElementById('editingId').value;
@@ -1639,7 +1708,7 @@ const category = document.getElementById('songCategory').value.trim() || 'Music'
       const lyrics = document.getElementById('songLyrics').value.trim();
       const downloadurl = document.getElementById('songDownload').value.trim() || '#';
       const spotify = document.getElementById('songSpotify').value.trim();
-if (!title || !cover) { status.className = 'status error'; status.innerText = 'Title and Cover required!'; return; }
+if (!title || !cover) { status.className = 'status error'; status.innerText = 'Title and Cover required!'; return; }if (!(await ensureArtistEmail(artist, 'songArtistEmail', 'songArtistEmailBox', status))) return;
 if (!editingId) { const coverOk = await checkSongCover(); if (!coverOk) { status.className = 'status error'; status.innerText = 'Cover rejected - see the red message under the cover link'; return; } }
 try {
        const payload = { title, cover, category, country, date, description, lyrics: lyrics || null, downloadurl, artist_name: artist, featuring: featuring, producer: producer || null, spotify: spotify, youtube: (document.getElementById('songYoutube').value.trim() || null), status: 'live', release_at: null };
@@ -2077,7 +2146,7 @@ songItems.forEach(item => {
 });
       if (!valid) { status.className = 'status error'; status.innerText = 'All songs need a title!'; return; }
       status.className = 'status'; status.innerText = '';
-const prog = startPublishProgress('album', 'Publishing album...');
+const prog = startPublishProgress('album', 'Publishing album...');if (!(await ensureArtistEmail(artist, 'albumArtistEmail', 'albumArtistEmailBox', status))) return;
       try {
         const payload = songs.map((s, i) => ({ title: s.title, cover, artist_name: artist, featuring: ((document.querySelectorAll('#albumSongsContainer .album-song-feat')[i] || {}).value || '').trim() || null, category: s.category, producer: s.producer, country, date, description: s.description, lyrics: s.lyrics || null, youtube: s.youtube || null, downloadurl: s.downloadurl, album_name: albumName, status: 'live', release_at: null }));
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' }, body: JSON.stringify(payload) });
@@ -2145,7 +2214,8 @@ const category = document.getElementById('schCategory').value.trim() || 'Music';
       const { date, iso } = getSelectedDateTime('schMonth','schDay','schYear','schHour','schMinute', currentAmPm);
       if (date.getTime() <= Date.now()) { status.className = 'status error'; status.innerText = 'Pick a future date & time!'; return; }
       status.className = 'status'; status.innerText = '';
-const prog = startPublishProgress('scheduleSingle', 'Scheduling...');
+
+if (!(await ensureArtistEmail(artist, 'schArtistEmail', 'schArtistEmailBox', status))) return;const prog = startPublishProgress('scheduleSingle', 'Scheduling...');
       try {
         const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
         const payload = { title, cover, artist_name: artist, featuring: featuring, producer: producer || null, category, country, description, lyrics: lyrics || null, downloadurl, spotify: spotify || null, youtube: ytLink || null, date: displayDate, status: 'scheduled', release_at: iso };
@@ -2230,7 +2300,8 @@ setTimeout(() => {
       if (!valid) { status.className = 'status error'; status.innerText = 'All songs need a title!'; return; }
       const { date, iso } = getSelectedDateTime('schAMonth','schADay','schAYear','schAHour','schAMinute', currentAAmPm);
       if (date.getTime() <= Date.now()) { status.className = 'status error'; status.innerText = 'Pick a future date & time!'; return; }
-      status.className = 'status info'; status.innerText = 'Scheduling album...';
+      if (!(await ensureArtistEmail(artist, 'schAlbumArtistEmail', 'schAlbumArtistEmailBox', status))) return;
+status.className = 'status info'; status.innerText = 'Scheduling album...';
       try {
         const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
         const payload = songs.map((s, i) => ({ title: s.title, cover, artist_name: artist, featuring: ((document.querySelectorAll('#schAlbumSongsContainer .sch-album-song-feat')[i] || {}).value || '').trim() || null, category: s.category, producer: s.producer, country, description: s.description, lyrics: s.lyrics || null, youtube: s.youtube || null, downloadurl: s.downloadurl, album_name: albumName, date: displayDate, status: 'scheduled', release_at: iso }));

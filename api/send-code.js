@@ -7,6 +7,15 @@ export default async function handler(req) {
     const body = await req.json();
     const { email, code, artistName } = body;
 
+    const sbKey = (process.env.SUPABASE_SERVICE_KEY || '').trim();
+    if (!sbKey) return new Response(JSON.stringify({ error: 'server_not_ready' }), { status: 500 });
+    const ar = await fetch('https://kamnfnukaizdglntcdvi.supabase.co/rest/v1/artists?select=name,email&limit=20&name=ilike.' + encodeURIComponent(artistName || ''), { headers: { apikey: sbKey, Authorization: 'Bearer ' + sbKey } });
+    const rows = await ar.json();
+    const row = (Array.isArray(rows) ? rows : []).find(r => (r.name || '').trim().toLowerCase() === String(artistName || '').trim().toLowerCase());
+    const onFile = ((row && row.email) || '').trim().toLowerCase();
+    if (!onFile) return new Response(JSON.stringify({ error: 'no_email' }), { status: 403 });
+    if (onFile !== String(email || '').trim().toLowerCase()) return new Response(JSON.stringify({ error: 'name_taken' }), { status: 403 });
+
     if (!email || !code) {
       return new Response(JSON.stringify({ error: 'Missing email or code' }), { status: 400 });
     }

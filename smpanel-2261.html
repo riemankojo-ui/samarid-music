@@ -675,7 +675,7 @@
       <div class="form-group"><label>TikTok Link</label><input type="text" id="artistTiktok" placeholder="https://tiktok.com/@..."></div>
       <div class="form-group"><label>Instagram Link</label><input type="text" id="artistInstagram" placeholder="https://instagram.com/..."></div>
       <div class="form-group"><label>YouTube Link</label><input type="text" id="artistYoutube" placeholder="https://youtube.com/@..."></div>
-      <div class="form-group"><label>Spotify Link</label><input type="text" id="artistSpotify" placeholder="https://open.spotify.com/artist/..."></div>
+      <div class="form-group"><label>Artist Email *</label><input type="email" id="artistEmail" placeholder="artist@email.com"></div>
       <div class="modal-btns">
         <button class="cancel" onclick="closeArtistModal()">Cancel</button>
         <button class="confirm-green" onclick="saveArtist()">Save</button>
@@ -1261,7 +1261,7 @@ if (tab === 'hoster') loadHosterFiles();
       document.getElementById('artistTiktok').value = artist ? (artist.tiktok || '') : '';
       document.getElementById('artistInstagram').value = artist ? (artist.instagram || '') : '';
       document.getElementById('artistYoutube').value = artist ? (artist.youtube || '') : '';
-      document.getElementById('artistSpotify').value = artist ? (artist.spotify || '') : '';
+      document.getElementById('artistEmail').value = artist ? (artist.email || '') : '';
       document.getElementById('artistSaveStatus').innerText = '';
       updateAvatarPreview();
       document.getElementById('artistModal').classList.add('open');
@@ -1283,11 +1283,11 @@ if (tab === 'hoster') loadHosterFiles();
       const tiktok = document.getElementById('artistTiktok').value.trim();
       const instagram = document.getElementById('artistInstagram').value.trim();
       const youtube = document.getElementById('artistYoutube').value.trim();
-      const spotify = document.getElementById('artistSpotify').value.trim();
-      if (!name) { status.style.color = '#ff0033'; status.innerText = 'Name required'; return; }
+      const email = document.getElementById('artistEmail').value.trim().toLowerCase();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { status.style.color = '#ff0033'; status.innerText = 'Artist email required'; return; }
       status.style.color = '#ffcc00'; status.innerText = 'Saving...';
       try {
-        const payload = { name, profile_pic, bio, tiktok, instagram, youtube, spotify };
+        const payload = { name, profile_pic, bio, tiktok, instagram, youtube, spotify, email };
         let res;
         if (id) {
           res = await fetch(SUPABASE_URL + '/rest/v1/artists?id=eq.' + id, { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' }, body: JSON.stringify(payload) });
