@@ -252,16 +252,35 @@
     <div class="content">
       <div class="page active" id="pageHome">
         <h1 class="page-title">Dashboard</h1>
-        <p class="page-subtitle">Latest 5 songs — search to find older ones</p>
-        <div class="search-wrap">
-          <i class="fas fa-search search-icon"></i>
-          <input type="text" id="songSearchInput" placeholder="Search all songs..." oninput="handleSongSearch()" autocomplete="off">
-        </div>
-        <p class="song-count-label" id="songCountLabel"></p>
-        <div id="homeSongList"></div>
+        <p class="page-subtitle">Albums & Latest Singles</p>
+<div class="search-wrap">
+  <i class="fas fa-search search-icon"></i>
+  <input type="text" id="songSearchInput" placeholder="Search all songs or albums..." oninput="handleSongSearch()" autocomplete="off">
+</div>
+
+<div id="albumListContainer" style="margin-bottom: 30px;"></div>
+
+<p class="song-count-label" id="songCountLabel"></p>
+<div id="homeSongList"></div>
       </div>
 
-      <div class="page" id="pageAdd" style="position:relative;">
+      <!-- ALBUM DETAILS PAGE -->
+<div class="page" id="pageAlbumDetail">
+  <button class="secondary-btn" onclick="goToPage('home')" style="width: auto; display: inline-flex; padding: 8px 16px; margin-bottom: 20px;"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+  
+  <div id="albumDetailHeader" style="display:flex; gap:16px; align-items:center; margin-bottom:20px; background:var(--card); padding:16px; border-radius:16px; border:1px solid var(--border);">
+    <!-- Filled by JS -->
+  </div>
+  
+  <div class="search-wrap">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" id="albumSongSearchInput" placeholder="Search songs in this album..." oninput="handleAlbumSongSearch()" autocomplete="off">
+  </div>
+  
+  <div id="albumSongList"></div>
+</div>
+
+<div class="page" id="pageAdd" style="position:relative;">
         <button type="button" class="imp-open" onclick="openImportPopup(false)" style="position:absolute;top:0;right:0;background:#ff8800;color:#fff;border:0;border-radius:18px;padding:9px 18px;font-size:13px;font-weight:800;font-family:inherit;z-index:5;">Import</button>
         <p class="page-subtitle">Publish instantly — no scheduling</p>
 
@@ -1015,10 +1034,13 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
       } catch(e) {}
     });
     window.goToPage = function(page) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      const pageId = 'page' + page.charAt(0).toUpperCase() + page.slice(1);
-      const navId = 'nav' + page.charAt(0).toUpperCase() + page.slice(1);
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  
+  let pageId = 'page' + page.charAt(0).toUpperCase() + page.slice(1);
+  if (page === 'albumDetail') pageId = 'pageAlbumDetail'; // Custom mapping for the new page
+  
+  const navId = 'nav' + page.charAt(0).toUpperCase() + page.slice(1);
       const pageEl = document.getElementById(pageId);
       const navEl = document.getElementById(navId);
       if (pageEl) pageEl.classList.add('active');
@@ -1068,40 +1090,131 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
       } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; }
     }
     function renderAdminSongs(query) {
-      const list = document.getElementById('homeSongList');
-      const countLabel = document.getElementById('songCountLabel');
-      const isSearching = query && query.length > 0;
-      let filtered = allAdminSongs;
-      if (isSearching) {
-        filtered = allAdminSongs.filter(s => (s.title || '').toLowerCase().includes(query) || (s.artist_name || '').toLowerCase().includes(query) || (s.album_name || '').toLowerCase().includes(query));
+  const albumContainer = document.getElementById('albumListContainer');
+  const list = document.getElementById('homeSongList');
+  const countLabel = document.getElementById('songCountLabel');
+  const isSearching = query && query.length > 0;
+  
+  let filtered = allAdminSongs;
+  if (isSearching) {
+    filtered = allAdminSongs.filter(s => (s.title || '').toLowerCase().includes(query) || (s.artist_name || '').toLowerCase().includes(query) || (s.album_name || '').toLowerCase().includes(query));
+  }
+
+  // --- 1. GROUP ALBUMS ---
+  const albumsMap = {};
+  const singlesList = [];
+
+  filtered.forEach(s => {
+    if (s.album_name && s.album_name.trim()) {
+      const aName = s.album_name.trim();
+      if (!albumsMap[aName]) {
+        albumsMap[aName] = { name: aName, cover: s.cover, artist: s.artist_name || 'Samarid', songs: [] };
       }
-      if (countLabel) {
-        if (isSearching) countLabel.textContent = filtered.length + ' result' + (filtered.length !== 1 ? 's' : '') + ' for "' + query + '"';
-        else {
-          const total = allAdminSongs.length;
-          if (total === 0) countLabel.textContent = '';
-          else if (total <= HOME_SONGS_LIMIT) countLabel.textContent = 'Showing all ' + total + ' song' + (total !== 1 ? 's' : '');
-          else if (homeShowAll) countLabel.textContent = 'Showing all ' + total + ' songs';
-          else countLabel.textContent = 'Showing ' + HOME_SONGS_LIMIT + ' of ' + total + ' songs — search to find older ones';
-        }
-      }
-      if (filtered.length === 0) { list.innerHTML = '<p class="empty-songs">' + (isSearching ? 'No songs match.' : 'No songs yet.') + '</p>'; return; }
-      let displayList = filtered;
-      let hasMore = false;
-      if (!isSearching && !homeShowAll && filtered.length > HOME_SONGS_LIMIT) { displayList = filtered.slice(0, HOME_SONGS_LIMIT); hasMore = true; }
-      let html = displayList.map(s => {
-        const albumTag = s.album_name ? ' • <span style="color:#ff8800;">' + s.album_name + '</span>' : '';
-        const featTag = s.featuring ? ' <span style="color:#1d9bf0;">feat. ' + s.featuring + '</span>' : '';
-        const spotifyTag = s.spotify ? ' • <span style="color:#1DB954;">Spotify</span>' : '';
-        const scheduledTag = s.status === 'scheduled' ? ' • <span style="color:#ffcc00;">SCHEDULED</span>' : '';
-        const countryTag = s.country ? ' • ' + s.country : ''; // NEW
-        return '<div class="admin-song"><img src="' + s.cover + '" alt="' + s.title + '"><div class="info"><h4>' + s.title + '</h4><p>' + (s.artist_name || 'Samarid') + featTag + ' • ' + s.category + countryTag + ' • ' + s.date + albumTag + spotifyTag + scheduledTag + '</p></div><div class="actions"><button class="action-btn link-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link"></i></button><button class="action-btn edit-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash"></i></button></div></div>';
-      }).join('');
-      if (hasMore) html += '<button class="show-all-btn" onclick="showAllSongs()"><i class="fas fa-chevron-down"></i> Show All ' + allAdminSongs.length + ' Songs</button>';
-      if (!isSearching && homeShowAll && allAdminSongs.length > HOME_SONGS_LIMIT) html += '<button class="show-all-btn muted" onclick="hideExtraSongs()"><i class="fas fa-chevron-up"></i> Show Only Latest ' + HOME_SONGS_LIMIT + '</button>';
-      list.innerHTML = html;
+      albumsMap[aName].songs.push(s);
+    } else {
+      singlesList.push(s);
     }
-    window.showAllSongs = function() { homeShowAll = true; renderAdminSongs(''); }
+  });
+
+  const albumsList = Object.values(albumsMap);
+
+  // Render Albums
+  if (albumsList.length > 0) {
+    albumContainer.innerHTML = '<div class="section-head" style="margin-top:0; margin-bottom:10px; border-bottom:none; padding-bottom:0;"><h3 style="font-size:14px; color:#ff8800;"><i class="fas fa-compact-disc"></i> Albums (' + albumsList.length + ')</h3></div>' + 
+      albumsList.map(a => {
+        return '<div onclick="openAlbumDetail(\'' + a.name.replace(/'/g, "\\'") + '\')" style="display:flex; gap:14px; align-items:center; background:var(--card); border:1px solid var(--border); padding:12px; border-radius:12px; margin-bottom:10px; cursor:pointer; transition:0.15s;" onmouseover="this.style.borderColor=\'#ff8800\'" onmouseout="this.style.borderColor=\'var(--border)\'">' +
+          '<img src="' + a.cover + '" style="width:65px; height:65px; border-radius:8px; object-fit:cover;">' +
+          '<div style="flex:1; min-width:0;">' +
+            '<h4 style="font-size:15px; font-weight:800; color:#fff; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + a.name + '</h4>' +
+            '<p style="font-size:12px; color:var(--text2);">' + a.artist + ' • <span style="color:#00cc44;">' + a.songs.length + ' Songs</span></p>' +
+          '</div>' +
+          '<i class="fas fa-chevron-right" style="color:#666;"></i>' +
+        '</div>';
+      }).join('');
+  } else {
+    albumContainer.innerHTML = isSearching ? '' : '<div class="section-head" style="margin-top:0; margin-bottom:10px; border-bottom:none; padding-bottom:0;"><h3 style="font-size:14px; color:#ff8800;"><i class="fas fa-compact-disc"></i> Albums (0)</h3></div><p class="empty-songs" style="padding:10px 0;">No albums found.</p>';
+  }
+
+  // --- 2. RENDER SINGLES ---
+  if (countLabel) {
+    if (isSearching) countLabel.textContent = singlesList.length + ' single(s) found';
+    else countLabel.textContent = singlesList.length > 0 ? 'Latest Singles' : 'No singles found.';
+  }
+
+  if (singlesList.length === 0) { 
+    list.innerHTML = isSearching ? '<p class="empty-songs">No singles match.</p>' : ''; 
+    return; 
+  }
+
+  let displayList = singlesList;
+  let hasMore = false;
+  if (!isSearching && !homeShowAll && singlesList.length > HOME_SONGS_LIMIT) { 
+    displayList = singlesList.slice(0, HOME_SONGS_LIMIT); 
+    hasMore = true; 
+  }
+
+  let html = displayList.map(s => {
+    const featTag = s.featuring ? ' <span style="color:#1d9bf0;">feat. ' + s.featuring + '</span>' : '';
+    const spotifyTag = s.spotify ? ' • <span style="color:#1DB954;">Spotify</span>' : '';
+    const scheduledTag = s.status === 'scheduled' ? ' • <span style="color:#ffcc00;">SCHEDULED</span>' : '';
+    const countryTag = s.country ? ' • ' + s.country : '';
+    return '<div class="admin-song"><img src="' + s.cover + '" alt="' + s.title + '"><div class="info"><h4>' + s.title + '</h4><p>' + (s.artist_name || 'Samarid') + featTag + ' • ' + s.category + countryTag + ' • ' + s.date + spotifyTag + scheduledTag + '</p></div><div class="actions"><button class="action-btn link-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link"></i></button><button class="action-btn edit-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash"></i></button></div></div>';
+  }).join('');
+  
+  if (hasMore) html += '<button class="show-all-btn" onclick="showAllSongs()"><i class="fas fa-chevron-down"></i> Show All ' + singlesList.length + ' Singles</button>';
+  if (!isSearching && homeShowAll && singlesList.length > HOME_SONGS_LIMIT) html += '<button class="show-all-btn muted" onclick="hideExtraSongs()"><i class="fas fa-chevron-up"></i> Show Only Latest ' + HOME_SONGS_LIMIT + '</button>';
+  list.innerHTML = html;
+}
+    let currentAlbumView = '';
+
+window.openAlbumDetail = function(albumName) {
+  currentAlbumView = albumName;
+  const albumSongs = allAdminSongs.filter(s => s.album_name && s.album_name.trim() === albumName.trim());
+  
+  if (albumSongs.length === 0) { goToPage('home'); return; }
+  
+  const first = albumSongs[0];
+  
+  // Render Header
+  document.getElementById('albumDetailHeader').innerHTML = 
+    '<img src="' + first.cover + '" style="width:80px; height:80px; border-radius:12px; object-fit:cover; box-shadow:0 4px 15px rgba(0,0,0,0.3);">' +
+    '<div style="flex:1; min-width:0;">' +
+      '<h2 style="font-size:18px; font-weight:900; color:#fff; margin-bottom:4px; overflow-wrap:anywhere;">' + albumName + '</h2>' +
+      '<p style="font-size:13px; color:var(--text2); font-weight:600;">' + (first.artist_name || 'Samarid') + '</p>' +
+      '<p style="font-size:11px; color:#ff8800; font-weight:800; margin-top:4px;">' + albumSongs.length + ' SONGS</p>' +
+    '</div>';
+
+  document.getElementById('albumSongSearchInput').value = '';
+  renderAlbumSongsList(albumName, '');
+  goToPage('albumDetail');
+}
+
+window.handleAlbumSongSearch = function() {
+  const q = document.getElementById('albumSongSearchInput').value.toLowerCase().trim();
+  renderAlbumSongsList(currentAlbumView, q);
+}
+
+function renderAlbumSongsList(albumName, query) {
+  const list = document.getElementById('albumSongList');
+  let songs = allAdminSongs.filter(s => s.album_name && s.album_name.trim() === albumName.trim());
+  
+  if (query) {
+    songs = songs.filter(s => (s.title || '').toLowerCase().includes(query));
+  }
+
+  if (songs.length === 0) {
+    list.innerHTML = '<p class="empty-songs">No songs match your search.</p>';
+    return;
+  }
+
+  list.innerHTML = songs.map(s => {
+    const featTag = s.featuring ? ' <span style="color:#1d9bf0;">feat. ' + s.featuring + '</span>' : '';
+    const scheduledTag = s.status === 'scheduled' ? ' • <span style="color:#ffcc00;">SCHEDULED</span>' : '';
+    return '<div class="admin-song"><img src="' + s.cover + '" alt="' + s.title + '"><div class="info"><h4>' + s.title + '</h4><p>' + (s.artist_name || 'Samarid') + featTag + scheduledTag + '</p></div><div class="actions"><button class="action-btn link-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link"></i></button><button class="action-btn edit-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit"></i></button><button class="action-btn delete-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash"></i></button></div></div>';
+  }).join('');
+}
+
+window.showAllSongs = function() { homeShowAll = true; renderAdminSongs(''); }
     window.hideExtraSongs = function() { homeShowAll = false; renderAdminSongs(''); window.scrollTo(0, 0); }
     window.handleSongSearch = function() { renderAdminSongs(document.getElementById('songSearchInput').value.toLowerCase().trim()); }
     window.copySongLink = async function(id) {
@@ -1249,10 +1362,13 @@ window.saveEditModal = async function() {
     progressBox.classList.add('done');
     btn.innerHTML = '<i class="fas fa-check"></i> Saved!';
 
-    setTimeout(() => {
-      closeEditModal();
-      loadAdminSongs();
-      showEditToast('Song updated successfully!');
+    setTimeout(async () => {
+  closeEditModal();
+  await loadAdminSongs();
+  if (currentAlbumView) {
+     renderAlbumSongsList(currentAlbumView, document.getElementById('albumSongSearchInput').value);
+  }
+  showEditToast('Song updated successfully!');
       // show YouTube re-find popup (no email)
       relPop.open('Release status', title + ' - ' + artist);
       relPop.row('song', 'Song', 'ok', 'Updated on FlexTune');
