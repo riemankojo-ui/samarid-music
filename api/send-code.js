@@ -16,7 +16,8 @@ export default async function handler(req) {
         <h2 style="color: #ff0033; margin-bottom: 10px;">FlexTune Security</h2>
         <p style="color: #333; font-size: 14px;">You requested to claim the artist profile: <strong>${artistName}</strong>.</p>
         <p style="color: #333; font-size: 14px;">Here is your 6-digit verification code:</p>
-        <h1 style="font-size: 32px; letter-spacing: 5px; color: #0a0a0a; background: #f5f5f5; padding: 15px; border-radius: 8px; margin: 20px 0;">${code}</h1>
+        <h1 style="font-size: 36px; letter-spacing: 6px; color: #0a0a0a; background: #f5f5f5; padding: 16px; border-radius: 8px; margin: 20px 0 8px; -webkit-user-select: all; user-select: all;">${code}</h1>
+        <p style="font-size: 12px; color: #888; margin: 0 0 18px;">Tap and hold the code, then choose Copy.</p>
         <p style="font-size: 12px; color: #888;">If you did not request this, you can safely ignore this email.</p>
       </div>
     `;
