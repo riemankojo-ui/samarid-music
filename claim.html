@@ -38,7 +38,7 @@
       <i class="fas fa-user-check icon-top"></i>
       <h1>Artist Found!</h1>
       <p>We found an existing FlexTune account for <strong id="displayName">Artist</strong>. Is this you?</p>
-      <button class="btn" onclick="sendCode()"><i class="fas fa-envelope"></i> Send 6-Digit Code</button>
+      <button class="btn" onclick="sendCode(event)"><i class="fas fa-envelope"></i> Send 6-Digit Code</button>
     </div>
 
     <!-- STEP 2: Enter Code -->
@@ -83,7 +83,7 @@
   // Generate a random 6 digit code
   generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
   
-  const btn = e.target;
+  const btn = (e && e.target && e.target.closest('button')) || document.querySelector('#step1 .btn');
   const originalText = btn.innerHTML;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
   btn.disabled = true;
