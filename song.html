@@ -750,8 +750,9 @@ window.smartDownload = async function(btn) {
         currentSongData = s;
         const artist = (s.artist_name || 'Samarid').trim();
         const featuring = (s.featuring || '').trim();
-        currentArtistName = artist;
-        const badge = s.verified ? VERIFY_BADGE : '';
+const producer = (s.producer || '').trim();
+currentArtistName = artist;
+const badge = s.verified ? VERIFY_BADGE : '';
         const downloadTitle = artist + (featuring ? ' Feat ' + featuring : '') + ' - ' + s.title;
         document.title = downloadTitle + ' - FlexTune';
 
@@ -827,7 +828,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
             <span>${escapeHtml(s.category || 'Music')}</span>
           </p>
 
-          <p class="detail-label"><i class="fas fa-compact-disc"></i> A FlexTune Release</p>
+          ${producer ? `<p class="detail-label" style="text-transform: none; font-size: 13px; margin-bottom: 20px;"><i class="fas fa-sliders"></i> Produced by <strong>${escapeHtml(producer)}</strong></p>` : `<p class="detail-label"><i class="fas fa-compact-disc"></i> A FlexTune Release</p>`}
 
           <div class="detail-description"${(!s.description || /^no description yet\.?$/i.test(String(s.description).trim())) ? ' style="display:none;"' : ''}>
             <h4><i class="fas fa-info-circle"></i> About this Song</h4>

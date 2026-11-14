@@ -51,6 +51,7 @@
     album: 'album', title: 'title', song: 'title',
     artist: 'artist', 'artist name': 'artist', by: 'artist',
     featuring: 'feat', feat: 'feat', 'featuring artist': 'feat', 'featuring artists': 'feat',
+producer: 'producer', producers: 'producer', 'produced by': 'producer',
     category: 'category', genre: 'category',
     country: 'country', location: 'country',
     cover: 'cover', 'cover art': 'cover', art: 'cover', image: 'cover',
@@ -176,6 +177,7 @@
     setVal(P + 'Cover', h.cover || '');
     setVal(P + 'Artist', h.artist || '');
     setVal(P + 'Featuring', h.feat || '');
+setVal(P + 'Producer', h.producer || '');
     setVal(P + 'Category', h.category || '');
     setVal(P + 'Country', /nigeria/i.test(h.country || '') ? 'Nigeria' : 'Ghana');
     setVal(P + 'Description', h.desc || '');

@@ -223,7 +223,7 @@ export default async function handler(req) {
   const sb = { apikey: key, 'Content-Type': 'application/json' };
   if (key.indexOf('eyJ') === 0) sb.Authorization = 'Bearer ' + key;
 
-  const r = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id + '&select=id,title,artist_name,featuring,youtube,auto_youtube,auto_youtube_type,auto_youtube_checked,auto_youtube_score&limit=1', { headers: sb });
+  const r = await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id + '&select=id,title,artist_name,featuring,youtube,auto_youtube,auto_youtube_type,auto_youtube_checked,auto_youtube_score,category&limit=1', { headers: sb });
   const rows = await r.json();
   if (!Array.isArray(rows) || !rows[0]) return json({ url: null, why: 'song not found' });
   const song = rows[0];
@@ -246,7 +246,7 @@ export default async function handler(req) {
   (song.artist_name || '') + ' ' + (song.title || '')
 ].filter(q => q.trim());
 
-    let best = null, bestScore = 0, quotaHit = false;
+    let best = null, bestScore = 0, quotaHit = false, bestTitle = "";
 
     for (const q of queries) {
       const yr = await fetch('https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&videoEmbeddable=true&maxResults=10&q=' + encodeURIComponent(q) + '&key=' + ytKey);
@@ -261,7 +261,7 @@ export default async function handler(req) {
       yd.items.forEach(function (it) {
         if (!it.id || !it.id.videoId) return;
         const sc = rate(it, song.title, song.artist_name, song.featuring);
-        if (sc && sc > bestScore) { best = it.id.videoId; bestScore = sc; }
+        if (sc && sc > bestScore) { best = it.id.videoId; bestScore = sc; bestTitle = it.snippet.title; }
       });
       if (best && bestScore >= 6) break;
     }
@@ -273,11 +273,24 @@ export default async function handler(req) {
       let result = have || { url: null };
       
       if (!have || bestScore > haveScore || (bestScore >= 4 && bestScore === haveScore)) {
-        result = { url: 'https://www.youtube.com/watch?v=' + best, type: newType };
-        patch.auto_youtube = result.url;
-        patch.auto_youtube_type = newType;
-        patch.auto_youtube_score = bestScore;
+  result = { url: 'https://www.youtube.com/watch?v=' + best, type: newType };
+  patch.auto_youtube = result.url;
+  patch.auto_youtube_type = newType;
+  patch.auto_youtube_score = bestScore;
+  
+  // NEW: Auto-detect Genre from YouTube Title
+  if (bestTitle) {
+    const genreKeywords = ['Afrobeats', 'Afro Drill', 'Hip Hop', 'Highlife', 'Amapiano', 'R&B', 'Gospel', 'Afropop', 'Dancehall', 'Reggae', 'Drill', 'Trap'];
+    for (const g of genreKeywords) {
+      if (new RegExp('\\b' + g.replace(' ', '\\s*') + '\\b', 'i').test(bestTitle)) {
+        if (!song.category || song.category.trim() === '' || song.category.trim().toLowerCase() === 'music') {
+          patch.category = g;
+        }
+        break;
       }
+    }
+  }
+}
       await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id, { method: 'PATCH', headers: Object.assign({ Prefer: 'return=minimal' }, sb), body: JSON.stringify(patch) });
       return json(result);
     }
@@ -297,11 +310,24 @@ export default async function handler(req) {
 
   const patch = { auto_youtube_checked: new Date().toISOString() };
   if (invResult) {
-    const newType = invResult.score >= 6 ? 'video' : (invResult.score === 5 ? 'visualizer' : (invResult.score === 4 ? 'lyrics' : 'audio'));
-    const result = { url: 'https://www.youtube.com/watch?v=' + invResult.videoId, type: newType };
-    patch.auto_youtube = result.url;
-    patch.auto_youtube_type = newType;
-    patch.auto_youtube_score = invResult.score;
+  const newType = invResult.score >= 6 ? 'video' : (invResult.score === 5 ? 'visualizer' : (invResult.score === 4 ? 'lyrics' : 'audio'));
+  const result = { url: 'https://www.youtube.com/watch?v=' + invResult.videoId, type: newType };
+  patch.auto_youtube = result.url;
+  patch.auto_youtube_type = newType;
+  patch.auto_youtube_score = invResult.score;
+  
+  // NEW: Auto-detect Genre from Fallback Title
+  if (invResult.title) {
+    const genreKeywords = ['Afrobeats', 'Afro Drill', 'Hip Hop', 'Highlife', 'Amapiano', 'R&B', 'Gospel', 'Afropop', 'Dancehall', 'Reggae', 'Drill', 'Trap'];
+    for (const g of genreKeywords) {
+      if (new RegExp('\\b' + g.replace(' ', '\\s*') + '\\b', 'i').test(invResult.title)) {
+        if (!song.category || song.category.trim() === '' || song.category.trim().toLowerCase() === 'music') {
+          patch.category = g;
+        }
+        break;
+      }
+    }
+  }
     await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + id, { method: 'PATCH', headers: Object.assign({ Prefer: 'return=minimal' }, sb), body: JSON.stringify(patch) });
     return json(result);
   }

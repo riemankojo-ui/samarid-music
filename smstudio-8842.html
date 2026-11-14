@@ -299,7 +299,23 @@
           <div class="form-group"><label>Cover Art Image URL</label><input type="text" id="songCover" placeholder="Tap to add cover art" readonly onclick="cloudPick('songCover')" oninput="clearTimeout(window.coverT); window.coverT = setTimeout(checkSongCover, 600)" onchange="checkSongCover()"><div id="songCoverMsg" style="display:none;font-size:12px;margin-top:6px;line-height:1.4"></div></div>
           <div class="form-group"><label>Artist Name</label><input type="text" id="songArtist" placeholder="e.g. Jh linx"></div>
           <div class="form-group"><label>Featuring Artist(s)</label><input type="text" id="songFeaturing" placeholder="e.g. Samarid, Kofi Kinaata (optional)"></div>
-          <div class="form-group"><label>Category</label><input type="text" id="songCategory" placeholder="e.g. Afrobeats"></div>
+<div class="form-group"><label>Producer(s)</label><input type="text" id="songProducer" placeholder="e.g. DJ Khaled, Killbeatz (optional)"></div>
+          <div class="form-group">
+  <label>Category</label>
+  <input type="text" id="songCategory" list="genreList" placeholder="e.g. Afrobeats, Amapiano">
+  <datalist id="genreList">
+    <option value="Afrobeats">
+    <option value="Afro Drill">
+    <option value="Hip Hop">
+    <option value="Highlife">
+    <option value="Amapiano">
+    <option value="R&B">
+    <option value="Gospel">
+    <option value="Afropop">
+    <option value="Dancehall">
+    <option value="Reggae">
+  </datalist>
+</div>
           <!-- NEW COUNTRY DROPDOWN FOR ADD SINGLE -->
           <div class="form-group">
             <label>Country</label>
@@ -390,6 +406,7 @@
           <div class="form-group"><label>Cover Art Image URL *</label><input type="text" id="schCover" placeholder="Tap to add cover art" readonly onclick="cloudPick('schCover')"></div>
           <div class="form-group"><label>Artist Name *</label><input type="text" id="schArtist" placeholder="e.g. Jh linx"></div>
           <div class="form-group"><label>Featuring Artist(s)</label><input type="text" id="schFeaturing" placeholder="e.g. Samarid (optional)"></div>
+<div class="form-group"><label>Producer(s)</label><input type="text" id="schProducer" placeholder="e.g. DJ Khaled (optional)"></div>
           <div class="form-group"><label>Category</label><input type="text" id="schCategory" placeholder="e.g. Afrobeats"></div>
           
           <!-- NEW COUNTRY SELECTOR FOR SCHEDULE SINGLE -->
@@ -802,6 +819,7 @@ Download: https://example.com/cry-baby.mp3</div>
     <div class="form-group"><label>Cover Art URL</label><input type="text" id="editCover" placeholder="https://...png"></div>
     <div class="form-group"><label>Artist Name</label><input type="text" id="editArtist" placeholder="Artist"></div>
     <div class="form-group"><label>Featuring</label><input type="text" id="editFeaturing" placeholder="Feat (optional)"></div>
+<div class="form-group"><label>Producer(s)</label><input type="text" id="editProducer" placeholder="Producer (optional)"></div>
     <div class="form-group"><label>Category</label><input type="text" id="editCategory" placeholder="Genre"></div>
     <div class="form-group">
       <label>Country</label>
@@ -1352,7 +1370,8 @@ window.saveEditModal = async function() {
   const cover = getCompressedCover(document.getElementById('editCover').value.trim());
   const artist = document.getElementById('editArtist').value.trim() || 'Samarid';
   const featuring = document.getElementById('editFeaturing').value.trim();
-  const category = document.getElementById('editCategory').value.trim() || 'Music';
+const producer = document.getElementById('editProducer').value.trim();
+const category = document.getElementById('editCategory').value.trim() || 'Music';
   const country = document.getElementById('editCountry').value;
   const date = document.getElementById('editDate').value.trim();
   const description = document.getElementById('editDescription').value.trim() || 'No description yet.';
@@ -1393,11 +1412,12 @@ window.saveEditModal = async function() {
 
   try {
     const payload = {
-      title, cover, category, country, date,
-      description, lyrics: lyrics || null,
-      downloadurl, artist_name: artist,
-      featuring: featuring || null,
-      spotify: spotify || null,
+  title, cover, category, country, date,
+  description, lyrics: lyrics || null,
+  downloadurl, artist_name: artist,
+  featuring: featuring || null,
+  producer: producer || null,
+  spotify: spotify || null,
       youtube: (document.getElementById('editYoutube').value.trim() || null)
     };
     const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + id, {
@@ -1473,7 +1493,8 @@ window.saveEditModal = async function() {
       const cover = getCompressedCover(document.getElementById('songCover').value.trim());
       const artist = document.getElementById('songArtist').value.trim() || 'Samarid';
       const featuring = document.getElementById('songFeaturing').value.trim();
-      const category = document.getElementById('songCategory').value.trim() || 'Music';
+const producer = document.getElementById('songProducer').value.trim();
+const category = document.getElementById('songCategory').value.trim() || 'Music';
       const country = document.getElementById('songCountry').value; // NEW
       const date = document.getElementById('songDate').value.trim() || new Date().toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
       const description = document.getElementById('songDescription').value.trim() || 'No description yet.';
@@ -1483,7 +1504,7 @@ window.saveEditModal = async function() {
 if (!title || !cover) { status.className = 'status error'; status.innerText = 'Title and Cover required!'; return; }
 if (!editingId) { const coverOk = await checkSongCover(); if (!coverOk) { status.className = 'status error'; status.innerText = 'Cover rejected - see the red message under the cover link'; return; } }
 try {
-       const payload = { title, cover, category, country, date, description, lyrics: lyrics || null, downloadurl, artist_name: artist, featuring: featuring, spotify: spotify, youtube: (document.getElementById('songYoutube').value.trim() || null), status: 'live', release_at: null };
+       const payload = { title, cover, category, country, date, description, lyrics: lyrics || null, downloadurl, artist_name: artist, featuring: featuring, producer: producer || null, spotify: spotify, youtube: (document.getElementById('songYoutube').value.trim() || null), status: 'live', release_at: null };
         let res;
         if (editingId) res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + editingId, { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         else res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
@@ -1900,7 +1921,8 @@ setTimeout(() => {
       const cover = getCompressedCover(document.getElementById('schCover').value.trim());
       const artist = document.getElementById('schArtist').value.trim() || 'Samarid';
       const featuring = document.getElementById('schFeaturing').value.trim();
-      const category = document.getElementById('schCategory').value.trim() || 'Music';
+const producer = document.getElementById('schProducer').value.trim();
+const category = document.getElementById('schCategory').value.trim() || 'Music';
       const country = document.getElementById('schCountry').value; // NEW
       const description = document.getElementById('schDescription').value.trim() || 'No description yet.';
       const lyrics = document.getElementById('schLyrics').value.trim();
@@ -1916,7 +1938,7 @@ setTimeout(() => {
 const prog = startPublishProgress('scheduleSingle', 'Scheduling...');
       try {
         const displayDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
-        const payload = { title, cover, artist_name: artist, featuring: featuring, category, country, description, lyrics: lyrics || null, downloadurl, spotify: spotify || null, youtube: ytLink || null, date: displayDate, status: 'scheduled', release_at: iso };
+        const payload = { title, cover, artist_name: artist, featuring: featuring, producer: producer || null, category, country, description, lyrics: lyrics || null, downloadurl, spotify: spotify || null, youtube: ytLink || null, date: displayDate, status: 'scheduled', release_at: iso };
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE, { method: 'POST', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation' }, body: JSON.stringify(payload) });
 if (!res.ok) { const err = await res.text(); throw new Error(err); }
 let created = [];
@@ -2181,18 +2203,38 @@ function cleanFileName(fileName) {
   let name = fileName.replace(/\.[^/.]+$/, ""); 
   try { name = decodeURIComponent(name); } catch(e) {}
   try { name = decodeURIComponent(name); } catch(e) {}
+  
   name = name.replace(/_/g, ' ').replace(/[–—]/g, '-').replace(/-{2,}/g, '-');
   
+  // NEW: Strip out website links and domains from anywhere in the filename
+  name = name.replace(/www\./gi, '');
+  name = name.replace(/[a-zA-Z0-9-]+\.(com|net|org|gh|ng|co|info|xyz|top|me)/gi, '');
+  name = name.replace(/\.(com|net|org|gh|ng|co|info|xyz|top|me)/gi, '');
+  
   // Ignore common junk words at the start of the filename
-  const junkRegex = /^(download|mp3|audio|music|song|track|www|flextune|flex tune|com)\s*[\-\s]*/i;
+  const junkRegex = /^(download|mp3|audio|music|song|track|www|flextune|flex tune)\s*[\-\s]*/i;
   while (junkRegex.test(name)) {
     name = name.replace(junkRegex, '').trim();
   }
+  
+  // Clean up any extra spaces left behind after removing the domains
+  name = name.replace(/\s+/g, ' ').trim();
+  
   return name;
 }
 
 function parseFileName(fileName, detectedArtist = '') {
   let name = cleanFileName(fileName);
+  
+  // NEW: Detect Genre from filename
+  let genre = '';
+  const genreKeywords = ['Afrobeats', 'Afro Drill', 'Hip Hop', 'Highlife', 'Amapiano', 'R&B', 'Gospel', 'Afropop', 'Dancehall', 'Reggae', 'Drill', 'Trap'];
+  for (const g of genreKeywords) {
+    if (new RegExp('\\b' + g.replace(' ', '\\s*') + '\\b', 'i').test(name)) {
+      genre = g;
+      break;
+    }
+  }
   
   let feat = '';
   const featMatch = name.match(/(?:ft\.?|feat\.?|featuring)\s*([^)]+)/i);
@@ -2226,7 +2268,7 @@ function parseFileName(fileName, detectedArtist = '') {
   title = title.replace(/-/g, ' ');
   title = title.replace(/\s+/g, ' ').trim();
 
-  return { artist, title, feat };
+  return { artist, title, feat, genre };
 }
 
 window.handleFolderImport = async function(event) {
@@ -2333,7 +2375,7 @@ let txt = 'Type: Album\n';
   txt += 'Album: ' + folderName + '\n';
   txt += 'Artist: ' + defaultArtist + '\n';
   if (coverUrl) txt += 'Cover: ' + coverUrl + '\n';
-  txt += 'Category: Music\n';
+  txt += 'Category: ' + (defaultGenre || 'Music') + '\n';
   txt += 'Country: Ghana\n';
   txt += 'Description: Album imported from folder.\n\n';
 
@@ -2457,7 +2499,7 @@ let txt = '';
     txt += 'Artist: ' + t.artist + '\n';
     if (t.feat) txt += 'Featuring: ' + t.feat + '\n';
     if (coverUrl) txt += 'Cover: ' + coverUrl + '\n';
-    txt += 'Category: Music\n';
+    txt += 'Category: ' + (defaultGenre || 'Music') + '\n';
     txt += 'Country: Ghana\n';
       txt += 'Download: ' + t.url + '\n';
   txt += '# Source File: ' + t.originalName + '\n';
@@ -2468,7 +2510,7 @@ let txt = '';
   txt += 'Album: Singles Collection\n';
   txt += 'Artist: ' + defaultArtist + '\n';
   if (coverUrl) txt += 'Cover: ' + coverUrl + '\n';
-  txt += 'Category: Music\n';
+  txt += 'Category: ' + (defaultGenre || 'Music') + '\n';
   txt += 'Country: Ghana\n';
   parsedTracks.forEach(t => {
     txt += '\nTrack ' + t.index + ': ' + t.title + '\n';
