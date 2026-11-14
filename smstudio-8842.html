@@ -809,14 +809,10 @@ Download: https://example.com/cry-baby.mp3</div>
       </div>
 
       <div class="page" id="pageChannel">
-        <h1 class="page-title">YouTube Channel</h1>
-        <p class="page-subtitle">Connect your channel to auto-sync videos</p>
-        <div class="form-group"><label>Channel Link</label><input type="text" id="channelLinkInput" placeholder="https://youtube.com/@yourchannel"></div>
-        <button class="main-btn" onclick="saveChannelLink()">Save & Sync Channel</button>
-        <button class="secondary-btn" onclick="resetChannelLink()">Reset to Default Channel</button>
-        <p id="channelStatus" class="status"></p>
+  <h1 class="page-title">My Videos</h1>
+  <p class="page-subtitle">Publish your official music videos</p>
 
-        <div class="video-section-box">
+  <div class="video-section-box" style="margin-top: 0;">
           <div class="video-section-title"><i class="fas fa-video"></i> Add Video Link</div>
           <div class="video-section-note">Add individual YouTube video links to display in your Videos page.</div>
           <div class="form-group"><label>Video Title</label><input type="text" id="videoTitle" placeholder="e.g. Samarid Back To Sender Visualizer"></div>
@@ -835,7 +831,7 @@ Download: https://example.com/cry-baby.mp3</div>
       <button class="nav-item" onclick="goToPage('release')" id="navRelease"><div class="icon"><i class="fas fa-calendar-alt"></i></div><div class="label">RELEASE</div></button>
       <button class="nav-item" onclick="goToPage('import')" id="navImport"><div class="icon"><i class="fas fa-file-import"></i></div><div class="label">IMPORT</div></button>
       <button class="nav-item" onclick="goToPage('seo')" id="navSeo"><div class="icon"><i class="fas fa-search-plus"></i></div><div class="label">SEO</div></button>
-      <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon"><i class="fas fa-tv"></i></div><div class="label">CHANNEL</div></button>
+      <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon"><i class="fas fa-video"></i></div><div class="label">VIDEOS</div></button>
     </div>
   </div>
 <div class="edit-modal-overlay" id="editModalOverlay" onclick="closeEditModal()">
@@ -1143,22 +1139,29 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
         }
       }
     }    
-    async function loadAdminSongs() {
-  const list = document.getElementById('homeSongList');
-  list.innerHTML = `
-    <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
-    <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
-    <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
-    <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
-  `;
-      try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=*&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
-        const songs = await res.json();
-        allAdminSongs = Array.isArray(songs) ? songs : [];
-        homeShowAll = false;
-        renderAdminSongs('');
-      } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; }
-    }
+      async function loadAdminSongs() {
+const list = document.getElementById('homeSongList');
+list.innerHTML = `
+  <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
+  <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
+`;
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      const claimedArtist = urlParams.get('artist');
+      let apiUrl = SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=*&order=id.desc';
+      
+      // If an artist is claimed, ONLY fetch their songs
+      if (claimedArtist) {
+        apiUrl += '&artist_name=ilike.' + encodeURIComponent(claimedArtist);
+      }
+
+      const res = await fetch(apiUrl, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+      const songs = await res.json();
+      allAdminSongs = Array.isArray(songs) ? songs : [];
+      homeShowAll = false;
+      renderAdminSongs('');
+    } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; }
+  }
     function renderAdminSongs(query) {
   const albumContainer = document.getElementById('albumListContainer');
   const list = document.getElementById('homeSongList');
@@ -3168,35 +3171,35 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
     }
 
     // ===== ARTIST CLAIM FILTER LOGIC =====
-    window.addEventListener('load', function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const claimedArtist = urlParams.get('artist');
-      
-      if (claimedArtist) {
-        const managerBtn = document.querySelector('.manager-quick-btn');
-        if (managerBtn) managerBtn.style.display = 'none';
-        
-        const navImport = document.getElementById('navImport');
-        const navSeo = document.getElementById('navSeo');
-        const navChannel = document.getElementById('navChannel');
-        if (navImport) navImport.style.display = 'none';
-        if (navSeo) navSeo.style.display = 'none';
-        if (navChannel) navChannel.style.display = 'none';
-        
-        document.querySelector('.top-bar h1').innerText = claimedArtist + ' Studio';
-        document.querySelector('.top-bar .brand').innerText = 'CLAIMED ARTIST';
-        
-        document.querySelector('.page-subtitle').innerText = 'Manage your releases, ' + claimedArtist;
-        
-        setTimeout(() => {
-          const searchInput = document.getElementById('songSearchInput');
-          if (searchInput) {
-            searchInput.value = claimedArtist;
-            handleSongSearch();
-          }
-        }, 1000);
-      }
-    });
+window.addEventListener('load', function() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const claimedArtist = urlParams.get('artist');
+  
+  if (claimedArtist) {
+    // Hide Manager button
+    const managerBtn = document.querySelector('.manager-quick-btn');
+    if (managerBtn) managerBtn.style.display = 'none';
+    
+    // Update the Library header text but keep the FlexTune header above
+    const searchHeaderText = document.getElementById('searchHeaderText');
+    if (searchHeaderText) {
+      searchHeaderText.innerHTML = '<i class="fas fa-music" style="color: #ff8800;"></i> My Releases';
+    }
+    
+    // Hide the search button because they only have their own songs
+    const searchToggleBtn = document.getElementById('searchToggleBtn');
+    if (searchToggleBtn) searchToggleBtn.style.display = 'none';
+
+    // Auto-fill their artist name in all Add/Release forms
+    setTimeout(() => {
+      const artistInputs = ['songArtist', 'albumArtist', 'schArtist', 'schAlbumArtist'];
+      artistInputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = claimedArtist;
+      });
+    }, 500);
+  }
+});
   </script>
 <script src="/import-fill.js?v=3"></script>
 <script src="/site-logo.js" defer></script>
