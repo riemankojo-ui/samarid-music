@@ -81,6 +81,15 @@
 
   .foot { text-align:center; padding:22px; font-size:11px; color:#555; letter-spacing:1.5px; text-transform:uppercase; font-weight:600; border-top:1px solid rgba(255,255,255,0.06); }
   .foot b { color:var(--accent); font-weight:900; }
+
+  .pw-wrap { position:relative; margin-bottom:12px; }
+  .pw-wrap input, .txt-input { width:100%; padding:15px 46px 15px 14px; background:rgba(10,10,10,.6); border:1.5px solid var(--border); border-radius:12px; color:#fff; font-size:15px; font-weight:600; outline:none; }
+  .txt-input { padding-right:14px; margin-bottom:12px; }
+  .pw-wrap input:focus, .txt-input:focus { border-color:var(--accent); }
+  .pw-wrap input::placeholder, .txt-input::placeholder { color:#7a7a7a; }
+  .eye { position:absolute; right:6px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--text2); font-size:15px; padding:10px; cursor:pointer; }
+  .rules { font-size:12px; color:var(--text2); line-height:1.6; margin:2px 0 18px; }
+  .progress.four div { flex:1; }
 </style>
 </head>
 <body>
@@ -91,16 +100,15 @@
   </div>
 
   <div class="wrap">
-
-    <div class="progress">
-      <div id="p1" class="on"></div><div id="p2"></div><div id="p3"></div>
+    <div class="progress four">
+      <div id="p1" class="on"></div><div id="p2"></div><div id="p3"></div><div id="p4"></div>
     </div>
 
     <!-- STEP 1 -->
     <div id="step1" class="step active">
       <div class="label">Claim Your Profile</div>
       <h1>We found your <span>artist profile</span></h1>
-      <p class="lead">Good news. An artist named <strong id="displayName">Artist</strong> already has songs on FlexTune. If this is you, confirm it below and take control of your music.</p>
+      <p class="lead">An artist named <strong id="displayName">Artist</strong> already has songs on FlexTune. If this is you, confirm below and take control of your music.</p>
 
       <div class="who">
         <div class="who-row"><span class="k">Artist name</span><span class="v" id="whoName">Artist</span></div>
@@ -108,8 +116,8 @@
       </div>
 
       <ul class="points">
-        <li><i class="fas fa-envelope-circle-check"></i><div><b>We email you a 6-digit code</b>Type it on the next screen to prove this profile is yours.</div></li>
-        <li><i class="fas fa-music"></i><div><b>Manage your own releases</b>Upload songs, schedule drops and update your details yourself.</div></li>
+        <li><i class="fas fa-envelope-circle-check"></i><div><b>We email you a 6-digit code</b>Only the email registered for this artist can receive it.</div></li>
+        <li><i class="fas fa-key"></i><div><b>You set your own password</b>Next time you log in with your password, then a code we email you.</div></li>
         <li><i class="fas fa-shield-halved"></i><div><b>Only you get access</b>Nobody else can claim or edit this profile after you.</div></li>
       </ul>
 
@@ -120,7 +128,7 @@
 
     <!-- STEP 2 -->
     <div id="step2" class="step">
-      <div class="label">Step 2 of 3</div>
+      <div class="label">Step 2 of 4</div>
       <h1>Enter your <span>code</span></h1>
       <p class="lead">We sent a 6-digit code to <strong id="sentTo">your email</strong>. It can take a minute to arrive.</p>
 
@@ -129,39 +137,52 @@
       <p class="msg" id="codeMsg"></p>
 
       <button class="btn" onclick="verifyCode()"><i class="fas fa-check"></i> Verify Code</button>
-
       <div class="resend">Did not get it? <button class="link-btn" id="resendBtn" onclick="sendCode(event, true)">Send again</button></div>
-
-      <div class="tip"><i class="fas fa-lightbulb"></i><div><b>Check your Spam folder.</b> The email comes from "FlexTune" and sometimes lands in Spam or Promotions. If you find it there, tap "Report as not spam".</div></div>
+      <div class="tip"><i class="fas fa-lightbulb"></i><div><b>Check your Spam folder.</b> The email comes from "FlexTune" and sometimes lands in Spam or Promotions.</div></div>
     </div>
 
     <!-- STEP 3 -->
     <div id="step3" class="step">
-      <div class="label">Step 3 of 3</div>
+      <div class="label">Step 3 of 4</div>
       <h1>How will you <span>release?</span></h1>
-      <p class="lead">You are verified. Now choose how you want to publish your music on FlexTune. You can talk to us later if you want to change it.</p>
+      <p class="lead">You are verified. Choose how you want to publish your music on FlexTune. You can talk to us later if you want to change it.</p>
 
-      <button class="choice" onclick="chooseSelfRelease()">
+      <button class="choice" onclick="chooseRelease('self')">
         <div class="ic"><i class="fas fa-user-tie"></i></div>
         <div><h3>I'll release myself</h3><p>Open your own studio to upload songs, add covers, schedule releases and edit your tracks anytime.</p></div>
         <i class="fas fa-chevron-right go"></i>
       </button>
-      <button class="choice" onclick="chooseCreatorRelease()">
+      <button class="choice" onclick="chooseRelease('creators')">
         <div class="ic"><i class="fas fa-users"></i></div>
         <div><h3>Release by creators</h3><p>The FlexTune team handles your uploads for you. Just send us your songs and we take care of the rest.</p></div>
         <i class="fas fa-chevron-right go"></i>
       </button>
     </div>
 
-    <!-- STEP 4 -->
+    <!-- STEP 4: SET PASSWORD (last step before entering) -->
     <div id="step4" class="step">
+      <div class="label">Last step</div>
+      <h1>Set your <span>password</span></h1>
+      <p class="lead">This protects your profile. Next time you log in, you will type this password and then a code we email you.</p>
+
+      <label class="field-label" for="pw1">New password</label>
+      <div class="pw-wrap"><input type="password" id="pw1" placeholder="At least 8 characters" autocomplete="new-password"><button type="button" class="eye" onclick="togglePw()"><i class="fas fa-eye"></i></button></div>
+      <label class="field-label" for="pw2">Confirm password</label>
+      <div class="pw-wrap"><input type="password" id="pw2" placeholder="Type it again" autocomplete="new-password"></div>
+      <p class="rules">Use 8 or more characters. Do not reuse a password from another site.</p>
+      <p class="msg" id="pwMsg"></p>
+
+      <button class="btn" id="pwBtn" onclick="savePassword()"><i class="fas fa-lock"></i> <span id="pwBtnText">Save password and enter</span></button>
+    </div>
+
+    <!-- DONE (creators option) -->
+    <div id="step5" class="step">
       <div class="done-icon"><i class="fas fa-circle-check"></i></div>
       <div class="label">All Done</div>
       <h1>Request <span>sent</span></h1>
-      <p class="lead">Your profile is now claimed. The FlexTune creators will contact you shortly to manage your next release. Keep your phone and email close.</p>
+      <p class="lead">Your profile is claimed and your password is saved. The FlexTune creators will contact you shortly to manage your next release. Keep your phone and email close.</p>
       <a href="index.html" class="btn btn-ghost" style="margin-top:0;">Go to Homepage</a>
     </div>
-
   </div>
 
   <div class="foot"><b>FLEXTUNE</b> © 2026</div>
@@ -170,33 +191,35 @@
     const params = new URLSearchParams(window.location.search);
     const artistName = params.get('name') || 'Artist';
     const artistEmail = params.get('email') || '';
+    let ticket = '';
+    let releaseChoice = '';
+    let resendWait = null;
 
     function maskEmail(e) {
       if (!e || e.indexOf('@') < 1) return 'your email';
       const p = e.split('@');
       return p[0].charAt(0) + '•••' + (p[0].length > 1 ? p[0].slice(-1) : '') + '@' + p[1];
     }
-
     document.getElementById('displayName').innerText = artistName;
     document.getElementById('whoName').innerText = artistName;
     document.getElementById('whoEmail').innerText = maskEmail(artistEmail);
     document.getElementById('sentTo').innerText = maskEmail(artistEmail);
 
-    let generatedCode = '';
-    let resendWait = null;
-
     function showStep(n) {
-      for (let i = 1; i <= 4; i++) document.getElementById('step' + i).classList.toggle('active', i === n);
-      const bars = Math.min(n, 3);
-      for (let i = 1; i <= 3; i++) document.getElementById('p' + i).classList.toggle('on', i <= bars);
+      for (let i = 1; i <= 5; i++) document.getElementById('step' + i).classList.toggle('active', i === n);
+      const bars = Math.min(n, 4);
+      for (let i = 1; i <= 4; i++) document.getElementById('p' + i).classList.toggle('on', i <= bars);
       window.scrollTo(0, 0);
     }
-
+    async function api(body) {
+      const r = await fetch('/api/artist-auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      let d = {}; try { d = await r.json(); } catch (e) {}
+      return { ok: r.ok, status: r.status, data: d };
+    }
     function startResendTimer() {
       const b = document.getElementById('resendBtn');
       let s = 45;
-      b.disabled = true;
-      b.innerText = 'Send again (' + s + 's)';
+      b.disabled = true; b.innerText = 'Send again (' + s + 's)';
       clearInterval(resendWait);
       resendWait = setInterval(function () {
         s--;
@@ -204,34 +227,30 @@
         else b.innerText = 'Send again (' + s + 's)';
       }, 1000);
     }
+    function sendError(code) {
+      if (code === 'name_taken') return 'The artist name "' + artistName + '" is already taken. The email you entered does not match the email on file for this artist, so it cannot be claimed. Use the email this artist registered with, or pick another name.';
+      if (code === 'no_email') return 'The artist name "' + artistName + '" is already taken and has no email on file yet. Contact FlexTune to verify you are the artist.';
+      if (code === 'already_claimed') return 'This profile already has a login. Use "Log in" instead.';
+      if (code === 'wait_a_bit') return 'A code was just sent. Wait a few seconds and try again.';
+      if (code === 'not_found') return 'We could not find this artist. Go back and fill the form again.';
+      return 'Could not send the email. Please try again.';
+    }
 
     window.sendCode = async function (e, isResend) {
-      if (!artistEmail || artistEmail.indexOf('@') < 1) {
-        const m = document.getElementById('sendMsg');
-        m.className = 'msg err';
-        m.innerText = 'No email found. Please go back and fill the form again.';
-        return;
-      }
-      generatedCode = Math.floor(100000 + Math.random() * 900000).toString();
-
+      const m = document.getElementById('sendMsg');
+      if (!artistEmail || artistEmail.indexOf('@') < 1) { m.className = 'msg err'; m.innerText = 'No email found. Please go back and fill the form again.'; return; }
       const btn = (e && e.target && e.target.closest && e.target.closest('button')) || document.getElementById('sendBtn');
       const original = btn.innerHTML;
       btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
       btn.disabled = true;
-
       try {
-        const res = await fetch('/api/send-code', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: artistEmail, code: generatedCode, artistName: artistName })
-        });
-        if (!res.ok) {
-          let d = {}; try { d = await res.json(); } catch (x) {}
-          if (d.error === 'name_taken') throw new Error('The artist name "' + artistName + '" is already taken. The email you entered does not match the email on file for this artist, so it cannot be claimed. Use the email this artist registered with, or pick another name.');
-          if (d.error === 'no_email') throw new Error('The artist name "' + artistName + '" is already taken and has no email on file yet. Contact FlexTune to verify you are the artist.');
-          throw new Error('Could not send the email. Please try again.');
+        const r = await api({ action: 'claim-code', name: artistName, email: artistEmail });
+        if (!r.ok) {
+          const msg = sendError(r.data.error);
+          m.className = 'msg err'; m.innerText = msg;
+          if (isResend) { const cm = document.getElementById('codeMsg'); cm.className = 'msg err'; cm.innerText = msg; }
+          return;
         }
-
         showStep(2);
         startResendTimer();
         const cm = document.getElementById('codeMsg');
@@ -239,48 +258,67 @@
         cm.innerText = isResend ? 'New code sent. Check your inbox and Spam.' : 'Code sent. Check your inbox and Spam.';
         setTimeout(function () { document.getElementById('codeInput').focus(); }, 300);
       } catch (err) {
-        const m = document.getElementById('sendMsg');
-        m.className = 'msg err';
-        m.innerText = err.message;
-        if (isResend) { const cm = document.getElementById('codeMsg'); cm.className = 'msg err'; cm.innerText = err.message; }
+        m.className = 'msg err'; m.innerText = 'Connection problem. Please try again.';
       } finally {
         btn.innerHTML = original;
-        if (!(isResend)) btn.disabled = false;
+        if (!isResend) btn.disabled = false;
       }
     };
 
-    window.verifyCode = function () {
+    window.verifyCode = async function () {
       const input = document.getElementById('codeInput').value.trim();
       const cm = document.getElementById('codeMsg');
       if (input.length !== 6) { cm.className = 'msg err'; cm.innerText = 'Enter all 6 digits.'; return; }
-      if (generatedCode && input === generatedCode) {
-        showStep(3);
-      } else {
+      cm.className = 'msg'; cm.innerText = 'Checking...';
+      try {
+        const r = await api({ action: 'verify-code', purpose: 'claim', name: artistName, code: input });
+        if (r.ok && r.data.ticket) { ticket = r.data.ticket; showStep(3); return; }
+        const c = r.data.error;
         cm.className = 'msg err';
-        cm.innerText = 'Incorrect code. Please try again.';
+        cm.innerText = c === 'code_expired' ? 'This code expired. Tap "Send again".' : c === 'too_many' ? 'Too many wrong tries. Tap "Send again" for a new code.' : 'Incorrect code. Please try again.';
         document.getElementById('codeInput').value = '';
-      }
+      } catch (e) { cm.className = 'msg err'; cm.innerText = 'Connection problem. Please try again.'; }
     };
-
-    document.getElementById('codeInput').addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') verifyCode();
-    });
-
-    // Auto-verify as soon as 6 digits are typed or pasted
+    document.getElementById('codeInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') verifyCode(); });
     document.getElementById('codeInput').addEventListener('input', function (e) {
       e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
-      if (e.target.value.length === 6) {
-        document.getElementById('codeMsg').className = 'msg';
-        document.getElementById('codeMsg').innerText = 'Checking...';
-        setTimeout(verifyCode, 250);
-      }
+      if (e.target.value.length === 6) setTimeout(verifyCode, 250);
     });
 
-    window.chooseSelfRelease = function () {
-      window.location.href = 'smstudio-8842.html?artist=' + encodeURIComponent(artistName);
-    };
-    window.chooseCreatorRelease = function () {
+    window.chooseRelease = function (choice) {
+      releaseChoice = choice;
+      document.getElementById('pwBtnText').innerText = choice === 'self' ? 'Save password and enter studio' : 'Save password and finish';
       showStep(4);
+    };
+    window.togglePw = function () {
+      const a = document.getElementById('pw1'), b = document.getElementById('pw2');
+      const show = a.type === 'password';
+      a.type = b.type = show ? 'text' : 'password';
+    };
+    window.savePassword = async function () {
+      const pm = document.getElementById('pwMsg');
+      const p1 = document.getElementById('pw1').value, p2 = document.getElementById('pw2').value;
+      if (p1.length < 8) { pm.className = 'msg err'; pm.innerText = 'Password must be at least 8 characters.'; return; }
+      if (p1 !== p2) { pm.className = 'msg err'; pm.innerText = 'The two passwords do not match.'; return; }
+      const btn = document.getElementById('pwBtn');
+      const original = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
+      try {
+        const r = await api({ action: 'set-password', ticket: ticket, password: p1 });
+        if (!r.ok) {
+          const c = r.data.error;
+          pm.className = 'msg err';
+          pm.innerText = c === 'ticket_expired' ? 'This session expired. Go back and claim the profile again.' : c === 'already_claimed' ? 'This profile already has a login.' : 'Could not save the password. Try again.';
+          btn.innerHTML = original; btn.disabled = false;
+          return;
+        }
+        try { localStorage.setItem('ft-artist-session', JSON.stringify({ token: r.data.token, artist: r.data.artist })); } catch (e) {}
+        if (releaseChoice === 'self') window.location.href = 'smstudio-8842.html?artist=' + encodeURIComponent(r.data.artist);
+        else showStep(5);
+      } catch (e) {
+        pm.className = 'msg err'; pm.innerText = 'Connection problem. Please try again.';
+        btn.innerHTML = original; btn.disabled = false;
+      }
     };
   </script>
 </body>
