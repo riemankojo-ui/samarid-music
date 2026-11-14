@@ -154,21 +154,27 @@ export default async function handler(req) {
       return r.error ? json({ error: r.error }, r.status) : json({ ok: true });
     }
 
-    // 2) Login step 1: name + password, then a code is emailed
-    if (action === 'login') {
-      const art = await findArtist(b.name);
-      const key = art ? art.name.trim().toLowerCase() : '';
-      const auth = art ? await getAuth(key) : null;
-      if (!art || !auth || !auth.pw_hash) return json({ error: 'bad_login' }, 401);
-      if ((auth.lock_until || 0) > Date.now()) return json({ error: 'locked' }, 429);
-      const h = await hashPassword(String(b.password || ''), unhex(auth.pw_salt));
-      if (!safeEq(h, auth.pw_hash)) {
-        const fails = (auth.fail_count || 0) + 1;
-        await saveAuth(key, fails >= 5 ? { fail_count: 0, lock_until: Date.now() + 15 * MIN } : { fail_count: fails });
-        return json({ error: 'bad_login' }, 401);
-      }
-      await saveAuth(key, { fail_count: 0 });
-      if (!art.email) return json({ error: 'no_email' }, 403);
+    // 2) Login step 1: name + email + password, then a code is emailed
+if (action === 'login') {
+  const art = await findArtist(b.name);
+  const key = art ? art.name.trim().toLowerCase() : '';
+  const auth = art ? await getAuth(key) : null;
+  if (!art || !auth || !auth.pw_hash) return json({ error: 'bad_login' }, 401);
+  
+  // Check email match
+  const enteredEmail = String(b.email || '').trim().toLowerCase();
+  const onFileEmail = String(art.email || '').trim().toLowerCase();
+  if (!onFileEmail || onFileEmail !== enteredEmail) return json({ error: 'wrong_email' }, 401);
+
+  if ((auth.lock_until || 0) > Date.now()) return json({ error: 'locked' }, 429);
+  const h = await hashPassword(String(b.password || ''), unhex(auth.pw_salt));
+  if (!safeEq(h, auth.pw_hash)) {
+    const fails = (auth.fail_count || 0) + 1;
+    await saveAuth(key, fails >= 5 ? { fail_count: 0, lock_until: Date.now() + 15 * MIN } : { fail_count: fails });
+    return json({ error: 'bad_login' }, 401);
+  }
+  await saveAuth(key, { fail_count: 0 });
+  if (!art.email) return json({ error: 'no_email' }, 403);
       const r = await issueCode(art, 'login');
       return r.error ? json({ error: r.error }, r.status) : json({ ok: true });
     }
