@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +33,7 @@ h1{font-size:20px;margin:0}
 </style>
 </head>
 <body>
-<div class="top"><a class="back" href="smstudio-8842.html">&larr; Studio</a><h1>Test Video</h1></div>
+<div class="top"><a class="back" id="backLink" href="smstudio-8842.html">&larr; Studio</a><h1>Test Video</h1></div>
 <div class="song"><img id="cover" alt=""><div><b id="sTitle">Loading...</b><span id="sArtist"></span></div></div>
 <div class="now" id="now"></div>
 <div id="list"><div class="msg">Searching YouTube...</div></div>
@@ -101,7 +102,9 @@ function render(list) {
   });
 }
 
-$('skip').onclick = function () { location.href = 'smstudio-8842.html'; };
+function studioHome() { try { if (!localStorage.getItem('ft-studio-pw') && localStorage.getItem('ft-artist-session')) return 'artist-dashboard.html'; } catch (e) {} return 'smstudio-8842.html'; }
+(function () { var b = document.getElementById('backLink'); if (b) b.href = studioHome(); })();
+$('skip').onclick = function () { location.href = studioHome(); };
 $('reset').onclick = function () {
   $('status').className = 'msg'; $('status').textContent = 'Resetting...';
   fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?id=eq.' + encodeURIComponent(id), { method: 'PATCH', headers: H, body: JSON.stringify({ youtube: null }) })

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -315,7 +316,7 @@
           return;
         }
         try { localStorage.setItem('ft-artist-session', JSON.stringify({ token: r.data.token, artist: r.data.artist })); } catch (e) {}
-        if (releaseChoice === 'self') window.location.href = 'smstudio-8842.html?artist=' + encodeURIComponent(r.data.artist);
+        if (releaseChoice === 'self') window.location.href = 'artist-dashboard.html';
         else showStep(5);
       } catch (e) {
         pm.className = 'msg err'; pm.innerText = 'Connection problem. Please try again.';
@@ -325,3 +326,4 @@
   </script>
 </body>
 </html>
+

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -165,7 +166,7 @@
     let ticket = '';
     let timer = null;
 
-    try { const s = JSON.parse(localStorage.getItem('ft-artist-session') || 'null'); if (s && s.token) window.location.replace('smstudio-8842.html?artist=' + encodeURIComponent(s.artist || '')); } catch (e) {}
+    try { const s = JSON.parse(localStorage.getItem('ft-artist-session') || 'null'); if (s && s.token) window.location.replace('artist-dashboard.html'); } catch (e) {}
     try { const last = localStorage.getItem('ft-artist-last'); if (last) document.getElementById('lName').value = last; } catch (e) {}
 
     function showView(id) {
@@ -195,7 +196,7 @@
     }
     function enter(token, artist) {
       try { localStorage.setItem('ft-artist-session', JSON.stringify({ token: token, artist: artist })); localStorage.setItem('ft-artist-last', artist); } catch (e) {}
-      window.location.href = 'smstudio-8842.html?artist=' + encodeURIComponent(artist);
+      window.location.href = 'artist-dashboard.html';
     }
     function goCode() {
       document.getElementById('cName').innerText = who;
@@ -296,3 +297,4 @@
   </script>
 </body>
 </html>
+
