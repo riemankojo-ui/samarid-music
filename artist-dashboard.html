@@ -228,7 +228,24 @@
   .seo-char-count { font-size: 10px; color: var(--text2); text-align: right; margin-top: -8px; margin-bottom: 12px; font-weight: 700; }
   details summary { list-style: none; cursor: pointer; }
   details summary::-webkit-details-marker { display: none; }
-  #pageAdd, #pageRelease { position: relative; }</style>
+  #pageAdd, #pageRelease { position: relative; }
+  /* ===== SETTINGS ===== */
+  .set-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 14px; }
+  .set-title { font-size: 14px; font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .set-title i { color: var(--accent); }
+  .set-note { font-size: 12px; color: var(--text2); margin-bottom: 12px; line-height: 1.5; }
+  .set-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border); font-size: 13px; }
+  .set-row:first-of-type { border-top: none; }
+  .set-row b { color: #fff; word-break: break-word; text-align: right; }
+  .set-row span { color: var(--text2); flex-shrink: 0; }
+  .set-btns { display: flex; gap: 8px; margin-top: 10px; }
+  .set-btns > * { flex: 1; }
+  a.set-btn, button.set-btn { padding: 12px; background: transparent; color: #fff; border: 1px solid #333; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  a.set-btn:active, button.set-btn:active { transform: scale(0.97); }
+  button.set-logout { width: 100%; padding: 14px; background: #ff0033; color: #fff; border: none; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  button.set-logout:active { transform: scale(0.97); }
+  .set-ok { color: #00cc44; } .set-err { color: #ff4d4d; }
+</style>
 <link rel="stylesheet" href="/desktop.css">
 <script>try{if(localStorage.getItem('ft-artist-session'))document.write('<style id="fastLogin">#loginScreen{display:none!important}</style>');}catch(e){}</script></head><body>
 
@@ -817,6 +834,71 @@ Download: https://example.com/cry-baby.mp3</div>
         </div>
       </div>
 
+      <div class="page" id="pageSettings">
+        <h1 class="page-title">Settings</h1>
+        <p class="page-subtitle">Your account and studio preferences</p>
+
+        <div class="set-card">
+          <div class="set-title"><i class="fas fa-user"></i> My Profile</div>
+          <div class="set-note">Your artist profile on FlexTune.</div>
+          <div class="set-row"><span>Artist name</span><b id="setArtistName">-</b></div>
+          <div class="set-btns">
+            <a class="set-btn" id="setViewPage" href="#" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> View my page</a>
+            <button class="set-btn" type="button" onclick="setCopyPageLink()"><i class="fas fa-link"></i> Copy link</button>
+          </div>
+          <p id="setProfileStatus" class="status" style="margin-top:8px;"></p>
+        </div>
+
+        <div class="set-card">
+          <div class="set-title"><i class="fas fa-key"></i> Change Password</div>
+          <div id="setPwStep1">
+            <div class="set-note">We send a 6-digit code to the email on your artist profile, then you choose a new password.</div>
+            <button class="main-btn" type="button" id="setPwSendBtn" onclick="setPwSend()">Send me a code</button>
+          </div>
+          <div id="setPwStep2" style="display:none;">
+            <div class="set-note">Enter the code we emailed you. It is valid for 10 minutes. Check your Spam folder too.</div>
+            <div class="form-group"><label>6-digit code</label><input type="text" id="setPwCode" inputmode="numeric" maxlength="6" placeholder="123456" autocomplete="one-time-code"></div>
+            <button class="main-btn" type="button" id="setPwVerifyBtn" onclick="setPwVerify()">Verify code</button>
+          </div>
+          <div id="setPwStep3" style="display:none;">
+            <div class="set-note">Choose a new password (at least 8 characters).</div>
+            <div class="form-group"><label>New password</label><input type="password" id="setPw1" autocomplete="new-password" placeholder="New password"></div>
+            <div class="form-group"><label>Repeat password</label><input type="password" id="setPw2" autocomplete="new-password" placeholder="Repeat password"></div>
+            <button class="main-btn" type="button" id="setPwSaveBtn" onclick="setPwSave()">Save password</button>
+          </div>
+          <p id="setPwStatus" class="status"></p>
+        </div>
+
+        <div class="set-card">
+          <div class="set-title"><i class="fas fa-tag"></i> Default Category</div>
+          <div class="set-note">Fills the Category field automatically when you add or schedule a release. You can still change it each time.</div>
+          <div class="form-group" style="margin-bottom:0;"><input type="text" id="setDefCategory" list="genreList" placeholder="e.g. Afrobeats" oninput="setSavePref('category', this.value.trim())"></div>
+        </div>
+
+        <div class="set-card">
+          <div class="set-title"><i class="fas fa-home"></i> Start Page</div>
+          <div class="set-note">The tab that opens first each time you enter your studio.</div>
+          <div class="form-group" style="margin-bottom:0;">
+            <select id="setStartPage" onchange="setSavePref('start', this.value)">
+              <option value="home">Home - My Releases</option>
+              <option value="release">Release - Schedule</option>
+              <option value="import">Import</option>
+              <option value="seo">SEO</option>
+              <option value="channel">Videos</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="set-card">
+          <div class="set-title"><i class="fas fa-broom"></i> Saved Data On This Device</div>
+          <div class="set-note">Clears your saved preferences and cached video link from this device. You stay logged in and your songs are not touched.</div>
+          <button class="set-btn" style="width:100%;" type="button" onclick="setClearData()"><i class="fas fa-trash-alt"></i> Clear saved data</button>
+          <p id="setClearStatus" class="status" style="margin-top:8px;"></p>
+        </div>
+
+        <button class="set-logout" type="button" onclick="artistLogout()"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+      </div>
+
     </div>
 
     <div class="bottom-nav">
@@ -826,6 +908,7 @@ Download: https://example.com/cry-baby.mp3</div>
       <button class="nav-item" onclick="goToPage('import')" id="navImport"><div class="icon"><i class="fas fa-file-import"></i></div><div class="label">IMPORT</div></button>
       <button class="nav-item" onclick="goToPage('seo')" id="navSeo"><div class="icon"><i class="fas fa-search-plus"></i></div><div class="label">SEO</div></button>
       <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon"><i class="fas fa-video"></i></div><div class="label">VIDEOS</div></button>
+      <button class="nav-item" onclick="goToPage('settings')" id="navSettings"><div class="icon"><i class="fas fa-cog"></i></div><div class="label">SETTINGS</div></button>
     </div>
   </div>
 <div class="edit-modal-overlay" id="editModalOverlay" onclick="closeEditModal()">
@@ -3200,6 +3283,99 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
+
+    // ===== ARTIST SETTINGS =====
+    var FT_PREF_KEY = 'ft-artist-prefs';
+    function setGetPrefs() { try { return JSON.parse(localStorage.getItem(FT_PREF_KEY) || '{}') || {}; } catch (e) { return {}; } }
+    window.setSavePref = function (k, v) {
+      var p = setGetPrefs(); p[k] = v;
+      try { localStorage.setItem(FT_PREF_KEY, JSON.stringify(p)); } catch (e) {}
+      if (k === 'category') setFillCategory();
+    };
+    function setFillCategory() {
+      var c = setGetPrefs().category; if (!c) return;
+      ['songCategory', 'albumCategory', 'schCategory', 'schAlbumCategory'].forEach(function (id) {
+        var el = document.getElementById(id); if (el && !el.value) el.value = c;
+      });
+    }
+    function setPublicLink() { return location.origin + '/artist-template.html?name=' + encodeURIComponent(window.FT_ARTIST || ''); }
+    function setStatus(id, msg, ok) { var el = document.getElementById(id); if (!el) return; el.textContent = msg || ''; el.className = 'status ' + (ok ? 'set-ok' : 'set-err'); }
+    function initSettings() {
+      var n = document.getElementById('setArtistName'); if (n) n.textContent = window.FT_ARTIST || '-';
+      var a = document.getElementById('setViewPage'); if (a) a.href = setPublicLink();
+      var p = setGetPrefs();
+      var c = document.getElementById('setDefCategory'); if (c) c.value = p.category || '';
+      var sp = document.getElementById('setStartPage'); if (sp && p.start) sp.value = p.start;
+      setFillCategory();
+      if (p.start && p.start !== 'home' && document.getElementById('page' + p.start.charAt(0).toUpperCase() + p.start.slice(1))) goToPage(p.start);
+    }
+    window.setCopyPageLink = function () {
+      var link = setPublicLink();
+      function done() { setStatus('setProfileStatus', 'Link copied', true); }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(link).then(done, function () { prompt('Copy your link:', link); });
+      else prompt('Copy your link:', link);
+    };
+    window.setClearData = function () {
+      if (!confirm('Clear saved preferences on this device? You will stay logged in.')) return;
+      try { localStorage.removeItem(FT_PREF_KEY); localStorage.removeItem('samarid_channel_link'); } catch (e) {}
+      var c = document.getElementById('setDefCategory'); if (c) c.value = '';
+      var sp = document.getElementById('setStartPage'); if (sp) sp.value = 'home';
+      setStatus('setClearStatus', 'Saved data cleared', true);
+    };
+    // change password: email code -> ticket -> new password
+    var setPwTicket = '';
+    async function setApi(body) {
+      var r = await fetch('/api/artist-auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      var d = {}; try { d = await r.json(); } catch (e) {}
+      return { ok: r.ok, d: d };
+    }
+    function setPwShow(n) { [1, 2, 3].forEach(function (i) { document.getElementById('setPwStep' + i).style.display = (i === n) ? 'block' : 'none'; }); }
+    function setPwErr(code) {
+      var m = { wait_a_bit: 'Please wait a minute before asking for another code.', wrong_code: 'Wrong code. Try again.', code_expired: 'That code expired. Ask for a new one.', too_many: 'Too many wrong tries. Ask for a new code later.', ticket_expired: 'Time ran out. Start again.', weak_password: 'Password must be 8 to 100 characters.', server_error: 'Server error. Try again.' };
+      return m[code] || 'Something went wrong. Try again.';
+    }
+    window.setPwSend = async function () {
+      var b = document.getElementById('setPwSendBtn'); b.disabled = true; setStatus('setPwStatus', '');
+      try {
+        var r = await setApi({ action: 'reset-code', name: window.FT_ARTIST });
+        if (!r.ok) { setStatus('setPwStatus', setPwErr(r.d.error), false); }
+        else { setPwShow(2); setStatus('setPwStatus', 'Code sent. Check your email.', true); }
+      } catch (e) { setStatus('setPwStatus', 'No connection. Try again.', false); }
+      b.disabled = false;
+    };
+    window.setPwVerify = async function () {
+      var code = document.getElementById('setPwCode').value.trim();
+      if (!/^\d{6}$/.test(code)) { setStatus('setPwStatus', 'Enter the 6-digit code.', false); return; }
+      var b = document.getElementById('setPwVerifyBtn'); b.disabled = true;
+      try {
+        var r = await setApi({ action: 'verify-code', purpose: 'reset', name: window.FT_ARTIST, code: code });
+        if (!r.ok || !r.d.ticket) { setStatus('setPwStatus', setPwErr(r.d.error), false); }
+        else { setPwTicket = r.d.ticket; setPwShow(3); setStatus('setPwStatus', '', true); }
+      } catch (e) { setStatus('setPwStatus', 'No connection. Try again.', false); }
+      b.disabled = false;
+    };
+    window.setPwSave = async function () {
+      var p1 = document.getElementById('setPw1').value, p2 = document.getElementById('setPw2').value;
+      if (p1.length < 8) { setStatus('setPwStatus', 'Password must be at least 8 characters.', false); return; }
+      if (p1 !== p2) { setStatus('setPwStatus', 'Passwords do not match.', false); return; }
+      var b = document.getElementById('setPwSaveBtn'); b.disabled = true;
+      try {
+        var r = await setApi({ action: 'set-password', ticket: setPwTicket, password: p1 });
+        if (!r.ok) { setStatus('setPwStatus', setPwErr(r.d.error), false); }
+        else {
+          if (r.d.token) { try { localStorage.setItem('ft-artist-session', JSON.stringify({ token: r.d.token, artist: r.d.artist || window.FT_ARTIST })); } catch (e) {} }
+          setPwTicket = ''; document.getElementById('setPw1').value = ''; document.getElementById('setPw2').value = ''; document.getElementById('setPwCode').value = '';
+          setPwShow(1); setStatus('setPwStatus', 'Password changed.', true);
+        }
+      } catch (e) { setStatus('setPwStatus', 'No connection. Try again.', false); }
+      b.disabled = false;
+    };
+    window.artistLogout = function () {
+      if (!confirm('Log out of your artist studio?')) return;
+      try { localStorage.removeItem('ft-artist-session'); } catch (e) {}
+      location.replace('artist-login.html');
+    };
+
     // ===== ARTIST STUDIO: session check + setup =====
     function applyArtistMode(artist) {
       window.FT_ARTIST = artist;
@@ -3229,6 +3405,7 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
           var fl = document.getElementById('fastLogin'); if (fl) fl.remove();
           document.getElementById('dashboard').style.display = 'block';
           initDatePickers(); loadAdminSongs(); loadChannelLink(); addAlbumSong(); addSchAlbumSong(); loadScheduled(); loadStudioLogo();
+          initSettings();
         })
         .catch(function () {
           var st = document.getElementById('loginStatus');
