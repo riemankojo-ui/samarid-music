@@ -2350,7 +2350,7 @@ status.className = 'status success';
 `;
       try {
         const nowIso = new Date().toISOString();
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?status=eq.scheduled&release_at=gt.' + encodeURIComponent(nowIso) + '&select=*&order=release_at.asc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?status=eq.scheduled&release_at=gt.' + encodeURIComponent(nowIso) + '&select=*&order=release_at.asc' + artistQ(), { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
         if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<p class="empty-songs">No scheduled releases yet.</p>'; return; }
         list.innerHTML = songs.map(s => {
@@ -3054,11 +3054,12 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
       document.getElementById(contentId).classList.add('active');
       if (which === 'overview') loadSeoOverview();
     }
+    function artistQ() { var a = new URLSearchParams(location.search).get('artist'); return a ? '&artist_name=ilike.' + encodeURIComponent(a) : ''; }
     async function loadSeoSongs() {
       const list = document.getElementById('seoSongsList');
       list.innerHTML = '<p class="empty-songs">Loading songs...</p>';
       try {
-        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=id,title,artist_name,cover,description&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+        const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=id,title,artist_name,cover,description&order=id.desc' + artistQ(), { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
         seoAllSongs = Array.isArray(songs) ? songs : [];
         renderSeoSongs('');
@@ -3119,7 +3120,7 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
       list.innerHTML = '<p class="empty-songs">Loading artists...</p>';
       try {
         const [songsRes, profilesRes] = await Promise.all([
-          fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=artist_name,verified,cover&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=artist_name,verified,cover&order=id.desc' + artistQ(), { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
           fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?select=name,profile_pic,bio,verified', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
         ]);
         const songs = await songsRes.json();
@@ -3201,9 +3202,9 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
     async function loadSeoOverview() {
       try {
         const [songsRes, profilesRes, songsFullRes] = await Promise.all([
-          fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=id,title,artist_name,cover,description&order=id.desc', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
+          fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=id,title,artist_name,cover,description&order=id.desc' + artistQ(), { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
           fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?select=name,bio,profile_pic', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } }),
-          fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=artist_name', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
+          fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=artist_name' + artistQ().replace('&', '&'), { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } })
         ]);
         const songs = await songsRes.json();
         const profiles = await profilesRes.json();
