@@ -830,7 +830,7 @@ Download: https://example.com/cry-baby.mp3</div>
 
     <div class="bottom-nav">
       <button class="nav-item active" onclick="goToPage('home')" id="navHome"><div class="icon"><i class="fas fa-home"></i></div><div class="label">HOME</div></button>
-      <button class="nav-item" onclick="goToPage('add')" id="navAdd" style="display:none"><div class="icon"><i class="fas fa-plus"></i></div><div class="label">ADD</div></button>
+      <button class="nav-item" onclick="goToPage('add')" id="navAdd"><div class="icon"><i class="fas fa-plus"></i></div><div class="label">ADD</div></button>
       <button class="nav-item" onclick="goToPage('release')" id="navRelease"><div class="icon"><i class="fas fa-calendar-alt"></i></div><div class="label">RELEASE</div></button>
       <button class="nav-item" onclick="goToPage('import')" id="navImport"><div class="icon"><i class="fas fa-file-import"></i></div><div class="label">IMPORT</div></button>
       <button class="nav-item" onclick="goToPage('seo')" id="navSeo"><div class="icon"><i class="fas fa-search-plus"></i></div><div class="label">SEO</div></button>
@@ -3251,6 +3251,7 @@ window.addEventListener('load', function() {
     // Hide Manager button
     const managerBtn = document.querySelector('.manager-quick-btn');
     if (managerBtn) managerBtn.style.display = 'none';
+    var navAddBtn = document.getElementById('navAdd'); if (navAddBtn) navAddBtn.style.display = 'none';
     
     // Update the Library header text but keep the FlexTune header above
     const searchHeaderText = document.getElementById('searchHeaderText');
