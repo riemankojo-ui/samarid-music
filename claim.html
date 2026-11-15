@@ -205,7 +205,8 @@
     document.getElementById('whoEmail').innerText = maskEmail(artistEmail);
     document.getElementById('sentTo').innerText = maskEmail(artistEmail);
 
-    function showStep(n) {
+    function saveClaimState(n) { try { if (n < 2 || n > 4) { sessionStorage.removeItem('ft-claim'); return; } var o = JSON.parse(sessionStorage.getItem('ft-claim') || 'null'); if (!o || o.n !== artistName || o.e !== artistEmail) o = { n: artistName, e: artistEmail, ts: Date.now() }; if (n === 2 || n === 3) o.ts = Date.now(); o.s = n; o.t = ticket; o.r = releaseChoice; sessionStorage.setItem('ft-claim', JSON.stringify(o)); } catch (e) {} }
+    function showStep(n) { saveClaimState(n);
       for (let i = 1; i <= 5; i++) document.getElementById('step' + i).classList.toggle('active', i === n);
       const bars = Math.min(n, 4);
       for (let i = 1; i <= 4; i++) document.getElementById('p' + i).classList.toggle('on', i <= bars);
@@ -280,6 +281,7 @@
       } catch (e) { cm.className = 'msg err'; cm.innerText = 'Connection problem. Please try again.'; }
     };
     document.getElementById('codeInput').addEventListener('keydown', function (e) { if (e.key === 'Enter') verifyCode(); });
+    (function () { try { var o = JSON.parse(sessionStorage.getItem('ft-claim') || 'null'); if (!o || o.n !== artistName || o.e !== artistEmail) return; var age = Date.now() - o.ts; if ((o.s === 2 && age < 10 * 60000) || ((o.s === 3 || o.s === 4) && o.t && age < 14 * 60000)) { ticket = o.t || ''; releaseChoice = o.r || ''; if (o.s === 4) document.getElementById('pwBtnText').innerText = releaseChoice === 'self' ? 'Save password and enter studio' : 'Save password and finish'; showStep(o.s); sessionStorage.setItem('ft-claim', JSON.stringify(o)); } else sessionStorage.removeItem('ft-claim'); } catch (e) {} })();
     document.getElementById('codeInput').addEventListener('input', function (e) {
       e.target.value = e.target.value.replace(/\D/g, '').slice(0, 6);
       if (e.target.value.length === 6) setTimeout(verifyCode, 250);
