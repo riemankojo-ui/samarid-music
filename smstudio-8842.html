@@ -286,15 +286,17 @@
 
       <!-- ALBUM DETAILS PAGE -->
 <div class="page" id="pageAlbumDetail">
-  <button class="secondary-btn" onclick="goToPage('home')" style="width: auto; display: inline-flex; padding: 8px 16px; margin-bottom: 20px;"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+  <button class="secondary-btn" onclick="goToPage('home')" style="width: auto; display: inline-flex; padding: 8px 16px; margin-bottom: 10px;"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
   
-  <div id="albumDetailHeader" style="display:flex; gap:16px; align-items:center; margin-bottom:20px; background:var(--card); padding:16px; border-radius:16px; border:1px solid var(--border);">
+  <div id="albumDetailHeader" style="display:flex; gap:16px; align-items:center; margin-bottom:16px; background:var(--card); padding:16px; border-radius:16px; border:none; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
     <!-- Filled by JS -->
   </div>
   
-  <div class="search-wrap">
-    <i class="fas fa-search search-icon"></i>
-    <input type="text" id="albumSongSearchInput" placeholder="Search songs in this album..." oninput="handleAlbumSongSearch()" autocomplete="off">
+  <div id="albumSearchWrapper" style="display:none; margin-bottom: 16px;">
+    <div class="search-wrap" style="margin-bottom: 0;">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="albumSongSearchInput" placeholder="Search songs in this album..." oninput="handleAlbumSongSearch()" autocomplete="off">
+    </div>
   </div>
   
   <div id="albumSongList"></div>
@@ -1091,9 +1093,10 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
         loadChannelLink();
         addAlbumSong();
         addSchAlbumSong();
-        loadScheduled();
-        loadStudioLogo();
-      } else {
+          loadScheduled();
+  loadStudioLogo();
+  restoreLastTab();
+} else {
         status.innerText = 'Wrong password. Try again.'; var fl = document.getElementById('fastLogin'); if (fl) fl.remove();
       }
     }
@@ -1104,6 +1107,10 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
       } catch(e) {}
     });
     window.goToPage = function(page) {
+  try { 
+    localStorage.setItem('ft-last-tab', page); 
+    localStorage.setItem('ft-last-tab-time', Date.now().toString()); 
+  } catch(e) {}
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   
@@ -1116,9 +1123,28 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
       if (pageEl) pageEl.classList.add('active');
       if (navEl) navEl.classList.add('active');
       if (page === 'release') loadScheduled();
-      if (page === 'seo') { loadSeoSongs(); loadSeoArtists(); loadSeoOverview(); }
-      window.scrollTo(0, 0);
+        if (page === 'seo') { loadSeoSongs(); loadSeoArtists(); loadSeoOverview(); }
+  window.scrollTo(0, 0);
+}
+
+window.restoreLastTab = function() {
+  try {
+    var savedTab = localStorage.getItem('ft-last-tab');
+    var savedTime = localStorage.getItem('ft-last-tab-time');
+    var ONE_HOUR = 60 * 60 * 1000; 
+
+    if (savedTab && savedTime && (Date.now() - parseInt(savedTime) < ONE_HOUR)) {
+      var targetPage = 'page' + savedTab.charAt(0).toUpperCase() + savedTab.slice(1);
+      if (document.getElementById(targetPage)) {
+        goToPage(savedTab);
+        return;
+      }
     }
+    goToPage('home');
+  } catch (e) {
+    goToPage('home');
+  }
+}
     async function ensureArtistExists(name) {
       if (!name || !name.trim()) return;
       const cleanName = name.trim();
@@ -1238,9 +1264,9 @@ list.innerHTML = `
       '</div>' +
       '<button class="song-menu-btn" onclick="toggleSongMenu(event, \'' + menuId + '\')"><i class="fas fa-ellipsis-v"></i></button>' +
       '<div class="song-dropdown" id="' + menuId + '">' +
-        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:#1d9bf0;"></i> Copy Link</button>' +
-        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:#00cc44;"></i> Edit</button>' +
-        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:#ff0033;"></i> Delete</button>' +
+        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:rgba(255,255,255,0.7);"></i> Copy Link</button>' +
+        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:rgba(255,255,255,0.7);"></i> Edit</button>' +
+        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:rgba(255,255,255,0.7);"></i> Delete</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -1261,17 +1287,38 @@ window.openAlbumDetail = function(albumName) {
   
   // Render Header
 document.getElementById('albumDetailHeader').innerHTML = 
-  '<img src="' + first.cover + '" style="width:80px; height:80px; border-radius:12px; object-fit:cover; box-shadow:0 4px 15px rgba(0,0,0,0.3);">' +
-  '<div style="flex:1; min-width:0;">' +
-    '<h2 style="font-size:18px; font-weight:900; color:#fff; margin-bottom:4px; overflow-wrap:anywhere;">' + albumName + '</h2>' +
-    '<p style="font-size:13px; color:var(--text2); font-weight:600;">' + (first.artist_name || 'Samarid') + '</p>' +
+  '<img src="' + first.cover + '" style="width:80px; height:80px; border-radius:12px; object-fit:cover; box-shadow:0 4px 15px rgba(0,0,0,0.3); flex-shrink:0;">' +
+  '<div style="flex:1; min-width:0; padding-right:8px;">' +
+    '<h2 style="font-size:15px; font-weight:900; color:#fff; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%;">' + albumName + '</h2>' +
+    '<p style="font-size:13px; color:var(--text2); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + (first.artist_name || 'Samarid') + '</p>' +
     '<p style="font-size:11px; color:#ff8800; font-weight:800; margin-top:4px;">' + albumSongs.length + ' SONGS</p>' +
   '</div>' +
-  '<button onclick="deleteFullAlbum(\'' + albumName.replace(/'/g, "\\'") + '\')" style="background:#ff0033; color:#fff; border:none; padding:10px 14px; border-radius:10px; font-weight:800; cursor:pointer; font-size:12px; display:flex; align-items:center; gap:6px; box-shadow: 0 4px 12px rgba(255,0,51,0.3);"><i class="fas fa-trash"></i> Delete Album</button>';
+  '<div style="display:flex; gap:0px; align-items:center; flex-shrink:0;">' +
+    '<button onclick="toggleAlbumSearch()" style="background:transparent; color:rgba(255,255,255,0.4); border:none; padding:8px; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:color 0.2s;" onmouseover="this.style.color=\'#fff\'" onmouseout="this.style.color=\'rgba(255,255,255,0.4)\'" id="albumSearchIcon"><i class="fas fa-search"></i></button>' +
+    '<button onclick="deleteFullAlbum(\'' + albumName.replace(/'/g, "\\'") + '\')" style="background:transparent; color:rgba(255,255,255,0.4); border:none; padding:8px; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:color 0.2s;" onmouseover="this.style.color=\'#ff0033\'" onmouseout="this.style.color=\'rgba(255,255,255,0.4)\'"><i class="fas fa-trash"></i></button>' +
+  '</div>';
 
+  document.getElementById('albumSearchWrapper').style.display = 'none';
   document.getElementById('albumSongSearchInput').value = '';
   renderAlbumSongsList(albumName, '');
   goToPage('albumDetail');
+}
+
+window.toggleAlbumSearch = function() {
+  var wrapper = document.getElementById('albumSearchWrapper');
+  var icon = document.querySelector('#albumSearchIcon i');
+  if (wrapper.style.display === 'none') {
+    wrapper.style.display = 'block';
+    icon.className = 'fas fa-times';
+    icon.style.color = '#ff0033';
+    document.getElementById('albumSongSearchInput').focus();
+  } else {
+    wrapper.style.display = 'none';
+    icon.className = 'fas fa-search';
+    icon.style.color = 'rgba(255,255,255,0.4)';
+    document.getElementById('albumSongSearchInput').value = '';
+    renderAlbumSongsList(currentAlbumView, '');
+  }
 }
 
 window.deleteFullAlbum = function(albumName) {
@@ -1283,7 +1330,7 @@ window.deleteFullAlbum = function(albumName) {
     return; 
   }
 
-  showConfirm('Delete Album', 'Are you sure you want to permanently delete ALL ' + albumSongs.length + ' songs in this album? This will also delete their MP3s and covers from Cloudinary.', true, async function() {
+  showConfirm('Delete Album', 'Are you sure you want to permanently delete ALL ' + albumSongs.length + ' songs in this album? This will also delete their MP3s and covers from the site.', true, async function() {
     const btn = event && event.target ? event.target.closest('button') : null;
     if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...'; btn.disabled = true; }
 
@@ -1364,9 +1411,9 @@ function renderAlbumSongsList(albumName, query) {
       '</div>' +
       '<button class="song-menu-btn" onclick="toggleSongMenu(event, \'' + menuId + '\')"><i class="fas fa-ellipsis-v"></i></button>' +
       '<div class="song-dropdown" id="' + menuId + '">' +
-        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:#1d9bf0;"></i> Copy Link</button>' +
-        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:#00cc44;"></i> Edit</button>' +
-        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:#ff0033;"></i> Delete</button>' +
+        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:rgba(255,255,255,0.7);"></i> Copy Link</button>' +
+        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:rgba(255,255,255,0.7);"></i> Edit</button>' +
+        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:rgba(255,255,255,0.7);"></i> Delete</button>' +
       '</div>' +
     '</div>';
   }).join('');

@@ -268,19 +268,19 @@
 
     <div class="content">
       <div class="page active" id="pageHome">
-        <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; margin-bottom: 20px; display: flex; align-items: center; flex-direction: column; align-items: stretch; gap: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-  <div id="searchHeaderText" style="font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px;">
-    <i class="fas fa-layer-group" style="color: #ff8800;"></i> Library
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+  <div id="searchHeaderText" style="font-size: 15px; font-weight: 900; color: #fff; letter-spacing: -0.2px; display: flex; align-items: center; gap: 8px;">
+    <i class="fas fa-music" style="color: #ff8800;"></i> My Releases
   </div>
   
-  <div id="studioSearchWrapper" style="display:block; width: 100%;">
+  <div id="studioSearchWrapper" style="display:none; flex:1; margin-left: 12px;">
     <div class="search-wrap" style="margin-bottom:0; width: 100%;">
       <i class="fas fa-search search-icon"></i>
-      <input type="text" id="songSearchInput" placeholder="Search songs or albums..." oninput="handleSongSearch()" autocomplete="off" style="padding: 8px 30px; font-size: 13px;">
+      <input type="text" id="songSearchInput" placeholder="Search songs or albums..." oninput="handleSongSearch()" autocomplete="off" style="padding: 8px 12px 8px 34px; font-size: 13px; border-radius: 8px; background: #0a0a0a; border: 1px solid #333; color: #fff; width: 100%;">
     </div>
   </div>
   
-  <button id="searchToggleBtn" onclick="toggleStudioSearch()" style="display:none;" style="background:transparent; border:none; color:#ff8800; width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; flex-shrink:0;">
+  <button id="searchToggleBtn" onclick="toggleStudioSearch()" style="background:transparent; border:none; color:rgba(255,255,255,0.6); width:34px; height:34px; display:flex; align-items: center; justify-content: center; cursor:pointer; font-size:16px; flex-shrink:0; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">
     <i class="fas fa-search"></i>
   </button>
 </div>
@@ -293,15 +293,17 @@
 
       <!-- ALBUM DETAILS PAGE -->
 <div class="page" id="pageAlbumDetail">
-  <button class="secondary-btn" onclick="goToPage('home')" style="width: auto; display: inline-flex; padding: 8px 16px; margin-bottom: 20px;"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+  <button class="secondary-btn" onclick="goToPage('home')" style="width: auto; display: inline-flex; padding: 8px 16px; margin-bottom: 10px;"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
   
-  <div id="albumDetailHeader" style="display:flex; gap:16px; align-items:center; margin-bottom:20px; background:var(--card); padding:16px; border-radius:16px; border:1px solid var(--border);">
+  <div id="albumDetailHeader" style="display:flex; gap:16px; align-items:center; margin-bottom:16px; background:var(--card); padding:16px; border-radius:16px; border:none; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
     <!-- Filled by JS -->
   </div>
   
-  <div class="search-wrap">
-    <i class="fas fa-search search-icon"></i>
-    <input type="text" id="albumSongSearchInput" placeholder="Search songs in this album..." oninput="handleAlbumSongSearch()" autocomplete="off">
+  <div id="albumSearchWrapper" style="display:none; margin-bottom: 16px;">
+    <div class="search-wrap" style="margin-bottom: 0;">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" id="albumSongSearchInput" placeholder="Search songs in this album..." oninput="handleAlbumSongSearch()" autocomplete="off">
+    </div>
   </div>
   
   <div id="albumSongList"></div>
@@ -1148,6 +1150,10 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
       updateReleaseAlbumPreview();
     }
     window.goToPage = function(page) {
+  try { 
+    localStorage.setItem('ft-last-tab', page); 
+    localStorage.setItem('ft-last-tab-time', Date.now().toString()); 
+  } catch(e) {}
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   
@@ -1284,9 +1290,9 @@ list.innerHTML = `
       '</div>' +
       '<button class="song-menu-btn" onclick="toggleSongMenu(event, \'' + menuId + '\')"><i class="fas fa-ellipsis-v"></i></button>' +
       '<div class="song-dropdown" id="' + menuId + '">' +
-        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:#1d9bf0;"></i> Copy Link</button>' +
-        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:#00cc44;"></i> Edit</button>' +
-        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:#ff0033;"></i> Delete</button>' +
+        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:rgba(255,255,255,0.7);"></i> Copy Link</button>' +
+        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:rgba(255,255,255,0.7);"></i> Edit</button>' +
+        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:rgba(255,255,255,0.7);"></i> Delete</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -1307,14 +1313,18 @@ window.openAlbumDetail = function(albumName) {
   
   // Render Header
 document.getElementById('albumDetailHeader').innerHTML = 
-  '<img src="' + first.cover + '" style="width:80px; height:80px; border-radius:12px; object-fit:cover; box-shadow:0 4px 15px rgba(0,0,0,0.3);">' +
-  '<div style="flex:1; min-width:0;">' +
-    '<h2 style="font-size:18px; font-weight:900; color:#fff; margin-bottom:4px; overflow-wrap:anywhere;">' + albumName + '</h2>' +
-    '<p style="font-size:13px; color:var(--text2); font-weight:600;">' + (first.artist_name || 'Samarid') + '</p>' +
+  '<img src="' + first.cover + '" style="width:80px; height:80px; border-radius:12px; object-fit:cover; box-shadow:0 4px 15px rgba(0,0,0,0.3); flex-shrink:0;">' +
+  '<div style="flex:1; min-width:0; padding-right:8px;">' +
+    '<h2 style="font-size:15px; font-weight:900; color:#fff; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%;">' + albumName + '</h2>' +
+    '<p style="font-size:13px; color:var(--text2); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + (first.artist_name || 'Samarid') + '</p>' +
     '<p style="font-size:11px; color:#ff8800; font-weight:800; margin-top:4px;">' + albumSongs.length + ' SONGS</p>' +
   '</div>' +
-  '<button onclick="deleteFullAlbum(\'' + albumName.replace(/'/g, "\\'") + '\')" style="background:#ff0033; color:#fff; border:none; padding:10px 14px; border-radius:10px; font-weight:800; cursor:pointer; font-size:12px; display:flex; align-items:center; gap:6px; box-shadow: 0 4px 12px rgba(255,0,51,0.3);"><i class="fas fa-trash"></i> Delete Album</button>';
+  '<div style="display:flex; gap:0px; align-items:center; flex-shrink:0;">' +
+    '<button onclick="toggleAlbumSearch()" style="background:transparent; color:rgba(255,255,255,0.4); border:none; padding:8px; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:color 0.2s;" onmouseover="this.style.color=\'#fff\'" onmouseout="this.style.color=\'rgba(255,255,255,0.4)\'" id="albumSearchIcon"><i class="fas fa-search"></i></button>' +
+    '<button onclick="deleteFullAlbum(\'' + albumName.replace(/'/g, "\\'") + '\')" style="background:transparent; color:rgba(255,255,255,0.4); border:none; padding:8px; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:color 0.2s;" onmouseover="this.style.color=\'#ff0033\'" onmouseout="this.style.color=\'rgba(255,255,255,0.4)\'"><i class="fas fa-trash"></i></button>' +
+  '</div>';
 
+  document.getElementById('albumSearchWrapper').style.display = 'none';
   document.getElementById('albumSongSearchInput').value = '';
   renderAlbumSongsList(albumName, '');
   goToPage('albumDetail');
@@ -1410,9 +1420,9 @@ function renderAlbumSongsList(albumName, query) {
       '</div>' +
       '<button class="song-menu-btn" onclick="toggleSongMenu(event, \'' + menuId + '\')"><i class="fas fa-ellipsis-v"></i></button>' +
       '<div class="song-dropdown" id="' + menuId + '">' +
-        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:#1d9bf0;"></i> Copy Link</button>' +
-        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:#00cc44;"></i> Edit</button>' +
-        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:#ff0033;"></i> Delete</button>' +
+        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:rgba(255,255,255,0.7);"></i> Copy Link</button>' +
+        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:rgba(255,255,255,0.7);"></i> Edit</button>' +
+        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:rgba(255,255,255,0.7);"></i> Delete</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -1421,6 +1431,46 @@ function renderAlbumSongsList(albumName, query) {
 window.showAllSongs = function() { homeShowAll = true; renderAdminSongs(''); }
     window.hideExtraSongs = function() { homeShowAll = false; renderAdminSongs(''); window.scrollTo(0, 0); }
     window.handleSongSearch = function() { renderAdminSongs(document.getElementById('songSearchInput').value.toLowerCase().trim()); }
+window.toggleStudioSearch = function() {
+  const wrapper = document.getElementById('studioSearchWrapper');
+  const input = document.getElementById('songSearchInput');
+  const text = document.getElementById('searchHeaderText');
+  const icon = document.querySelector('#searchToggleBtn i');
+  
+  if (wrapper.style.display === 'none' || wrapper.style.display === '') {
+    wrapper.style.display = 'block';
+    text.style.display = 'none';
+    icon.className = 'fas fa-times';
+    icon.style.color = '#ff0033';
+    setTimeout(() => input.focus(), 100);
+  } else {
+    wrapper.style.display = 'none';
+    text.style.display = 'flex';
+    icon.className = 'fas fa-search';
+    icon.style.color = 'rgba(255,255,255,0.6)';
+    input.value = '';
+    renderAdminSongs('');
+  }
+}
+
+window.restoreLastTab = function() {
+  try {
+    var savedTab = localStorage.getItem('ft-last-tab');
+    var savedTime = localStorage.getItem('ft-last-tab-time');
+    var ONE_HOUR = 60 * 60 * 1000; 
+
+    if (savedTab && savedTime && (Date.now() - parseInt(savedTime) < ONE_HOUR)) {
+      var targetPage = 'page' + savedTab.charAt(0).toUpperCase() + savedTab.slice(1);
+      if (document.getElementById(targetPage)) {
+        goToPage(savedTab);
+        return;
+      }
+    }
+    goToPage('home');
+  } catch (e) {
+    goToPage('home');
+  }
+}
 
 window.toggleSongMenu = function(e, id) {
   e.stopPropagation();
@@ -3361,8 +3411,7 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
       var navAddBtn = document.getElementById('navAdd'); if (navAddBtn) navAddBtn.style.display = 'none';
       var searchHeaderText = document.getElementById('searchHeaderText');
       if (searchHeaderText) searchHeaderText.innerHTML = '<i class="fas fa-music" style="color: #ff8800;"></i> My Releases';
-      var searchToggleBtn = document.getElementById('searchToggleBtn');
-      if (searchToggleBtn) searchToggleBtn.style.display = 'none';
+      
       ['songArtist', 'albumArtist', 'schArtist', 'schAlbumArtist'].forEach(function (id) {
         var el = document.getElementById(id); if (el) el.value = artist;
       });
@@ -3374,7 +3423,14 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
         try { localStorage.removeItem('ft-artist-session'); } catch (e) {}
         location.replace('artist-login.html');
       }
-      if (!s || !s.token) { toLogin(); return; }
+      if (!s || !s.token) {
+  // ⚠️ TEMPORARY PREVIEW MODE — DELETE THIS BEFORE GOING LIVE
+  applyArtistMode('Samarid');
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  initDatePickers(); loadAdminSongs(); loadChannelLink(); addAlbumSong(); addSchAlbumSong(); loadScheduled(); loadStudioLogo(); restoreLastTab();
+return;
+}
       fetch('/api/artist-auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'check', token: s.token }) })
         .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
         .then(function (x) {
@@ -3383,8 +3439,8 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
           document.getElementById('loginScreen').style.display = 'none';
           var fl = document.getElementById('fastLogin'); if (fl) fl.remove();
           document.getElementById('dashboard').style.display = 'block';
-          initDatePickers(); loadAdminSongs(); loadChannelLink(); addAlbumSong(); addSchAlbumSong(); loadScheduled(); loadStudioLogo();
-          initSettings();
+          initDatePickers(); loadAdminSongs(); loadChannelLink(); addAlbumSong(); addSchAlbumSong(); loadScheduled(); loadStudioLogo(); restoreLastTab();
+initSettings(); restoreLastTab();
         })
         .catch(function () {
           var st = document.getElementById('loginStatus');
