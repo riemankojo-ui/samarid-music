@@ -268,19 +268,19 @@
 
     <div class="content">
       <div class="page active" id="pageHome">
-        <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+        <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; margin-bottom: 20px; display: flex; align-items: center; flex-direction: column; align-items: stretch; gap: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
   <div id="searchHeaderText" style="font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px;">
     <i class="fas fa-layer-group" style="color: #ff8800;"></i> Library
   </div>
   
-  <div id="studioSearchWrapper" style="display:none; flex:1; margin-left: 12px;">
+  <div id="studioSearchWrapper" style="display:block; width: 100%;">
     <div class="search-wrap" style="margin-bottom:0; width: 100%;">
       <i class="fas fa-search search-icon"></i>
       <input type="text" id="songSearchInput" placeholder="Search songs or albums..." oninput="handleSongSearch()" autocomplete="off" style="padding: 8px 30px; font-size: 13px;">
     </div>
   </div>
   
-  <button id="searchToggleBtn" onclick="toggleStudioSearch()" style="background:transparent; border:none; color:#ff8800; width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; flex-shrink:0;">
+  <button id="searchToggleBtn" onclick="toggleStudioSearch()" style="display:none;" style="background:transparent; border:none; color:#ff8800; width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; flex-shrink:0;">
     <i class="fas fa-search"></i>
   </button>
 </div>
@@ -1438,27 +1438,6 @@ document.addEventListener('click', function() {
   document.querySelectorAll('.song-dropdown').forEach(m => m.classList.remove('show'));
 });
 
-window.toggleStudioSearch = function() {
-  const wrapper = document.getElementById('studioSearchWrapper');
-  const input = document.getElementById('songSearchInput');
-  const text = document.getElementById('searchHeaderText');
-  const icon = document.querySelector('#searchToggleBtn i');
-  
-  if (wrapper.style.display === 'none' || wrapper.style.display === '') {
-    wrapper.style.display = 'block';
-    text.style.display = 'none';
-    icon.className = 'fas fa-times';
-    icon.style.color = '#ff0033';
-    setTimeout(() => input.focus(), 100);
-  } else {
-    wrapper.style.display = 'none';
-    text.style.display = 'flex';
-    icon.className = 'fas fa-search';
-    icon.style.color = '#ff8800';
-    input.value = '';
-    renderAdminSongs('');
-  }
-}
     window.copySongLink = async function(id) {
   const url = 'https://samarid-music.vercel.app/song.html?id=' + id;
   try {
