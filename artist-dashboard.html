@@ -243,7 +243,24 @@
   .seo-char-count { font-size: 10px; color: var(--text2); text-align: right; margin-top: -8px; margin-bottom: 12px; font-weight: 700; }
   details summary { list-style: none; cursor: pointer; }
   details summary::-webkit-details-marker { display: none; }
-  #pageAdd, #pageRelease { position: relative; }</style>
+    #pageAdd, #pageRelease { position: relative; }
+  /* ===== SETTINGS ===== */
+  .set-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 14px; }
+  .set-title { font-size: 14px; font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .set-title i { color: var(--accent); }
+  .set-note { font-size: 12px; color: var(--text2); margin-bottom: 12px; line-height: 1.5; }
+  .set-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border); font-size: 13px; }
+  .set-row:first-of-type { border-top: none; }
+  .set-row b { color: #fff; word-break: break-word; text-align: right; }
+  .set-row span { color: var(--text2); flex-shrink: 0; }
+  .set-btns { display: flex; gap: 8px; margin-top: 10px; }
+  .set-btns > * { flex: 1; }
+  a.set-btn, button.set-btn { padding: 12px; background: transparent; color: #fff; border: 1px solid #333; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  a.set-btn:active, button.set-btn:active { transform: scale(0.97); }
+  button.set-logout { width: 100%; padding: 14px; background: #ff0033; color: #fff; border: none; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  button.set-logout:active { transform: scale(0.97); }
+  .set-ok { color: #00cc44; } .set-err { color: #ff4d4d; }
+</style>
 <link rel="stylesheet" href="/desktop.css">
 <script>try{if(localStorage.getItem('ft-artist-session'))document.write('<style id="fastLogin">#loginScreen{display:none!important}</style>');}catch(e){}</script></head><body>
 
@@ -843,12 +860,78 @@ Download: https://example.com/cry-baby.mp3</div>
           <div class="form-group"><label>Video Title</label><input type="text" id="videoTitle" placeholder="e.g. Samarid Back To Sender Visualizer"></div>
           <div class="form-group"><label>YouTube Link</label><input type="text" id="videoUrl" placeholder="https://youtube.com/watch?v=..."></div>
           <div class="form-group"><label>Release Date</label><input type="text" id="videoDate" placeholder="e.g. April 13, 2026"></div>
-          <button class="main-btn" onclick="saveVideo()">Publish Video Link</button>
-          <p id="videoStatus" class="status"></p>
-        </div>
-      </div>
-
+                <button class="main-btn" onclick="saveVideo()">Publish Video Link</button>
+      <p id="videoStatus" class="status"></p>
     </div>
+  </div>
+
+  <!-- SETTINGS PAGE -->
+  <div class="page" id="pageSettings">
+    <h1 class="page-title">Settings</h1>
+    <p class="page-subtitle">Your account and studio preferences</p>
+
+    <div class="set-card">
+      <div class="set-title"><i class="fas fa-user"></i> My Profile</div>
+      <div class="set-note">Your artist profile on FlexTune.</div>
+      <div class="set-row"><span>Artist name</span><b id="setArtistName">-</b></div>
+      <div class="set-btns">
+        <a class="set-btn" id="setViewPage" href="#" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> View my page</a>
+        <button class="set-btn" type="button" onclick="setCopyPageLink()"><i class="fas fa-link"></i> Copy link</button>
+      </div>
+      <p id="setProfileStatus" class="status" style="margin-top:8px;"></p>
+    </div>
+
+    <div class="set-card">
+      <div class="set-title"><i class="fas fa-key"></i> Change Password</div>
+      <div id="setPwStep1">
+        <div class="set-note">We send a 6-digit code to the email on your artist profile, then you choose a new password.</div>
+        <button class="main-btn" type="button" id="setPwSendBtn" onclick="setPwSend()">Send me a code</button>
+      </div>
+      <div id="setPwStep2" style="display:none;">
+        <div class="set-note">Enter the code we emailed you. It is valid for 10 minutes. Check your Spam folder too.</div>
+        <div class="form-group"><label>6-digit code</label><input type="text" id="setPwCode" inputmode="numeric" maxlength="6" placeholder="123456" autocomplete="one-time-code"></div>
+        <button class="main-btn" type="button" id="setPwVerifyBtn" onclick="setPwVerify()">Verify code</button>
+      </div>
+      <div id="setPwStep3" style="display:none;">
+        <div class="set-note">Choose a new password (at least 8 characters).</div>
+        <div class="form-group"><label>New password</label><input type="password" id="setPw1" autocomplete="new-password" placeholder="New password"></div>
+        <div class="form-group"><label>Repeat password</label><input type="password" id="setPw2" autocomplete="new-password" placeholder="Repeat password"></div>
+        <button class="main-btn" type="button" id="setPwSaveBtn" onclick="setPwSave()">Save password</button>
+      </div>
+      <p id="setPwStatus" class="status"></p>
+    </div>
+
+    <div class="set-card">
+      <div class="set-title"><i class="fas fa-tag"></i> Default Category</div>
+      <div class="set-note">Fills the Category field automatically when you add or schedule a release. You can still change it each time.</div>
+      <div class="form-group" style="margin-bottom:0;"><input type="text" id="setDefCategory" list="genreList" placeholder="e.g. Afrobeats" oninput="setSavePref('category', this.value.trim())"></div>
+    </div>
+
+    <div class="set-card">
+      <div class="set-title"><i class="fas fa-home"></i> Start Page</div>
+      <div class="set-note">The tab that opens first each time you enter your studio.</div>
+      <div class="form-group" style="margin-bottom:0;">
+        <select id="setStartPage" onchange="setSavePref('start', this.value)">
+          <option value="home">Home - My Releases</option>
+          <option value="release">Release - Schedule</option>
+          <option value="import">Import</option>
+          <option value="seo">SEO</option>
+          <option value="channel">Videos</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="set-card">
+      <div class="set-title"><i class="fas fa-broom"></i> Saved Data On This Device</div>
+      <div class="set-note">Clears your saved preferences and cached video link from this device. You stay logged in and your songs are not touched.</div>
+      <button class="set-btn" style="width:100%;" type="button" onclick="setClearData()"><i class="fas fa-trash-alt"></i> Clear saved data</button>
+      <p id="setClearStatus" class="status" style="margin-top:8px;"></p>
+    </div>
+
+    <button class="set-logout" type="button" onclick="artistLogout()"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+  </div>
+
+</div>
 
     <div class="bottom-nav">
       <button class="nav-item active" onclick="goToPage('home')" id="navHome"><div class="icon"><i class="fas fa-home"></i></div><div class="label">HOME</div></button>
@@ -856,8 +939,9 @@ Download: https://example.com/cry-baby.mp3</div>
       <button class="nav-item" onclick="goToPage('release')" id="navRelease"><div class="icon"><i class="fas fa-calendar-alt"></i></div><div class="label">RELEASE</div></button>
       <button class="nav-item" onclick="goToPage('import')" id="navImport"><div class="icon"><i class="fas fa-file-import"></i></div><div class="label">IMPORT</div></button>
       <button class="nav-item" onclick="goToPage('seo')" id="navSeo"><div class="icon"><i class="fas fa-search-plus"></i></div><div class="label">SEO</div></button>
-      <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon"><i class="fas fa-video"></i></div><div class="label">VIDEOS</div></button>
-    </div>
+        <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon"><i class="fas fa-video"></i></div><div class="label">VIDEOS</div></button>
+  <button class="nav-item" onclick="goToPage('settings')" id="navSettings"><div class="icon"><i class="fas fa-cog"></i></div><div class="label">SETTINGS</div></button>
+</div>
   </div>
 <div class="edit-modal-overlay" id="editModalOverlay" onclick="closeEditModal()">
   <div class="edit-modal" onclick="event.stopPropagation()">
@@ -3300,6 +3384,25 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
     })();
   </script>
 <script src="/site-logo.js" defer></script>
+<script>
+  // PREVIEW FALLBACK: Force dashboard to open if no artist is loaded
+  setTimeout(function() {
+    var dash = document.getElementById('dashboard');
+    var login = document.getElementById('loginScreen');
+    
+    // If the dashboard is still hidden after 2 seconds, assume it's a preview
+    if (dash && dash.style.display === 'none') {
+      dash.style.display = 'block';
+      if (login) login.style.display = 'none';
+      
+      // Load dummy data for "Samarid" so you can see the stats and albums
+      if (!window.FT_ARTIST) {
+        window.FT_ARTIST = 'Samarid'; 
+        if (typeof loadAdminSongs === 'function') loadAdminSongs();
+      }
+    }
+  }, 2000); // Wait 2 seconds for real auth first
+</script>
 </body>
 </html>
 
