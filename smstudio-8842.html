@@ -83,6 +83,17 @@
   .search-wrap input:focus { outline: none; border-color: var(--accent); }
   .search-wrap .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #666; font-size: 14px; pointer-events: none; }
   .song-count-label { text-align: center; font-size: 11px; color: #666; margin-bottom: 14px; font-weight: 600; letter-spacing: 0.3px; }
+
+/* ===== HOME STATS GRID ===== */
+.home-stats-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+.home-stat-box { padding: 20px 10px; text-align: center; border-bottom: 1px solid var(--border); }
+.home-stat-box:nth-child(odd) { border-right: 1px solid var(--border); }
+.home-stat-box:nth-child(3), .home-stat-box:nth-child(4) { border-bottom: none; }
+.home-stat-box .num { font-size: 26px; font-weight: 900; color: var(--accent); line-height: 1; }
+.home-stat-box .num.green { color: #00cc44; }
+.home-stat-box .num.blue { color: #1d9bf0; }
+.home-stat-box .lbl { font-size: 10px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-top: 8px; }
+.home-stat-box .status-txt { font-size: 15px; font-weight: 900; margin-top: 2px; }
   .admin-song { position: relative; display: flex; gap: 14px; align-items: center; background: transparent; border-bottom: 1px solid var(--border); padding: 12px 4px; border-radius: 0; margin-bottom: 0; }
 .song-menu-btn { background: transparent; border: none; color: #999; font-size: 18px; padding: 8px; cursor: pointer; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 .song-menu-btn:active { background: rgba(255,255,255,0.1); }
@@ -280,6 +291,25 @@
   <button id="searchToggleBtn" onclick="toggleStudioSearch()" style="background:transparent; border:none; color:#ff8800; width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; flex-shrink:0;">
     <i class="fas fa-search"></i>
   </button>
+</div>
+
+<div class="home-stats-grid">
+  <div class="home-stat-box">
+    <div class="num" id="statTotalPlays">0</div>
+    <div class="lbl">Total Plays</div>
+  </div>
+  <div class="home-stat-box">
+    <div class="num green" id="statTotalFollowers">0</div>
+    <div class="lbl">Followers</div>
+  </div>
+  <div class="home-stat-box">
+    <div class="num blue" id="statTotalDownloads">0</div>
+    <div class="lbl">Downloads</div>
+  </div>
+  <div class="home-stat-box">
+    <div class="status-txt" id="statAnalyzing" style="color: var(--accent);">Loading...</div>
+    <div class="lbl">Performance</div>
+  </div>
 </div>
 
 <div id="albumListContainer" style="margin-bottom: 30px;"></div>
@@ -1161,13 +1191,44 @@ list.innerHTML = `
       renderAdminSongs('');
     } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; }
   }
-    function renderAdminSongs(query) {
-  const albumContainer = document.getElementById('albumListContainer');
-  const list = document.getElementById('homeSongList');
-  const countLabel = document.getElementById('songCountLabel');
-  const isSearching = query && query.length > 0;
-  
-  let filtered = allAdminSongs;
+      function renderAdminSongs(query) {
+const albumContainer = document.getElementById('albumListContainer');
+const list = document.getElementById('homeSongList');
+const countLabel = document.getElementById('songCountLabel');
+const isSearching = query && query.length > 0;
+
+// --- CALCULATE HOME STATS ---
+let totalPlays = 0;
+let totalDownloads = 0;
+allAdminSongs.forEach(s => {
+  totalPlays += (s.plays || 0);
+  totalDownloads += (s.downloads || 0);
+});
+
+const playsEl = document.getElementById('statTotalPlays');
+const dlEl = document.getElementById('statTotalDownloads');
+if (playsEl) playsEl.innerText = totalPlays.toLocaleString();
+if (dlEl) dlEl.innerText = totalDownloads.toLocaleString();
+
+// Analyze Performance
+const perfEl = document.getElementById('statAnalyzing');
+if (perfEl) {
+  if (totalPlays > 10000) {
+    perfEl.innerText = "🔥 Trending";
+    perfEl.style.color = "#ff8800"; // Orange
+  } else if (totalPlays > 1000) {
+    perfEl.innerText = "Good";
+    perfEl.style.color = "#00cc44"; // Green
+  } else if (totalPlays > 100) {
+    perfEl.innerText = "Growing";
+    perfEl.style.color = "#ffcc00"; // Yellow
+  } else {
+    perfEl.innerText = "Needs Boost";
+    perfEl.style.color = "#ff0033"; // Red
+  }
+}
+
+let filtered = allAdminSongs;
   if (isSearching) {
     filtered = allAdminSongs.filter(s => (s.title || '').toLowerCase().includes(query) || (s.artist_name || '').toLowerCase().includes(query) || (s.album_name || '').toLowerCase().includes(query));
   }
