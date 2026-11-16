@@ -363,7 +363,7 @@
           <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="Tap to add song audio" readonly onclick="audioPick('songDownload')"></div>
           <div class="form-group"><label>Spotify Link</label><input type="text" id="songSpotify" placeholder="https://open.spotify.com/track/..."></div>
 <div class="form-group"><label>YouTube Video Link</label><input type="text" id="songYoutube" placeholder="https://youtube.com/watch?v=..."></div>
-<div id="songYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('songTitle','songArtist','songFeaturing','songYoutube','songYtTest')"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div>
+<div id="songYtTest"><button type="button" class="secondary-btn" onclick="Find VideoFor('songTitle','songArtist','songFeaturing','songYoutube','songYtTest')"><i class="fas fa-play-circle"></i> Find Video</button><div class="yt-test-list"></div></div>
         <button class="main-btn" id="submitBtn" onclick="saveSong()">Submit </button>
 <button class="secondary-btn" id="cancelBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
 
@@ -470,7 +470,7 @@
           <div class="form-group"><label>Download MP3 Link *</label><input type="text" id="schDownload" placeholder="Tap to add song audio" readonly onclick="audioPick('schDownload')"></div>
           <div class="form-group"><label>Spotify Link</label><input type="text" id="schSpotify" placeholder="https://open.spotify.com/track/..."></div>
           <div class="form-group"><label>YouTube Video Link</label><input type="text" id="schYoutube" placeholder="https://youtube.com/watch?v=..."></div>
-          <div id="schYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('schTitle','schArtist','schFeaturing','schYoutube','schYtTest')"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div>
+          <div id="schYtTest"><button type="button" class="secondary-btn" onclick="Find VideoFor('schTitle','schArtist','schFeaturing','schYoutube','schYtTest')"><i class="fas fa-play-circle"></i> Find Video</button><div class="yt-test-list"></div></div>
 
           <div class="datetime-section">
             <div class="datetime-section-title"><i class="fas fa-calendar-alt"></i> Release Date & Time (Ghana Time)</div>
@@ -887,7 +887,7 @@ Download: https://example.com/cry-baby.mp3</div>
     <div class="form-group"><label>Download MP3 Link</label><input type="text" id="editDownload" placeholder="Tap to upload song audio" readonly onclick="audioPick('editDownload')"></div>
     <div class="form-group"><label>Spotify Link</label><input type="text" id="editSpotify" placeholder="https://open.spotify.com/track/..."></div>
     <div class="form-group"><label>YouTube Video Link</label><input type="text" id="editYoutube" placeholder="https://youtube.com/watch?v=..."></div>
-<div id="editYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('editTitle','editArtist','editFeaturing','editYoutube','editYtTest')"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div>
+<div id="editYtTest"><button type="button" class="secondary-btn" onclick="Find VideoFor('editTitle','editArtist','editFeaturing','editYoutube','editYtTest')"><i class="fas fa-play-circle"></i> Find Video</button><div class="yt-test-list"></div></div>
 
  <div class="publish-progress" id="editProgress">
   <div class="publish-progress-bar"><div class="publish-progress-fill" id="editProgressFill"></div></div>
@@ -1713,8 +1713,8 @@ const category = document.getElementById('editCategory').value.trim() || 'Music'
           item.appendChild(testList);
         }
         
-        if (typeof testVideoFor === 'function') {
-          testVideoFor(titleInput.id, artistInput.id, '', '', testList.id);
+        if (typeof Find VideoFor === 'function') {
+          Find VideoFor(titleInput.id, artistInput.id, '', '', testList.id);
         }
       }
     }
@@ -1735,8 +1735,8 @@ const category = document.getElementById('editCategory').value.trim() || 'Music'
     const doSearch = () => {
       // Only search if both title and artist have at least 2 characters
       if (tEl.value.trim().length > 2 && aEl.value.trim().length > 1) {
-        if (typeof testVideoFor === 'function') {
-          testVideoFor(p.title, p.artist, p.feat, p.yt, p.list);
+        if (typeof Find VideoFor === 'function') {
+          Find VideoFor(p.title, p.artist, p.feat, p.yt, p.list);
         }
       }
     };
@@ -1940,7 +1940,7 @@ try {
       function open(title, sub) {
         css(); close(); rows = {};
         var o = document.createElement('div'); o.id = 'relPop';
-        o.innerHTML = '<div class="rp-card"><div class="rp-title">Release status</div><div class="rp-sub"></div><div class="rp-rows"></div><button class="rp-btn rp-test" style="display:none;background:#222;color:#fff;border:1px solid #444">Test video</button><button class="rp-btn" onclick="relPop.close()">OK</button></div>';
+        o.innerHTML = '<div class="rp-card"><div class="rp-title">Release status</div><div class="rp-sub"></div><div class="rp-rows"></div><button class="rp-btn rp-test" style="display:none;background:#222;color:#fff;border:1px solid #444">Find Video</button><button class="rp-btn" onclick="relPop.close()">OK</button></div>';
         o.querySelector('.rp-sub').textContent = sub || title || '';
         document.body.appendChild(o);
       }
@@ -1962,7 +1962,7 @@ try {
       }
       return { open: open, row: row, close: close, testBtn: testBtn };
     })();
-    window.testVideoFor = function (titleId, artistId, featId, inputId, boxId) {
+    window.Find VideoFor = function (titleId, artistId, featId, inputId, boxId) {
       var el = function (x) { return (typeof x === 'string') ? document.getElementById(x) : x; };
       var g = function (i) { var e = el(i); return e ? e.value.trim() : ''; };
       var title = g(titleId), artist = g(artistId), feat = g(featId);
@@ -2088,11 +2088,11 @@ window.albumFindMeta = function(btn) {
   findMetadata(titleEl, artistEl, genreEl, prodEl, btn);
 };
 
-window.albumTestVideo = function (btn, sch) {
+window.albumFind Video = function (btn, sch) {
       var item = btn.closest('.album-song-item');
       var p = sch ? 'sch-album-song-' : 'album-song-';
       var artistEl = document.getElementById(sch ? 'schAlbumArtist' : 'albumArtist');
-      testVideoFor(item.querySelector('.' + p + 'title'), artistEl, item.querySelector('.' + p + 'feat'), item.querySelector('.' + p + 'youtube'), btn.parentNode);
+      Find VideoFor(item.querySelector('.' + p + 'title'), artistEl, item.querySelector('.' + p + 'feat'), item.querySelector('.' + p + 'youtube'), btn.parentNode);
     };
 window.showConfirm = function(title, message, isDanger, onConfirm) {
   const old = document.getElementById('globalConfirmCard'); if (old) old.remove();
@@ -2162,7 +2162,7 @@ window.deleteSong = function(id) {
       const div = document.createElement('div');
       div.className = 'album-song-item';
       div.id = 'album-song-' + albumSongIndex;
-      div.innerHTML = '<div class="album-song-num">SONG ' + albumSongIndex + '</div><button class="album-song-remove" onclick="removeAlbumSong(' + albumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Producer(s)</label><div style="display:flex; gap:8px;"><input type="text" class="album-song-producer" placeholder="e.g. DJ Khaled" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>Category</label><div style="display:flex; gap:8px;"><input type="text" class="album-song-category" placeholder="e.g. Afrobeats" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,false)"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
+      div.innerHTML = '<div class="album-song-num">SONG ' + albumSongIndex + '</div><button class="album-song-remove" onclick="removeAlbumSong(' + albumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Producer(s)</label><div style="display:flex; gap:8px;"><input type="text" class="album-song-producer" placeholder="e.g. DJ Khaled" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>Category</label><div style="display:flex; gap:8px;"><input type="text" class="album-song-category" placeholder="e.g. Afrobeats" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumFind Video(this,false)"><i class="fas fa-play-circle"></i> Find Video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
       container.appendChild(div);
       updateAlbumCount();
     }
@@ -2316,7 +2316,7 @@ setTimeout(() => {
       const div = document.createElement('div');
       div.className = 'album-song-item';
       div.id = 'sch-album-song-' + schAlbumSongIndex;
-      div.innerHTML = '<div class="album-song-num">SONG ' + schAlbumSongIndex + '</div><button class="album-song-remove" onclick="removeSchAlbumSong(' + schAlbumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="sch-album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Producer(s)</label><div style="display:flex; gap:8px;"><input type="text" class="sch-album-song-producer" placeholder="e.g. DJ Khaled" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>Category</label><div style="display:flex; gap:8px;"><input type="text" class="sch-album-song-category" placeholder="e.g. Afrobeats" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="sch-album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,true)"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="sch-album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
+      div.innerHTML = '<div class="album-song-num">SONG ' + schAlbumSongIndex + '</div><button class="album-song-remove" onclick="removeSchAlbumSong(' + schAlbumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="sch-album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Producer(s)</label><div style="display:flex; gap:8px;"><input type="text" class="sch-album-song-producer" placeholder="e.g. DJ Khaled" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>Category</label><div style="display:flex; gap:8px;"><input type="text" class="sch-album-song-category" placeholder="e.g. Afrobeats" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="sch-album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumFind Video(this,true)"><i class="fas fa-play-circle"></i> Find Video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="sch-album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
       container.appendChild(div);
       updateSchAlbumCount();
     }
