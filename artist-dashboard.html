@@ -1652,60 +1652,7 @@ const category = document.getElementById('editCategory').value.trim() || 'Music'
     wireArtistEmail('albumArtist', 'albumArtistEmailBox');
     wireArtistEmail('schArtist', 'schArtistEmailBox');
     wireArtistEmail('schAlbumArtist', 'schAlbumArtistEmailBox');
-    // Auto-Find Video logic (Singles & Albums)
-(function() {
-  // Watch for blur on Album inputs (dynamically added)
-  document.addEventListener('focusout', function(e) {
-    const target = e.target;
-    if (target.tagName === 'INPUT' && target.closest('#albumSongsContainer, #schAlbumSongsContainer')) {
-      const item = target.closest('.album-song-item');
-      if (!item) return;
-
-      const titleInput = item.querySelector('input[id*="Title"], input[id*="title"]');
-      const artistInput = item.querySelector('input[id*="Artist"], input[id*="artist"]');
-      
-      if (titleInput && artistInput && titleInput.value.trim().length > 2 && artistInput.value.trim().length > 1) {
-        let testList = item.querySelector('.yt-test-list');
-        if (!testList) {
-          testList = document.createElement('div');
-          testList.className = 'yt-test-list';
-          testList.id = 'yt-test-' + Date.now() + Math.random().toString(36).substr(2, 5);
-          item.appendChild(testList);
-        }
-        
-        if (typeof testVideoFor === 'function') {
-          testVideoFor(titleInput.id, artistInput.id, '', '', testList.id);
-        }
-      }
-    }
-  });
-
-  // Standard pairs for Single/Edit forms
-  const pairs = [
-    { title: 'songTitle', artist: 'songArtist', feat: 'songFeaturing', yt: 'songYoutube', list: 'songYtTest' },
-    { title: 'schTitle', artist: 'schArtist', feat: 'schFeaturing', yt: 'schYoutube', list: 'schYtTest' },
-    { title: 'editTitle', artist: 'editArtist', feat: 'editFeaturing', yt: 'editYoutube', list: 'editYtTest' }
-  ];
-  pairs.forEach(p => {
-    const tEl = document.getElementById(p.title);
-    const aEl = document.getElementById(p.artist);
-    if (!tEl || !aEl) return;
-    
-    const doSearch = () => {
-      // Only search if both title and artist have at least 2 characters
-      if (tEl.value.trim().length > 2 && aEl.value.trim().length > 1) {
-        if (typeof testVideoFor === 'function') {
-          testVideoFor(p.title, p.artist, p.feat, p.yt, p.list);
-        }
-      }
-    };
-    
-    tEl.addEventListener('blur', doSearch);
-    aEl.addEventListener('blur', doSearch);
-  });
-})();
-
-window.saveSong = async function() {
+    window.saveSong = async function() {
       const status = document.getElementById('songStatus');
       const editingId = document.getElementById('editingId').value;
       const title = document.getElementById('songTitle').value.trim();
