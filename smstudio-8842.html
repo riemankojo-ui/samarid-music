@@ -202,14 +202,18 @@
   .import-status.info { color: #ffcc00; }
   .template-box { background: #0a0a0a; border: 1px solid #222; border-radius: 12px; padding: 14px; margin-bottom: 14px; font-family: monospace; font-size: 12px; line-height: 1.7; color: #ccc; white-space: pre-wrap; word-break: break-word; max-height: 240px; overflow-y: auto; }
   .copy-template-btn { background: #222; border: 1px solid #333; border-radius: 10px; color: #fff; padding: 10px 14px; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
-  .seo-overview { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-  .seo-stat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; text-align: center; }
+  .seo-overview { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 20px; border-top: 1px solid var(--border); }
+.seo-stat { background: transparent; border: none; border-bottom: 1px solid var(--border); border-radius: 0; padding: 20px 10px; text-align: center; }
+.seo-stat:nth-child(odd) { border-right: 1px solid var(--border); }
+.seo-stat:nth-child(3), .seo-stat:nth-child(4) { border-bottom: none; }
   .seo-stat .num { font-size: 26px; font-weight: 900; color: var(--accent); line-height: 1; }
   .seo-stat .num.good { color: #00cc44; }
   .seo-stat .num.bad { color: #ff0033; }
   .seo-stat .lbl { font-size: 10px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-top: 6px; }
-  .seo-list-item { display: flex; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; }
+  .seo-list-item { display: flex; gap: 12px; align-items: center; background: transparent; border: none; border-bottom: 1px solid var(--border); padding: 14px 4px; border-radius: 0; margin-bottom: 0; cursor: pointer; }
+.seo-list-item:first-child { border-top: 1px solid var(--border); }
   .seo-list-item img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+#seoContentArtists .seo-list-item img { border-radius: 50%; }
   .seo-list-item .info { flex: 1; min-width: 0; }
   .seo-list-item h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .seo-list-item p { font-size: 11px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -278,7 +282,7 @@
   </button>
 </div>
 
-<div id="albumListContainer" style="margin-bottom: 10px;"></div>
+<div id="albumListContainer" style="margin-bottom: 30px;"></div>
 
 <p class="song-count-label" id="songCountLabel"></p>
 <div id="homeSongList"></div>
@@ -286,17 +290,15 @@
 
       <!-- ALBUM DETAILS PAGE -->
 <div class="page" id="pageAlbumDetail">
-  <button class="secondary-btn" onclick="goToPage('home')" style="width: auto; display: inline-flex; padding: 8px 16px; margin-bottom: 10px;"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+  <button class="secondary-btn" onclick="goToPage('home')" style="width: auto; display: inline-flex; padding: 8px 16px; margin-bottom: 20px;"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
   
-  <div id="albumDetailHeader" style="display:flex; gap:16px; align-items:center; margin-bottom:16px; background:var(--card); padding:16px; border-radius:16px; border:none; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+  <div id="albumDetailHeader" style="display:flex; gap:16px; align-items:center; margin-bottom:20px; background:var(--card); padding:16px; border-radius:16px; border:1px solid var(--border);">
     <!-- Filled by JS -->
   </div>
   
-  <div id="albumSearchWrapper" style="display:none; margin-bottom: 16px;">
-    <div class="search-wrap" style="margin-bottom: 0;">
-      <i class="fas fa-search search-icon"></i>
-      <input type="text" id="albumSongSearchInput" placeholder="Search songs in this album..." oninput="handleAlbumSongSearch()" autocomplete="off">
-    </div>
+  <div class="search-wrap">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" id="albumSongSearchInput" placeholder="Search songs in this album..." oninput="handleAlbumSongSearch()" autocomplete="off">
   </div>
   
   <div id="albumSongList"></div>
@@ -361,7 +363,7 @@
           <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="Tap to add song audio" readonly onclick="audioPick('songDownload')"></div>
           <div class="form-group"><label>Spotify Link</label><input type="text" id="songSpotify" placeholder="https://open.spotify.com/track/..."></div>
 <div class="form-group"><label>YouTube Video Link</label><input type="text" id="songYoutube" placeholder="https://youtube.com/watch?v=..."></div>
-<div id="songYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('songTitle','songArtist','songFeaturing','songYoutube','songYtTest')"><i class="fas fa-play-circle"></i> Find Video</button><div class="yt-test-list"></div></div>
+<div id="songYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('songTitle','songArtist','songFeaturing','songYoutube','songYtTest')"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div>
         <button class="main-btn" id="submitBtn" onclick="saveSong()">Submit </button>
 <button class="secondary-btn" id="cancelBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
 
@@ -468,7 +470,7 @@
           <div class="form-group"><label>Download MP3 Link *</label><input type="text" id="schDownload" placeholder="Tap to add song audio" readonly onclick="audioPick('schDownload')"></div>
           <div class="form-group"><label>Spotify Link</label><input type="text" id="schSpotify" placeholder="https://open.spotify.com/track/..."></div>
           <div class="form-group"><label>YouTube Video Link</label><input type="text" id="schYoutube" placeholder="https://youtube.com/watch?v=..."></div>
-          <div id="schYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('schTitle','schArtist','schFeaturing','schYoutube','schYtTest')"><i class="fas fa-play-circle"></i> Find Video</button><div class="yt-test-list"></div></div>
+          <div id="schYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('schTitle','schArtist','schFeaturing','schYoutube','schYtTest')"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div>
 
           <div class="datetime-section">
             <div class="datetime-section-title"><i class="fas fa-calendar-alt"></i> Release Date & Time (Ghana Time)</div>
@@ -711,10 +713,7 @@ Download: https://example.com/cry-baby.mp3</div>
       </div>
 
       <div class="page" id="pageSeo">
-        <h1 class="page-title">SEO</h1>
-        <p class="page-subtitle">Edit descriptions, bios & copy links</p>
-
-        <div class="subtabs">
+  <div class="subtabs">
           <button class="subtab active" id="seoTabSongs" onclick="switchSeoTab('songs', this)">
             <i class="fas fa-music"></i> Songs
           </button>
@@ -807,10 +806,10 @@ Download: https://example.com/cry-baby.mp3</div>
               <div class="lbl">Artists Missing Bio</div>
             </div>
           </div>
-          <div class="album-box">
-            <div class="album-box-title"><i class="fas fa-exclamation-triangle"></i> Needs Attention</div>
-            <div id="seoNeedsAttention"><p class="empty-songs">Loading...</p></div>
-          </div>
+          <div style="margin-top: 24px;">
+  <div class="album-box-title" style="margin-bottom: 12px; color: #fff; font-size: 14px; border-bottom: 1px solid var(--border); padding-bottom: 10px;"><i class="fas fa-exclamation-triangle" style="color: var(--accent);"></i> Needs Attention</div>
+  <div id="seoNeedsAttention"><p class="empty-songs">Loading...</p></div>
+</div>
         </div>
       </div>
 
@@ -888,7 +887,7 @@ Download: https://example.com/cry-baby.mp3</div>
     <div class="form-group"><label>Download MP3 Link</label><input type="text" id="editDownload" placeholder="Tap to upload song audio" readonly onclick="audioPick('editDownload')"></div>
     <div class="form-group"><label>Spotify Link</label><input type="text" id="editSpotify" placeholder="https://open.spotify.com/track/..."></div>
     <div class="form-group"><label>YouTube Video Link</label><input type="text" id="editYoutube" placeholder="https://youtube.com/watch?v=..."></div>
-<div id="editYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('editTitle','editArtist','editFeaturing','editYoutube','editYtTest')"><i class="fas fa-play-circle"></i> Find Video</button><div class="yt-test-list"></div></div>
+<div id="editYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('editTitle','editArtist','editFeaturing','editYoutube','editYtTest')"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div>
 
  <div class="publish-progress" id="editProgress">
   <div class="publish-progress-bar"><div class="publish-progress-fill" id="editProgressFill"></div></div>
@@ -1093,10 +1092,9 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
         loadChannelLink();
         addAlbumSong();
         addSchAlbumSong();
-          loadScheduled();
-  loadStudioLogo();
-  restoreLastTab();
-} else {
+        loadScheduled();
+        loadStudioLogo();
+      } else {
         status.innerText = 'Wrong password. Try again.'; var fl = document.getElementById('fastLogin'); if (fl) fl.remove();
       }
     }
@@ -1107,10 +1105,6 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
       } catch(e) {}
     });
     window.goToPage = function(page) {
-  try { 
-    localStorage.setItem('ft-last-tab', page); 
-    localStorage.setItem('ft-last-tab-time', Date.now().toString()); 
-  } catch(e) {}
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   
@@ -1123,28 +1117,9 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
       if (pageEl) pageEl.classList.add('active');
       if (navEl) navEl.classList.add('active');
       if (page === 'release') loadScheduled();
-        if (page === 'seo') { loadSeoSongs(); loadSeoArtists(); loadSeoOverview(); }
-  window.scrollTo(0, 0);
-}
-
-window.restoreLastTab = function() {
-  try {
-    var savedTab = localStorage.getItem('ft-last-tab');
-    var savedTime = localStorage.getItem('ft-last-tab-time');
-    var ONE_HOUR = 60 * 60 * 1000; 
-
-    if (savedTab && savedTime && (Date.now() - parseInt(savedTime) < ONE_HOUR)) {
-      var targetPage = 'page' + savedTab.charAt(0).toUpperCase() + savedTab.slice(1);
-      if (document.getElementById(targetPage)) {
-        goToPage(savedTab);
-        return;
-      }
+      if (page === 'seo') { loadSeoSongs(); loadSeoArtists(); loadSeoOverview(); }
+      window.scrollTo(0, 0);
     }
-    goToPage('home');
-  } catch (e) {
-    goToPage('home');
-  }
-}
     async function ensureArtistExists(name) {
       if (!name || !name.trim()) return;
       const cleanName = name.trim();
@@ -1264,9 +1239,9 @@ list.innerHTML = `
       '</div>' +
       '<button class="song-menu-btn" onclick="toggleSongMenu(event, \'' + menuId + '\')"><i class="fas fa-ellipsis-v"></i></button>' +
       '<div class="song-dropdown" id="' + menuId + '">' +
-        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:rgba(255,255,255,0.7);"></i> Copy Link</button>' +
-        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:rgba(255,255,255,0.7);"></i> Edit</button>' +
-        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:rgba(255,255,255,0.7);"></i> Delete</button>' +
+        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:#1d9bf0;"></i> Copy Link</button>' +
+        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:#00cc44;"></i> Edit</button>' +
+        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:#ff0033;"></i> Delete</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -1285,40 +1260,22 @@ window.openAlbumDetail = function(albumName) {
   
   const first = albumSongs[0];
   
-  // Render Header
+// Render Header (Artist Style)
 document.getElementById('albumDetailHeader').innerHTML = 
-  '<img src="' + first.cover + '" style="width:80px; height:80px; border-radius:12px; object-fit:cover; box-shadow:0 4px 15px rgba(0,0,0,0.3); flex-shrink:0;">' +
-  '<div style="flex:1; min-width:0; padding-right:8px;">' +
-    '<h2 style="font-size:15px; font-weight:900; color:#fff; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%;">' + albumName + '</h2>' +
-    '<p style="font-size:13px; color:var(--text2); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + (first.artist_name || 'Samarid') + '</p>' +
+  '<img src="' + first.cover + '" style="width:80px; height:80px; border-radius:12px; object-fit:cover; box-shadow:0 4px 15px rgba(0,0,0,0.3);">' +
+  '<div style="flex:1; min-width:0;">' +
+    '<h2 style="font-size:18px; font-weight:900; color:#fff; margin-bottom:4px; overflow-wrap:anywhere;">' + albumName + '</h2>' +
+    '<p style="font-size:13px; color:var(--text2); font-weight:600;">' + (first.artist_name || 'Samarid') + '</p>' +
     '<p style="font-size:11px; color:#ff8800; font-weight:800; margin-top:4px;">' + albumSongs.length + ' SONGS</p>' +
   '</div>' +
-  '<div style="display:flex; gap:0px; align-items:center; flex-shrink:0;">' +
-    '<button onclick="toggleAlbumSearch()" style="background:transparent; color:rgba(255,255,255,0.4); border:none; padding:8px; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:color 0.2s;" onmouseover="this.style.color=\'#fff\'" onmouseout="this.style.color=\'rgba(255,255,255,0.4)\'" id="albumSearchIcon"><i class="fas fa-search"></i></button>' +
-    '<button onclick="deleteFullAlbum(\'' + albumName.replace(/'/g, "\\'") + '\')" style="background:transparent; color:rgba(255,255,255,0.4); border:none; padding:8px; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:color 0.2s;" onmouseover="this.style.color=\'#ff0033\'" onmouseout="this.style.color=\'rgba(255,255,255,0.4)\'"><i class="fas fa-trash"></i></button>' +
-  '</div>';
+  '<div style="display:flex; gap:16px; align-items:center; padding:0 10px;">' +
+  '<i class="fas fa-search" style="color:#999; font-size:18px; cursor:pointer;" onclick="document.getElementById(\'albumSongSearchInput\').focus()"></i>' +
+  '<i class="fas fa-trash" style="color:#999; font-size:18px; cursor:pointer;" onclick="deleteFullAlbum(\'' + albumName.replace(/'/g, "\\'") + '\')"></i>' +
+'</div>';
 
-  document.getElementById('albumSearchWrapper').style.display = 'none';
   document.getElementById('albumSongSearchInput').value = '';
   renderAlbumSongsList(albumName, '');
   goToPage('albumDetail');
-}
-
-window.toggleAlbumSearch = function() {
-  var wrapper = document.getElementById('albumSearchWrapper');
-  var icon = document.querySelector('#albumSearchIcon i');
-  if (wrapper.style.display === 'none') {
-    wrapper.style.display = 'block';
-    icon.className = 'fas fa-times';
-    icon.style.color = '#ff0033';
-    document.getElementById('albumSongSearchInput').focus();
-  } else {
-    wrapper.style.display = 'none';
-    icon.className = 'fas fa-search';
-    icon.style.color = 'rgba(255,255,255,0.4)';
-    document.getElementById('albumSongSearchInput').value = '';
-    renderAlbumSongsList(currentAlbumView, '');
-  }
 }
 
 window.deleteFullAlbum = function(albumName) {
@@ -1330,7 +1287,7 @@ window.deleteFullAlbum = function(albumName) {
     return; 
   }
 
-  showConfirm('Delete Album', 'Are you sure you want to permanently delete ALL ' + albumSongs.length + ' songs in this album? This will also delete their MP3s and covers from the site.', true, async function() {
+  showConfirm('Delete Album', 'Are you sure you want to permanently delete ALL ' + albumSongs.length + ' songs in this album? This will also delete their MP3s and covers from Cloudinary.', true, async function() {
     const btn = event && event.target ? event.target.closest('button') : null;
     if (btn) { btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...'; btn.disabled = true; }
 
@@ -1411,9 +1368,9 @@ function renderAlbumSongsList(albumName, query) {
       '</div>' +
       '<button class="song-menu-btn" onclick="toggleSongMenu(event, \'' + menuId + '\')"><i class="fas fa-ellipsis-v"></i></button>' +
       '<div class="song-dropdown" id="' + menuId + '">' +
-        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:rgba(255,255,255,0.7);"></i> Copy Link</button>' +
-        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:rgba(255,255,255,0.7);"></i> Edit</button>' +
-        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:rgba(255,255,255,0.7);"></i> Delete</button>' +
+        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:#1d9bf0;"></i> Copy Link</button>' +
+        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:#00cc44;"></i> Edit</button>' +
+        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:#ff0033;"></i> Delete</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -1929,7 +1886,7 @@ try {
       function open(title, sub) {
         css(); close(); rows = {};
         var o = document.createElement('div'); o.id = 'relPop';
-        o.innerHTML = '<div class="rp-card"><div class="rp-title">Release status</div><div class="rp-sub"></div><div class="rp-rows"></div><button class="rp-btn rp-test" style="display:none;background:#222;color:#fff;border:1px solid #444">Find Video</button><button class="rp-btn" onclick="relPop.close()">OK</button></div>';
+        o.innerHTML = '<div class="rp-card"><div class="rp-title">Release status</div><div class="rp-sub"></div><div class="rp-rows"></div><button class="rp-btn rp-test" style="display:none;background:#222;color:#fff;border:1px solid #444">Test video</button><button class="rp-btn" onclick="relPop.close()">OK</button></div>';
         o.querySelector('.rp-sub').textContent = sub || title || '';
         document.body.appendChild(o);
       }
@@ -2151,7 +2108,7 @@ window.deleteSong = function(id) {
       const div = document.createElement('div');
       div.className = 'album-song-item';
       div.id = 'album-song-' + albumSongIndex;
-      div.innerHTML = '<div class="album-song-num">SONG ' + albumSongIndex + '</div><button class="album-song-remove" onclick="removeAlbumSong(' + albumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Producer(s)</label><div style="display:flex; gap:8px;"><input type="text" class="album-song-producer" placeholder="e.g. DJ Khaled" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>Category</label><div style="display:flex; gap:8px;"><input type="text" class="album-song-category" placeholder="e.g. Afrobeats" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,false)"><i class="fas fa-play-circle"></i> Find Video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
+      div.innerHTML = '<div class="album-song-num">SONG ' + albumSongIndex + '</div><button class="album-song-remove" onclick="removeAlbumSong(' + albumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Producer(s)</label><div style="display:flex; gap:8px;"><input type="text" class="album-song-producer" placeholder="e.g. DJ Khaled" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>Category</label><div style="display:flex; gap:8px;"><input type="text" class="album-song-category" placeholder="e.g. Afrobeats" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,false)"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
       container.appendChild(div);
       updateAlbumCount();
     }
@@ -2305,7 +2262,7 @@ setTimeout(() => {
       const div = document.createElement('div');
       div.className = 'album-song-item';
       div.id = 'sch-album-song-' + schAlbumSongIndex;
-      div.innerHTML = '<div class="album-song-num">SONG ' + schAlbumSongIndex + '</div><button class="album-song-remove" onclick="removeSchAlbumSong(' + schAlbumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="sch-album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Producer(s)</label><div style="display:flex; gap:8px;"><input type="text" class="sch-album-song-producer" placeholder="e.g. DJ Khaled" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>Category</label><div style="display:flex; gap:8px;"><input type="text" class="sch-album-song-category" placeholder="e.g. Afrobeats" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="sch-album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,true)"><i class="fas fa-play-circle"></i> Find Video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="sch-album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
+      div.innerHTML = '<div class="album-song-num">SONG ' + schAlbumSongIndex + '</div><button class="album-song-remove" onclick="removeSchAlbumSong(' + schAlbumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="sch-album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Producer(s)</label><div style="display:flex; gap:8px;"><input type="text" class="sch-album-song-producer" placeholder="e.g. DJ Khaled" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>Category</label><div style="display:flex; gap:8px;"><input type="text" class="sch-album-song-category" placeholder="e.g. Afrobeats" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="sch-album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,true)"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="sch-album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
       container.appendChild(div);
       updateSchAlbumCount();
     }

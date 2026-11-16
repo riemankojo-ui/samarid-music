@@ -202,14 +202,18 @@
   .import-status.info { color: #ffcc00; }
   .template-box { background: #0a0a0a; border: 1px solid #222; border-radius: 12px; padding: 14px; margin-bottom: 14px; font-family: monospace; font-size: 12px; line-height: 1.7; color: #ccc; white-space: pre-wrap; word-break: break-word; max-height: 240px; overflow-y: auto; }
   .copy-template-btn { background: #222; border: 1px solid #333; border-radius: 10px; color: #fff; padding: 10px 14px; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
-  .seo-overview { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-  .seo-stat { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; text-align: center; }
+  .seo-overview { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 20px; border-top: 1px solid var(--border); }
+.seo-stat { background: transparent; border: none; border-bottom: 1px solid var(--border); border-radius: 0; padding: 20px 10px; text-align: center; }
+.seo-stat:nth-child(odd) { border-right: 1px solid var(--border); }
+.seo-stat:nth-child(3), .seo-stat:nth-child(4) { border-bottom: none; }
   .seo-stat .num { font-size: 26px; font-weight: 900; color: var(--accent); line-height: 1; }
   .seo-stat .num.good { color: #00cc44; }
   .seo-stat .num.bad { color: #ff0033; }
   .seo-stat .lbl { font-size: 10px; color: var(--text2); letter-spacing: 1px; text-transform: uppercase; font-weight: 700; margin-top: 6px; }
-  .seo-list-item { display: flex; gap: 12px; align-items: center; background: var(--card); border: 1px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; }
+  .seo-list-item { display: flex; gap: 12px; align-items: center; background: transparent; border: none; border-bottom: 1px solid var(--border); padding: 14px 4px; border-radius: 0; margin-bottom: 0; cursor: pointer; }
+.seo-list-item:first-child { border-top: 1px solid var(--border); }
   .seo-list-item img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+#seoContentArtists .seo-list-item img { border-radius: 50%; }
   .seo-list-item .info { flex: 1; min-width: 0; }
   .seo-list-item h4 { font-size: 13px; font-weight: 700; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .seo-list-item p { font-size: 11px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -228,24 +232,7 @@
   .seo-char-count { font-size: 10px; color: var(--text2); text-align: right; margin-top: -8px; margin-bottom: 12px; font-weight: 700; }
   details summary { list-style: none; cursor: pointer; }
   details summary::-webkit-details-marker { display: none; }
-  #pageAdd, #pageRelease { position: relative; }
-  /* ===== SETTINGS ===== */
-  .set-card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; margin-bottom: 14px; }
-  .set-title { font-size: 14px; font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
-  .set-title i { color: var(--accent); }
-  .set-note { font-size: 12px; color: var(--text2); margin-bottom: 12px; line-height: 1.5; }
-  .set-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 0; border-top: 1px solid var(--border); font-size: 13px; }
-  .set-row:first-of-type { border-top: none; }
-  .set-row b { color: #fff; word-break: break-word; text-align: right; }
-  .set-row span { color: var(--text2); flex-shrink: 0; }
-  .set-btns { display: flex; gap: 8px; margin-top: 10px; }
-  .set-btns > * { flex: 1; }
-  a.set-btn, button.set-btn { padding: 12px; background: transparent; color: #fff; border: 1px solid #333; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; }
-  a.set-btn:active, button.set-btn:active { transform: scale(0.97); }
-  button.set-logout { width: 100%; padding: 14px; background: #ff0033; color: #fff; border: none; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; }
-  button.set-logout:active { transform: scale(0.97); }
-  .set-ok { color: #00cc44; } .set-err { color: #ff4d4d; }
-</style>
+  #pageAdd, #pageRelease { position: relative; }</style>
 <link rel="stylesheet" href="/desktop.css">
 <script>try{if(localStorage.getItem('ft-artist-session'))document.write('<style id="fastLogin">#loginScreen{display:none!important}</style>');}catch(e){}</script></head><body>
 
@@ -269,23 +256,23 @@
     <div class="content">
       <div class="page active" id="pageHome">
         <div style="background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-  <div id="searchHeaderText" style="font-size: 15px; font-weight: 900; color: #fff; letter-spacing: -0.2px; display: flex; align-items: center; gap: 8px;">
-    <i class="fas fa-music" style="color: #ff8800;"></i> My Releases
+  <div id="searchHeaderText" style="font-size: 14px; font-weight: 800; color: #fff; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px;">
+    <i class="fas fa-layer-group" style="color: #ff8800;"></i> Library
   </div>
   
   <div id="studioSearchWrapper" style="display:none; flex:1; margin-left: 12px;">
     <div class="search-wrap" style="margin-bottom:0; width: 100%;">
       <i class="fas fa-search search-icon"></i>
-      <input type="text" id="songSearchInput" placeholder="Search songs or albums..." oninput="handleSongSearch()" autocomplete="off" style="padding: 8px 12px 8px 34px; font-size: 13px; border-radius: 8px; background: #0a0a0a; border: 1px solid #333; color: #fff; width: 100%;">
+      <input type="text" id="songSearchInput" placeholder="Search songs or albums..." oninput="handleSongSearch()" autocomplete="off" style="padding: 8px 30px; font-size: 13px;">
     </div>
   </div>
   
-  <button id="searchToggleBtn" onclick="toggleStudioSearch()" style="background:transparent; border:none; color:rgba(255,255,255,0.6); width:34px; height:34px; display:flex; align-items: center; justify-content: center; cursor:pointer; font-size:16px; flex-shrink:0; transition: color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.6)'">
+  <button id="searchToggleBtn" onclick="toggleStudioSearch()" style="background:transparent; border:none; color:#ff8800; width:30px; height:30px; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:16px; flex-shrink:0;">
     <i class="fas fa-search"></i>
   </button>
 </div>
 
-<div id="albumListContainer" style="margin-bottom: 10px;"></div>
+<div id="albumListContainer" style="margin-bottom: 30px;"></div>
 
 <p class="song-count-label" id="songCountLabel"></p>
 <div id="homeSongList"></div>
@@ -293,17 +280,15 @@
 
       <!-- ALBUM DETAILS PAGE -->
 <div class="page" id="pageAlbumDetail">
-  <button class="secondary-btn" onclick="goToPage('home')" style="width: auto; display: inline-flex; padding: 8px 16px; margin-bottom: 10px;"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+  <button class="secondary-btn" onclick="goToPage('home')" style="width: auto; display: inline-flex; padding: 8px 16px; margin-bottom: 20px;"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
   
-  <div id="albumDetailHeader" style="display:flex; gap:16px; align-items:center; margin-bottom:16px; background:var(--card); padding:16px; border-radius:16px; border:none; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+  <div id="albumDetailHeader" style="display:flex; gap:16px; align-items:center; margin-bottom:20px; background:var(--card); padding:16px; border-radius:16px; border:1px solid var(--border);">
     <!-- Filled by JS -->
   </div>
   
-  <div id="albumSearchWrapper" style="display:none; margin-bottom: 16px;">
-    <div class="search-wrap" style="margin-bottom: 0;">
-      <i class="fas fa-search search-icon"></i>
-      <input type="text" id="albumSongSearchInput" placeholder="Search songs in this album..." oninput="handleAlbumSongSearch()" autocomplete="off">
-    </div>
+  <div class="search-wrap">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" id="albumSongSearchInput" placeholder="Search songs in this album..." oninput="handleAlbumSongSearch()" autocomplete="off">
   </div>
   
   <div id="albumSongList"></div>
@@ -368,7 +353,7 @@
           <div class="form-group"><label>Download MP3 Link</label><input type="text" id="songDownload" placeholder="Tap to add song audio" readonly onclick="audioPick('songDownload')"></div>
           <div class="form-group"><label>Spotify Link</label><input type="text" id="songSpotify" placeholder="https://open.spotify.com/track/..."></div>
 <div class="form-group"><label>YouTube Video Link</label><input type="text" id="songYoutube" placeholder="https://youtube.com/watch?v=..."></div>
-<div id="songYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('songTitle','songArtist','songFeaturing','songYoutube','songYtTest')"><i class="fas fa-play-circle"></i> Find video</button><div class="yt-test-list"></div></div>
+<div id="songYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('songTitle','songArtist','songFeaturing','songYoutube','songYtTest')"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div>
         <button class="main-btn" id="submitBtn" onclick="saveSong()">Submit </button>
 <button class="secondary-btn" id="cancelBtn" onclick="cancelEdit()" style="display:none;">Cancel Edit</button>
 
@@ -475,7 +460,7 @@
           <div class="form-group"><label>Download MP3 Link *</label><input type="text" id="schDownload" placeholder="Tap to add song audio" readonly onclick="audioPick('schDownload')"></div>
           <div class="form-group"><label>Spotify Link</label><input type="text" id="schSpotify" placeholder="https://open.spotify.com/track/..."></div>
           <div class="form-group"><label>YouTube Video Link</label><input type="text" id="schYoutube" placeholder="https://youtube.com/watch?v=..."></div>
-          <div id="schYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('schTitle','schArtist','schFeaturing','schYoutube','schYtTest')"><i class="fas fa-play-circle"></i> Find Video</button><div class="yt-test-list"></div></div>
+          <div id="schYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('schTitle','schArtist','schFeaturing','schYoutube','schYtTest')"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div>
 
           <div class="datetime-section">
             <div class="datetime-section-title"><i class="fas fa-calendar-alt"></i> Release Date & Time (Ghana Time)</div>
@@ -718,10 +703,7 @@ Download: https://example.com/cry-baby.mp3</div>
       </div>
 
       <div class="page" id="pageSeo">
-        <h1 class="page-title">SEO</h1>
-        <p class="page-subtitle">Edit descriptions, bios & copy links</p>
-
-        <div class="subtabs">
+  <div class="subtabs">
           <button class="subtab active" id="seoTabSongs" onclick="switchSeoTab('songs', this)">
             <i class="fas fa-music"></i> Songs
           </button>
@@ -814,10 +796,10 @@ Download: https://example.com/cry-baby.mp3</div>
               <div class="lbl">Artists Missing Bio</div>
             </div>
           </div>
-          <div class="album-box">
-            <div class="album-box-title"><i class="fas fa-exclamation-triangle"></i> Needs Attention</div>
-            <div id="seoNeedsAttention"><p class="empty-songs">Loading...</p></div>
-          </div>
+          <div style="margin-top: 24px;">
+  <div class="album-box-title" style="margin-bottom: 12px; color: #fff; font-size: 14px; border-bottom: 1px solid var(--border); padding-bottom: 10px;"><i class="fas fa-exclamation-triangle" style="color: var(--accent);"></i> Needs Attention</div>
+  <div id="seoNeedsAttention"><p class="empty-songs">Loading...</p></div>
+</div>
         </div>
       </div>
 
@@ -836,71 +818,6 @@ Download: https://example.com/cry-baby.mp3</div>
         </div>
       </div>
 
-      <div class="page" id="pageSettings">
-        <h1 class="page-title">Settings</h1>
-        <p class="page-subtitle">Your account and studio preferences</p>
-
-        <div class="set-card">
-          <div class="set-title"><i class="fas fa-user"></i> My Profile</div>
-          <div class="set-note">Your artist profile on FlexTune.</div>
-          <div class="set-row"><span>Artist name</span><b id="setArtistName">-</b></div>
-          <div class="set-btns">
-            <a class="set-btn" id="setViewPage" href="#" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> View my page</a>
-            <button class="set-btn" type="button" onclick="setCopyPageLink()"><i class="fas fa-link"></i> Copy link</button>
-          </div>
-          <p id="setProfileStatus" class="status" style="margin-top:8px;"></p>
-        </div>
-
-        <div class="set-card">
-          <div class="set-title"><i class="fas fa-key"></i> Change Password</div>
-          <div id="setPwStep1">
-            <div class="set-note">We send a 6-digit code to the email on your artist profile, then you choose a new password.</div>
-            <button class="main-btn" type="button" id="setPwSendBtn" onclick="setPwSend()">Send me a code</button>
-          </div>
-          <div id="setPwStep2" style="display:none;">
-            <div class="set-note">Enter the code we emailed you. It is valid for 10 minutes. Check your Spam folder too.</div>
-            <div class="form-group"><label>6-digit code</label><input type="text" id="setPwCode" inputmode="numeric" maxlength="6" placeholder="123456" autocomplete="one-time-code"></div>
-            <button class="main-btn" type="button" id="setPwVerifyBtn" onclick="setPwVerify()">Verify code</button>
-          </div>
-          <div id="setPwStep3" style="display:none;">
-            <div class="set-note">Choose a new password (at least 8 characters).</div>
-            <div class="form-group"><label>New password</label><input type="password" id="setPw1" autocomplete="new-password" placeholder="New password"></div>
-            <div class="form-group"><label>Repeat password</label><input type="password" id="setPw2" autocomplete="new-password" placeholder="Repeat password"></div>
-            <button class="main-btn" type="button" id="setPwSaveBtn" onclick="setPwSave()">Save password</button>
-          </div>
-          <p id="setPwStatus" class="status"></p>
-        </div>
-
-        <div class="set-card">
-          <div class="set-title"><i class="fas fa-tag"></i> Default Category</div>
-          <div class="set-note">Fills the Category field automatically when you add or schedule a release. You can still change it each time.</div>
-          <div class="form-group" style="margin-bottom:0;"><input type="text" id="setDefCategory" list="genreList" placeholder="e.g. Afrobeats" oninput="setSavePref('category', this.value.trim())"></div>
-        </div>
-
-        <div class="set-card">
-          <div class="set-title"><i class="fas fa-home"></i> Start Page</div>
-          <div class="set-note">The tab that opens first each time you enter your studio.</div>
-          <div class="form-group" style="margin-bottom:0;">
-            <select id="setStartPage" onchange="setSavePref('start', this.value)">
-              <option value="home">Home - My Releases</option>
-              <option value="release">Release - Schedule</option>
-              <option value="import">Import</option>
-              <option value="seo">SEO</option>
-              <option value="channel">Videos</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="set-card">
-          <div class="set-title"><i class="fas fa-broom"></i> Saved Data On This Device</div>
-          <div class="set-note">Clears your saved preferences and cached video link from this device. You stay logged in and your songs are not touched.</div>
-          <button class="set-btn" style="width:100%;" type="button" onclick="setClearData()"><i class="fas fa-trash-alt"></i> Clear saved data</button>
-          <p id="setClearStatus" class="status" style="margin-top:8px;"></p>
-        </div>
-
-        <button class="set-logout" type="button" onclick="artistLogout()"><i class="fas fa-sign-out-alt"></i> Log Out</button>
-      </div>
-
     </div>
 
     <div class="bottom-nav">
@@ -910,7 +827,6 @@ Download: https://example.com/cry-baby.mp3</div>
       <button class="nav-item" onclick="goToPage('import')" id="navImport"><div class="icon"><i class="fas fa-file-import"></i></div><div class="label">IMPORT</div></button>
       <button class="nav-item" onclick="goToPage('seo')" id="navSeo"><div class="icon"><i class="fas fa-search-plus"></i></div><div class="label">SEO</div></button>
       <button class="nav-item" onclick="goToPage('channel')" id="navChannel"><div class="icon"><i class="fas fa-video"></i></div><div class="label">VIDEOS</div></button>
-      <button class="nav-item" onclick="goToPage('settings')" id="navSettings"><div class="icon"><i class="fas fa-cog"></i></div><div class="label">SETTINGS</div></button>
     </div>
   </div>
 <div class="edit-modal-overlay" id="editModalOverlay" onclick="closeEditModal()">
@@ -961,7 +877,7 @@ Download: https://example.com/cry-baby.mp3</div>
     <div class="form-group"><label>Download MP3 Link</label><input type="text" id="editDownload" placeholder="Tap to upload song audio" readonly onclick="audioPick('editDownload')"></div>
     <div class="form-group"><label>Spotify Link</label><input type="text" id="editSpotify" placeholder="https://open.spotify.com/track/..."></div>
     <div class="form-group"><label>YouTube Video Link</label><input type="text" id="editYoutube" placeholder="https://youtube.com/watch?v=..."></div>
-<div id="editYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('editTitle','editArtist','editFeaturing','editYoutube','editYtTest')"><i class="fas fa-play-circle"></i> Find Video</button><div class="yt-test-list"></div></div>
+<div id="editYtTest"><button type="button" class="secondary-btn" onclick="testVideoFor('editTitle','editArtist','editFeaturing','editYoutube','editYtTest')"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div>
 
  <div class="publish-progress" id="editProgress">
   <div class="publish-progress-bar"><div class="publish-progress-fill" id="editProgressFill"></div></div>
@@ -1150,10 +1066,6 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
       updateReleaseAlbumPreview();
     }
     window.goToPage = function(page) {
-  try { 
-    localStorage.setItem('ft-last-tab', page); 
-    localStorage.setItem('ft-last-tab-time', Date.now().toString()); 
-  } catch(e) {}
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   
@@ -1290,9 +1202,9 @@ list.innerHTML = `
       '</div>' +
       '<button class="song-menu-btn" onclick="toggleSongMenu(event, \'' + menuId + '\')"><i class="fas fa-ellipsis-v"></i></button>' +
       '<div class="song-dropdown" id="' + menuId + '">' +
-        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:rgba(255,255,255,0.7);"></i> Copy Link</button>' +
-        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:rgba(255,255,255,0.7);"></i> Edit</button>' +
-        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:rgba(255,255,255,0.7);"></i> Delete</button>' +
+        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:#1d9bf0;"></i> Copy Link</button>' +
+        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:#00cc44;"></i> Edit</button>' +
+        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:#ff0033;"></i> Delete</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -1313,18 +1225,14 @@ window.openAlbumDetail = function(albumName) {
   
   // Render Header
 document.getElementById('albumDetailHeader').innerHTML = 
-  '<img src="' + first.cover + '" style="width:80px; height:80px; border-radius:12px; object-fit:cover; box-shadow:0 4px 15px rgba(0,0,0,0.3); flex-shrink:0;">' +
-  '<div style="flex:1; min-width:0; padding-right:8px;">' +
-    '<h2 style="font-size:15px; font-weight:900; color:#fff; margin-bottom:4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%;">' + albumName + '</h2>' +
-    '<p style="font-size:13px; color:var(--text2); font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + (first.artist_name || 'Samarid') + '</p>' +
+  '<img src="' + first.cover + '" style="width:80px; height:80px; border-radius:12px; object-fit:cover; box-shadow:0 4px 15px rgba(0,0,0,0.3);">' +
+  '<div style="flex:1; min-width:0;">' +
+    '<h2 style="font-size:18px; font-weight:900; color:#fff; margin-bottom:4px; overflow-wrap:anywhere;">' + albumName + '</h2>' +
+    '<p style="font-size:13px; color:var(--text2); font-weight:600;">' + (first.artist_name || 'Samarid') + '</p>' +
     '<p style="font-size:11px; color:#ff8800; font-weight:800; margin-top:4px;">' + albumSongs.length + ' SONGS</p>' +
   '</div>' +
-  '<div style="display:flex; gap:0px; align-items:center; flex-shrink:0;">' +
-    '<button onclick="toggleAlbumSearch()" style="background:transparent; color:rgba(255,255,255,0.4); border:none; padding:8px; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:color 0.2s;" onmouseover="this.style.color=\'#fff\'" onmouseout="this.style.color=\'rgba(255,255,255,0.4)\'" id="albumSearchIcon"><i class="fas fa-search"></i></button>' +
-    '<button onclick="deleteFullAlbum(\'' + albumName.replace(/'/g, "\\'") + '\')" style="background:transparent; color:rgba(255,255,255,0.4); border:none; padding:8px; cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:color 0.2s;" onmouseover="this.style.color=\'#ff0033\'" onmouseout="this.style.color=\'rgba(255,255,255,0.4)\'"><i class="fas fa-trash"></i></button>' +
-  '</div>';
+  '<button onclick="deleteFullAlbum(\'' + albumName.replace(/'/g, "\\'") + '\')" style="background:#ff0033; color:#fff; border:none; padding:10px 14px; border-radius:10px; font-weight:800; cursor:pointer; font-size:12px; display:flex; align-items:center; gap:6px; box-shadow: 0 4px 12px rgba(255,0,51,0.3);"><i class="fas fa-trash"></i> Delete Album</button>';
 
-  document.getElementById('albumSearchWrapper').style.display = 'none';
   document.getElementById('albumSongSearchInput').value = '';
   renderAlbumSongsList(albumName, '');
   goToPage('albumDetail');
@@ -1420,9 +1328,9 @@ function renderAlbumSongsList(albumName, query) {
       '</div>' +
       '<button class="song-menu-btn" onclick="toggleSongMenu(event, \'' + menuId + '\')"><i class="fas fa-ellipsis-v"></i></button>' +
       '<div class="song-dropdown" id="' + menuId + '">' +
-        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:rgba(255,255,255,0.7);"></i> Copy Link</button>' +
-        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:rgba(255,255,255,0.7);"></i> Edit</button>' +
-        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:rgba(255,255,255,0.7);"></i> Delete</button>' +
+        '<button class="song-dropdown-btn" onclick="copySongLink(' + s.id + ')"><i class="fas fa-link" style="color:#1d9bf0;"></i> Copy Link</button>' +
+        '<button class="song-dropdown-btn" onclick=\'editSong(' + JSON.stringify(s).replace(/'/g, "&#39;") + ')\'><i class="fas fa-edit" style="color:#00cc44;"></i> Edit</button>' +
+        '<button class="song-dropdown-btn" onclick="deleteSong(' + s.id + ')"><i class="fas fa-trash" style="color:#ff0033;"></i> Delete</button>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -1431,46 +1339,6 @@ function renderAlbumSongsList(albumName, query) {
 window.showAllSongs = function() { homeShowAll = true; renderAdminSongs(''); }
     window.hideExtraSongs = function() { homeShowAll = false; renderAdminSongs(''); window.scrollTo(0, 0); }
     window.handleSongSearch = function() { renderAdminSongs(document.getElementById('songSearchInput').value.toLowerCase().trim()); }
-window.toggleStudioSearch = function() {
-  const wrapper = document.getElementById('studioSearchWrapper');
-  const input = document.getElementById('songSearchInput');
-  const text = document.getElementById('searchHeaderText');
-  const icon = document.querySelector('#searchToggleBtn i');
-  
-  if (wrapper.style.display === 'none' || wrapper.style.display === '') {
-    wrapper.style.display = 'block';
-    text.style.display = 'none';
-    icon.className = 'fas fa-times';
-    icon.style.color = '#ff0033';
-    setTimeout(() => input.focus(), 100);
-  } else {
-    wrapper.style.display = 'none';
-    text.style.display = 'flex';
-    icon.className = 'fas fa-search';
-    icon.style.color = 'rgba(255,255,255,0.6)';
-    input.value = '';
-    renderAdminSongs('');
-  }
-}
-
-window.restoreLastTab = function() {
-  try {
-    var savedTab = localStorage.getItem('ft-last-tab');
-    var savedTime = localStorage.getItem('ft-last-tab-time');
-    var ONE_HOUR = 60 * 60 * 1000; 
-
-    if (savedTab && savedTime && (Date.now() - parseInt(savedTime) < ONE_HOUR)) {
-      var targetPage = 'page' + savedTab.charAt(0).toUpperCase() + savedTab.slice(1);
-      if (document.getElementById(targetPage)) {
-        goToPage(savedTab);
-        return;
-      }
-    }
-    goToPage('home');
-  } catch (e) {
-    goToPage('home');
-  }
-}
 
 window.toggleSongMenu = function(e, id) {
   e.stopPropagation();
@@ -1488,6 +1356,27 @@ document.addEventListener('click', function() {
   document.querySelectorAll('.song-dropdown').forEach(m => m.classList.remove('show'));
 });
 
+window.toggleStudioSearch = function() {
+  const wrapper = document.getElementById('studioSearchWrapper');
+  const input = document.getElementById('songSearchInput');
+  const text = document.getElementById('searchHeaderText');
+  const icon = document.querySelector('#searchToggleBtn i');
+  
+  if (wrapper.style.display === 'none' || wrapper.style.display === '') {
+    wrapper.style.display = 'block';
+    text.style.display = 'none';
+    icon.className = 'fas fa-times';
+    icon.style.color = '#ff0033';
+    setTimeout(() => input.focus(), 100);
+  } else {
+    wrapper.style.display = 'none';
+    text.style.display = 'flex';
+    icon.className = 'fas fa-search';
+    icon.style.color = '#ff8800';
+    input.value = '';
+    renderAdminSongs('');
+  }
+}
     window.copySongLink = async function(id) {
   const url = 'https://samarid-music.vercel.app/song.html?id=' + id;
   try {
@@ -1957,7 +1846,7 @@ try {
       function open(title, sub) {
         css(); close(); rows = {};
         var o = document.createElement('div'); o.id = 'relPop';
-        o.innerHTML = '<div class="rp-card"><div class="rp-title">Release status</div><div class="rp-sub"></div><div class="rp-rows"></div><button class="rp-btn rp-test" style="display:none;background:#222;color:#fff;border:1px solid #444">Find Video</button><button class="rp-btn" onclick="relPop.close()">OK</button></div>';
+        o.innerHTML = '<div class="rp-card"><div class="rp-title">Release status</div><div class="rp-sub"></div><div class="rp-rows"></div><button class="rp-btn rp-test" style="display:none;background:#222;color:#fff;border:1px solid #444">Test video</button><button class="rp-btn" onclick="relPop.close()">OK</button></div>';
         o.querySelector('.rp-sub').textContent = sub || title || '';
         document.body.appendChild(o);
       }
@@ -2179,7 +2068,7 @@ window.deleteSong = function(id) {
       const div = document.createElement('div');
       div.className = 'album-song-item';
       div.id = 'album-song-' + albumSongIndex;
-      div.innerHTML = '<div class="album-song-num">SONG ' + albumSongIndex + '</div><button class="album-song-remove" onclick="removeAlbumSong(' + albumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Producer(s)</label><div style="display:flex; gap:8px;"><input type="text" class="album-song-producer" placeholder="e.g. DJ Khaled" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>Category</label><div style="display:flex; gap:8px;"><input type="text" class="album-song-category" placeholder="e.g. Afrobeats" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,false)"><i class="fas fa-play-circle"></i> Find Video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
+      div.innerHTML = '<div class="album-song-num">SONG ' + albumSongIndex + '</div><button class="album-song-remove" onclick="removeAlbumSong(' + albumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Producer(s)</label><div style="display:flex; gap:8px;"><input type="text" class="album-song-producer" placeholder="e.g. DJ Khaled" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>Category</label><div style="display:flex; gap:8px;"><input type="text" class="album-song-category" placeholder="e.g. Afrobeats" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,false)"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
       container.appendChild(div);
       updateAlbumCount();
     }
@@ -2333,7 +2222,7 @@ setTimeout(() => {
       const div = document.createElement('div');
       div.className = 'album-song-item';
       div.id = 'sch-album-song-' + schAlbumSongIndex;
-      div.innerHTML = '<div class="album-song-num">SONG ' + schAlbumSongIndex + '</div><button class="album-song-remove" onclick="removeSchAlbumSong(' + schAlbumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="sch-album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Producer(s)</label><div style="display:flex; gap:8px;"><input type="text" class="sch-album-song-producer" placeholder="e.g. DJ Khaled" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>Category</label><div style="display:flex; gap:8px;"><input type="text" class="sch-album-song-category" placeholder="e.g. Afrobeats" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="sch-album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,true)"><i class="fas fa-play-circle"></i> Find Video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="sch-album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
+      div.innerHTML = '<div class="album-song-num">SONG ' + schAlbumSongIndex + '</div><button class="album-song-remove" onclick="removeSchAlbumSong(' + schAlbumSongIndex + ')"><i class="fas fa-times"></i></button><div class="form-group"><label>Song Title *</label><input type="text" class="sch-album-song-title" placeholder="e.g. Track 1"></div><div class="form-group"><label>Featuring Artist(s)</label><input type="text" class="sch-album-song-feat" placeholder="e.g. Lill Moo (optional)"></div><div class="form-group"><label>Download MP3 Link</label><input type="text" class="sch-album-song-download" placeholder="Tap to add song audio" readonly onclick="audioPick(this)"></div><div class="form-group"><label>Description (optional)</label><input type="text" class="sch-album-song-desc" placeholder="About this track..."></div><div class="form-group"><label>Producer(s)</label><div style="display:flex; gap:8px;"><input type="text" class="sch-album-song-producer" placeholder="e.g. DJ Khaled" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>Category</label><div style="display:flex; gap:8px;"><input type="text" class="sch-album-song-category" placeholder="e.g. Afrobeats" style="flex:1;"><button type="button" class="secondary-btn" onclick="albumFindMeta(this)" style="width:auto; margin:0; padding: 0 12px; font-size:12px; flex-shrink:0;">Find</button></div></div><div class="form-group"><label>YouTube Link (optional)</label><input type="text" class="sch-album-song-youtube" placeholder="https://youtube.com/watch?v=..."></div><div class="album-yt-test"><button type="button" class="secondary-btn" onclick="albumTestVideo(this,true)"><i class="fas fa-play-circle"></i> Test video</button><div class="yt-test-list"></div></div><div class="form-group"><label>Lyrics</label><textarea class="sch-album-song-lyrics" placeholder="One line per lyric..."></textarea></div>';
       container.appendChild(div);
       updateSchAlbumCount();
     }
@@ -3312,106 +3201,14 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
-
-    // ===== ARTIST SETTINGS =====
-    var FT_PREF_KEY = 'ft-artist-prefs';
-    function setGetPrefs() { try { return JSON.parse(localStorage.getItem(FT_PREF_KEY) || '{}') || {}; } catch (e) { return {}; } }
-    window.setSavePref = function (k, v) {
-      var p = setGetPrefs(); p[k] = v;
-      try { localStorage.setItem(FT_PREF_KEY, JSON.stringify(p)); } catch (e) {}
-      if (k === 'category') setFillCategory();
-    };
-    function setFillCategory() {
-      var c = setGetPrefs().category; if (!c) return;
-      ['songCategory', 'albumCategory', 'schCategory', 'schAlbumCategory'].forEach(function (id) {
-        var el = document.getElementById(id); if (el && !el.value) el.value = c;
-      });
-    }
-    function setPublicLink() { return location.origin + '/artist-template.html?name=' + encodeURIComponent(window.FT_ARTIST || ''); }
-    function setStatus(id, msg, ok) { var el = document.getElementById(id); if (!el) return; el.textContent = msg || ''; el.className = 'status ' + (ok ? 'set-ok' : 'set-err'); }
-    function initSettings() {
-      var n = document.getElementById('setArtistName'); if (n) n.textContent = window.FT_ARTIST || '-';
-      var a = document.getElementById('setViewPage'); if (a) a.href = setPublicLink();
-      var p = setGetPrefs();
-      var c = document.getElementById('setDefCategory'); if (c) c.value = p.category || '';
-      var sp = document.getElementById('setStartPage'); if (sp && p.start) sp.value = p.start;
-      setFillCategory();
-      if (p.start && p.start !== 'home' && document.getElementById('page' + p.start.charAt(0).toUpperCase() + p.start.slice(1))) goToPage(p.start);
-    }
-    window.setCopyPageLink = function () {
-      var link = setPublicLink();
-      function done() { setStatus('setProfileStatus', 'Link copied', true); }
-      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(link).then(done, function () { prompt('Copy your link:', link); });
-      else prompt('Copy your link:', link);
-    };
-    window.setClearData = function () {
-      if (!confirm('Clear saved preferences on this device? You will stay logged in.')) return;
-      try { localStorage.removeItem(FT_PREF_KEY); localStorage.removeItem('samarid_channel_link'); } catch (e) {}
-      var c = document.getElementById('setDefCategory'); if (c) c.value = '';
-      var sp = document.getElementById('setStartPage'); if (sp) sp.value = 'home';
-      setStatus('setClearStatus', 'Saved data cleared', true);
-    };
-    // change password: email code -> ticket -> new password
-    var setPwTicket = '';
-    async function setApi(body) {
-      var r = await fetch('/api/artist-auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-      var d = {}; try { d = await r.json(); } catch (e) {}
-      return { ok: r.ok, d: d };
-    }
-    function setPwShow(n) { [1, 2, 3].forEach(function (i) { document.getElementById('setPwStep' + i).style.display = (i === n) ? 'block' : 'none'; }); }
-    function setPwErr(code) {
-      var m = { wait_a_bit: 'Please wait a minute before asking for another code.', wrong_code: 'Wrong code. Try again.', code_expired: 'That code expired. Ask for a new one.', too_many: 'Too many wrong tries. Ask for a new code later.', ticket_expired: 'Time ran out. Start again.', weak_password: 'Password must be 8 to 100 characters.', server_error: 'Server error. Try again.' };
-      return m[code] || 'Something went wrong. Try again.';
-    }
-    window.setPwSend = async function () {
-      var b = document.getElementById('setPwSendBtn'); b.disabled = true; setStatus('setPwStatus', '');
-      try {
-        var r = await setApi({ action: 'reset-code', name: window.FT_ARTIST });
-        if (!r.ok) { setStatus('setPwStatus', setPwErr(r.d.error), false); }
-        else { setPwShow(2); setStatus('setPwStatus', 'Code sent. Check your email.', true); }
-      } catch (e) { setStatus('setPwStatus', 'No connection. Try again.', false); }
-      b.disabled = false;
-    };
-    window.setPwVerify = async function () {
-      var code = document.getElementById('setPwCode').value.trim();
-      if (!/^\d{6}$/.test(code)) { setStatus('setPwStatus', 'Enter the 6-digit code.', false); return; }
-      var b = document.getElementById('setPwVerifyBtn'); b.disabled = true;
-      try {
-        var r = await setApi({ action: 'verify-code', purpose: 'reset', name: window.FT_ARTIST, code: code });
-        if (!r.ok || !r.d.ticket) { setStatus('setPwStatus', setPwErr(r.d.error), false); }
-        else { setPwTicket = r.d.ticket; setPwShow(3); setStatus('setPwStatus', '', true); }
-      } catch (e) { setStatus('setPwStatus', 'No connection. Try again.', false); }
-      b.disabled = false;
-    };
-    window.setPwSave = async function () {
-      var p1 = document.getElementById('setPw1').value, p2 = document.getElementById('setPw2').value;
-      if (p1.length < 8) { setStatus('setPwStatus', 'Password must be at least 8 characters.', false); return; }
-      if (p1 !== p2) { setStatus('setPwStatus', 'Passwords do not match.', false); return; }
-      var b = document.getElementById('setPwSaveBtn'); b.disabled = true;
-      try {
-        var r = await setApi({ action: 'set-password', ticket: setPwTicket, password: p1 });
-        if (!r.ok) { setStatus('setPwStatus', setPwErr(r.d.error), false); }
-        else {
-          if (r.d.token) { try { localStorage.setItem('ft-artist-session', JSON.stringify({ token: r.d.token, artist: r.d.artist || window.FT_ARTIST })); } catch (e) {} }
-          setPwTicket = ''; document.getElementById('setPw1').value = ''; document.getElementById('setPw2').value = ''; document.getElementById('setPwCode').value = '';
-          setPwShow(1); setStatus('setPwStatus', 'Password changed.', true);
-        }
-      } catch (e) { setStatus('setPwStatus', 'No connection. Try again.', false); }
-      b.disabled = false;
-    };
-    window.artistLogout = function () {
-      if (!confirm('Log out of your artist studio?')) return;
-      try { localStorage.removeItem('ft-artist-session'); } catch (e) {}
-      location.replace('artist-login.html');
-    };
-
     // ===== ARTIST STUDIO: session check + setup =====
     function applyArtistMode(artist) {
       window.FT_ARTIST = artist;
       var navAddBtn = document.getElementById('navAdd'); if (navAddBtn) navAddBtn.style.display = 'none';
       var searchHeaderText = document.getElementById('searchHeaderText');
       if (searchHeaderText) searchHeaderText.innerHTML = '<i class="fas fa-music" style="color: #ff8800;"></i> My Releases';
-      
+      var searchToggleBtn = document.getElementById('searchToggleBtn');
+      if (searchToggleBtn) searchToggleBtn.style.display = 'none';
       ['songArtist', 'albumArtist', 'schArtist', 'schAlbumArtist'].forEach(function (id) {
         var el = document.getElementById(id); if (el) el.value = artist;
       });
@@ -3423,14 +3220,7 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
         try { localStorage.removeItem('ft-artist-session'); } catch (e) {}
         location.replace('artist-login.html');
       }
-      if (!s || !s.token) {
-  // ⚠️ TEMPORARY PREVIEW MODE — DELETE THIS BEFORE GOING LIVE
-  applyArtistMode('Samarid');
-  document.getElementById('loginScreen').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-  initDatePickers(); loadAdminSongs(); loadChannelLink(); addAlbumSong(); addSchAlbumSong(); loadScheduled(); loadStudioLogo(); restoreLastTab();
-return;
-}
+      if (!s || !s.token) { toLogin(); return; }
       fetch('/api/artist-auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'check', token: s.token }) })
         .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
         .then(function (x) {
@@ -3439,8 +3229,7 @@ return;
           document.getElementById('loginScreen').style.display = 'none';
           var fl = document.getElementById('fastLogin'); if (fl) fl.remove();
           document.getElementById('dashboard').style.display = 'block';
-          initDatePickers(); loadAdminSongs(); loadChannelLink(); addAlbumSong(); addSchAlbumSong(); loadScheduled(); loadStudioLogo(); restoreLastTab();
-initSettings(); restoreLastTab();
+          initDatePickers(); loadAdminSongs(); loadChannelLink(); addAlbumSong(); addSchAlbumSong(); loadScheduled(); loadStudioLogo();
         })
         .catch(function () {
           var st = document.getElementById('loginStatus');
