@@ -529,19 +529,37 @@ window.smartDownload = async function(btn) {
 
   const cleanArtist = artist.replace(/[^\w\s\-\.]/g, '').trim();
   const cleanTitle = title.replace(/[^\w\s\-\.]/g, '').trim();
-  const filename = cleanArtist + ((currentSongData.featuring || '').trim() ? ' ft. ' + (currentSongData.featuring || '').replace(/[^\w\s\-\.,]/g, '').replace(/\s*,\s*/g, ', ').trim() : '') + ' - ' + cleanTitle + ' | FlexTune.mp3';
+  const filename = cleanArtist + ((currentSongData.featuring || '').trim() ? ' ft. ' + (currentSongData.featuring || '').replace(/[^\w\s\-\.,]/g, '').replace(/\s*,\s*/g, ', ').trim() : '') + ' - ' + cleanTitle + ' - FlexTune.mp3';
   
   const originalHTML = btn.innerHTML;
   btn.disabled = true;
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparing...';
 
-  let mp3ArrayBuffer = null;
+  async function getBuffer(u) {
+    const tries = [
+      u,
+      '/api/download?url=' + encodeURIComponent(u),
+      'https://corsproxy.io/?' + encodeURIComponent(u)
+    ];
+    for (const t of tries) {
+      try {
+        const r = await fetch(t);
+        if (r.ok) return await r.arrayBuffer();
+      } catch (e) {}
+    }
+    return null;
+  }
 
-  try {
-    const response = await fetch('/api/download?url=' + encodeURIComponent(url));
-    if (!response.ok) throw new Error('Direct failed');
-    mp3ArrayBuffer = await response.arrayBuffer();
-  } catch (err) {
+  let mp3ArrayBuffer = await getBuffer(url);
+  if (!mp3ArrayBuffer) {
+    showToast('Download failed: this song link is broken.');
+    btn.disabled = false;
+    btn.innerHTML = originalHTML;
+    return;
+  }
+
+  if (false) {
+  try { throw new Error('x'); } catch (err) {
     console.warn('Direct fetch blocked. Trying Proxy 1...');
     try {
       const proxy1 = 'https://corsproxy.io/?' + encodeURIComponent(url);
@@ -571,6 +589,8 @@ window.smartDownload = async function(btn) {
     }
   }
 
+  }
+
   try {
     let writer = new ID3Writer(mp3ArrayBuffer);
     writer.setFrame('TIT2', title)
@@ -579,12 +599,8 @@ window.smartDownload = async function(btn) {
 
     if (currentSongData.cover) {
       try {
-      let coverResponse = await fetch('/api/download?url=' + encodeURIComponent(currentSongData.cover));  
-        if (!coverResponse.ok) { showToast('Cover failed: ' + coverResponse.status);
-           const cProxy = 'https://corsproxy.io/?' + encodeURIComponent(currentSongData.cover);
-           coverResponse = await fetch(cProxy);
-        }
-        const coverArrayBuffer = await coverResponse.arrayBuffer();
+      const coverArrayBuffer = await getBuffer(currentSongData.cover);
+        if (!coverArrayBuffer) throw new Error('cover failed');
         let mimeType = currentSongData.cover.toLowerCase().includes('.png') ? 'image/png' : 'image/jpeg';
         writer.setFrame('APIC', { type: 3, data: coverArrayBuffer, description: 'Cover', mimeType: mimeType });
       } catch (coverErr) {
@@ -592,7 +608,7 @@ window.smartDownload = async function(btn) {
       }
     }
 
-    writer.addTag(); await new Promise(r => setTimeout(r, 5000));
+    writer.addTag();
     const taggedBlob = writer.getBlob();
     const blobUrl = URL.createObjectURL(taggedBlob);
     
@@ -759,7 +775,7 @@ const badge = s.verified ? VERIFY_BADGE : '';
 let rawAudioSrc = s.audio_url || s.downloadurl || '';
 
 // Force Cloudinary to serve an MP3 version for perfect mobile playback
-if (rawAudioSrc.includes('res.cloudinary.com') && rawAudioSrc.includes('/video/upload/')) {
+if (rawAudioSrc.includes('res.cloudinary.com') && rawAudioSrc.includes('/video/upload/') && !/\.mp3(\?|$)/i.test(rawAudioSrc)) {
     if (rawAudioSrc.includes('/video/upload/') && !rawAudioSrc.includes('/video/upload/f_mp3/')) {
         rawAudioSrc = rawAudioSrc.replace('/video/upload/', '/video/upload/f_mp3/');
     }
@@ -858,7 +874,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
       <a href="${escapeHtml(rawAudioSrc)}" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; background: #ff0000; color: #fff; border-radius: 30px; text-decoration: none; font-weight: 900; font-size: 14px; box-shadow: 0 4px 15px rgba(255,0,0,0.3);"><i class="fab fa-youtube"></i> Play on YouTube</a>
     </div>
   ` : `
-    <audio id="audioPlayer" src="${escapeHtml(rawAudioSrc)}" preload="none" onerror="handleAudioError()"></audio>
+    <audio id="audioPlayer" src="${escapeHtml(rawAudioSrc)}" preload="metadata" onerror="handleAudioError()"></audio>
     <div class="player-row">
       <button class="play-pause-btn" id="playPauseBtn" onclick="togglePlay()"><i class="fas fa-play"></i></button>
       <input type="range" id="seekSlider" value="0" max="100">
@@ -998,6 +1014,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
       const btn = document.getElementById('playPauseBtn');
       if (!audio || !btn) return;
       if (audio.paused) {
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
         audio.play().then(() => {
           btn.innerHTML = '<i class="fas fa-pause"></i>';
           if (hasRecentPlay(currentSongData.id)) return;
@@ -1014,6 +1031,7 @@ const isYouTube = rawAudioSrc.includes('youtube.com') || rawAudioSrc.includes('y
             }
           }, 1000);
         }).catch(() => {
+          btn.innerHTML = '<i class="fas fa-play"></i>';
           showToast('Tap play to start the audio');
         });
       } else {
