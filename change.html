@@ -183,7 +183,7 @@ window.saveProfile = async function() {
         // If password is entered, you would call your API here to update password safely
         if (password) {
           if (password.length < 8) throw new Error('short');
-          const tok = localStorage.getItem('ft-artist-session') || '';
+          let tok = ''; try { tok = JSON.parse(localStorage.getItem('ft-artist-session') || 'null').token || ''; } catch (e) {}
           const pr = await fetch('/api/artist-auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'change-password', token: tok, password: password }) });
           if (!pr.ok) throw new Error('Password failed');
         }
