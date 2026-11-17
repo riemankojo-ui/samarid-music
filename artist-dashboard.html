@@ -874,7 +874,11 @@ Download: https://example.com/cry-baby.mp3</div>
     <div class="set-card">
       <div class="set-title"><i class="fas fa-user"></i> My Profile</div>
       <div class="set-note">Your artist profile on FlexTune.</div>
-      <div class="set-row"><span>Artist name</span><b id="setArtistName">-</b></div>
+<div class="set-row" style="padding: 10px 0; align-items:center;">
+  <span>Profile Photo</span>
+  <img id="settingsArtistAvatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23444'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 1px solid var(--border); background: #000;" onclick="openAvatarModal()" alt="Profile">
+</div>
+<div class="set-row"><span>Artist name</span><b id="setArtistName">-</b></div>
       <div class="set-btns">
         <a class="set-btn" id="setViewPage" href="#" target="_blank" rel="noopener"><i class="fas fa-external-link-alt"></i> View my page</a>
         <button class="set-btn" type="button" onclick="setCopyPageLink()"><i class="fas fa-link"></i> Copy link</button>
@@ -995,6 +999,31 @@ Download: https://example.com/cry-baby.mp3</div>
   <button class="btn-modal-save" id="editSaveBtn" onclick="saveEditModal()"><i class="fas fa-check"></i> Save Changes</button>
 </div>
 <p id="editModalStatus" class="status"></p>
+  </div>
+</div>
+
+<!-- AVATAR MODAL -->
+<div class="edit-modal-overlay" id="avatarModalOverlay" onclick="closeAvatarModal()">
+  <div class="edit-modal" onclick="event.stopPropagation()" style="max-width: 340px; text-align: center;">
+    <div class="edit-modal-header">
+      <h3><i class="fas fa-camera"></i> Profile Photo</h3>
+      <button class="edit-modal-close" onclick="closeAvatarModal()">✕</button>
+    </div>
+    
+    <img id="avatarModalPreview" src="" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin: 20px auto; border: 2px solid var(--border); display: block; background: #000;">
+    
+    <!-- Hidden input for the URL -->
+    <input type="text" id="avatarUrlInput" style="display: none;">
+    
+    <button class="secondary-btn" onclick="cloudPick('avatarUrlInput')" style="margin-bottom: 10px;">
+      <i class="fas fa-upload"></i> Choose New Photo
+    </button>
+    
+    <button class="main-btn" id="avatarSaveBtn" onclick="saveAvatar()">
+      <i class="fas fa-check"></i> Save Photo
+    </button>
+    
+    <p id="avatarStatus" class="status"></p>
   </div>
 </div>
 
@@ -1786,7 +1815,100 @@ const category = document.getElementById('editCategory').value.trim() || 'Music'
     wireArtistEmail('albumArtist', 'albumArtistEmailBox');
     wireArtistEmail('schArtist', 'schArtistEmailBox');
     wireArtistEmail('schAlbumArtist', 'schAlbumArtistEmailBox');
-    window.saveSong = async function() {
+    // ===== AVATAR / PROFILE PHOTO LOGIC =====
+window.openAvatarModal = function() {
+  if (!window.FT_ARTIST) return;
+  const currentImg = document.getElementById('settingsArtistAvatar').src;
+  document.getElementById('avatarModalPreview').src = currentImg;
+  document.getElementById('avatarUrlInput').value = currentImg;
+  document.getElementById('avatarStatus').innerText = '';
+  document.getElementById('avatarStatus').className = 'status';
+  
+  const saveBtn = document.getElementById('avatarSaveBtn');
+  saveBtn.disabled = false;
+  saveBtn.innerHTML = '<i class="fas fa-check"></i> Save Photo';
+
+  document.getElementById('avatarModalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+window.closeAvatarModal = function() {
+  document.getElementById('avatarModalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+window.saveAvatar = async function() {
+  const url = document.getElementById('avatarUrlInput').value;
+  const status = document.getElementById('avatarStatus');
+  const btn = document.getElementById('avatarSaveBtn');
+
+  if (!url) {
+    status.className = 'status error';
+    status.innerText = 'Please select an image first.';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+  try {
+    // NOTE: If your artists table uses 'avatar', change 'image_url' to 'avatar' below.
+    const res = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(window.FT_ARTIST), {
+      method: 'PATCH',
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image_url: url }) // <--- Update this column name if needed
+    });
+
+    if (!res.ok) throw new Error('Failed to save');
+
+    // Update the UI instantly
+    document.getElementById('settingsArtistAvatar').src = url;
+    document.getElementById('avatarModalPreview').src = url;
+    
+    status.className = 'status success';
+    status.innerText = 'Photo saved successfully!';
+    
+    setTimeout(() => { closeAvatarModal(); }, 1200);
+  } catch (e) {
+    status.className = 'status error';
+    status.innerText = 'Error saving photo. Check database column.';
+    btn.disabled = false;
+    btn.innerHTML = '<i class="fas fa-check"></i> Save Photo';
+  }
+};
+
+// Listen for when cloudPick sets the URL to update the preview instantly
+document.getElementById('avatarUrlInput').addEventListener('change', function() {
+  if (this.value) {
+    document.getElementById('avatarModalPreview').src = this.value;
+  }
+});
+
+// Load the current avatar when the Settings page opens
+window.loadArtistAvatar = async function() {
+  if (!window.FT_ARTIST) return;
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(window.FT_ARTIST) + '&select=image_url&limit=1', {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+    const data = await res.json();
+    if (data && data.length > 0 && data[0].image_url) {
+      document.getElementById('settingsArtistAvatar').src = data[0].image_url;
+      document.getElementById('avatarUrlInput').value = data[0].image_url;
+    }
+  } catch (e) { console.log('Avatar load error', e); }
+};
+
+// Call this when loading the settings page (we hook it into goToPage)
+const originalGoToPage = window.goToPage;
+window.goToPage = function(page) {
+  originalGoToPage(page);
+  if (page === 'settings') {
+    loadArtistAvatar();
+  }
+};
+
+window.saveSong = async function() {
       const status = document.getElementById('songStatus');
       const editingId = document.getElementById('editingId').value;
       const title = document.getElementById('songTitle').value.trim();
