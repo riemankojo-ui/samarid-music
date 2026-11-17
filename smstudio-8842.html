@@ -1210,6 +1210,52 @@ const list = document.getElementById('homeSongList');
       renderAdminSongs('');
     } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; }
   }
+      (function applyCachedStats() {
+        try {
+          const t = getCache('statsTotals');
+          const f = getCache('followers');
+          const p = document.getElementById('statTotalPlays');
+          const d = document.getElementById('statTotalDownloads');
+          const fl = document.getElementById('statTotalFollowers');
+          if (t && p) p.innerText = (t.plays || 0).toLocaleString();
+          if (t && d) d.innerText = (t.downloads || 0).toLocaleString();
+          if (f != null && fl) fl.innerText = Number(f).toLocaleString();
+        } catch (e) {}
+      })();
+      function setStat(id, value) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const txt = Number(value).toLocaleString();
+        if (el.innerText !== txt) el.innerText = txt;
+      }
+      async function refreshStatsSilently() {
+        if (window.FT_ARTIST === '') return; // artist studio: not logged in yet
+        try {
+          const h = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY };
+          let sUrl = SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=plays,downloads';
+          let fUrl = SUPABASE_URL + '/rest/v1/follows?select=id';
+          if (window.FT_ARTIST) {
+            const a = '&artist_name=ilike.' + encodeURIComponent(window.FT_ARTIST);
+            sUrl += a; fUrl += a;
+          }
+          const [sr, fr] = await Promise.all([fetch(sUrl, { headers: h }), fetch(fUrl, { headers: h })]);
+          const songs = await sr.json();
+          const fol = await fr.json();
+          if (Array.isArray(songs)) {
+            let p = 0, d = 0;
+            songs.forEach(s => { p += (s.plays || 0); d += (s.downloads || 0); });
+            setStat('statTotalPlays', p);
+            setStat('statTotalDownloads', d);
+            setCache('statsTotals', { plays: p, downloads: d });
+          }
+          if (Array.isArray(fol)) {
+            setStat('statTotalFollowers', fol.length);
+            setCache('followers', fol.length);
+          }
+        } catch (e) {}
+      }
+      setInterval(() => { if (!document.hidden) refreshStatsSilently(); }, 30000);
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshStatsSilently(); });
       async function loadFollowerStat() {
         const el = document.getElementById('statTotalFollowers');
         if (!el) return;
@@ -1218,7 +1264,9 @@ const list = document.getElementById('homeSongList');
           if (window.FT_ARTIST) url += '&artist_name=ilike.' + encodeURIComponent(window.FT_ARTIST);
           const res = await fetch(url, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
           const rows = await res.json();
-          el.innerText = (Array.isArray(rows) ? rows.length : 0).toLocaleString();
+          const f = Array.isArray(rows) ? rows.length : 0;
+          el.innerText = f.toLocaleString();
+          setCache('followers', f);
         } catch (e) { console.error('Follower count failed', e); }
       }
       function renderAdminSongs(query) {
@@ -1239,7 +1287,10 @@ const playsEl = document.getElementById('statTotalPlays');
 const dlEl = document.getElementById('statTotalDownloads');
 if (playsEl) playsEl.innerText = totalPlays.toLocaleString();
 if (dlEl) dlEl.innerText = totalDownloads.toLocaleString();
-if (!isSearching) loadFollowerStat();
+if (!isSearching) {
+  setCache('statsTotals', { plays: totalPlays, downloads: totalDownloads });
+  loadFollowerStat();
+}
 
 // Analyze Performance
 const perfEl = document.getElementById('statAnalyzing');
