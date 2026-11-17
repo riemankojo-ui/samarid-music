@@ -3735,6 +3735,21 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
     } catch(e) {}
   };
 </script>
+<script>
+  // Restore the last tab when the page loads/refreshes
+  window.addEventListener('load', function() {
+    // Wait half a second for auth and dashboard to load
+    setTimeout(function() {
+      // Only restore if the dashboard is visible (meaning we are logged in)
+      const dash = document.getElementById('dashboard');
+      if (dash && dash.style.display !== 'none') {
+        if (typeof restoreLastTab === 'function') {
+          restoreLastTab();
+        }
+      }
+    }, 500);
+  });
+</script>
 </body>
 </html>
 
