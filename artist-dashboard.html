@@ -1865,41 +1865,34 @@ window.openAvatarModal = async function() {
   document.body.style.overflow = 'hidden';
 
   try {
-    // 1. Check if the artist has a profile photo in the database
-    const res = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(window.FT_ARTIST) + '&select=*&limit=1', {
-      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-    });
-    const data = await res.json();
-    
-    let foundImg = null;
-    if (data && data.length > 0) {
-      // Check whatever column name you might be using
-      foundImg = data[0].image_url || data[0].avatar || data[0].cover || data[0].photo;
-    }
-
-    // 2. If no profile photo is set, use their latest song cover as a fallback
-    if (!foundImg) {
-      const songRes = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?artist_name=ilike.' + encodeURIComponent(window.FT_ARTIST) + '&select=cover&order=id.desc&limit=1', {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
-      });
-      const songData = await songRes.json();
-      if (songData && songData.length > 0 && songData[0].cover) {
-        foundImg = songData[0].cover;
-      }
-    }
-
-    if (foundImg) {
-      previewImg.src = foundImg;
-      avatarInput.value = foundImg;
-      status.innerText = '';
-      // Also update the settings page avatar so they match
-      document.getElementById('settingsArtistAvatar').src = foundImg;
-    } else {
-      status.innerText = 'No photo found. Upload one below!';
-    }
-  } catch (e) {
-    status.innerText = '';
+  // 1. Check if the artist has a profile photo in the database
+  const res = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(window.FT_ARTIST) + '&select=*&limit=1', {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+  });
+  const data = await res.json();
+  
+  let foundImg = null;
+  if (data && data.length > 0) {
+    // ONLY check the specific profile picture columns
+    foundImg = data[0].profile_pic || data[0].image_url || data[0].avatar || data[0].photo;
   }
+
+  // 2. Update the modal image ONLY if a real profile photo exists
+  if (foundImg && foundImg.trim() !== '') {
+    previewImg.src = foundImg;
+    avatarInput.value = foundImg;
+    status.innerText = '';
+    document.getElementById('settingsArtistAvatar').src = foundImg;
+  } else {
+    // Show a blank user icon if they have no profile photo
+    const defaultIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23444'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E";
+    previewImg.src = defaultIcon;
+    avatarInput.value = '';
+    status.innerText = 'No profile photo set yet.';
+  }
+} catch (e) {
+  status.innerText = '';
+}
 }
 
 window.closeAvatarModal = function() {
