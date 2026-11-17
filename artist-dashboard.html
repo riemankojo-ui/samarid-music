@@ -3960,6 +3960,107 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
     }
   }, 1000); // Wait 1 second for your original functions to load first
 </script>
+<script>
+  (function() {
+    // 1. PROFILE PHOTO: Instantly load from cache on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      try {
+        const cachedPhoto = localStorage.getItem('ft_cached_profile_photo');
+        if (cachedPhoto && cachedPhoto.length > 10) {
+          const img = document.getElementById('settingsArtistAvatar');
+          if (img) img.src = cachedPhoto;
+          const modalImg = document.getElementById('avatarModalPreview');
+          if (modalImg) modalImg.src = cachedPhoto;
+          const input = document.getElementById('avatarUrlInput');
+          if (input) input.value = cachedPhoto;
+        }
+      } catch(e) {}
+    });
+
+    // 2. WRAPPER FUNCTIONS
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        
+        // --- SEO SONGS CACHE ---
+        if (typeof window.loadSeoSongs === 'function') {
+          const origSongs = window.loadSeoSongs;
+          window.loadSeoSongs = async function() {
+            const list = document.getElementById('seoSongsList');
+            const cache = localStorage.getItem('ft_seo_songs_html');
+            
+            // Start the original fetch (which sets "Loading...")
+            const fetchPromise = origSongs();
+            
+            // Instantly overwrite "Loading..." with the cached HTML
+            if (cache && list) list.innerHTML = cache;
+            
+            // Wait for the fetch to finish in the background
+            await fetchPromise;
+            
+            // Save the fresh HTML to cache
+            if (list) {
+              try { localStorage.setItem('ft_seo_songs_html', list.innerHTML); } catch(e) {}
+            }
+          };
+        }
+
+        // --- SEO ARTISTS CACHE ---
+        if (typeof window.loadSeoArtists === 'function') {
+          const origArtists = window.loadSeoArtists;
+          window.loadSeoArtists = async function() {
+            const list = document.getElementById('seoArtistsList');
+            const cache = localStorage.getItem('ft_seo_artists_html');
+            
+            const fetchPromise = origArtists();
+            if (cache && list) list.innerHTML = cache;
+            
+            await fetchPromise;
+            
+            if (list) {
+              try { localStorage.setItem('ft_seo_artists_html', list.innerHTML); } catch(e) {}
+            }
+          };
+        }
+
+        // --- PROFILE PHOTO SAVE CACHE ---
+        if (typeof window.saveAvatar === 'function') {
+          const origSave = window.saveAvatar;
+          window.saveAvatar = async function() {
+            await origSave();
+            setTimeout(function() {
+              try {
+                const url = document.getElementById('avatarUrlInput').value;
+                if (url && url.length > 10) localStorage.setItem('ft_cached_profile_photo', url);
+              } catch(e) {}
+            }, 500);
+          };
+        }
+
+        // --- PROFILE PHOTO LOAD CACHE ---
+        if (typeof window.loadArtistAvatar === 'function') {
+          const origLoad = window.loadArtistAvatar;
+          window.loadArtistAvatar = async function() {
+            const img = document.getElementById('settingsArtistAvatar');
+            const cache = localStorage.getItem('ft_cached_profile_photo');
+            
+            if (cache && img) img.src = cache;
+            
+            await origLoad();
+            
+            setTimeout(function() {
+              try {
+                if (img && img.src && img.src.startsWith('http')) {
+                  localStorage.setItem('ft_cached_profile_photo', img.src);
+                }
+              } catch(e) {}
+            }, 500);
+          };
+        }
+
+      }, 500); // Wait for original functions to load
+    });
+  })();
+</script>
 </body>
 </html>
 
