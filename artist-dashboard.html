@@ -1013,11 +1013,14 @@ Download: https://example.com/cry-baby.mp3</div>
     <img id="avatarModalPreview" src="" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin: 20px auto; border: 2px solid var(--border); display: block; background: #000;">
     
     <!-- Hidden input for the URL -->
-    <input type="text" id="avatarUrlInput" style="display: none;">
-    
-    <button class="secondary-btn" onclick="cloudPick('avatarUrlInput')" style="margin-bottom: 10px;">
-      <i class="fas fa-upload"></i> Choose New Photo
-    </button>
+<input type="text" id="avatarUrlInput" style="display: none;">
+
+<!-- Direct File Uploader -->
+<input type="file" id="avatarFileInput" accept="image/*" style="display: none;" onchange="uploadAvatarImage(event)">
+
+<button class="secondary-btn" onclick="document.getElementById('avatarFileInput').click()" style="margin-bottom: 10px;">
+  <i class="fas fa-upload"></i> Choose New Photo
+</button>
     
     <button class="main-btn" id="avatarSaveBtn" onclick="saveAvatar()">
       <i class="fas fa-check"></i> Save Photo
@@ -1816,13 +1819,20 @@ const category = document.getElementById('editCategory').value.trim() || 'Music'
     wireArtistEmail('schArtist', 'schArtistEmailBox');
     wireArtistEmail('schAlbumArtist', 'schAlbumArtistEmailBox');
     // ===== AVATAR / PROFILE PHOTO LOGIC =====
-window.openAvatarModal = function() {
+window.openAvatarModal = async function() {
   if (!window.FT_ARTIST) return;
-  const currentImg = document.getElementById('settingsArtistAvatar').src;
-  document.getElementById('avatarModalPreview').src = currentImg;
-  document.getElementById('avatarUrlInput').value = currentImg;
-  document.getElementById('avatarStatus').innerText = '';
-  document.getElementById('avatarStatus').className = 'status';
+  
+  const previewImg = document.getElementById('avatarModalPreview');
+  const avatarInput = document.getElementById('avatarUrlInput');
+  const status = document.getElementById('avatarStatus');
+  
+  // Set to current page photo first
+  previewImg.src = document.getElementById('settingsArtistAvatar').src;
+  avatarInput.value = '';
+  
+  // Reset status and button
+  status.className = 'status';
+  status.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading photo...';
   
   const saveBtn = document.getElementById('avatarSaveBtn');
   saveBtn.disabled = false;
@@ -1830,6 +1840,24 @@ window.openAvatarModal = function() {
 
   document.getElementById('avatarModalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  // Fetch the original photo directly from the database
+  try {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(window.FT_ARTIST) + '&select=image_url&limit=1', {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+    });
+    const data = await res.json();
+    
+    if (data && data.length > 0 && data[0].image_url) {
+      previewImg.src = data[0].image_url;
+      avatarInput.value = data[0].image_url;
+      status.innerText = '';
+    } else {
+      status.innerText = 'No photo set yet. Upload one below!';
+    }
+  } catch (e) {
+    status.innerText = '';
+  }
 }
 
 window.closeAvatarModal = function() {
@@ -1877,7 +1905,41 @@ window.saveAvatar = async function() {
   }
 };
 
-// Listen for when cloudPick sets the URL to update the preview instantly
+// Custom Uploader for Profile Photos (No square restriction)
+window.uploadAvatarImage = async function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const status = document.getElementById('avatarStatus');
+  status.className = 'status';
+  status.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading image...';
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', window.CLOUD_PRESET); // flextune_covers preset
+
+  try {
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${window.CLOUD_NAME}/image/upload`, {
+      method: 'POST',
+      body: formData
+    });
+    const data = await res.json();
+    
+    if (data.secure_url) {
+      document.getElementById('avatarUrlInput').value = data.secure_url;
+      document.getElementById('avatarModalPreview').src = data.secure_url;
+      status.innerText = 'Image uploaded! Tap Save Photo below.';
+      status.className = 'status success';
+    } else {
+      throw new Error('Upload failed');
+    }
+  } catch (e) {
+    status.innerText = 'Upload error. Please try a smaller image.';
+    status.className = 'status error';
+  }
+};
+
+// Listen for manual URL changes to update the preview
 document.getElementById('avatarUrlInput').addEventListener('change', function() {
   if (this.value) {
     document.getElementById('avatarModalPreview').src = this.value;
