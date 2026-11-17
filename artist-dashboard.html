@@ -1034,6 +1034,18 @@ Download: https://example.com/cry-baby.mp3</div>
     // Verified artist name (set only after the server confirms the session)
     window.FT_ARTIST = "";
     async function loadStudioLogo() {
+      const box = document.getElementById('studioLogo');
+      try {
+        const u = localStorage.getItem('ft_logo_url');
+        if (u && box) box.innerHTML = '<img src="' + u + '" alt="FlexTune" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+      } catch (e) {}
+      await loadStudioLogoOrig();
+      try {
+        const img = box && box.querySelector('img');
+        if (img && img.getAttribute('src')) localStorage.setItem('ft_logo_url', img.getAttribute('src'));
+      } catch (e) {}
+    }
+    async function loadStudioLogoOrig() {
   const box = document.getElementById('studioLogo');
   if (!box) return;
   try {
@@ -1301,11 +1313,14 @@ if (cachedSongs && Array.isArray(cachedSongs) && cachedSongs.length > 0) {
         const txt = Number(value).toLocaleString();
         if (el.innerText !== txt) el.innerText = txt;
       }
+      function songsSignature(arr) {
+        return (arr || []).map(s => [s.id, s.title, s.album_name, s.cover, s.plays || 0, s.downloads || 0].join('~')).join('|');
+      }
       async function refreshStatsSilently() {
         if (window.FT_ARTIST === '') return; // artist studio: not logged in yet
         try {
           const h = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY };
-          let sUrl = SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=plays,downloads';
+          let sUrl = SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=*&order=id.desc';
           let fUrl = SUPABASE_URL + '/rest/v1/follows?select=id';
           if (window.FT_ARTIST) {
             const a = '&artist_name=ilike.' + encodeURIComponent(window.FT_ARTIST);
@@ -1320,6 +1335,14 @@ if (cachedSongs && Array.isArray(cachedSongs) && cachedSongs.length > 0) {
             setStat('statTotalPlays', p);
             setStat('statTotalDownloads', d);
             setCache('statsTotals', { plays: p, downloads: d });
+            // songs changed (added, edited, deleted, new plays)? update the list quietly
+            if (songsSignature(songs) !== songsSignature(allAdminSongs)) {
+              allAdminSongs = songs;
+              setCache('songs', songs);
+              const si = document.getElementById('songSearchInput');
+              const q = si ? si.value.toLowerCase().trim() : '';
+              renderAdminSongs(q);
+            }
           }
           if (Array.isArray(fol)) {
             setStat('statTotalFollowers', fol.length);
@@ -1327,7 +1350,7 @@ if (cachedSongs && Array.isArray(cachedSongs) && cachedSongs.length > 0) {
           }
         } catch (e) {}
       }
-      setInterval(() => { if (!document.hidden) refreshStatsSilently(); }, 30000);
+      setInterval(() => { if (!document.hidden) refreshStatsSilently(); }, 10000);
       document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshStatsSilently(); });
       async function loadFollowerStat() {
         const el = document.getElementById('statTotalFollowers');

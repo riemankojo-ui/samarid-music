@@ -818,6 +818,29 @@ function renderHosterSkeletons(count) {
 }
 
 async function loadHosterFiles() {
+  // show saved list instantly (only when nothing is in memory yet)
+  if (!hosterFiles.audio.length && !hosterFiles.image.length) {
+    try {
+      const c = JSON.parse(localStorage.getItem('ft_manager_hoster_data') || 'null');
+      if (c && c.files) {
+        hosterFiles = { audio: c.files.audio || [], image: c.files.image || [] };
+        if (c.storage) document.getElementById('hosterStorageText').innerText = c.storage;
+      }
+    } catch (e) {}
+  }
+  const hadData = (hosterFiles.audio.length + hosterFiles.image.length) > 0;
+  const fresh = loadHosterFilesOrig(); // starts the real fetch in the background
+  if (hadData) {
+    document.getElementById('hosterSkeleton').style.display = 'none';
+    document.getElementById('hosterContent').style.display = 'block';
+    renderHosterList();
+  }
+  await fresh;
+  try {
+    localStorage.setItem('ft_manager_hoster_data', JSON.stringify({ files: hosterFiles, storage: document.getElementById('hosterStorageText').innerText }));
+  } catch (e) {}
+}
+async function loadHosterFilesOrig() {
   document.getElementById('hosterSkeleton').style.display = 'flex';
   document.getElementById('hosterContent').style.display = 'none';
   
@@ -1030,6 +1053,10 @@ function escapeHtml(s) {
         document.getElementById('dashboard').style.display = 'block';
         try { localStorage.setItem('ft-manager-pw', input); } catch(e) {}
         bootApp();
+        try {
+          const t = localStorage.getItem('ft_manager_tab');
+          if (t && t !== 'artists' && document.querySelector('.page[data-page="' + t + '"]')) window.goTab(t);
+        } catch (e) {}
       } else {
         status.innerText = 'Wrong password.'; var fl = document.getElementById('fastLogin'); if (fl) fl.remove();
         document.getElementById('passwordInput').value = '';
@@ -1049,6 +1076,18 @@ function escapeHtml(s) {
 }
 
     async function loadManagerLogo() {
+      const box = document.getElementById('studioLogo');
+      try {
+        const u = localStorage.getItem('ft_logo_url');
+        if (u && box) box.innerHTML = '<img src="' + u + '" alt="FlexTune" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+      } catch (e) {}
+      await loadManagerLogoOrig();
+      try {
+        const img = box && box.querySelector('img');
+        if (img && img.getAttribute('src')) localStorage.setItem('ft_logo_url', img.getAttribute('src'));
+      } catch (e) {}
+    }
+    async function loadManagerLogoOrig() {
       const box = document.getElementById('studioLogo');
       if (!box) return;
       try {
@@ -1095,6 +1134,7 @@ function escapeHtml(s) {
       if (tab === 'settings') loadSiteSettings();
       if (tab === 'ads') { loadAds(); updateAdPreview(); }
 if (tab === 'hoster') loadHosterFiles();
+      try { localStorage.setItem('ft_manager_tab', tab); } catch (e) {}
       window.scrollTo(0, 0);
     }
 
@@ -1200,6 +1240,16 @@ if (tab === 'hoster') loadHosterFiles();
 
     async function loadArtists() {
       const list = document.getElementById('artistsList');
+      let hadCache = false;
+      try {
+        const c = JSON.parse(localStorage.getItem('ft_manager_artists_data') || 'null');
+        if (c && Array.isArray(c.artists) && c.artists.length) {
+          allArtists = c.artists;
+          window.__artCov = c.cov || {};
+          renderArtists('');
+          hadCache = true;
+        }
+      } catch (e) {}
       try {
         if (!allArtists.length) { try { const n = Math.min(parseInt(localStorage.getItem('ft-artist-count')) || 2, 8); let h = ''; for (let i = 0; i < n; i++) h += '<div class="artist-card" style="opacity:.5;"><div class="artist-top"><div class="artist-avatar" style="background:#2a2a2a;"></div><div class="artist-meta"><h4 style="background:#2a2a2a;border-radius:4px;width:80px;height:12px;"></h4><p style="background:#262626;border-radius:4px;width:55px;height:9px;"></p></div></div><div class="artist-actions"><button style="height:26px;"></button></div></div>'; list.innerHTML = h; } catch (e) {} } window.__artCov = {}; const songsRes = await fetch(SUPABASE_URL + '/rest/v1/songs?select=artist_name,verified,cover', { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songsData = await songsRes.json();
@@ -1223,7 +1273,15 @@ if (tab === 'hoster') loadHosterFiles();
           return { name: name, id: null, bio: null, profile_pic: null, verified: false };
         });
         allArtists.sort((a, b) => (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase()));
-        renderArtists(''); try { localStorage.setItem('ft-artist-count', String(allArtists.length)); } catch (e) {}
+        const newSig = JSON.stringify(allArtists);
+        let oldSig = '';
+        try { const c = JSON.parse(localStorage.getItem('ft_manager_artists_data') || 'null'); oldSig = c ? JSON.stringify(c.artists) : ''; } catch (e) {}
+        try { localStorage.setItem('ft_manager_artists_data', JSON.stringify({ artists: allArtists, cov: window.__artCov || {} })); } catch (e) {}
+        if (!hadCache || newSig !== oldSig) {
+          const aq = document.getElementById('artistSearch');
+          renderArtists(aq ? aq.value.toLowerCase().trim() : '');
+        }
+        try { localStorage.setItem('ft-artist-count', String(allArtists.length)); } catch (e) {}
       } catch (e) { list.innerHTML = '<p class="empty" style="color:#ff0033;">Error.</p>'; }
     }
     function renderArtists(query) {
@@ -2111,7 +2169,7 @@ if (tab === 'hoster') loadHosterFiles();
       }
 
       // Wrap the main Manager tabs (Artists, Videos, Ads, Texts)
-      wrapLoader('loadArtists', 'artistsList', 'artists_html');
+      // loadArtists now has its own instant cache
       wrapLoader('loadVideos', 'manualVideosList', 'videos_html');
       wrapLoader('loadAds', 'adsList', 'ads_html');
       wrapLoader('loadTexts', 'textsList', 'texts_html');

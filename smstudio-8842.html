@@ -938,6 +938,18 @@ Download: https://example.com/cry-baby.mp3</div>
   <script>
     const SECRET_PASSWORD = "samarid2026";
     async function loadStudioLogo() {
+      const box = document.getElementById('studioLogo');
+      try {
+        const u = localStorage.getItem('ft_logo_url');
+        if (u && box) box.innerHTML = '<img src="' + u + '" alt="FlexTune" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">';
+      } catch (e) {}
+      await loadStudioLogoOrig();
+      try {
+        const img = box && box.querySelector('img');
+        if (img && img.getAttribute('src')) localStorage.setItem('ft_logo_url', img.getAttribute('src'));
+      } catch (e) {}
+    }
+    async function loadStudioLogoOrig() {
   const box = document.getElementById('studioLogo');
   if (!box) return;
   try {
@@ -1129,6 +1141,8 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
         addSchAlbumSong();
         loadScheduled();
         loadStudioLogo();
+        window.restoreStudioPage();
+        if (!document.getElementById('pageSeo').classList.contains('active')) loadSeoSongs();
       } else {
         status.innerText = 'Wrong password. Try again.'; var fl = document.getElementById('fastLogin'); if (fl) fl.remove();
       }
@@ -1153,8 +1167,21 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
       if (navEl) navEl.classList.add('active');
       if (page === 'release') loadScheduled();
       if (page === 'seo') { loadSeoSongs(); loadSeoArtists(); loadSeoOverview(); }
+      try { if (page !== 'albumDetail') localStorage.setItem('ft_studio_page', page); } catch (e) {}
       window.scrollTo(0, 0);
     }
+    window.restoreStudioPage = function () {
+      try {
+        const p = localStorage.getItem('ft_studio_page');
+        if (p && p !== 'home' && p !== 'albumDetail' && document.getElementById('page' + p.charAt(0).toUpperCase() + p.slice(1))) {
+          window.goToPage(p);
+        }
+      } catch (e) { console.error('Restore page failed', e); }
+      // safety: never leave the studio blank
+      if (!document.querySelector('.page.active')) {
+        try { window.goToPage('home'); } catch (e) {}
+      }
+    };
     async function ensureArtistExists(name) {
       if (!name || !name.trim()) return;
       const cleanName = name.trim();
@@ -1228,11 +1255,14 @@ const list = document.getElementById('homeSongList');
         const txt = Number(value).toLocaleString();
         if (el.innerText !== txt) el.innerText = txt;
       }
+      function songsSignature(arr) {
+        return (arr || []).map(s => [s.id, s.title, s.album_name, s.cover, s.plays || 0, s.downloads || 0].join('~')).join('|');
+      }
       async function refreshStatsSilently() {
         if (window.FT_ARTIST === '') return; // artist studio: not logged in yet
         try {
           const h = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY };
-          let sUrl = SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=plays,downloads';
+          let sUrl = SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=*&order=id.desc';
           let fUrl = SUPABASE_URL + '/rest/v1/follows?select=id';
           if (window.FT_ARTIST) {
             const a = '&artist_name=ilike.' + encodeURIComponent(window.FT_ARTIST);
@@ -1247,6 +1277,14 @@ const list = document.getElementById('homeSongList');
             setStat('statTotalPlays', p);
             setStat('statTotalDownloads', d);
             setCache('statsTotals', { plays: p, downloads: d });
+            // songs changed (added, edited, deleted, new plays)? update the list quietly
+            if (songsSignature(songs) !== songsSignature(allAdminSongs)) {
+              allAdminSongs = songs;
+              setCache('songs', songs);
+              const si = document.getElementById('songSearchInput');
+              const q = si ? si.value.toLowerCase().trim() : '';
+              renderAdminSongs(q);
+            }
           }
           if (Array.isArray(fol)) {
             setStat('statTotalFollowers', fol.length);
@@ -1254,7 +1292,7 @@ const list = document.getElementById('homeSongList');
           }
         } catch (e) {}
       }
-      setInterval(() => { if (!document.hidden) refreshStatsSilently(); }, 30000);
+      setInterval(() => { if (!document.hidden) refreshStatsSilently(); }, 10000);
       document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshStatsSilently(); });
       async function loadFollowerStat() {
         const el = document.getElementById('statTotalFollowers');
@@ -3199,12 +3237,23 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
     function artistQ() { return ''; }
     async function loadSeoSongs() {
       const list = document.getElementById('seoSongsList');
-      list.innerHTML = '<p class="empty-songs">Loading songs...</p>';
+      let hadCache = false;
+      try {
+        const c = JSON.parse(localStorage.getItem('ft_studio_seo_songs_data') || 'null');
+        if (Array.isArray(c) && c.length) { seoAllSongs = c; renderSeoSongs(''); hadCache = true; }
+      } catch (e) {}
+      if (!hadCache) list.innerHTML = '<p class="empty-songs">Loading songs...</p>';
       try {
         const res = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=id,title,artist_name,cover,description&order=id.desc' + artistQ(), { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
         const songs = await res.json();
-        seoAllSongs = Array.isArray(songs) ? songs : [];
-        renderSeoSongs('');
+        const fresh = Array.isArray(songs) ? songs : [];
+        const changed = JSON.stringify(fresh) !== JSON.stringify(seoAllSongs);
+        seoAllSongs = fresh;
+        try { localStorage.setItem('ft_studio_seo_songs_data', JSON.stringify(fresh)); } catch (e) {}
+        if (changed || !hadCache) {
+          const si = document.getElementById('seoSongSearch');
+          renderSeoSongs(si ? si.value.toLowerCase().trim() : '');
+        }
       } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; }
     }
     function renderSeoSongs(query) {
@@ -3391,7 +3440,7 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
   window.addEventListener('load', function() {
     setTimeout(function() {
       // 1. SEO SONGS CACHE
-      if (typeof window.loadSeoSongs === 'function') {
+      if (false && typeof window.loadSeoSongs === 'function') {
         const origSongs = window.loadSeoSongs;
         window.loadSeoSongs = async function() {
           const list = document.getElementById('seoSongsList');
