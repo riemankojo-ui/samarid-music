@@ -1830,9 +1830,8 @@ window.openAvatarModal = async function() {
   previewImg.src = document.getElementById('settingsArtistAvatar').src;
   avatarInput.value = '';
   
-  // Reset status and button
   status.className = 'status';
-  status.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading photo...';
+  status.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading current photo...';
   
   const saveBtn = document.getElementById('avatarSaveBtn');
   saveBtn.disabled = false;
@@ -1841,19 +1840,38 @@ window.openAvatarModal = async function() {
   document.getElementById('avatarModalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 
-  // Fetch the original photo directly from the database
   try {
-    const res = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(window.FT_ARTIST) + '&select=image_url&limit=1', {
+    // 1. Check if the artist has a profile photo in the database
+    const res = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(window.FT_ARTIST) + '&select=*&limit=1', {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
     });
     const data = await res.json();
     
-    if (data && data.length > 0 && data[0].image_url) {
-      previewImg.src = data[0].image_url;
-      avatarInput.value = data[0].image_url;
+    let foundImg = null;
+    if (data && data.length > 0) {
+      // Check whatever column name you might be using
+      foundImg = data[0].image_url || data[0].avatar || data[0].cover || data[0].photo;
+    }
+
+    // 2. If no profile photo is set, use their latest song cover as a fallback
+    if (!foundImg) {
+      const songRes = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?artist_name=ilike.' + encodeURIComponent(window.FT_ARTIST) + '&select=cover&order=id.desc&limit=1', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      const songData = await songRes.json();
+      if (songData && songData.length > 0 && songData[0].cover) {
+        foundImg = songData[0].cover;
+      }
+    }
+
+    if (foundImg) {
+      previewImg.src = foundImg;
+      avatarInput.value = foundImg;
       status.innerText = '';
+      // Also update the settings page avatar so they match
+      document.getElementById('settingsArtistAvatar').src = foundImg;
     } else {
-      status.innerText = 'No photo set yet. Upload one below!';
+      status.innerText = 'No photo found. Upload one below!';
     }
   } catch (e) {
     status.innerText = '';
@@ -1950,13 +1968,29 @@ document.getElementById('avatarUrlInput').addEventListener('change', function() 
 window.loadArtistAvatar = async function() {
   if (!window.FT_ARTIST) return;
   try {
-    const res = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(window.FT_ARTIST) + '&select=image_url&limit=1', {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(window.FT_ARTIST) + '&select=*&limit=1', {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
     });
     const data = await res.json();
-    if (data && data.length > 0 && data[0].image_url) {
-      document.getElementById('settingsArtistAvatar').src = data[0].image_url;
-      document.getElementById('avatarUrlInput').value = data[0].image_url;
+    
+    let foundImg = null;
+    if (data && data.length > 0) {
+      foundImg = data[0].image_url || data[0].avatar || data[0].cover || data[0].photo;
+    }
+    
+    if (!foundImg) {
+      const songRes = await fetch(SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?artist_name=ilike.' + encodeURIComponent(window.FT_ARTIST) + '&select=cover&order=id.desc&limit=1', {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+      });
+      const songData = await songRes.json();
+      if (songData && songData.length > 0 && songData[0].cover) {
+        foundImg = songData[0].cover;
+      }
+    }
+
+    if (foundImg) {
+      document.getElementById('settingsArtistAvatar').src = foundImg;
+      document.getElementById('avatarUrlInput').value = foundImg;
     }
   } catch (e) { console.log('Avatar load error', e); }
 };
@@ -3748,6 +3782,20 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
         }
       }
     }, 500);
+  });
+</script>
+<script>
+  // Restore the last tab when the page loads/refreshes
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      const dash = document.getElementById('dashboard');
+      // If dashboard is visible (logged in), restore the last tab
+      if (dash && dash.style.display !== 'none') {
+        if (typeof restoreLastTab === 'function') {
+          restoreLastTab();
+        }
+      }
+    }, 800); // Wait 0.8s to let the login process finish
   });
 </script>
 </body>
