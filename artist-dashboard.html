@@ -1200,9 +1200,13 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
       document.getElementById('schAPM').classList.toggle('active', v === 'PM');
       updateReleaseAlbumPreview();
     }
-    window.goToPage = function(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      window.goToPage = function(page) {
+try { 
+  localStorage.setItem('ft-last-tab', page); 
+  localStorage.setItem('ft-last-tab-time', Date.now().toString()); 
+} catch(e) {}
+document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   
   let pageId = 'page' + page.charAt(0).toUpperCase() + page.slice(1);
   if (page === 'albumDetail') pageId = 'pageAlbumDetail'; // Custom mapping for the new page
@@ -3804,6 +3808,28 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
       // Only restore if it's not home (home loads by default anyway)
       if (savedTab && savedTab !== 'home' && typeof goToPage === 'function') {
         goToPage(savedTab);
+      }
+    }
+  }, 300); // Checks every 300ms
+</script>
+<script>
+  // Restore the last tab when the page loads/refreshes
+  let tabRestoreInterval = setInterval(function() {
+    const dash = document.getElementById('dashboard');
+    // If dashboard is visible and we haven't restored yet
+    if (dash && dash.style.display !== 'none' && !window._tabRestored) {
+      window._tabRestored = true;
+      clearInterval(tabRestoreInterval);
+      
+      const savedTab = localStorage.getItem('ft-last-tab');
+      const savedTime = localStorage.getItem('ft-last-tab-time');
+      const ONE_HOUR = 60 * 60 * 1000; 
+
+      // Only restore if it was saved within the last hour and it's not 'home'
+      if (savedTab && savedTime && (Date.now() - parseInt(savedTime) < ONE_HOUR) && savedTab !== 'home') {
+        if (typeof goToPage === 'function') {
+          goToPage(savedTab);
+        }
       }
     }
   }, 300); // Checks every 300ms
