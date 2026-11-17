@@ -103,7 +103,7 @@
       let artistName = "";
       try {
         // Try to get from local storage (set by your main dashboard)
-        artistName = localStorage.getItem('ft-artist-session') || window.FT_ARTIST || "Samarid"; 
+        try { const s = JSON.parse(localStorage.getItem('ft-artist-session') || 'null'); artistName = (s && s.artist) || window.FT_ARTIST || ""; } catch (e2) { artistName = window.FT_ARTIST || ""; } 
       } catch(e) {}
 
       // Fetch from Supabase (Assuming your table has 'name', 'last_name', 'email')
