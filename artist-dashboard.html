@@ -883,24 +883,12 @@ Download: https://example.com/cry-baby.mp3</div>
     </div>
 
     <div class="set-card">
-      <div class="set-title"><i class="fas fa-key"></i> Change Password</div>
-      <div id="setPwStep1">
-        <div class="set-note">We send a 6-digit code to the email on your artist profile, then you choose a new password.</div>
-        <button class="main-btn" type="button" id="setPwSendBtn" onclick="setPwSend()">Send me a code</button>
-      </div>
-      <div id="setPwStep2" style="display:none;">
-        <div class="set-note">Enter the code we emailed you. It is valid for 10 minutes. Check your Spam folder too.</div>
-        <div class="form-group"><label>6-digit code</label><input type="text" id="setPwCode" inputmode="numeric" maxlength="6" placeholder="123456" autocomplete="one-time-code"></div>
-        <button class="main-btn" type="button" id="setPwVerifyBtn" onclick="setPwVerify()">Verify code</button>
-      </div>
-      <div id="setPwStep3" style="display:none;">
-        <div class="set-note">Choose a new password (at least 8 characters).</div>
-        <div class="form-group"><label>New password</label><input type="password" id="setPw1" autocomplete="new-password" placeholder="New password"></div>
-        <div class="form-group"><label>Repeat password</label><input type="password" id="setPw2" autocomplete="new-password" placeholder="Repeat password"></div>
-        <button class="main-btn" type="button" id="setPwSaveBtn" onclick="setPwSave()">Save password</button>
-      </div>
-      <p id="setPwStatus" class="status"></p>
-    </div>
+  <div class="set-title"><i class="fas fa-user-edit"></i> Edit Profile</div>
+  <div class="set-note">Update your artist name, second name, email address, and password.</div>
+  <a href="change.html" class="main-btn" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px; background:var(--accent); color:#fff; border-radius:10px; padding:14px; font-weight:800; font-size:14px;">
+    <i class="fas fa-edit"></i> Edit Profile Details
+  </a>
+</div>
 
     <div class="set-card">
       <div class="set-title"><i class="fas fa-tag"></i> Default Category</div>
