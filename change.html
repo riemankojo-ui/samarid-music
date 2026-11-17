@@ -44,6 +44,19 @@
 </head>
 <body>
 
+<div id="gate" style="position:fixed;inset:0;z-index:1000;background:#161616;display:flex;align-items:center;justify-content:center;padding:24px;">
+  <div style="width:100%;max-width:400px;text-align:center;">
+    <div style="font-size:40px;color:#ff8800;margin-bottom:12px;"><i class="fas fa-shield-alt"></i></div>
+    <h2 style="font-size:20px;font-weight:900;margin-bottom:8px;">Verify it's you</h2>
+    <p id="gateInfo" style="font-size:13px;color:#999;line-height:1.6;margin-bottom:18px;">Sending a 6-digit code to your email...</p>
+    <input type="text" id="gateCode" inputmode="numeric" maxlength="6" placeholder="000000" autocomplete="one-time-code" style="width:100%;padding:14px;background:#0a0a0a;border:1px solid #2e2e2e;border-radius:10px;color:#fff;font-size:22px;letter-spacing:8px;text-align:center;font-family:inherit;margin-bottom:12px;">
+    <button class="main-btn" id="gateBtn" onclick="gateVerify()">Verify</button>
+    <button type="button" onclick="gateSend()" style="background:none;border:none;color:#ff8800;font-weight:700;margin-top:14px;font-size:13px;cursor:pointer;">Resend code</button>
+    <p id="gateMsg" class="status"></p>
+    <a href="artist-dashboard.html" style="display:inline-block;margin-top:10px;color:#999;font-size:13px;text-decoration:none;">Cancel</a>
+  </div>
+</div>
+
   <div class="top-bar">
     <a href="artist-dashboard.html"><i class="fas fa-arrow-left"></i></a>
     <h1>Edit Profile</h1>
@@ -97,6 +110,72 @@
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
     let currentArtistId = null;
+
+    // 0. Email code gate
+    let gateName = '';
+    try { const gs = JSON.parse(localStorage.getItem('ft-artist-session') || 'null'); gateName = (gs && gs.artist) || window.FT_ARTIST || ''; } catch (e) {}
+
+    async function gateApi(body) {
+      return fetch('/api/artist-auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    }
+
+    window.gateSend = async function() {
+      const info = document.getElementById('gateInfo');
+      const msg = document.getElementById('gateMsg');
+      msg.innerText = '';
+      try {
+        const r = await gateApi({ action: 'reset-code', name: gateName });
+        if (r.status === 429) {
+          info.innerText = 'A code was just sent. Check your email, or wait a minute and tap Resend.';
+          return;
+        }
+        info.innerText = 'We sent a 6-digit code to the email on your artist account. Enter it below.';
+      } catch (e) {
+        msg.className = 'status error';
+        msg.innerText = 'Could not send the code. Check your internet and tap Resend.';
+      }
+    };
+
+    window.gateVerify = async function() {
+      const msg = document.getElementById('gateMsg');
+      const btn = document.getElementById('gateBtn');
+      const code = document.getElementById('gateCode').value.trim();
+      if (!/^\d{6}$/.test(code)) {
+        msg.className = 'status error';
+        msg.innerText = 'Enter the 6-digit code.';
+        return;
+      }
+      btn.disabled = true;
+      msg.innerText = '';
+      try {
+        const r = await gateApi({ action: 'verify-code', purpose: 'reset', name: gateName, code: code });
+        if (!r.ok) {
+          msg.className = 'status error';
+          msg.innerText = r.status === 429 ? 'Too many tries. Tap Resend for a new code.' : 'Wrong or expired code.';
+          btn.disabled = false;
+          return;
+        }
+        document.getElementById('gate').style.display = 'none';
+      } catch (e) {
+        msg.className = 'status error';
+        msg.innerText = 'Something went wrong. Try again.';
+        btn.disabled = false;
+      }
+    };
+
+    window.addEventListener('load', gateSend);
+
+    const gateVerifyRaw = window.gateVerify;
+    window.gateVerify = async function() {
+      const gb = document.getElementById('gateBtn');
+      gb.innerText = 'Verifying...';
+      await gateVerifyRaw();
+      gb.innerText = 'Verify';
+    };
+
+    document.getElementById('gateCode').addEventListener('input', function() {
+      if (/^\d{6}$/.test(this.value.trim())) window.gateVerify();
+    });
 
     // 1. Load the current data on page load
     window.addEventListener('load', async () => {
