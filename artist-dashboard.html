@@ -3907,6 +3907,59 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
     }, 500); // Wait half a second for functions to be defined
   });
 </script>
+<script>
+  // 1. Instantly load the cached profile photo when the page refreshes
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      const cachedPhoto = localStorage.getItem('ft_cached_profile_photo');
+      if (cachedPhoto && cachedPhoto.length > 10) {
+        const img = document.getElementById('settingsArtistAvatar');
+        if (img) img.src = cachedPhoto;
+        
+        const modalImg = document.getElementById('avatarModalPreview');
+        if (modalImg) modalImg.src = cachedPhoto;
+        
+        const input = document.getElementById('avatarUrlInput');
+        if (input) input.value = cachedPhoto;
+      }
+    } catch(e) {}
+  });
+
+  // 2. Automatically save the photo to cache when you save a new one
+  setTimeout(function() {
+    // Wrap the save function
+    if (typeof window.saveAvatar === 'function') {
+      const originalSave = window.saveAvatar;
+      window.saveAvatar = async function() {
+        await originalSave();
+        setTimeout(function() {
+          try {
+            const url = document.getElementById('avatarUrlInput').value;
+            if (url && url.length > 10) {
+              localStorage.setItem('ft_cached_profile_photo', url);
+            }
+          } catch(e) {}
+        }, 500);
+      };
+    }
+
+    // Wrap the load function
+    if (typeof window.loadArtistAvatar === 'function') {
+      const originalLoad = window.loadArtistAvatar;
+      window.loadArtistAvatar = async function() {
+        await originalLoad();
+        setTimeout(function() {
+          try {
+            const img = document.getElementById('settingsArtistAvatar');
+            if (img && img.src && img.src.startsWith('http')) {
+              localStorage.setItem('ft_cached_profile_photo', img.src);
+            }
+          } catch(e) {}
+        }, 500);
+      };
+    }
+  }, 1000); // Wait 1 second for your original functions to load first
+</script>
 </body>
 </html>
 
