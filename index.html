@@ -491,6 +491,28 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
   <script>
     const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
+    window.saveHomeCount = function (k, n) {
+      try {
+        const c = JSON.parse(localStorage.getItem('ft_home_counts') || '{}');
+        c[k] = n;
+        localStorage.setItem('ft_home_counts', JSON.stringify(c));
+      } catch (e) {}
+    };
+    (function matchSkeletons() {
+      try {
+        const c = JSON.parse(localStorage.getItem('ft_home_counts') || 'null');
+        if (!c) return;
+        [['topSongsList', 'top'], ['songList', 'latest'], ['topAlbumsList', 'albums']].forEach(function (p) {
+          const el = document.getElementById(p[0]);
+          const want = c[p[1]];
+          if (!el || typeof want !== 'number') return;
+          const cards = el.querySelectorAll('.skeleton-card');
+          if (!cards.length) return;
+          for (let i = cards.length - 1; i >= want; i--) cards[i].remove();
+          for (let i = cards.length; i < want; i++) el.appendChild(cards[0].cloneNode(true));
+        });
+      } catch (e) {}
+    })();
     const TOP_SONGS_LIMIT = 4;
     const LATEST_SONGS_LIMIT = 10;
     const TOP_ALBUMS_LIMIT = 4;
@@ -660,6 +682,7 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
         const songs = await res.json();
         if (!Array.isArray(songs) || songs.length === 0) { container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>No Top Songs Yet</h3></div>'; return; }
         container.innerHTML = songs.map(renderSongCard).join('');
+        saveHomeCount('top', songs.length);
       } catch (e) { container.innerHTML = '<div class="empty-state"><div class="icon">🔥</div><h3>Error</h3></div>'; }
     }
 
@@ -671,6 +694,7 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
         if (!Array.isArray(songs) || songs.length === 0) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>No Songs Yet</h3></div>'; allLatestSongs = []; return; }
         allLatestSongs = songs;
         list.innerHTML = songs.map(renderSongCard).join('');
+        saveHomeCount('latest', songs.length);
       } catch (e) { list.innerHTML = '<div class="empty-state"><div class="icon">🎵</div><h3>Error</h3></div>'; }
     }
 
@@ -798,6 +822,7 @@ window.closeHomePlayer = function() {
         });
         const albums = Object.values(albumMap).sort((a, b) => b.totalPlays - a.totalPlays).slice(0, TOP_ALBUMS_LIMIT);
         container.innerHTML = albums.map(renderAlbumCard).join('');
+        saveHomeCount('albums', albums.length);
       } catch (e) { container.innerHTML = '<div class="empty-state"><div class="icon">📀</div><h3>Error loading albums.</h3></div>'; }
     }
 
