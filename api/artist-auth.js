@@ -1,3 +1,4 @@
+import { sendCodeEmail } from './_mailjet.js';
 export const config = { runtime: 'edge' };
 
 const SB = 'https://kamnfnukaizdglntcdvi.supabase.co/rest/v1';
@@ -99,8 +100,8 @@ function esc(s) {
   return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 async function sendMail(to, artistName, code, purpose) {
-  if (!process.env.BREVO_API_KEY) throw new Error('brevo_key_missing');
-  if (!process.env.BREVO_SENDER_EMAIL) throw new Error('brevo_sender_missing');
+  // brevo key check removed, codes use Mailjet
+  // brevo sender check removed, codes use Mailjet
   
   const what = purpose === 'login' ? 'log in to' : purpose === 'reset' ? 'reset the password for' : 'claim';
   const html = '<div style="font-family:Arial,sans-serif;max-width:400px;margin:auto;padding:20px;border:1px solid #eee;border-radius:10px;text-align:center;">' +
@@ -109,6 +110,9 @@ async function sendMail(to, artistName, code, purpose) {
     '<p style="color:#333;font-size:14px;">Your 6-digit code (valid for 10 minutes):</p>' +
     '<h1 style="font-size:36px;letter-spacing:6px;color:#0a0a0a;background:#f5f5f5;padding:16px;border-radius:8px;margin:20px 0 8px;user-select:all;">' + code + '</h1>' +
     '<p style="font-size:12px;color:#888;">If this was not you, ignore this email. Nobody can get in without this code.</p></div>';
+  const sent = await sendCodeEmail(to, 'Your FlexTune code: ' + code, html);
+  if (!sent.ok) throw new Error('mail_failed');
+  return;
   const res = await fetch('https://api.brevo.com/v3/smtp/email', {
     method: 'POST',
     headers: { 'api-key': process.env.BREVO_API_KEY, 'Content-Type': 'application/json' },

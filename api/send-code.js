@@ -1,3 +1,4 @@
+import { sendCodeEmail } from './_mailjet.js';
 export const config = { runtime: 'edge' };
 
 export default async function handler(req) {
@@ -31,6 +32,9 @@ export default async function handler(req) {
       </div>
     `;
 
+    const m = await sendCodeEmail(email, 'Your FlexTune Verification Code: ' + code, html);
+    if (!m.ok) return new Response(JSON.stringify({ error: m.error }), { status: 500 });
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
     const res = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: {
