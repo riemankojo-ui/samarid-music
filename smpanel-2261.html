@@ -743,7 +743,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
   <script>
     const SECRET_PASSWORD = "samarid2026";
-    const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
+    // CACHE HELPERS
+function setCache(key, data) { try { localStorage.setItem('ft_manager_' + key, JSON.stringify(data)); } catch(e) {} }
+function getCache(key) { try { const v = localStorage.getItem('ft_manager_' + key); return v ? JSON.parse(v) : null; } catch(e) { return null; } }
+
+const SUPABASE_URL = "https://kamnfnukaizdglntcdvi.supabase.co";
     const SUPABASE_KEY = "sb_publishable__YPveWCU1NMYYsegLLYskg_38s0VRip";
     const CHANNEL_ID = localStorage.getItem('samarid_channel_id') || 'UC11ElndF459dLRfV-OzwmpA';
     const API_KEY = 'AIzaSyC5EpiTdMJ27fxNqTUYR3LctkcgiBfBmLM';
@@ -2074,5 +2078,47 @@ if (tab === 'hoster') loadHosterFiles();
   </script>
 <script src="/site-logo.js" defer></script>
 <script src="/site-logo.js" defer></script>
+<script>
+  // ===== INSTANT LOAD CACHE WRAPPER =====
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      
+      // This helper function automatically adds caching to any load function
+      function wrapLoader(funcName, containerId, cacheKey) {
+        if (typeof window[funcName] === 'function') {
+          const origFunc = window[funcName];
+          window[funcName] = async function() {
+            const container = document.getElementById(containerId);
+            const cache = localStorage.getItem('ft_manager_' + cacheKey);
+            
+            // 1. Start fetching fresh data in the background
+            const fetchPromise = origFunc();
+            
+            // 2. Instantly overwrite "Loading..." with the cached list
+            if (cache && container) {
+              container.innerHTML = cache;
+            }
+            
+            // 3. Wait for the fetch to finish
+            await fetchPromise;
+            
+            // 4. Save the fresh list to cache for next time
+            if (container) {
+              try { localStorage.setItem('ft_manager_' + cacheKey, container.innerHTML); } catch(e) {}
+            }
+          };
+        }
+      }
+
+      // Wrap the main Manager tabs (Artists, Videos, Ads, Texts)
+      wrapLoader('loadArtists', 'artistsList', 'artists_html');
+      wrapLoader('loadVideos', 'manualVideosList', 'videos_html');
+      wrapLoader('loadAds', 'adsList', 'ads_html');
+      wrapLoader('loadTexts', 'textsList', 'texts_html');
+      wrapLoader('loadImages', 'imagesList', 'images_html');
+      
+    }, 500); // Wait half a second for the original functions to load
+  });
+</script>
 </body>
 </html>
