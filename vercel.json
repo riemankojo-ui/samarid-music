@@ -6,6 +6,20 @@
     "minimumCacheTTL": 31536000,
     "remotePatterns": [{ "protocol": "https", "hostname": "files.catbox.moe" }]
   },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Link", "value": "</logo-wide.png>; rel=preload; as=image" }
+      ]
+    },
+    {
+      "source": "/logo-wide.png",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }
+      ]
+    }
+  ],
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap" }
   ]

@@ -1,3 +1,16 @@
+/* FlexTune - show the real logo from the first paint (no placeholder flash) */
+a.logo {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  min-width: 120px;
+  min-height: 24px;
+  font-size: 0 !important;
+  color: transparent !important;
+  background: url('/logo-wide.png') center / contain no-repeat;
+}
+a.logo > :not(img) { display: none !important; }
+
 /* FlexTune - menu: lines between buttons */
 .menu-dropdown .menu-item + .menu-item { border-top: 1px solid #e6e6e6; }
 
