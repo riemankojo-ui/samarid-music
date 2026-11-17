@@ -3862,6 +3862,51 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
     }
   }, 300); // Checks every 300ms
 </script>
+<script>
+  // ===== SEO TAB CACHING WRAPPER =====
+  window.addEventListener('load', function() {
+    // Wait for the main script to finish loading
+    setTimeout(function() {
+      
+      // 1. Wrap loadSeoSongs
+      if (typeof window.loadSeoSongs === 'function') {
+        const originalLoadSeoSongs = window.loadSeoSongs;
+        window.loadSeoSongs = async function() {
+          const list = document.getElementById('seoSongsList');
+          
+          // Instantly show cached HTML
+          const cachedHTML = localStorage.getItem('ft_seo_songs_html');
+          if (cachedHTML) { list.innerHTML = cachedHTML; }
+          
+          // Run the original function to fetch fresh data
+          await originalLoadSeoSongs();
+          
+          // Save the fresh HTML to cache
+          try { localStorage.setItem('ft_seo_songs_html', list.innerHTML); } catch(e) {}
+        };
+      }
+
+      // 2. Wrap loadSeoArtists
+      if (typeof window.loadSeoArtists === 'function') {
+        const originalLoadSeoArtists = window.loadSeoArtists;
+        window.loadSeoArtists = async function() {
+          const list = document.getElementById('seoArtistsList');
+          
+          // Instantly show cached HTML
+          const cachedHTML = localStorage.getItem('ft_seo_artists_html');
+          if (cachedHTML) { list.innerHTML = cachedHTML; }
+          
+          // Run the original function to fetch fresh data
+          await originalLoadSeoArtists();
+          
+          // Save the fresh HTML to cache
+          try { localStorage.setItem('ft_seo_artists_html', list.innerHTML); } catch(e) {}
+        };
+      }
+      
+    }, 500); // Wait half a second for functions to be defined
+  });
+</script>
 </body>
 </html>
 
