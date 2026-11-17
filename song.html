@@ -511,6 +511,15 @@ let visitorId = localStorage.getItem('samarid_visitor_id');
   if (btn) { btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i>'; btn.disabled = true; }
 }
 
+window.incrementDownloadCount = async function() {
+  if (!currentSongData) return;
+  const n = (currentSongData.downloads || 0) + 1;
+  currentSongData.downloads = n;
+  try {
+    await fetch(SUPABASE_URL + '/rest/v1/songs?id=eq.' + currentSongData.id, { method: 'PATCH', headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ downloads: n }) });
+  } catch (e) { console.error('Download count save failed:', e); }
+};
+
 window.smartDownload = async function(btn) {
   if (!currentSongData) return;
   const url = currentSongData.downloadurl || currentSongData.audio_url || '';
@@ -620,7 +629,7 @@ window.smartDownload = async function(btn) {
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
     
-    /* silent download */
+    window.incrementDownloadCount();
   } catch (e) {
     console.error('Tagging error:', e);
     showToast('Error creating file. Opening link...');

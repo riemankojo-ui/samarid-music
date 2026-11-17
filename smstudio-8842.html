@@ -1210,6 +1210,17 @@ const list = document.getElementById('homeSongList');
       renderAdminSongs('');
     } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; }
   }
+      async function loadFollowerStat() {
+        const el = document.getElementById('statTotalFollowers');
+        if (!el) return;
+        try {
+          let url = SUPABASE_URL + '/rest/v1/follows?select=id';
+          if (window.FT_ARTIST) url += '&artist_name=ilike.' + encodeURIComponent(window.FT_ARTIST);
+          const res = await fetch(url, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
+          const rows = await res.json();
+          el.innerText = (Array.isArray(rows) ? rows.length : 0).toLocaleString();
+        } catch (e) { console.error('Follower count failed', e); }
+      }
       function renderAdminSongs(query) {
 const albumContainer = document.getElementById('albumListContainer');
 const list = document.getElementById('homeSongList');
@@ -1228,6 +1239,7 @@ const playsEl = document.getElementById('statTotalPlays');
 const dlEl = document.getElementById('statTotalDownloads');
 if (playsEl) playsEl.innerText = totalPlays.toLocaleString();
 if (dlEl) dlEl.innerText = totalDownloads.toLocaleString();
+if (!isSearching) loadFollowerStat();
 
 // Analyze Performance
 const perfEl = document.getElementById('statAnalyzing');
