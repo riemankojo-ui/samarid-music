@@ -233,6 +233,18 @@ if (action === 'login') {
       return json({ ok: true, token: await sessionFor(t.n), artist: t.n });
     }
 
+    // 5b) Change password while logged in
+    if (action === 'change-password') {
+      const s = await readToken(b.token, ['session']);
+      if (!s) return json({ error: 'invalid' }, 401);
+      const pw = String(b.password || '');
+      if (pw.length < 8 || pw.length > 100) return json({ error: 'weak_password' }, 400);
+      const key = s.n.trim().toLowerCase();
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      await saveAuth(key, { pw_hash: await hashPassword(pw, salt), pw_salt: hex(salt), fail_count: 0, lock_until: 0 });
+      return json({ ok: true });
+    }
+
     // 6) The studio asks: is this session real?
     if (action === 'check') {
       const s = await readToken(b.token, ['session']);
