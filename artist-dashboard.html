@@ -1120,7 +1120,12 @@ function getCompressedCover(url) {
 }
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    let allAdminSongs = [];
+
+// CACHE HELPERS
+function setCache(key, data) { try { localStorage.setItem('ft_cache_' + key, JSON.stringify(data)); } catch(e) {} }
+function getCache(key) { try { const v = localStorage.getItem('ft_cache_' + key); return v ? JSON.parse(v) : null; } catch(e) { return null; } }
+
+let allAdminSongs = [];
     let albumSongIndex = 0;
     let schAlbumSongIndex = 0;
     let currentAmPm = 'AM';
@@ -1217,7 +1222,8 @@ document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')
       if (pageEl) pageEl.classList.add('active');
       if (navEl) navEl.classList.add('active');
       if (page === 'release') loadScheduled();
-      if (page === 'seo') { loadSeoSongs(); loadSeoArtists(); loadSeoOverview(); }
+if (page === 'seo') { loadSeoSongs(); loadSeoArtists(); loadSeoOverview(); }
+if (page === 'settings') { loadArtistAvatar(); } // Loads cached avatar instantly
       window.scrollTo(0, 0);
     }
     async function ensureArtistExists(name) {
@@ -1246,10 +1252,20 @@ document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active')
     }    
       async function loadAdminSongs() {
 const list = document.getElementById('homeSongList');
-list.innerHTML = `
-  <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
-  <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
-`;
+
+// 1. INSTANTLY LOAD FROM CACHE (No waiting)
+const cachedSongs = getCache('songs');
+if (cachedSongs && Array.isArray(cachedSongs) && cachedSongs.length > 0) {
+  allAdminSongs = cachedSongs;
+  renderAdminSongs(''); 
+} else {
+  // Show skeleton ONLY if there is no cache at all
+  list.innerHTML = `
+    <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
+    <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
+  `;
+}
+
     try {
       let apiUrl = SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=*&order=id.desc';
       // Artist studio: ONLY this artist's songs
@@ -1259,6 +1275,10 @@ list.innerHTML = `
       const res = await fetch(apiUrl, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
       const songs = await res.json();
       allAdminSongs = Array.isArray(songs) ? songs : [];
+      
+      // 2. SAVE FRESH DATA TO CACHE FOR NEXT TIME
+      setCache('songs', allAdminSongs); 
+      
       homeShowAll = false;
       renderAdminSongs('');
     } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; }
@@ -1971,6 +1991,14 @@ document.getElementById('avatarUrlInput').addEventListener('change', function() 
 // Load the current avatar when the Settings page opens
 window.loadArtistAvatar = async function() {
   if (!window.FT_ARTIST) return;
+  
+  // 1. INSTANTLY LOAD FROM CACHE
+  const cachedAvatar = getCache('avatar');
+  if (cachedAvatar) {
+    document.getElementById('settingsArtistAvatar').src = cachedAvatar;
+    document.getElementById('avatarUrlInput').value = cachedAvatar;
+  }
+
   try {
     const res = await fetch(SUPABASE_URL + '/rest/v1/' + ARTISTS_TABLE + '?name=ilike.' + encodeURIComponent(window.FT_ARTIST) + '&select=*&limit=1', {
       headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
@@ -1979,15 +2007,15 @@ window.loadArtistAvatar = async function() {
     
     let foundImg = null;
     if (data && data.length > 0) {
-      // ONLY look for the artist profile picture column
       foundImg = data[0].profile_pic || data[0].image_url; 
     }
 
     if (foundImg) {
       document.getElementById('settingsArtistAvatar').src = foundImg;
       document.getElementById('avatarUrlInput').value = foundImg;
+      // 2. SAVE TO CACHE
+      setCache('avatar', foundImg); 
     } else {
-      // Default placeholder if no photo is set
       document.getElementById('settingsArtistAvatar').src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23444'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E";
     }
   } catch (e) { console.log('Avatar load error', e); }
