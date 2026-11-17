@@ -1,3 +1,4 @@
+import { sendEmail } from './_mail.js';
 export const config = { runtime: 'edge' };
 
 export default async function handler(req) {
@@ -40,6 +41,9 @@ export default async function handler(req) {
 
   let sent = 0, firstErr = '';
   for (const s of subs.slice(0, 290)) {
+    const m = await sendEmail(s.email, 'New drop: ' + body.artist + (body.featuring ? ' ft. ' + body.featuring : '') + ' - ' + body.title, html);
+    if (m.ok) sent++; else if (!firstErr) firstErr = String(m.error || '').substring(0, 120);
+    continue;
     const r = await fetch('https://api.brevo.com/v3/smtp/email', {
       method: 'POST',
       headers: { 'api-key': process.env.BREVO_API_KEY, 'Content-Type': 'application/json' },
