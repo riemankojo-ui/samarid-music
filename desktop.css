@@ -20,6 +20,19 @@ a.logo::before {
 a.logo:has(> img)::before { display: none; }
 a.logo > :not(img) { display: none !important; }
 
+/* FlexTune - menu follows the theme */
+html[data-theme="dark"] .menu-dropdown { background: #141414; border-right-color: #2a2a2a; box-shadow: 10px 0 40px rgba(0,0,0,0.6); }
+html[data-theme="dark"] .menu-title { color: #888; border-top-color: #2a2a2a; }
+html[data-theme="dark"] .menu-item,
+html[data-theme="dark"] .menu-item .label,
+html[data-theme="dark"] .theme-label { color: #ffffff; }
+html[data-theme="dark"] .menu-item:active { background: #222222; }
+html[data-theme="dark"] .menu-item .arrow { color: #666666; }
+html[data-theme="dark"] .theme-btn { background: #1f1f1f; border-color: #333333; color: #aaaaaa; }
+html[data-theme="dark"] .theme-btn.active { border-color: var(--accent); color: var(--accent); }
+html[data-theme="dark"] .join-wrap { border-top-color: #2a2a2a; }
+html[data-theme="dark"] .menu-dropdown .menu-item + .menu-item { border-top-color: #2a2a2a; }
+
 /* FlexTune - menu: lines between buttons */
 .menu-dropdown .menu-item + .menu-item { border-top: 1px solid #e6e6e6; }
 

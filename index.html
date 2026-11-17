@@ -546,6 +546,7 @@ html{overflow-x:hidden;max-width:100vw}body{overflow-x:clip;max-width:100vw}.hea
       const theme = localStorage.getItem('samarid-theme') || 'light';
       const accent = localStorage.getItem('samarid-accent') || '#ff0033';
       document.body.classList.toggle('light', theme === 'light');
+      document.documentElement.setAttribute('data-theme', theme);
       document.documentElement.style.setProperty('--accent', accent);
       document.querySelectorAll('.theme-btn').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
     }
