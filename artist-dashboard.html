@@ -3403,6 +3403,165 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
     }
   }, 2000); // Wait 2 seconds for real auth first
 </script>
+<script>
+  // ===== SETTINGS TAB LOGIC =====
+  document.addEventListener('DOMContentLoaded', () => {
+    const setArtistNameEl = document.getElementById('setArtistName');
+    if (setArtistNameEl && window.FT_ARTIST) {
+      setArtistNameEl.innerText = window.FT_ARTIST;
+    }
+  });
+
+  // Log Out
+  window.artistLogout = function() {
+    try { localStorage.removeItem('ft-artist-session'); } catch(e) {}
+    window.location.href = 'artist-login.html';
+  };
+
+  // Copy Profile Link
+  window.setCopyPageLink = async function() {
+    if (!window.FT_ARTIST) return;
+    const url = 'https://samarid-music.vercel.app/artist.html?name=' + encodeURIComponent(window.FT_ARTIST);
+    try {
+      await navigator.clipboard.writeText(url);
+      const status = document.getElementById('setProfileStatus');
+      status.innerText = 'Link copied!';
+      status.className = 'status success';
+      setTimeout(() => { status.innerText = ''; }, 3000);
+    } catch(e) {
+      alert('Could not copy link.');
+    }
+  };
+
+  // Password Reset Flow (Step 1: Send Code)
+  window.setPwSend = async function() {
+    if (!window.FT_ARTIST) return;
+    const btn = document.getElementById('setPwSendBtn');
+    const status = document.getElementById('setPwStatus');
+    btn.disabled = true;
+    btn.innerText = 'Sending...';
+    
+    try {
+      const res = await fetch('/api/artist-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'reset-code', name: window.FT_ARTIST })
+      });
+      const data = await res.json();
+      if (data.ok) {
+        document.getElementById('setPwStep1').style.display = 'none';
+        document.getElementById('setPwStep2').style.display = 'block';
+        status.innerText = 'Code sent! Check your email.';
+        status.className = 'status success';
+      } else {
+        status.innerText = data.error || 'Failed to send code.';
+        status.className = 'status error';
+        btn.disabled = false;
+        btn.innerText = 'Send me a code';
+      }
+    } catch(e) {
+      status.innerText = 'Network error.';
+      status.className = 'status error';
+      btn.disabled = false;
+      btn.innerText = 'Send me a code';
+    }
+  };
+
+  // Password Reset Flow (Step 2: Verify Code)
+  window.setPwVerify = async function() {
+    if (!window.FT_ARTIST) return;
+    const code = document.getElementById('setPwCode').value.trim();
+    const status = document.getElementById('setPwStatus');
+    if (!code) return;
+    
+    const btn = document.getElementById('setPwVerifyBtn');
+    btn.disabled = true;
+    btn.innerText = 'Verifying...';
+
+    try {
+      const res = await fetch('/api/artist-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'verify-code', name: window.FT_ARTIST, code: code, purpose: 'reset' })
+      });
+      const data = await res.json();
+      if (data.ok && data.ticket) {
+        window._resetTicket = data.ticket; // Save ticket for step 3
+        document.getElementById('setPwStep2').style.display = 'none';
+        document.getElementById('setPwStep3').style.display = 'block';
+        status.innerText = 'Code verified. Choose a new password.';
+        status.className = 'status success';
+      } else {
+        status.innerText = data.error || 'Wrong code.';
+        status.className = 'status error';
+        btn.disabled = false;
+        btn.innerText = 'Verify code';
+      }
+    } catch(e) {
+      status.innerText = 'Network error.';
+      status.className = 'status error';
+      btn.disabled = false;
+      btn.innerText = 'Verify code';
+    }
+  };
+
+  // Password Reset Flow (Step 3: Save Password)
+  window.setPwSave = async function() {
+    const pw1 = document.getElementById('setPw1').value;
+    const pw2 = document.getElementById('setPw2').value;
+    const status = document.getElementById('setPwStatus');
+    
+    if (pw1.length < 8) { status.innerText = 'Password must be at least 8 characters.'; status.className = 'status error'; return; }
+    if (pw1 !== pw2) { status.innerText = 'Passwords do not match.'; status.className = 'status error'; return; }
+    if (!window._resetTicket) { status.innerText = 'Session expired. Try again.'; status.className = 'status error'; return; }
+
+    const btn = document.getElementById('setPwSaveBtn');
+    btn.disabled = true;
+    btn.innerText = 'Saving...';
+
+    try {
+      const res = await fetch('/api/artist-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'set-password', ticket: window._resetTicket, password: pw1 })
+      });
+      const data = await res.json();
+      if (data.ok && data.token) {
+        try { localStorage.setItem('ft-artist-session', data.token); } catch(e) {}
+        status.innerText = 'Password saved successfully!';
+        status.className = 'status success';
+        setTimeout(() => { location.reload(); }, 1500);
+      } else {
+        status.innerText = data.error || 'Failed to save password.';
+        status.className = 'status error';
+        btn.disabled = false;
+        btn.innerText = 'Save password';
+      }
+    } catch(e) {
+      status.innerText = 'Network error.';
+      status.className = 'status error';
+      btn.disabled = false;
+      btn.innerText = 'Save password';
+    }
+  };
+
+  // Save Preferences
+  window.setSavePref = function(key, val) {
+    try { localStorage.setItem('ft-pref-' + key, val); } catch(e) {}
+  };
+  
+  window.setClearData = function() {
+    try {
+      const keys = Object.keys(localStorage);
+      keys.forEach(k => {
+        if (k.startsWith('ft-pref-') || k.startsWith('ft-last-tab')) localStorage.removeItem(k);
+      });
+      document.getElementById('setClearStatus').innerText = 'Data cleared!';
+      document.getElementById('setClearStatus').className = 'status success';
+      setTimeout(() => { document.getElementById('setClearStatus').innerText = ''; }, 3000);
+    } catch(e) {}
+  };
+</script>
 </body>
 </html>
 
