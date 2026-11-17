@@ -1024,6 +1024,11 @@ function getCompressedCover(url) {
 }
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    // CACHE HELPERS
+    function setCache(key, data) { try { localStorage.setItem('ft_studio_' + key, JSON.stringify(data)); } catch(e) {} }
+    function getCache(key) { try { const v = localStorage.getItem('ft_studio_' + key); return v ? JSON.parse(v) : null; } catch(e) { return null; } }
+
     let allAdminSongs = [];
     let albumSongIndex = 0;
     let schAlbumSongIndex = 0;
@@ -1176,10 +1181,20 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
     }    
       async function loadAdminSongs() {
 const list = document.getElementById('homeSongList');
-list.innerHTML = `
-  <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
-  <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
-`;
+    
+    // 1. INSTANTLY LOAD FROM CACHE (No waiting for stats or list)
+    const cachedSongs = getCache('songs');
+    if (cachedSongs && Array.isArray(cachedSongs) && cachedSongs.length > 0) {
+      allAdminSongs = cachedSongs;
+      renderAdminSongs(''); 
+    } else {
+      // Show skeleton ONLY if there is no cache at all
+      list.innerHTML = `
+        <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
+        <div class="skeleton-song"><div class="skeleton-song-img"></div><div class="skeleton-song-info"><div class="skeleton-song-line title"></div><div class="skeleton-song-line meta"></div><div class="skeleton-song-line meta short"></div></div></div>
+      `;
+    }
+
     try {
       // FlexTune studio: all artists' songs
       let apiUrl = SUPABASE_URL + '/rest/v1/' + SONGS_TABLE + '?select=*&order=id.desc';
@@ -1187,6 +1202,10 @@ list.innerHTML = `
       const res = await fetch(apiUrl, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY } });
       const songs = await res.json();
       allAdminSongs = Array.isArray(songs) ? songs : [];
+      
+      // 2. SAVE FRESH DATA TO CACHE
+      setCache('songs', allAdminSongs);
+
       homeShowAll = false;
       renderAdminSongs('');
     } catch (e) { list.innerHTML = '<p class="empty-songs" style="color:#ff0033;">Could not load songs.</p>'; }
@@ -3304,6 +3323,50 @@ lyrics = lyrics.replace(/\s*\/\s*/g, '\n').trim();
 
   </script>
 <script src="/site-logo.js" defer></script>
+<script>
+  // ===== SEO CACHE WRAPPER =====
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      // 1. SEO SONGS CACHE
+      if (typeof window.loadSeoSongs === 'function') {
+        const origSongs = window.loadSeoSongs;
+        window.loadSeoSongs = async function() {
+          const list = document.getElementById('seoSongsList');
+          const cache = localStorage.getItem('ft_studio_seo_songs_html');
+          
+          const fetchPromise = origSongs();
+          // Instantly overwrite "Loading..." with the cached list
+          if (cache && list) list.innerHTML = cache;
+          
+          await fetchPromise;
+          
+          // Save the fresh list to cache
+          if (list) {
+            try { localStorage.setItem('ft_studio_seo_songs_html', list.innerHTML); } catch(e) {}
+          }
+        };
+      }
+
+      // 2. SEO ARTISTS CACHE
+      if (typeof window.loadSeoArtists === 'function') {
+        const origArtists = window.loadSeoArtists;
+        window.loadSeoArtists = async function() {
+          const list = document.getElementById('seoArtistsList');
+          const cache = localStorage.getItem('ft_studio_seo_artists_html');
+          
+          const fetchPromise = origArtists();
+          if (cache && list) list.innerHTML = cache;
+          
+          await fetchPromise;
+          
+          if (list) {
+            try { localStorage.setItem('ft_studio_seo_artists_html', list.innerHTML); } catch(e) {}
+          }
+        };
+      }
+    }, 500); // Wait for the original functions to load
+  });
+</script>
 </body>
 </html>
 
