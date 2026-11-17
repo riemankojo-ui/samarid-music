@@ -197,7 +197,7 @@ window.saveProfile = async function() {
 
       } catch (e) {
         status.className = 'status error';
-        status.innerText = 'Error saving profile. Try again.';
+        status.innerText = 'Error: ' + (e && e.message ? e.message : e);
         btn.disabled = false;
         btn.innerHTML = 'Save Changes';
       }
