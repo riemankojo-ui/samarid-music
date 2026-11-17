@@ -242,6 +242,18 @@ if (action === 'login') {
       return json({ ok: true, artist: s.n });
     }
 
+    // 7) Update password for logged-in artist
+    if (action === 'update-password') {
+      const s = await readToken(b.token, ['session']);
+      if (!s) return json({ error: 'invalid_session' }, 401);
+      const pw = String(b.password || '');
+      if (pw.length < 8 || pw.length > 100) return json({ error: 'weak_password' }, 400);
+      const key = s.n.trim().toLowerCase();
+      const salt = crypto.getRandomValues(new Uint8Array(16));
+      await saveAuth(key, { pw_hash: await hashPassword(pw, salt), pw_salt: hex(salt), fail_count: 0, lock_until: 0 });
+      return json({ ok: true });
+    }
+
     return json({ error: 'bad_request' }, 400);
   } catch (e) {
     return json({ error: 'server_error' }, 500);
