@@ -163,7 +163,55 @@
       }
     };
 
-    window.addEventListener('load', gateSend);
+    (function() {
+      const g = document.getElementById('gate');
+      g.style.background = 'radial-gradient(circle at 50% 0%, #2a1700 0%, #161616 60%)';
+      g.innerHTML = `
+        <div style="width:100%;max-width:380px;background:#1f1f1f;border:1px solid #2e2e2e;border-radius:20px;padding:32px 24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6);">
+          <div style="width:72px;height:72px;margin:0 auto 18px;border-radius:50%;background:rgba(255,136,0,.12);box-shadow:0 0 30px rgba(255,136,0,.25);display:flex;align-items:center;justify-content:center;font-size:30px;color:#ff8800;"><i class="fas fa-shield-alt"></i></div>
+          <h2 style="font-size:22px;font-weight:900;margin-bottom:8px;">Verify it's you</h2>
+          <p id="gateInfo" style="font-size:13px;color:#999;line-height:1.7;margin-bottom:22px;">For your safety, we'll email a 6-digit code to the email on your artist account.</p>
+          <button class="main-btn" id="gateSendBtn" onclick="gateSend()"><i class="fas fa-paper-plane"></i> Send Code</button>
+          <div id="gateStep2" style="display:none;">
+            <input type="text" id="gateCode" inputmode="numeric" maxlength="6" placeholder="------" autocomplete="one-time-code" style="width:100%;padding:16px;background:#0a0a0a;border:1px solid #2e2e2e;border-radius:12px;color:#fff;font-size:26px;letter-spacing:10px;text-align:center;font-family:inherit;margin-bottom:14px;">
+            <button class="main-btn" id="gateBtn" onclick="gateVerify()">Verify</button>
+            <button type="button" onclick="gateSend()" style="background:none;border:none;color:#ff8800;font-weight:700;margin-top:16px;font-size:13px;cursor:pointer;">Resend code</button>
+          </div>
+          <p id="gateMsg" class="status"></p>
+          <a href="artist-dashboard.html" style="display:inline-block;margin-top:14px;color:#777;font-size:13px;text-decoration:none;">Cancel</a>
+        </div>`;
+    })();
+
+    window.gateSend = async function() {
+      const sb = document.getElementById('gateSendBtn');
+      const info = document.getElementById('gateInfo');
+      const msg = document.getElementById('gateMsg');
+      msg.innerText = '';
+      sb.disabled = true;
+      sb.innerText = 'Sending...';
+      try {
+        const r = await gateApi({ action: 'reset-code', name: gateName });
+        if (r.status === 429) {
+          info.innerText = 'A code was just sent. Check your email, or wait a minute and tap Resend.';
+        } else if (!r.ok) {
+          msg.className = 'status error';
+          msg.innerText = 'Could not send the code. Try again.';
+          sb.disabled = false;
+          sb.innerHTML = '<i class="fas fa-paper-plane"></i> Send Code';
+          return;
+        } else {
+          info.innerText = 'Code sent! Check your email (and spam folder), then enter the 6 digits below.';
+        }
+        sb.style.display = 'none';
+        document.getElementById('gateStep2').style.display = 'block';
+        document.getElementById('gateCode').focus();
+      } catch (e) {
+        msg.className = 'status error';
+        msg.innerText = 'No internet. Try again.';
+        sb.disabled = false;
+        sb.innerHTML = '<i class="fas fa-paper-plane"></i> Send Code';
+      }
+    };
 
     const gateVerifyRaw = window.gateVerify;
     window.gateVerify = async function() {
