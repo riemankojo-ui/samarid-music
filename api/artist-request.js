@@ -1,3 +1,4 @@
+import { sendEmail } from './_mail.js';
 export const config = { runtime: 'edge' };
 
 const SB = 'https://kamnfnukaizdglntcdvi.supabase.co/rest/v1';
@@ -42,6 +43,20 @@ export default async function handler(req) {
       body: JSON.stringify({ name: name, email: email, phone: phone, genre: genre, link: link })
     });
     if (!ins.ok) return json({ error: 'db_error' }, 500);
+
+    try {
+      const sr = await fetch(SB + '/app_settings?select=value&key=eq.notify_email&limit=1', { headers: h });
+      const srRows = await sr.json();
+      const notifyTo = (Array.isArray(srRows) && srRows[0] && srRows[0].value) || '';
+      if (notifyTo) {
+        const e = function (s) { return String(s || '-').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+        const html = '<div style="font-family:Arial,sans-serif;max-width:420px;margin:auto;padding:24px;border:1px solid #eee;border-radius:12px;">' +
+          '<h2 style="color:#ff0033;margin-bottom:10px;text-align:center;">New artist request</h2>' +
+          '<p style="color:#333;font-size:14px;line-height:1.8;"><strong>Name:</strong> ' + e(name) + '<br><strong>Email:</strong> ' + e(email) + '<br><strong>Phone:</strong> ' + e(phone) + '<br><strong>Genre:</strong> ' + e(genre) + '<br><strong>Link:</strong> ' + e(link) + '</p>' +
+          '<p style="margin:24px 0;text-align:center;"><a href="https://flextune.vercel.app/smpanel-2261.html#requests" style="background:#ff8800;color:#fff;text-decoration:none;padding:14px 28px;border-radius:10px;font-weight:bold;display:inline-block;">Feedback</a></p></div>';
+        await sendEmail(notifyTo, 'New artist request: ' + name, html);
+      }
+    } catch (err) {}
     return json({ ok: true });
   } catch (e) {
     return json({ error: 'server_error' }, 500);

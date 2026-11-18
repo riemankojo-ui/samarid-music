@@ -54,6 +54,31 @@
   .sub-content { display: none; }
   .sub-content.active { display: block; }
 
+  /* Smaller tab text */
+  #bottomNav .nav-item { padding: 7px 2px; gap: 3px; }
+  #bottomNav .nav-item .icon { font-size: 16px; }
+  #bottomNav .nav-item .label { font-size: 7.5px; letter-spacing: 0.2px; }
+  .sub-tab { font-size: 11px; padding: 7px 12px; }
+  .page[data-page="requests"] .sub-tab { font-size: 12px; }
+
+  /* Requests page: flat layout, thin lines, no boxes */
+  .page[data-page="requests"] .artist-card { background: none; border: none; border-bottom: 1px solid var(--border); border-radius: 0; box-shadow: none; padding: 18px 0; margin: 0; }
+  .page[data-page="requests"] .sub-tabs { gap: 26px; border-bottom: 1px solid var(--border); margin-bottom: 18px; padding-bottom: 0; }
+  .page[data-page="requests"] .sub-tab { background: none; border: none; border-bottom: 2px solid transparent; border-radius: 0; padding: 10px 0; font-size: 13px; color: var(--text2); }
+  .page[data-page="requests"] .sub-tab.active { background: none; color: #fff; border-bottom-color: var(--accent); }
+  .page[data-page="requests"] input[type="text"],
+  .page[data-page="requests"] input[type="email"],
+  .page[data-page="requests"] input[type="password"] { background: transparent !important; border: none !important; border-bottom: 1px solid var(--border) !important; border-radius: 0 !important; padding: 12px 0 !important; }
+  .page[data-page="requests"] input:focus { outline: none; border-bottom-color: var(--accent) !important; }
+  .req-note { font-size: 12.5px; color: var(--text2); line-height: 1.75; margin-bottom: 16px; }
+  .req-sec { padding: 4px 0 20px; }
+  .req-label { font-size: 10px; color: var(--text2); font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+  .req-row { padding: 14px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .req-row .rn { font-size: 15px; font-weight: 800; }
+  .req-row .re { font-size: 12.5px; color: var(--text2); margin-top: 2px; word-break: break-all; }
+  .req-row .rs { font-size: 11px; font-weight: 800; margin-top: 4px; }
+  .req-copy { background: none; border: none; color: var(--accent); font-weight: 800; font-size: 12px; cursor: pointer; font-family: inherit; padding: 6px 0 6px 8px; flex-shrink: 0; }
+
   .artist-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 8px 10px; margin-bottom: 6px; }
   .artist-top { display: flex; gap: 10px; align-items: center; margin-bottom: 6px; }
   .artist-avatar { width: 38px; height: 38px; border-radius: 50%; overflow: hidden; flex-shrink: 0; background: linear-gradient(135deg, #ff0033 0%, #b3002d 100%); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; color: #fff; }
@@ -636,7 +661,80 @@
   </div>
 </div>
 
-<div class="page" data-page="settings">
+<div class="page" data-page="requests">
+        <h1 class="page-title">Artist Requests</h1>
+        <p class="page-subtitle">Review new artists, see their emails, and send their claim link.</p>
+
+        <div class="artist-card" id="reqKeyBox">
+          <div class="req-label">Admin key</div>
+          <p class="req-note">This page is private. Enter the ADMIN_KEY you saved in Vercel once. It stays on this phone until you tap "Forget admin key" in Settings.</p>
+          <input type="password" id="reqKeyInput" placeholder="Paste your ADMIN_KEY">
+          <button onclick="reqSaveKey()" style="width:100%;padding:13px;margin-top:14px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;">Unlock</button>
+        </div>
+
+        <div id="reqMain" style="display:none;">
+          <div class="sub-tabs">
+            <button class="sub-tab active" onclick="subTab('reqSubReq', this)">Requests</button>
+            <button class="sub-tab" onclick="subTab('reqSubEmails', this); loadEmails()">Emails</button>
+            <button class="sub-tab" onclick="subTab('reqSubSet', this)">Settings</button>
+          </div>
+
+          <div class="sub-content active" id="reqSubReq">
+            <p class="req-note">New artists who sign up appear here. Reject them, or approve them and choose when their claim link is emailed: right now, or after 6, 8 or 24 hours. A rejected artist never gets a link.</p>
+            <div id="reqList"></div>
+            <button onclick="loadRequests()" style="width:100%;padding:12px;margin-top:16px;background:transparent;color:var(--text2);border:1px solid var(--border);border-radius:10px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;"><i class="fas fa-rotate"></i> Refresh</button>
+          </div>
+
+          <div class="sub-content" id="reqSubEmails">
+            <p class="req-note">Every artist on FlexTune with the email on their profile. "Claimed" means the artist already set a password. "Not claimed yet" means they haven't used their claim link. These emails are private and only show here.</p>
+            <input type="text" id="emailSearch" placeholder="Search artists or emails..." oninput="filterEmails()">
+            <div id="emailSummary" class="req-note" style="margin:14px 0 4px;"></div>
+            <div id="emailList"></div>
+          </div>
+
+          <div class="sub-content" id="reqSubSet">
+            <div class="req-sec">
+              <div class="req-label">Notify me at this email</div>
+              <p class="req-note">Each time a new artist signs up, FlexTune emails this address with a Feedback button that opens this page.</p>
+              <input type="email" id="reqNotifyEmail" placeholder="you@email.com">
+              <button onclick="reqSaveNotify()" style="width:100%;padding:13px;margin-top:14px;background:#222;color:#fff;border:1px solid var(--border);border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;">Save email</button>
+              <div id="reqNotifyMsg" style="font-size:12px;margin-top:10px;font-weight:700;"></div>
+            </div>
+            <div class="req-sec" style="border-top:1px solid var(--border);padding-top:20px;">
+              <div class="req-label">Admin key</div>
+              <p class="req-note">Tap below to remove the admin key from this phone. You will need to paste it again to open this page.</p>
+              <button onclick="reqLogoutKey()" style="width:100%;padding:12px;background:transparent;color:#ff4d4d;border:1px solid var(--border);border-radius:10px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;">Forget admin key on this phone</button>
+            </div>
+          </div>
+        </div>
+        <p id="reqMsg" style="font-size:13px;font-weight:700;text-align:center;margin-top:12px;color:#ff0033;"></p>
+      </div>
+
+      <div class="page" data-page="requests-old">
+        <h1 class="page-title">Artist Requests</h1>
+        <p class="page-subtitle">Review new artists and send their claim link</p>
+
+        <div class="artist-card" id="reqKeyBox">
+          <div style="font-size:10px;color:var(--text2);font-weight:800;letter-spacing:1px;margin-bottom:8px;">ADMIN KEY</div>
+          <input type="password" id="reqKeyInput" placeholder="Paste your ADMIN_KEY" style="width:100%;padding:12px;background:#0a0a0a;border:1px solid var(--border);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;margin-bottom:10px;">
+          <button onclick="reqSaveKey()" style="width:100%;padding:12px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;">Unlock Requests</button>
+        </div>
+
+        <div id="reqMain" style="display:none;">
+          <div class="artist-card">
+            <div style="font-size:10px;color:var(--text2);font-weight:800;letter-spacing:1px;margin-bottom:8px;">NOTIFY ME AT THIS EMAIL</div>
+            <input type="email" id="reqNotifyEmail" placeholder="you@email.com" style="width:100%;padding:12px;background:#0a0a0a;border:1px solid var(--border);border-radius:10px;color:#fff;font-size:14px;font-family:inherit;margin-bottom:10px;">
+            <button onclick="reqSaveNotify()" style="width:100%;padding:12px;background:#222;color:#fff;border:1px solid var(--border);border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;">Save Email</button>
+            <div id="reqNotifyMsg" style="font-size:12px;margin-top:8px;font-weight:700;"></div>
+          </div>
+          <div id="reqList"></div>
+          <button onclick="loadRequests()" style="width:100%;padding:12px;margin-top:10px;background:transparent;color:var(--text2);border:1px solid var(--border);border-radius:10px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;"><i class="fas fa-rotate"></i> Refresh</button>
+          <button onclick="reqLogoutKey()" style="width:100%;padding:10px;margin-top:8px;background:transparent;color:#777;border:none;font-size:12px;cursor:pointer;font-family:inherit;">Forget admin key on this phone</button>
+        </div>
+        <p id="reqMsg" style="font-size:13px;font-weight:700;text-align:center;margin-top:12px;color:#ff0033;"></p>
+      </div>
+
+      <div class="page" data-page="settings">
         <h1 class="page-title">Site Settings</h1>
         <p class="page-subtitle">Control how your site looks and works</p>
         <div id="settingsList"><div class="artist-card"><div style="font-size:10px;color:var(--text2);font-weight:800;letter-spacing:1px;">TOTAL SONGS ON SITE</div><div id="siteTotalSongs" style="font-size:28px;font-weight:900;margin-top:4px;">...</div></div></div>
@@ -660,6 +758,7 @@
       <button class="nav-item" data-nav="ads" onclick="goTab('ads')"><div class="icon"><i class="fas fa-image"></i></div><div class="label">ADS</div></button>
       <button class="nav-item" data-nav="hoster" onclick="goTab('hoster')"><div class="icon"><i class="fas fa-server"></i></div><div class="label">HOSTER</div></button>
 <button class="nav-item" data-nav="verify" onclick="goTab('verify')"><div class="icon"><i class="fas fa-check-circle"></i></div><div class="label">VERIFY</div></button>
+      <button class="nav-item" data-nav="requests" onclick="goTab('requests')"><div class="icon"><i class="fas fa-inbox"></i></div><div class="label">REQUESTS</div></button>
       <button class="nav-item" data-nav="settings" onclick="goTab('settings')"><div class="icon"><i class="fas fa-gear"></i></div><div class="label">SETTINGS</div></button>
     </div>
   </div>
@@ -1055,7 +1154,7 @@ function escapeHtml(s) {
         bootApp();
         try {
           const t = localStorage.getItem('ft_manager_tab');
-          if (t && t !== 'artists' && document.querySelector('.page[data-page="' + t + '"]')) window.goTab(t);
+          if (location.hash === '#requests') { window.goTab('requests'); } else if (t && t !== 'artists' && document.querySelector('.page[data-page="' + t + '"]')) window.goTab(t);
         } catch (e) {}
       } else {
         status.innerText = 'Wrong password.'; var fl = document.getElementById('fastLogin'); if (fl) fl.remove();
@@ -1123,6 +1222,143 @@ function escapeHtml(s) {
         if (total && total !== '*') { el.textContent = total; try { localStorage.setItem('ft-total-songs', total); } catch (e) {} } else if (!el.textContent || el.textContent === '...') el.textContent = '?';
       } catch (e) { el.textContent = '?'; }
     }
+    function reqEsc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function reqKey() { try { return localStorage.getItem('ft-admin-key') || ''; } catch (e) { return ''; } }
+    async function reqApi(body) {
+      body.key = reqKey();
+      const r = await fetch('/api/admin-requests', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      let d = {};
+      try { d = await r.json(); } catch (e) {}
+      return { ok: r.ok, status: r.status, d: d };
+    }
+    function reqShowKeyBox() {
+      document.getElementById('reqMain').style.display = 'none';
+      document.getElementById('reqKeyBox').style.display = 'block';
+    }
+    window.reqSaveKey = function() {
+      const v = document.getElementById('reqKeyInput').value.trim();
+      if (!v) return;
+      try { localStorage.setItem('ft-admin-key', v); } catch (e) {}
+      loadRequests();
+    };
+    window.reqLogoutKey = function() {
+      try { localStorage.removeItem('ft-admin-key'); } catch (e) {}
+      document.getElementById('reqKeyInput').value = '';
+      reqShowKeyBox();
+    };
+    window.reqSaveNotify = async function() {
+      const msg = document.getElementById('reqNotifyMsg');
+      msg.style.color = '#999';
+      msg.innerText = 'Saving...';
+      const r = await reqApi({ action: 'set-notify', email: document.getElementById('reqNotifyEmail').value.trim() });
+      msg.style.color = r.ok ? '#00cc44' : '#ff0033';
+      msg.innerText = r.ok ? 'Saved' : 'Could not save. Check the email.';
+    };
+    window.reqDecide = async function(id, decision, hours) {
+      const msg = document.getElementById('reqMsg');
+      msg.style.color = '#999';
+      msg.innerText = 'Saving...';
+      const r = await reqApi({ action: 'decide', id: id, decision: decision, delay_hours: hours });
+      if (!r.ok) { msg.style.color = '#ff0033'; msg.innerText = 'Could not save. Try again.'; return; }
+      loadRequests();
+    };
+    window.loadRequests = async function() {
+      const msg = document.getElementById('reqMsg');
+      const list = document.getElementById('reqList');
+      if (!reqKey()) { reqShowKeyBox(); return; }
+      msg.style.color = '#999';
+      msg.innerText = 'Loading...';
+      let r;
+      try { r = await reqApi({ action: 'list' }); } catch (e) { msg.style.color = '#ff0033'; msg.innerText = 'No internet.'; return; }
+      if (r.status === 401) {
+        try { localStorage.removeItem('ft-admin-key'); } catch (e) {}
+        reqShowKeyBox();
+        msg.style.color = '#ff0033';
+        msg.innerText = 'Wrong admin key.';
+        return;
+      }
+      if (!r.ok) { msg.style.color = '#ff0033'; msg.innerText = 'Could not load requests.'; return; }
+      msg.innerText = '';
+      document.getElementById('reqKeyBox').style.display = 'none';
+      document.getElementById('reqMain').style.display = 'block';
+      const ne = document.getElementById('reqNotifyEmail');
+      if (document.activeElement !== ne) ne.value = r.d.notify_email || '';
+      const rows = (r.d.requests || []).map(function(q) {
+        q._st = q.link_sent_at ? 'sent' : (q.status || 'pending');
+        return q;
+      });
+      const rank = { pending: 0, approved: 1, conflict: 2, sent: 3, rejected: 4 };
+      rows.sort(function(a, b) { return (rank[a._st] == null ? 5 : rank[a._st]) - (rank[b._st] == null ? 5 : rank[b._st]); });
+      if (!rows.length) { list.innerHTML = '<div class="artist-card" style="text-align:center;color:var(--text2);font-size:13px;">No requests yet.</div>'; return; }
+      const btn = 'padding:10px 4px;border-radius:8px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;border:1px solid var(--border);';
+      list.innerHTML = rows.map(function(q) {
+        const id = reqEsc(q.id);
+        let foot = '';
+        if (q._st === 'pending') {
+          foot = '<div style="font-size:10px;color:var(--text2);font-weight:800;letter-spacing:1px;margin:12px 0 6px;">APPROVE AND SEND CLAIM LINK</div>' +
+            '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">' +
+            '<button style="' + btn + 'background:var(--accent);color:#fff;border-color:var(--accent);" onclick="reqDecide(\'' + id + '\',\'approve\',0)">Now</button>' +
+            '<button style="' + btn + 'background:#222;color:#fff;" onclick="reqDecide(\'' + id + '\',\'approve\',6)">6h</button>' +
+            '<button style="' + btn + 'background:#222;color:#fff;" onclick="reqDecide(\'' + id + '\',\'approve\',8)">8h</button>' +
+            '<button style="' + btn + 'background:#222;color:#fff;" onclick="reqDecide(\'' + id + '\',\'approve\',24)">24h</button></div>' +
+            '<button style="' + btn + 'width:100%;margin-top:8px;background:transparent;color:#ff4d4d;" onclick="reqDecide(\'' + id + '\',\'reject\')">Reject (no claim link)</button>';
+        } else if (q._st === 'approved') {
+          foot = '<div style="margin-top:12px;font-size:12px;font-weight:800;color:#ffaa00;">Approved. Claim link goes out ' + (q.send_at ? reqEsc(new Date(q.send_at).toLocaleString()) : 'soon') + '</div>';
+        } else if (q._st === 'sent') {
+          foot = '<div style="margin-top:12px;font-size:12px;font-weight:800;color:#00cc44;">Claim link sent</div>';
+        } else if (q._st === 'rejected') {
+          foot = '<div style="margin-top:12px;font-size:12px;font-weight:800;color:#ff4d4d;">Rejected</div>';
+        } else if (q._st === 'conflict') {
+          foot = '<div style="margin-top:12px;font-size:12px;font-weight:800;color:#ff4d4d;">Name already belongs to another email. Not sent.</div>';
+        }
+        return '<div class="artist-card">' +
+          '<div style="font-size:16px;font-weight:900;">' + reqEsc(q.name) + '</div>' +
+          '<div style="font-size:12px;color:var(--text2);line-height:1.8;margin-top:4px;">' + reqEsc(q.email) +
+          (q.phone ? '<br>' + reqEsc(q.phone) : '') + (q.genre ? '<br>' + reqEsc(q.genre) : '') +
+          (q.link ? '<br>' + reqEsc(q.link) : '') + '</div>' + foot + '</div>';
+      }).join('');
+    };
+
+    let emailRows = [];
+    window.loadEmails = async function() {
+      const list = document.getElementById('emailList');
+      list.innerHTML = '<p class="req-note">Loading...</p>';
+      let r;
+      try { r = await reqApi({ action: 'artists-emails' }); } catch (e) { list.innerHTML = '<p class="req-note">No internet.</p>'; return; }
+      if (r.status === 401) { try { localStorage.removeItem('ft-admin-key'); } catch (e) {} reqShowKeyBox(); return; }
+      if (!r.ok) { list.innerHTML = '<p class="req-note">Could not load emails. Try again.</p>'; return; }
+      emailRows = r.d.artists || [];
+      filterEmails();
+    };
+    window.filterEmails = function() {
+      const q = (document.getElementById('emailSearch').value || '').trim().toLowerCase();
+      const claimed = emailRows.filter(function(a) { return a.claimed; }).length;
+      document.getElementById('emailSummary').innerText = emailRows.length + ' artists · ' + claimed + ' claimed · ' + (emailRows.length - claimed) + ' not claimed yet';
+      const rows = emailRows.filter(function(a) {
+        return !q || String(a.name || '').toLowerCase().indexOf(q) !== -1 || String(a.email || '').toLowerCase().indexOf(q) !== -1;
+      });
+      const list = document.getElementById('emailList');
+      if (!rows.length) { list.innerHTML = '<p class="req-note">No artists found.</p>'; return; }
+      list.innerHTML = rows.map(function(a) {
+        let st, col;
+        if (!a.email) { st = 'No email on file'; col = '#ff4d4d'; }
+        else if (a.claimed) { st = 'Claimed'; col = '#00cc44'; }
+        else { st = 'Not claimed yet'; col = '#ffaa00'; }
+        return '<div class="req-row"><div style="min-width:0;">' +
+          '<div class="rn">' + reqEsc(a.name) + '</div>' +
+          '<div class="re">' + (a.email ? reqEsc(a.email) : '-') + '</div>' +
+          '<div class="rs" style="color:' + col + ';">' + st + '</div></div>' +
+          (a.email ? '<button class="req-copy" data-email="' + reqEsc(a.email) + '" onclick="copyEmail(this)">Copy</button>' : '') +
+          '</div>';
+      }).join('');
+    };
+    window.copyEmail = function(btn) {
+      const t = btn.getAttribute('data-email');
+      const done = function() { btn.innerText = 'Copied'; setTimeout(function() { btn.innerText = 'Copy'; }, 1500); };
+      try { navigator.clipboard.writeText(t).then(done).catch(function() { window.prompt('Copy this email', t); }); }
+      catch (e) { window.prompt('Copy this email', t); }
+    };
+
     window.goTab = function(tab) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       const page = document.querySelector('.page[data-page="' + tab + '"]');
@@ -1131,6 +1367,7 @@ function escapeHtml(s) {
         b.classList.toggle('active', b.dataset.nav === tab);
       });
       if (tab === 'verify') loadVerifyList();
+      if (tab === 'requests') loadRequests();
       if (tab === 'settings') loadSiteSettings();
       if (tab === 'ads') { loadAds(); updateAdPreview(); }
 if (tab === 'hoster') loadHosterFiles();
