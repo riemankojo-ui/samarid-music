@@ -1,4 +1,4 @@
-import { sendCodeEmail } from './_mailjet.js';
+import { sendEmail as sendCodeEmail } from './_mail.js';
 export const config = { runtime: 'edge' };
 
 const SB = 'https://kamnfnukaizdglntcdvi.supabase.co/rest/v1';
